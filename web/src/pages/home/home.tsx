@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import {Eye} from 'lucide-react'
 import {useState} from 'react'
 
+
 export function Home() {
   const { data, refetch } = useListCharacters()
   const { mutate, isLoading } = useCreateCharacter()
@@ -59,26 +60,36 @@ export function Home() {
             <DialogContent>
               <Select value={gameSystem} onValueChange={setGameSystem}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Sélectionnez le système de jeu" />
+                  <SelectValue placeholder="Sélectionnez l'univers du jeu" />
                 </SelectTrigger>
-
+                <!-- TODO : Les autres listes seront enabled quand un choix sera fait ici -->
                 <SelectContent>
-                  <SelectItem value="Dungeons & Dragons">
-                    Dungeons & Dragons
-                  </SelectItem>
+                  <SelectItem value="undefined">Univers générique</SelectItem>
+                  <SelectItem value="Aria">Aria</SelectItem>
+                  <SelectItem value="Ars Magica">Ars Magica</SelectItem>
+                  <SelectItem value="Brigandyne">Brigandyne</SelectItem>
+                  <SelectItem value="Chill">Chill</SelectItem>
+                  <SelectItem value="COPS">COPS</SelectItem>
+                  <SelectItem value="Cyberpunk RED">Cyberpunk RED</SelectItem>
+                  <SelectItem value="Call of Cthulhu">L'Appel de Cthulhu</SelectItem>
+                  <SelectItem value="Das Schwarze Auge">L'Œil noir</SelectItem>
+                  <SelectItem value="Dune">Dune</SelectItem>
+                  <SelectItem value="Dungeons & Dragons">Donjons & Dragons</SelectItem>
+                  <SelectItem value="Legends of the five Rings">La Légende des Cinq Anneaux</SelectItem>
+                  <SelectItem value="Lone Wolf">Loup Solitaire</SelectItem>
+                  <SelectItem value="Maléfices">Maléfices</SelectItem>
+                  <SelectItem value="Midnight">Midnight</SelectItem>
+                  <SelectItem value="Nightprowler">Nightprowler</SelectItem>
                   <SelectItem value="Pathfinder">Pathfinder</SelectItem>
-                  <SelectItem value="World of Darkness">
-                    World of Darkness
-                  </SelectItem>
-                  <SelectItem value="Call of Cthulhu">
-                    Call of Cthulhu
-                  </SelectItem>
-                  <SelectItem value="Warhammer Fantasy Roleplay">
-                    Warhammer Fantasy Roleplay
-                  </SelectItem>
+                  <SelectItem value="Rêve de Dragon">Rêve de Dragon</SelectItem>
                   <SelectItem value="Shadowrun">Shadowrun</SelectItem>
-                  <SelectItem value="GURPS">GURPS</SelectItem>
-                  <SelectItem value="Fate">Fate</SelectItem>
+                  <SelectItem value="Shaan">Shaan</SelectItem>
+                  <SelectItem value="Star Wars">Star Wars</SelectItem>
+                  <SelectItem value="Vermine">Vermine</SelectItem>
+                  <SelectItem value="Vampire The Masquerade">Vampire : La Mascarade</SelectItem>
+                  <SelectItem value="Warhammer Fantasy Roleplay">Warhammer Fantasy Roleplay</SelectItem>
+                  <SelectItem value="Warhammer 40K">Warhammer 40K</SelectItem>
+                  <SelectItem value="Würm">Würm</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -86,7 +97,7 @@ export function Home() {
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la race du personnage" />
                 </SelectTrigger>
-
+                <!-- TODO : Afficher une liste prédéfinie selon l'univers selectionné, sinon par défault uniquement HUMAIN -->
                 <SelectContent>
                   <SelectItem value="Human">Humain</SelectItem>
                   <SelectItem value="Elf">Elfe</SelectItem>
@@ -111,7 +122,7 @@ export function Home() {
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la classe du personnage" />
                 </SelectTrigger>
-
+                <!-- TODO : Afficher une liste optionnelle prédéfinie selon l'univers selectionné, sinon par défault aucun -->
                 <SelectContent>
                   <SelectItem value="Warrior">Guerrier</SelectItem>
                   <SelectItem value="Wizard">Mage</SelectItem>
@@ -132,6 +143,7 @@ export function Home() {
                 </SelectContent>
               </Select>
 
+              <!-- Contexte optionnel permettant d'orienter l'IA -->
               <Textarea
                 placeholder="Description"
                 value={description}
@@ -154,12 +166,12 @@ export function Home() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Date de création</TableHead>
               <TableHead>Nom</TableHead>
+              <TableHead>Age du personnage</TableHead>
               <TableHead>Lieu de naissance</TableHead>
               <TableHead>État matrimonial</TableHead>
-              <TableHead>A des enfants</TableHead>
-              <TableHead>Age</TableHead>
-              <TableHead>Creation</TableHead>
+              <TableHead>A des enfants ?</TableHead>
               <TableHead />
             </TableRow>
           </TableHeader>
@@ -167,14 +179,12 @@ export function Home() {
           <TableBody>
             {data?.map((character: any) => (
               <TableRow key={character.id}>
+                <TableCell>{dayjs(character.createdAt).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{character.name}</TableCell>
+                <TableCell>{character.age}</TableCell>
                 <TableCell>{character.birthPlace}</TableCell>
                 <TableCell>{character.maritalStatus}</TableCell>
                 <TableCell>{character.children}</TableCell>
-                <TableCell>{character.age}</TableCell>
-                <TableCell>
-                  {dayjs(character.createdAt).format('DD/MM/YYYY')}
-                </TableCell>
                 <TableCell>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -223,46 +233,37 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  État matrimonial
+                                  Lieu de résidence
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.maritalStatus}
+                                  {character.residenceLocation}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Profession
+                                  Raison de la résidence
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.profession}
+                                  {character.reasonForResidence}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Education
+                                  Climat
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.education}
+                                  {character.climate}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Description Physique
+                                  Problèmes communs
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.physicalDescription}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Préférence vestimentaire
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.clothingPreferences}
+                                  {character.commonProblems}
                                 </TableCell>
                               </TableRow>
 
@@ -277,127 +278,10 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Loisirs
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.hobbies}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Nourriture favorite
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.favoriteFood}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Peurs
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.fears}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Objectifs
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.goal}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Obstacle majeur
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.biggestObstacle}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Attitude envers les autres
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.attitudeTowardsPeople}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Attitude envers le groupe
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.attitudeTowardsGroups}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Vision du monde
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.attitudeTowardsWorld}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Changement souhaité de soi
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.changeInSelf}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Changement souhaité dans le monde
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.changeInWorld}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Histoire de son enfance
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.childhoodStory}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Signe distinctif
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.distinctiveTrait}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Parents en vie
+                                  Parents en vie ?
                                 </TableCell>
                                 <TableCell className="flex justify-end">
                                   {character.parentsAlive}
-                                </TableCell>
-                              </TableRow>
-
-                              <TableRow>
-                                <TableCell className="text-muted-foreground">
-                                  Sentiments par rapport aux parents
-                                </TableCell>
-                                <TableCell className="flex justify-end">
-                                  {character.feelingsAboutParents}
                                 </TableCell>
                               </TableRow>
 
@@ -412,10 +296,28 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Fraternité
+                                  Sentiments par rapport aux parents
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.feelingsAboutParents}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Fraternité ?
                                 </TableCell>
                                 <TableCell className="flex justify-end">
                                   {character.siblings}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Enfance du personnage
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.childhoodStory}
                                 </TableCell>
                               </TableRow>
 
@@ -439,16 +341,16 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Entreprise idéale
+                                  État matrimonial
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.idealCompany}
+                                  {character.maritalStatus}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Type de partenaire romantique
+                                  Type de partenaire en amour
                                 </TableCell>
                                 <TableCell className="flex justify-end">
                                   {character.typeOfLover}
@@ -457,10 +359,37 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Raison de l'objectif
+                                  Histoire conjugale
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.reasonForGoal}
+                                  {character.conjugalHistory}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  A des enfants ?
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.children}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Education
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.education}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Profession
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.profession}
                                 </TableCell>
                               </TableRow>
 
@@ -484,37 +413,46 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Climat
+                                  Changement souhaité dans le monde
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.climate}
+                                  {character.changeInWorld}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Lieu de résidence
+                                  Souhait personnel
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.residenceLocation}
+                                  {character.changeInSelf}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Raison de la résidence
+                                  Objectif de vie
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.reasonForResidence}
+                                  {character.goal}
                                 </TableCell>
                               </TableRow>
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Problèmes communs
+                                  Raison de l'objectif
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.commonProblems}
+                                  {character.reasonForGoal}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Obstacle majeur
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.biggestObstacle}
                                 </TableCell>
                               </TableRow>
 
@@ -556,6 +494,60 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
+                                  Signe distinctif
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.distinctiveTrait}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Description Physique
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.physicalDescription}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Préférence vestimentaire
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.clothingPreferences}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Phobies
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.fears}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Nourriture favorite
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.favoriteFood}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Loisirs
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.hobbies}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
                                   Activités de loisir
                                 </TableCell>
                                 <TableCell className="flex justify-end">
@@ -565,12 +557,40 @@ export function Home() {
 
                               <TableRow>
                                 <TableCell className="text-muted-foreground">
-                                  Histoire conjugale
+                                  Compagnons idéaux
                                 </TableCell>
                                 <TableCell className="flex justify-end">
-                                  {character.conjugalHistory}
+                                  {character.idealCompany}
                                 </TableCell>
                               </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Attitude envers le groupe
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.attitudeTowardsGroups}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Vision du monde
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.attitudeTowardsWorld}
+                                </TableCell>
+                              </TableRow>
+
+                              <TableRow>
+                                <TableCell className="text-muted-foreground">
+                                  Attitude envers les autres
+                                </TableCell>
+                                <TableCell className="flex justify-end">
+                                  {character.attitudeTowardsPeople}
+                                </TableCell>
+                              </TableRow>
+
                             </TableBody>
                           </Table>
                         </ScrollArea>

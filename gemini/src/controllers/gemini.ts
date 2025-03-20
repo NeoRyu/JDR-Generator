@@ -9,6 +9,7 @@ import {
 import dotenv from "dotenv";
 import fs from "fs";
 
+
 dotenv.config();
 
 // Configuration requise
@@ -33,49 +34,49 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
         '''
         {
             'name': 'Eldric Ironhand',
-            'âge': 28,
+            'age': 28,
             'birthPlace': 'Citadelle d\\'Ironcrest',
-            'childhoodStory': 'J\\'ai grandi dans une famille de forgerons, fasciné par les armes et les armures.',
-            'feelingsAboutParents': 'Respecte profondément, en particulier son père, un forgeron renommé.',
+            'residenceLocation': 'Une maison modeste dans la Citadelle d\\'Ironcrest.',
+            'reasonForResidence': 'Proximité de la famille et accès à la forge familiale.',
+            'climat': 'Tempéré, avec des hivers rigoureux.',
+            'commonProblems': 'Défis dans la forge, rivalités locales.',
+            'dailyRoutine': 'S\\'entraîner, forger, passer du temps avec ses amis et sa famille.',
             'parentsAlive': true,
             'detailsAboutParents': 'Le père est un maître forgeron ; la mère est une artisane qualifiée.',
-            'siblings': 'Une sœur cadette, apprentie alchimiste.',
-            'youthFriends': 'Divers, principalement d\\'autres apprentis d\\'artisans locaux.',
+            'feelingsAboutParents': 'Respecte profondément ses parents, en particulier son père, un forgeron renommé.',
+            'siblings': 'A une soeur cadette qui est actuellement apprentie alchimiste.',
+            'childhoodStory': 'J\\'ai grandi dans une famille de forgerons, fasciné par les armes et les armures.',
+            'youthFriends': 'Plusieurs amis d'enfance, principalement d\\'autres apprentis d\\'artisans locaux.',
+            'pet': 'Un chien de chasse robuste nommé Brawn.',
             'maritalStatus': 'Célibataire',
-            'conjugalHistory': 'Quelques romances passagères, rien de grave.',
-            'enfants': 'Aucun',
+            'typeOfLover': 'Quelqu\\'un de fort, indépendant et passionné.',
+            'conjugalHistory': 'Quelques romances passagères, rien d'important'.',
+            'children': 0,
             'education': 'Éducation de base, mais formation approfondie au combat et à la forge.',
             'profession': 'Guerrier et forgeron',
             'reasonForProfession': 'Passion pour les armes et désir d\\'honorer la tradition familiale.',
-            'physicalDescription': 'Grand, musclé, cheveux bruns courts, yeux verts, avec des cicatrices de bataille.',
-            'distinctiveTrait': 'Extrêmement doué en forgeage et en combat.',
-            'goal': 'Devenez un héros légendaire et forgez une arme unique.',
-            'reasonForGoal': 'Désir de prouver votre valeur et vos capacités.',
-            'planIfSuccessful': 'Fondez votre propre école de guerriers et de forgerons.',
-            'planIfFailed': 'Retournez à la citadelle et continuez en tant que forgeron.',
-            'biggestObstacle': 'Prouvez votre valeur dans un monde plein de héros et d\\'aventures.',
+            'workPreferences': 'Travaux impliquant des défis physiques et d'endurance.',
+            'changeInSelf': 'J\\'espère acquerir une compétence me permettant d'exceller dans mon domaine.',
+            'changeInWorld': 'Je souhaite être reconnu pour mes talents et poursuivre mes rêves.',
+            'goal': 'Devenir un héros légendaire ou forger une arme unique.',
+            'reasonForGoal': 'Désir être reconnu pour ma valeur et mes capacités.',
+            'biggestObstacle': 'Difficile d'être reconnu dans un monde déjà rempli de héros et d\\'aventuriers.',
             'overcomingObstacle': 'Dévouement implacable à l\\'entraînement et aux missions.',
-            'changeInWorld': 'Je veux inspirer les autres à poursuivre leurs rêves.',
-            'changeInSelf': 'J\\'espère trouver votre véritable objectif et vos capacités.',
-            'fears': 'Être oublié ou considéré comme médiocre.',
+            'planIfSuccessful': 'Fondez ma propre école de guerriers ou de forgerons.',
+            'planIfFailed': 'Retournez à la citadelle et continuez d'étudier en tant que forgeron.',
             'selfDescription': 'Un guerrier dévoué avec un cœur d\\'artisan.',
-            'attitudeTowardsWorld': 'Optimiste et stimulant.',
-            'attitudeTowardsPeople': 'Amical mais prudent.',
-            'attitudeTowardsGroups': 'Préfère l\\'action individuelle, mais respecte la force des groupes.',
-            'leisureActivities': 'Forge, chasse, jeux de stratégie.',
-            'clothingPreferences': 'Habillez-vous de manière pratique, en préférant les vêtements qui permettent de bouger facilement.',
-            'workPreferences': 'Travaux impliquant des défis physiques et stratégiques.',
-            'favoriteFood': 'Ragoût de bœuf en morceaux.',
-            'hobbies': 'Forge, entraînement au combat, échecs.',
-            'pet': 'Un chien de chasse robuste nommé Brawn.',
-            'idealCompany': 'Des compagnons fidèles et stimulants.',
-            'typeOfLover': 'Quelqu\\'un de fort, indépendant et passionné.',
-            'residenceLocation': 'Une maison modeste dans la Citadelle d\\'Ironcrest.',
-            'climat': 'Tempéré, avec des hivers rigoureux.',
-            'reasonForResidence': 'Proximité de la famille et accès à la forge familiale.',
-            'commonProblems': 'Défis dans la forge, rivalités locales.',
-            'dailyRoutine': 'S\\'entraîner, forger, passer du temps avec ses amis et sa famille.',
-            'image': 'Un homme grand et musclé aux cheveux bruns et aux yeux verts, portant une armure pratique et tenant un marteau de forge.'
+            'distinctiveTrait': 'Un accident pendant son apprentissage lui a fait perdre un doigt.',
+            'physicalDescription': 'Grand, musclé, cheveux bruns courts, yeux verts, avec des cicatrices de bataille.',
+            'clothingPreferences': 'S'habille de manière pratique, préférant les vêtements permettant de bouger facilement.',
+            'fears': 'Être oublié ou considéré comme médiocre.',
+            'favoriteFood': 'Sa nourriture préféré est le ragoût de bœuf en morceaux.',
+            'leisureActivities': 'Forger, chasser, et boire quelques pintes de bières.',
+            'hobbies': 'S'entrâiner à la forge, entraînement au combat',
+            'idealCompany': 'Son groupe doit contenir dans l'idéal des compagnons fidèles et stimulants.',
+            'attitudeTowardsGroups': 'Préfère l\\'action individuelle, mais respecte la force de chacun des compagnons du groupe.',
+            'attitudeTowardsWorld': 'Sa vision du monde est optimiste et ouvert d'esprit.',
+            'attitudeTowardsPeople': 'Amical mais prudent envers les inconnus.',
+            'image': 'Un homme grand et musclé aux cheveux bruns et aux yeux verts, équipé d'une armure légère et d'un marteau de forgereon.'
         }
         '''
 `;
@@ -101,10 +102,10 @@ export const generateResponse = async (req: Request, res: Response) => {
 
         const result: GenerateContentResult = await model.generateContent( // prompt
             contextPrompt({
-                gameSystem:'Call of Cthulhu',
-                race:'Human',
-                class:'Nécromant',
-                description:'Il est en possession du Necronomicon.',
+                gameSystem: prompt.gameSystem || 'undefined',
+                race: prompt.race || 'Human',
+                class: prompt.class || '',
+                description: prompt.description || '',
             })
         );
         const responseText: string = result.response.text();

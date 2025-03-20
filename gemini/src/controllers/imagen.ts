@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI, Part} from '@google/generative-ai';
 import * as fs from 'fs';
 
+
 // Configuration requise
 const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(process.env.API_KEY);
 const model: GenerativeModel = genAI.getGenerativeModel({

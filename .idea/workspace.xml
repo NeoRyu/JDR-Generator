@@ -4,8 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
-    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/theme-provider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/theme-provider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/dialog.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/dialog.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/input.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/input.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/scroll-area.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/scroll-area.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/select.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/select.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/table.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/table.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/textarea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/textarea.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/utils.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
+    </list>
+    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
+      <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,6 +56,7 @@
   <component name="ProjectId" id="2uUdUtSW6A2XH38Z3mlBFjF2Y2k" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
@@ -58,6 +73,7 @@
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
     "npm.build (1).executor": "Run",
     "npm.build (GEMINI).executor": "Run",
@@ -69,11 +85,11 @@
     "npm.start.executor": "Run",
     "npm.start: dev.executor": "Run",
     "npm.start:dev.executor": "Run",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.0",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 2024.3.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\web\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -228,10 +244,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build" />
         <item itemvalue="npm.start: dev" />
         <item itemvalue="npm.build (GEMINI)" />
-        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
       </list>
     </recent_temporary>
@@ -358,7 +374,31 @@
       <option name="project" value="LOCAL" />
       <updated>1742475599236</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <option name="closed" value="true" />
+      <created>1742476969527</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1742476969527</updated>
+    </task>
+    <task id="LOCAL-00014" summary="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <option name="closed" value="true" />
+      <created>1742477037420</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1742477037420</updated>
+    </task>
+    <task id="LOCAL-00015" summary="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <option name="closed" value="true" />
+      <created>1742477158840</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1742477158840</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
