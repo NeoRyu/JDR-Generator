@@ -62,7 +62,6 @@ export function Home() {
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez l'univers du jeu" />
                 </SelectTrigger>
-                <!-- TODO : Les autres listes seront enabled quand un choix sera fait ici -->
                 <SelectContent>
                   <SelectItem value="undefined">Univers générique</SelectItem>
                   <SelectItem value="Aria">Aria</SelectItem>
@@ -97,7 +96,6 @@ export function Home() {
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la race du personnage" />
                 </SelectTrigger>
-                <!-- TODO : Afficher une liste prédéfinie selon l'univers selectionné, sinon par défault uniquement HUMAIN -->
                 <SelectContent>
                   <SelectItem value="Human">Humain</SelectItem>
                   <SelectItem value="Elf">Elfe</SelectItem>
@@ -122,7 +120,6 @@ export function Home() {
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la classe du personnage" />
                 </SelectTrigger>
-                <!-- TODO : Afficher une liste optionnelle prédéfinie selon l'univers selectionné, sinon par défault aucun -->
                 <SelectContent>
                   <SelectItem value="Warrior">Guerrier</SelectItem>
                   <SelectItem value="Wizard">Mage</SelectItem>
@@ -143,7 +140,6 @@ export function Home() {
                 </SelectContent>
               </Select>
 
-              <!-- Contexte optionnel permettant d'orienter l'IA -->
               <Textarea
                 placeholder="Description"
                 value={description}

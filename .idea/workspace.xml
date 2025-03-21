@@ -5,9 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Cleaning and reorder JSON attributes&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/HELP.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/api.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/AIController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharacterEntity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/GeminiService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/ICharacterContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/IGeminiGenerationConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/RestPreconditions.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/resources/banner.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/gemini.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/gemini.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -16,6 +40,14 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -55,12 +87,19 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Maven.api [clean,package,install].executor": "Run",
+    "Maven.api [clean].executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.ApiApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/FantasyGenerator/gemini/src/controllers",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -75,6 +114,7 @@
     "npm.clean.executor": "Run",
     "npm.start (GEMINI).executor": "Run",
     "npm.start.executor": "Run",
+    "npm.start: dev (WEB).executor": "Run",
     "npm.start: dev.executor": "Run",
     "npm.start:dev.executor": "Run",
     "project.structure.last.edited": "Modules",
@@ -101,6 +141,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\gemini\src\controllers" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\api\src\infra\character-details\googleai" />
     </key>
@@ -115,7 +157,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="npm.build">
+  <component name="RunManager" selected="Spring Boot.ApiApplication">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="FantasyGenerator" />
       <method v="2">
@@ -164,6 +206,14 @@
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
+    <configuration name="ApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="api" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="jdr.generator.api.ApiApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="Tox" factoryName="Tox">
       <module name="FantasyGenerator" />
       <option name="ENV_FILES" value="" />
@@ -187,7 +237,7 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="build" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+    <configuration name="build (WEB)" type="js.build_tools.npm" temporary="true">
       <package-json value="$PROJECT_DIR$/web/package.json" />
       <command value="run" />
       <scripts>
@@ -217,7 +267,7 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="start: dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+    <configuration name="start: dev (WEB)" type="js.build_tools.npm" temporary="true">
       <package-json value="$PROJECT_DIR$/web/package.json" />
       <command value="run" />
       <scripts>
@@ -228,19 +278,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="npm.build" />
-      <item itemvalue="npm.start: dev" />
+      <item itemvalue="npm.build (WEB)" />
+      <item itemvalue="npm.start: dev (WEB)" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
+      <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start: dev (WEB)" />
         <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
-        <item itemvalue="npm.build" />
-        <item itemvalue="npm.start: dev" />
+        <item itemvalue="npm.build (WEB)" />
       </list>
     </recent_temporary>
   </component>
@@ -269,6 +320,7 @@
       <workItem from="1742367403019" duration="735000" />
       <workItem from="1742368219957" duration="9033000" />
       <workItem from="1742455608559" duration="14135000" />
+      <workItem from="1742543249283" duration="9580000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
