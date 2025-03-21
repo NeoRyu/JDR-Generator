@@ -12,7 +12,7 @@
       <user-name>root</user-name>
       <schema-mapping>
         <introspection-scope>
-          <node kind="schema" qname="jdr" />
+          <node kind="schema" qname="jdr_generator_db" />
         </introspection-scope>
       </schema-mapping>
     </data-source>

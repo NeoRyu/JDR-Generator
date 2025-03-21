@@ -12,7 +12,6 @@ For further reference, please consider the following sections:
 * [Spring Boot DevTools](https://docs.spring.io/spring-boot/3.4.4/reference/using/devtools.html)
 * [Flyway Migration](https://docs.spring.io/spring-boot/3.4.4/how-to/data-initialization.html#howto.data-initialization.migration-tool.flyway)
 * [JDBC API](https://docs.spring.io/spring-boot/3.4.4/reference/data/sql.html)
-* [Vertex AI Gemini](https://docs.spring.io/spring-ai/reference/api/chat/vertexai-gemini-chat.html)
 * [Spring Web](https://docs.spring.io/spring-boot/3.4.4/reference/web/servlet.html)
 
 ### Guides

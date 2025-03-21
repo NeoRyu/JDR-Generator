@@ -4,19 +4,45 @@ logging:
     org.springboot.security: INFO
 
 spring:
+  application:
+    name: api
   datasource:
-    url: jdbc:mysql://localhost:3306/jdr_generator_db?verifyServerCertificate=false&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam
+    hostname: localhost
+    port: 3306
+    schema-name: jdr_generator_db
+    args: ?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam
+    url: jdbc:mysql://${spring.datasource.hostname}:${spring.datasource.port}/${spring.datasource.schema-name}
+    # ${spring.datasource.args}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password:
+    password: root
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      leak-detection-threshold: 5000
+      username: root
+      password: root
     tomcat:
       test-while-idle: true
       validation-query: SELECT 1
     dbcp2:
       test-while-idle: true
       validation-query: SELECT 1
+  flyway:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    baseline-on-migrate: true
+    locations: [ "classpath:db/migration" ]
+    schemas: public
+    fail-on-missing-locations: true
   jpa:
-    database-platform: org.hibernate.dialect.MySQL5Dialect
+    #  SHOW VARIABLES LIKE "%version%"; ## check InnoDB version ::
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       org.hibernate.flushMode: COMMIT
     show-sql: false

@@ -1,9 +1,8 @@
-CREATE DATABASE IF NOT EXISTS jdr_generator_db;
-CREATE SCHEMA IF NOT EXISTS `JDR` DEFAULT CHARACTER SET utf8;
-USE `jdr_generator_db`;
+CREATE DATABASE IF NOT EXISTS `jdr_generator_db`;
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 
-DROP TABLE IF EXISTS JDR.`characters`;
-CREATE TABLE JDR.`characters` (
+DROP TABLE IF EXISTS `jdr_generator_db`.`character`;
+CREATE TABLE `jdr_generator_db`.`character` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(255)  DEFAULT NULL,
     `age` INTEGER NOT NULL,
