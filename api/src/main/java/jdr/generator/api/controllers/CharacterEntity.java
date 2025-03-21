@@ -1,18 +1,20 @@
 package jdr.generator.api.controllers;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Date;
 
-//@Entity
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@Getter @Setter
-//@Table(name="character")
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Table(name="characters")
 public class CharacterEntity {
 
+    @Id
     @Column(name="id", unique=true, nullable=false)
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
@@ -20,139 +22,139 @@ public class CharacterEntity {
     @Column(name="name", nullable=false)
     private String name;
 
-    @Column(name="age", nullable=true)
+    @Column(name="age")
     private int age;
 
-    @Column(name="birthPlace", nullable=true)
+    @Column(name="birth_place")
     private String birthPlace;
 
-    @Column(name="childhoodStory", nullable=true)
-    private String childhoodStory;
-
-    @Column(name="feelingsAboutParents", nullable=true)
-    private String feelingsAboutParents;
-
-    @Column(name="parentsAlive", nullable=true)
-    private Boolean parentsAlive;
-
-    @Column(name="detailsAboutParents", nullable=true)
-    private String detailsAboutParents;
-
-    @Column(name="siblings", nullable=true)
-    private String siblings;
-
-    @Column(name="youthFriends", nullable=true)
-    private String youthFriends;
-
-    @Column(name="maritalStatus", nullable=true)
-    private String maritalStatus;
-
-    @Column(name="conjugalHistory", nullable=true)
-    private String conjugalHistory;
-
-    @Column(name="children", nullable=true)
-    private Integer children; // TODO : List<Character>
-
-    @Column(name="education", nullable=true)
-    private String education;
-
-    @Column(name="profession", nullable=true)
-    private String profession;
-
-    @Column(name="reasonForProfession", nullable=true)
-    private String reasonForProfession;
-
-    @Column(name="physicalDescription", nullable=true)
-    private String physicalDescription;
-
-    @Column(name="distinctiveTrait", nullable=true)
-    private String distinctiveTrait;
-
-    @Column(name="goal", nullable=true)
-    private String goal;
-
-    @Column(name="reasonForGoal", nullable=true)
-    private String reasonForGoal;
-
-    @Column(name="planIfSuccessful", nullable=true)
-    private String planIfSuccessful;
-
-    @Column(name="planIfFailed", nullable=true)
-    private String planIfFailed;
-
-    @Column(name="biggestObstacle", nullable=true)
-    private String biggestObstacle;
-
-    @Column(name="overcomingObstacle", nullable=true)
-    private String overcomingObstacle;
-
-    @Column(name="changeInWorld", nullable=true)
-    private String changeInWorld;
-
-    @Column(name="changeInSelf", nullable=true)
-    private String changeInSelf;
-
-    @Column(name="fears", nullable=true)
-    private String fears;
-
-    @Column(name="selfDescription", nullable=true)
-    private String selfDescription;
-
-    @Column(name="attitudeTowardsWorld", nullable=true)
-    private String attitudeTowardsWorld;
-
-    @Column(name="attitudeTowardsPeople", nullable=true)
-    private String attitudeTowardsPeople;
-
-    @Column(name="attitudeTowardsGroups", nullable=true)
-    private String attitudeTowardsGroups;
-
-    @Column(name="leisureActivities", nullable=true)
-    private String leisureActivities;
-
-    @Column(name="clothingPreferences", nullable=true)
-    private String clothingPreferences;
-
-    @Column(name="workPreferences", nullable=true)
-    private String workPreferences;
-
-    @Column(name="favoriteFood", nullable=true)
-    private String favoriteFood;
-
-    @Column(name="hobbies", nullable=true)
-    private String hobbies;
-
-    @Column(name="pet", nullable=true)
-    private String pet;
-
-    @Column(name="idealCompany", nullable=true)
-    private String idealCompany;
-
-    @Column(name="typeOfLover", nullable=true)
-    private String typeOfLover;
-
-    @Column(name="residenceLocation", nullable=true)
+    @Column(name="residence_location")
     private String residenceLocation;
 
-    @Column(name="climate", nullable=true)
-    private String climate;
-
-    @Column(name="reasonForResidence", nullable=true)
+    @Column(name="reason_for_residence")
     private String reasonForResidence;
 
-    @Column(name="commonProblems", nullable=true)
+    @Column(name="climate")
+    private String climate;
+
+    @Column(name="common_problems")
     private String commonProblems;
 
-    @Column(name="dailyRoutine", nullable=true)
+    @Column(name="daily_routine")
     private String dailyRoutine;
 
-    @Column(name="image", nullable=true)
+    @Column(name="parents_alive")
+    private Boolean parentsAlive;
+
+    @Column(name="details_about_parents")
+    private String detailsAboutParents;
+
+    @Column(name="feelings_about_parents")
+    private String feelingsAboutParents;
+
+    @Column(name="siblings")
+    private String siblings;
+
+    @Column(name="childhood_story")
+    private String childhoodStory;
+
+    @Column(name="youth_friends")
+    private String youthFriends;
+
+    @Column(name="pet")
+    private String pet;
+
+    @Column(name="marital_status")
+    private String maritalStatus;
+
+    @Column(name="type_of_lover")
+    private String typeOfLover;
+
+    @Column(name="conjugal_history")
+    private String conjugalHistory;
+
+    @Column(name="children")
+    private Integer children; // TODO : List<Character>
+
+    @Column(name="education")
+    private String education;
+
+    @Column(name="profession")
+    private String profession;
+
+    @Column(name="reason_for_profession")
+    private String reasonForProfession;
+
+    @Column(name="work_preferences")
+    private String workPreferences;
+
+    @Column(name="change_in_world")
+    private String changeInWorld;
+
+    @Column(name="change_in_self")
+    private String changeInSelf;
+
+    @Column(name="goal")
+    private String goal;
+
+    @Column(name="reason_for_goal")
+    private String reasonForGoal;
+
+    @Column(name="biggest_obstacle")
+    private String biggestObstacle;
+
+    @Column(name="overcoming_obstacle")
+    private String overcomingObstacle;
+
+    @Column(name="plan_if_successful")
+    private String planIfSuccessful;
+
+    @Column(name="plan_if_failed")
+    private String planIfFailed;
+
+    @Column(name="self_description")
+    private String selfDescription;
+
+    @Column(name="distinctive_trait")
+    private String distinctiveTrait;
+
+    @Column(name="physical_description")
+    private String physicalDescription;
+
+    @Column(name="clothing_preferences")
+    private String clothingPreferences;
+
+    @Column(name="fears")
+    private String fears;
+
+    @Column(name="favorite_food")
+    private String favoriteFood;
+
+    @Column(name="hobbies")
+    private String hobbies;
+
+    @Column(name="leisure_activities")
+    private String leisureActivities;
+
+    @Column(name="ideal_company")
+    private String idealCompany;
+
+    @Column(name="attitude_towards_groups")
+    private String attitudeTowardsGroups;
+
+    @Column(name="attitude_towards_world")
+    private String attitudeTowardsWorld;
+
+    @Column(name="attitude_towards_people")
+    private String attitudeTowardsPeople;
+
+    @Column(name="image")
     private String image;
 
     @Column(name="createdAt", nullable=false)
     private Date createdAt;
 
-    @Column(name="updatedAt", nullable=true)
+    @Column(name="updatedAt")
     private Date updatedAt;
 
 }
