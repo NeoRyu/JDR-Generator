@@ -15,7 +15,7 @@ CREATE TABLE `jdr_generator_db`.`character_context` (
 
 -- Insertion de l'entrée avec id = 0
 INSERT INTO `jdr_generator_db`.`character_context` (`id`, `prompt_system`, `prompt_race`, `prompt_gender`, `prompt_class`, `prompt_description`)
-VALUES (0, 'Système de jeu non défini', '', 'Aucun genre spécifié', '', '');
+VALUES (1, 'Système de jeu non défini', '', 'Aucun genre spécifié', '', '');
 
 DROP TABLE IF EXISTS `jdr_generator_db`.`character_details`;
 CREATE TABLE `jdr_generator_db`.`character_details` (
@@ -66,7 +66,7 @@ CREATE TABLE `jdr_generator_db`.`character_details` (
     `image` TEXT  NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP,
-    `context_id` INT NOT NULL DEFAULT 0,
+    `context_id` INT NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
