@@ -4,13 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <changelist_data name="Coupez Frédéric" email="coupez.frederic@gmail.com" automatic="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharacterModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharacterModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharactersController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/GeminiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/PromptCharacterContext.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/PromptCharacterContext.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db.migration/V00001__Create_characters_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db.migration/V00002__Create_context_table.sql" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/src/controllers/gemini.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/gemini.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/create-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/create-character.service.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -80,7 +84,7 @@
     "Spring Boot.ApiApplication.executor": "Run",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/resources/db.migration",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/resources/db",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -130,6 +134,7 @@
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\api\src\infra\character-details\googleai" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\db" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\gemini\src" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -316,11 +321,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.start: dev (WEB)" />
+        <item itemvalue="npm.build (WEB)" />
         <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
-        <item itemvalue="npm.start: dev (WEB)" />
-        <item itemvalue="npm.build (WEB)" />
       </list>
     </recent_temporary>
   </component>
@@ -351,7 +356,7 @@
       <workItem from="1742455608559" duration="14135000" />
       <workItem from="1742543249283" duration="14684000" />
       <workItem from="1742567456870" duration="6805000" />
-      <workItem from="1742800320170" duration="12764000" />
+      <workItem from="1742800320170" duration="17968000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -505,7 +510,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742813657174</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
+      <option name="closed" value="true" />
+      <created>1742817730813</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1742817730813</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -525,7 +538,8 @@
     <MESSAGE value="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
-    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
+    <MESSAGE value="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -534,17 +548,7 @@
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharactersController.java</url>
           <line>27</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/CharactersController.java</url>
-          <line>20</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/api/src/main/java/jdr/generator/api/controllers/GeminiService.java</url>
-          <line>49</line>
-          <option name="timeStamp" value="15" />
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

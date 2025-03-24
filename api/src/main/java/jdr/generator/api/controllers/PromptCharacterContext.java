@@ -12,15 +12,19 @@ public class PromptCharacterContext {
 
     @Builder.Default
     @JsonProperty("promptSystem")
-    String promptSystem = "undefined";
+    String promptSystem = "Vampire The Masquerade";
 
     @Builder.Default
     @JsonProperty("promptRace")
-    String promptRace = "Human";
+    String promptRace = "Vampire";
+
+    @Builder.Default
+    @JsonProperty("promptGender")
+    String promptGender = "Male";
 
     @Builder.Default
     @JsonProperty("promptClass")
-    String promptClass = "";
+    String promptClass = "Nosferatu";
 
     @Builder.Default
     @JsonProperty("promptDescription")

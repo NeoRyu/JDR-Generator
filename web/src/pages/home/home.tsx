@@ -19,22 +19,24 @@ export function Home() {
 
   const [promptSystem, setPromptSystem] = useState('')
   const [promptRace, setPromptRace] = useState('')
+  const [promptGender, setPromptGender] = useState('')
   const [promptClass, setPromptClass] = useState('')
   const [promptDescription, setPromptDescription] = useState('')
 
   const handleGenerate = () => {
-    if (!promptSystem || !promptRace || !promptClass) {
+    if (!promptSystem || !promptGender) {
       return alert('Remplissez les champs')
     }
 
     mutate(
-      { promptSystem, promptClass, promptRace, promptDescription },
+      { promptSystem, promptClass, promptGender, promptRace, promptDescription },
       {
         onSuccess: () => {
           refetch()
 
           setPromptSystem('')
           setPromptRace('')
+          setPromptGender('')
           setPromptClass('')
           setPromptDescription('')
 
@@ -113,6 +115,17 @@ export function Home() {
                   <SelectItem value="Kenku">Kenku</SelectItem>
                   <SelectItem value="Goliath">Goliath</SelectItem>
                   <SelectItem value="Aasimar">Aasimar</SelectItem>
+                </SelectContent>
+              </Select>
+
+              <Select value={promptGender} onValueChange={setPromptGender}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Sélectionnez le sexe du personnage" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Masculin</SelectItem>
+                  <SelectItem value="Female">Féminin</SelectItem>
+                  <SelectItem value="Non-binary">Autre</SelectItem>
                 </SelectContent>
               </Select>
 

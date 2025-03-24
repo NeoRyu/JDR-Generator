@@ -17,7 +17,7 @@ public class CharactersController {
     @RequestMapping(value = {"/generate"}, method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:5173")
-    public String generate(@RequestBody PromptCharacterContext data) {
+    public CharacterModel generate(@RequestBody PromptCharacterContext data) {
         return geminiService.generate(data);
     }
 

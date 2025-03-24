@@ -14,15 +14,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
+
 @Service
 public class GeminiService implements IGeminiGenerationConfig {
 
+    final String hostApiIA = "http://localhost:3000/";
 
     @Override
-    public String generate(PromptCharacterContext data) {
-        final String apiUrl = "http://localhost:3000/generate";
+    public CharacterModel generate(PromptCharacterContext data) {
+        final String apiUrl = hostApiIA + "generate";
         StringBuilder jsonResponse = new StringBuilder();
+        CharacterModel character;
         try {
+            // On contact le serveur local qui va envoyer notre prompt à GEMINI
             HttpURLConnection con = getHttpURLConnection(data, apiUrl);
             try(BufferedReader br = new BufferedReader(
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
@@ -32,16 +36,21 @@ public class GeminiService implements IGeminiGenerationConfig {
                 }
             }
 
-            // Cleaning and Mapping JSON response to POJO CharacterModel :
+            // nettoyage de la réponse JSON et mapping vers l'objet CharacterModel :
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(String.valueOf(jsonResponse));
             String innerJsonString = jsonNode.get("response").asText();
-            innerJsonString = innerJsonString.replace("```json", "").replace("\\n", "").replace("\\t","").replace("\\","");
+            innerJsonString = innerJsonString
+                    .replace("```json", "")
+                    .replace("\\n", "")
+                    .replace("\\t","")
+                    .replace("\\","");
             innerJsonString = innerJsonString.substring(1, innerJsonString.length()-1);
             if (isValidJson(innerJsonString)) {
-                CharacterModel character = objectMapper.readValue(innerJsonString, CharacterModel.class);
+                character = objectMapper.readValue(innerJsonString, CharacterModel.class);
                 System.out.println("{JSON extracted} Test extraction with CharacterModel.name :: " + character.name);
             } else {
+                character = new CharacterModel();
                 System.out.println("> The JSON obtained from the AI is invalid, cleaning in place did not resolve the issue :: " + innerJsonString);
             }
 
@@ -49,25 +58,25 @@ public class GeminiService implements IGeminiGenerationConfig {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return jsonResponse.toString();
+        //
+        return character;
     }
 
     public boolean isValidJson(String json) {
-        System.out.println(json);
         try {
             new JSONObject(json);
         } catch (JSONException e) {
-            System.out.println("=> INVALID JSON RESPONSE OBJECT ...");
+            System.out.println("> INVALID JSON RESPONSE");
             return false;
         }
-        System.out.println("=> VALID JSON RESPONSE OBJECT !");
+        System.out.println("> VALID JSON RESPONSE");
         return true;
     }
 
 
     @Override
     public String illustrate(String data) {
-        final String apiUrl = "http://localhost:3000/illustrate";
+        final String apiUrl = hostApiIA + "illustrate";
         StringBuilder response = new StringBuilder();
         try {
             HttpURLConnection con = getHttpURLConnection(data, apiUrl);

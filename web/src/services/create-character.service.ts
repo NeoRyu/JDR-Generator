@@ -8,10 +8,11 @@ export const useCreateCharacter = () => {
         async (payload: {
             promptSystem: string
             promptRace: string
+            promptGender: string
             promptClass?: string
             promptDescription?: string
         }) => {
-            const { data } = await axios.post(
+            return await axios.post(
                 'http://localhost:8080/characters/generate',
                 payload,
                 {
@@ -22,9 +23,6 @@ export const useCreateCharacter = () => {
                     },
                 }
             );
-            // TODO : format json response
-            console.log('axios.post :: generate', data);
-            return data
         },
     )
 }

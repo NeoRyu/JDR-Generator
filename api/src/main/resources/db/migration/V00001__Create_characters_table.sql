@@ -1,6 +1,18 @@
 CREATE DATABASE IF NOT EXISTS `jdr_generator_db`;
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 
+DROP TABLE IF EXISTS `jdr_generator_db`.`context`;
+CREATE TABLE `jdr_generator_db`.`context` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `promptSystem` VARCHAR(255) DEFAULT NULL,
+    `promptRace` VARCHAR(255) DEFAULT NULL,
+    `promptGender` VARCHAR(255) DEFAULT NULL,
+    `promptClass` VARCHAR(255) DEFAULT NULL,
+    `promptDescription` TEXT DEFAULT NULL,
+    `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
 DROP TABLE IF EXISTS `jdr_generator_db`.`character`;
 CREATE TABLE `jdr_generator_db`.`character` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -50,5 +62,11 @@ CREATE TABLE `jdr_generator_db`.`character` (
     `image` TEXT  NOT NULL,
     `createdAt` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updatedAt` TIMESTAMP,
+    `context_id` INT NOT NULL DEFAULT 0,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `jdr_generator_db`.`character`
+    ADD CONSTRAINT `fk_context_id`
+        FOREIGN KEY (`context_id`)
+            REFERENCES context(`id`);
