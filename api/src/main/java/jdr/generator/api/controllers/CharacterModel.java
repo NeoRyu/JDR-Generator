@@ -1,7 +1,11 @@
 package jdr.generator.api.controllers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class CharacterModel {
 
     @JsonProperty("name")
@@ -10,52 +14,52 @@ public class CharacterModel {
     @JsonProperty("age")
     public int age;
 
-    @JsonProperty("age")
+    @JsonProperty("birthPlace")
     public String birthPlace;
 
-    @JsonProperty("age")
+    @JsonProperty("residenceLocation")
     public String residenceLocation;
 
-    @JsonProperty("age")
+    @JsonProperty("reasonForResidence")
     public String reasonForResidence;
 
     @JsonProperty("climate")
     public String climate;
 
-    @JsonProperty("common_problems")
+    @JsonProperty("commonProblems")
     public String commonProblems;
 
-    @JsonProperty("daily_routine")
+    @JsonProperty("dailyRoutine")
     public String dailyRoutine;
 
-    @JsonProperty("parents_alive")
+    @JsonProperty("parentsAlive")
     public Boolean parentsAlive;
 
-    @JsonProperty("details_about_parents")
+    @JsonProperty("detailsAboutParents")
     public String detailsAboutParents;
 
-    @JsonProperty("feelings_about_parents")
+    @JsonProperty("feelingsAboutParents")
     public String feelingsAboutParents;
 
     @JsonProperty("siblings")
     public String siblings;
 
-    @JsonProperty("childhood_story")
+    @JsonProperty("childhoodStory")
     public String childhoodStory;
 
-    @JsonProperty("youth_friends")
+    @JsonProperty("youthFriends")
     public String youthFriends;
 
     @JsonProperty("pet")
     public String pet;
 
-    @JsonProperty("marital_status")
+    @JsonProperty("maritalStatus")
     public String maritalStatus;
 
-    @JsonProperty("type_of_lover")
+    @JsonProperty("typeOfLover")
     public String typeOfLover;
 
-    @JsonProperty("conjugal_history")
+    @JsonProperty("conjugalHistory")
     public String conjugalHistory;
 
     @JsonProperty("children")
@@ -67,70 +71,70 @@ public class CharacterModel {
     @JsonProperty("profession")
     public String profession;
 
-    @JsonProperty("reason_for_profession")
+    @JsonProperty("reasonForProfession")
     public String reasonForProfession;
 
-    @JsonProperty("work_preferences")
+    @JsonProperty("workPreferences")
     public String workPreferences;
 
-    @JsonProperty("change_in_world")
+    @JsonProperty("changeInWorld")
     public String changeInWorld;
 
-    @JsonProperty("change_in_self")
+    @JsonProperty("changeInSelf")
     public String changeInSelf;
 
     @JsonProperty("goal")
     public String goal;
 
-    @JsonProperty("reason_for_goal")
+    @JsonProperty("reasonForGoal")
     public String reasonForGoal;
 
-    @JsonProperty("biggest_obstacle")
+    @JsonProperty("biggestObstacle")
     public String biggestObstacle;
 
-    @JsonProperty("overcoming_obstacle")
+    @JsonProperty("overcomingObstacle")
     public String overcomingObstacle;
 
-    @JsonProperty("plan_if_successful")
+    @JsonProperty("planIfSuccessful")
     public String planIfSuccessful;
 
-    @JsonProperty("plan_if_failed")
+    @JsonProperty("planIfFailed")
     public String planIfFailed;
 
-    @JsonProperty("self_description")
+    @JsonProperty("selfDescription")
     public String selfDescription;
 
-    @JsonProperty("distinctive_trait")
+    @JsonProperty("distinctiveTrait")
     public String distinctiveTrait;
 
-    @JsonProperty("physical_description")
+    @JsonProperty("physicalDescription")
     public String physicalDescription;
 
-    @JsonProperty("clothing_preferences")
+    @JsonProperty("clothingPreferences")
     public String clothingPreferences;
 
     @JsonProperty("fears")
     public String fears;
 
-    @JsonProperty("favorite_food")
+    @JsonProperty("favoriteFood")
     public String favoriteFood;
 
     @JsonProperty("hobbies")
     public String hobbies;
 
-    @JsonProperty("leisure_activities")
+    @JsonProperty("leisureActivities")
     public String leisureActivities;
 
-    @JsonProperty("ideal_company")
+    @JsonProperty("idealCompany")
     public String idealCompany;
 
-    @JsonProperty("attitude_towards_groups")
+    @JsonProperty("attitudeTowardsGroups")
     public String attitudeTowardsGroups;
 
-    @JsonProperty("attitude_towards_world")
+    @JsonProperty("attitudeTowardsWorld")
     public String attitudeTowardsWorld;
 
-    @JsonProperty("attitude_towards_people")
+    @JsonProperty("attitudeTowardsPeople")
     public String attitudeTowardsPeople;
 
     @JsonProperty("image")

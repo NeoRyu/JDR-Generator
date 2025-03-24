@@ -32,7 +32,7 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
             'birthPlace': 'Citadelle d\\'Ironcrest',
             'residenceLocation': 'Une maison modeste dans la Citadelle d\\'Ironcrest.',
             'reasonForResidence': 'Proximité de la famille et accès à la forge familiale.',
-            'climat': 'Tempéré, avec des hivers rigoureux.',
+            'climate': 'Tempéré, avec des hivers rigoureux.',
             'commonProblems': 'Défis dans la forge, rivalités locales.',
             'dailyRoutine': 'S\\'entraîner, forger, passer du temps avec ses amis et sa famille.',
             'parentsAlive': true,

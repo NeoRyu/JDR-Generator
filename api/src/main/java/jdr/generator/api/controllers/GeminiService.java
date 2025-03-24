@@ -1,8 +1,7 @@
 package jdr.generator.api.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -29,13 +28,21 @@ public class GeminiService implements IGeminiGenerationConfig {
                     new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
                 String responseLine = null;
                 while ((responseLine = br.readLine()) != null) {
-                    jsonResponse.append(cleanResponseToValidJson(responseLine));
+                    jsonResponse.append(responseLine);
                 }
             }
-            if (isValidJson(String.valueOf(jsonResponse))) {
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                CharacterModel character = gson.fromJson(String.valueOf(jsonResponse), CharacterModel.class);
-                System.out.println(character.toString());
+
+            // Cleaning and Mapping JSON response to POJO CharacterModel :
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(String.valueOf(jsonResponse));
+            String innerJsonString = jsonNode.get("response").asText();
+            innerJsonString = innerJsonString.replace("```json", "").replace("\\n", "").replace("\\t","").replace("\\","");
+            innerJsonString = innerJsonString.substring(1, innerJsonString.length()-1);
+            if (isValidJson(innerJsonString)) {
+                CharacterModel character = objectMapper.readValue(innerJsonString, CharacterModel.class);
+                System.out.println("{JSON extracted} Test extraction with CharacterModel.name :: " + character.name);
+            } else {
+                System.out.println("> The JSON obtained from the AI is invalid, cleaning in place did not resolve the issue :: " + innerJsonString);
             }
 
             // TODO : add custom context and character generated to database
@@ -43,24 +50,6 @@ public class GeminiService implements IGeminiGenerationConfig {
             throw new RuntimeException(e);
         }
         return jsonResponse.toString();
-    }
-
-    private String cleanResponseToValidJson(String responseLine) {
-        String data = responseLine.trim();
-        if (data.contains("```json")) {
-            data = data.replace("```json", "");
-        }
-        if (data.contains("```")) {
-            data = data.replace("```", "");
-        }
-        if (data.contains("{\"response\":\"\\n")) {
-            data = data.replace("{\"response\":\"\\n", "");
-            int pos = data.lastIndexOf("\\n}");
-            if (pos > -1) {
-                data = data.substring(0, pos) + data.substring(pos + "\\n}".length());
-            }
-        }
-        return data.trim();
     }
 
     public boolean isValidJson(String json) {
