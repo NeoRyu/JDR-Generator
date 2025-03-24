@@ -6,6 +6,7 @@ import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextMapper;
 import jdr.generator.api.characters.context.CharacterContextModel;
 import jdr.generator.api.characters.context.CharacterContextService;
+import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsMapper;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
@@ -42,7 +43,7 @@ public class GeminiService implements IGeminiGenerationConfig {
     public CharacterDetailsModel generate(DefaultContextJson data) {
         final String apiUrl = hostApiIA + "generate";
         StringBuilder jsonResponse = new StringBuilder();
-        CharacterDetailsModel character;
+        CharacterDetailsModel characterDetailsModel;
         try {
             // On contact le serveur local qui va envoyer notre prompt à GEMINI
             HttpURLConnection con = getHttpURLConnection(data, apiUrl);
@@ -54,7 +55,7 @@ public class GeminiService implements IGeminiGenerationConfig {
                 }
             }
 
-            // nettoyage de la réponse JSON et mapping vers l'objet CharacterModel :
+            // Nettoyage de la réponse JSON
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(String.valueOf(jsonResponse));
             String innerJsonString = jsonNode.get("response").asText();
@@ -64,29 +65,39 @@ public class GeminiService implements IGeminiGenerationConfig {
                     .replace("\\t","")
                     .replace("\\","");
             innerJsonString = innerJsonString.substring(1, innerJsonString.length()-1);
+
             if (isValidJson(innerJsonString)) {
-                character = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
-                System.out.println("{JSON extracted} Test extraction with CharacterModel.name :: " + character.name);
+                // Mapping de la réponse si le JSON est valide
+                characterDetailsModel = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
+                // On map le context ayant permis de générer le personnage
+                CharacterContextModel characterContextModel = new CharacterContextModel();
+                characterContextModel.promptSystem = data.promptSystem;
+                characterContextModel.promptRace = data.promptRace;
+                characterContextModel.promptGender = data.promptGender;
+                characterContextModel.promptClass = data.promptClass;
+                characterContextModel.promptDescription = data.promptDescription;
+                // Persistance du contexte, puis des details du personnage généré par IA lié à ce contexte
+                final CharacterContextEntity characterContextEntity = this.characterContextService.save(CharacterContextMapper.convertModelToEntity(characterContextModel));
+                final CharacterDetailsEntity characterDetailsEntity = this.characterDetailsService.save(CharacterDetailsMapper.convertModelToEntity(characterDetailsModel, characterContextEntity));
+                System.out.println("{JSON extracted} Created CharacterModel {id="+characterDetailsEntity.getId()+"} :: " + characterDetailsModel.name + " [" + characterContextModel.promptGender +" {idContext="+characterContextEntity.getId()+"}]");
             } else {
-                character = new CharacterDetailsModel();
+                // Le JSON récupéré depuis l'api GEMINI est invalide...
+                // Analyser auquel cas ce qui bug pour appliquer le correctif dans innerJsonString au-dessus !
+                characterDetailsModel = new CharacterDetailsModel();
                 System.out.println("> The JSON obtained from the AI is invalid, cleaning in place did not resolve the issue :: " + innerJsonString);
             }
-
-            CharacterContextModel characterContextModel = new CharacterContextModel();
-            characterContextModel.promptSystem = data.promptSystem;
-            characterContextModel.promptRace = data.promptRace;
-            characterContextModel.promptGender = data.promptGender;
-            characterContextModel.promptClass = data.promptClass;
-            characterContextModel.promptDescription = data.promptDescription;
-            CharacterContextEntity characterContextEntity = this.characterContextService.save(CharacterContextMapper.convertModelToEntity(characterContextModel));
-            this.characterDetailsService.save(CharacterDetailsMapper.convertModelToEntity(character, characterContextEntity));
-
-            // TODO : add custom context and character generated to database
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        //
-        return character;
+
+        try {
+            // TODO : Ajouter un blob permettant de persister et recréer à la volée l'image précédement générée par IA
+            // this.illustrate(characterDetailsModel.image);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // On retourne le model à la vue frontend WEB
+        return characterDetailsModel;
     }
 
     public boolean isValidJson(String json) {
@@ -96,7 +107,6 @@ public class GeminiService implements IGeminiGenerationConfig {
             System.out.println("> INVALID JSON RESPONSE");
             return false;
         }
-        System.out.println("> VALID JSON RESPONSE");
         return true;
     }
 
