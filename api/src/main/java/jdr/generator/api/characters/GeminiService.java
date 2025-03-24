@@ -1,7 +1,14 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api.characters;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jdr.generator.api.characters.context.CharacterContextEntity;
+import jdr.generator.api.characters.context.CharacterContextMapper;
+import jdr.generator.api.characters.context.CharacterContextModel;
+import jdr.generator.api.characters.context.CharacterContextService;
+import jdr.generator.api.characters.details.CharacterDetailsMapper;
+import jdr.generator.api.characters.details.CharacterDetailsModel;
+import jdr.generator.api.characters.details.CharacterDetailsService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -20,11 +27,22 @@ public class GeminiService implements IGeminiGenerationConfig {
 
     final String hostApiIA = "http://localhost:3000/";
 
+    private final CharacterDetailsService characterDetailsService;    // JPA Repository
+    private final CharacterContextService characterContextService;    // JPA Repository
+
+    public GeminiService(
+            CharacterDetailsService characterDetailsService,
+            CharacterContextService characterContextService
+    ) {
+        this.characterDetailsService = characterDetailsService;
+        this.characterContextService = characterContextService;
+    }
+
     @Override
-    public CharacterModel generate(PromptCharacterContext data) {
+    public CharacterDetailsModel generate(DefaultContextJson data) {
         final String apiUrl = hostApiIA + "generate";
         StringBuilder jsonResponse = new StringBuilder();
-        CharacterModel character;
+        CharacterDetailsModel character;
         try {
             // On contact le serveur local qui va envoyer notre prompt à GEMINI
             HttpURLConnection con = getHttpURLConnection(data, apiUrl);
@@ -47,12 +65,21 @@ public class GeminiService implements IGeminiGenerationConfig {
                     .replace("\\","");
             innerJsonString = innerJsonString.substring(1, innerJsonString.length()-1);
             if (isValidJson(innerJsonString)) {
-                character = objectMapper.readValue(innerJsonString, CharacterModel.class);
+                character = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
                 System.out.println("{JSON extracted} Test extraction with CharacterModel.name :: " + character.name);
             } else {
-                character = new CharacterModel();
+                character = new CharacterDetailsModel();
                 System.out.println("> The JSON obtained from the AI is invalid, cleaning in place did not resolve the issue :: " + innerJsonString);
             }
+
+            CharacterContextModel characterContextModel = new CharacterContextModel();
+            characterContextModel.promptSystem = data.promptSystem;
+            characterContextModel.promptRace = data.promptRace;
+            characterContextModel.promptGender = data.promptGender;
+            characterContextModel.promptClass = data.promptClass;
+            characterContextModel.promptDescription = data.promptDescription;
+            CharacterContextEntity characterContextEntity = this.characterContextService.save(CharacterContextMapper.convertModelToEntity(characterContextModel));
+            this.characterDetailsService.save(CharacterDetailsMapper.convertModelToEntity(character, characterContextEntity));
 
             // TODO : add custom context and character generated to database
         } catch (IOException e) {

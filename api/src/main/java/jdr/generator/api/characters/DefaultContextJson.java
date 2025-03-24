@@ -1,4 +1,4 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api.characters;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PromptCharacterContext {
+public class DefaultContextJson {
 
     @Builder.Default
     @JsonProperty("promptSystem")

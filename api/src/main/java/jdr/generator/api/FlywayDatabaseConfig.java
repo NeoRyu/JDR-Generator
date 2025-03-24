@@ -1,4 +1,4 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api;
 
 import org.flywaydb.core.Flyway;
 import org.springframework.boot.autoconfigure.flyway.FlywayProperties;

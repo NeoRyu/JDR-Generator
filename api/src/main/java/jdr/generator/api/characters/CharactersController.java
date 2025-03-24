@@ -1,5 +1,6 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api.characters;
 
+import jdr.generator.api.characters.details.CharacterDetailsModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class CharactersController {
     @RequestMapping(value = {"/generate"}, method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = "http://localhost:5173")
-    public CharacterModel generate(@RequestBody PromptCharacterContext data) {
+    public CharacterDetailsModel generate(@RequestBody DefaultContextJson data) {
         return geminiService.generate(data);
     }
 

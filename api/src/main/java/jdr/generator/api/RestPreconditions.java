@@ -1,4 +1,4 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api;
 
 public class RestPreconditions {
     public static <T> T checkFound(T data) throws Exception {

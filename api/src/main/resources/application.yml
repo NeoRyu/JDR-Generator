@@ -47,6 +47,8 @@ spring:
       org.hibernate.flushMode: COMMIT
     show-sql: false
     hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
       #ddl-auto: update
   servlet:

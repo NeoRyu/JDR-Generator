@@ -1,4 +1,4 @@
-package jdr.generator.api.controllers;
+package jdr.generator.api.characters.details;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,12 +11,12 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-@Table(name="character")
-public class CharacterEntity {
+@Table(name="character_details")
+public class CharacterDetailsEntity {
 
     @Id
     @Column(name="id", unique=true, nullable=false)
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="name", nullable=false)
@@ -151,10 +151,16 @@ public class CharacterEntity {
     @Column(name="image")
     private String image;
 
-    @Column(name="createdAt", nullable=false)
+    @Column(name="created_at", nullable=false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
-    @Column(name="updatedAt")
+    @Column(name="updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
+    @Column(name = "context_id")
+    private Long contextId;
+
+    // public void setContextId(Integer contextId) {}
 }
