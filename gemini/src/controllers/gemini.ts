@@ -1,11 +1,5 @@
 import {Request, Response} from "express";
-import {
-    ChatSession,
-    EnhancedGenerateContentResponse,
-    GenerateContentResult,
-    GenerativeModel,
-    GoogleGenerativeAI
-} from '@google/generative-ai';
+import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI} from '@google/generative-ai';
 import dotenv from "dotenv";
 import fs from "fs";
 
@@ -83,10 +77,10 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
 
 function contextPrompt(data): string {
     const context = `
-    game system: ${data.gameSystem}
-    race: ${data.race}
-    class: ${data.class}
-    description: ${data.description}
+    game system: ${data.promptSystem}
+    race: ${data.promptRace}
+    class: ${data.promptClass}
+    description: ${data.promptDescription}
     `;
     console.log('Contexte : ', context);
     return basePrompt + `Please use the context provided below to generate the character: Context: '''` + context + `'''`;
@@ -101,10 +95,10 @@ export const generateResponse = async (req: Request, res: Response) => {
 
         const result: GenerateContentResult = await model.generateContent( // prompt
             contextPrompt({
-                gameSystem: prompt && prompt?.gameSystem || 'undefined',
-                race: prompt && prompt?.race || 'Human',
-                class: prompt && prompt?.class || '',
-                description: prompt && prompt?.description || '',
+                promptSystem: prompt && prompt?.promptSystem || 'undefined',
+                promptRace: prompt && prompt?.promptRace || 'Human',
+                promptClass: prompt && prompt?.promptClass || '',
+                promptDescription: prompt && prompt?.promptDescription || '',
             })
         );
         const responseText: string = result.response.text();

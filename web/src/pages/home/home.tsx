@@ -17,26 +17,26 @@ export function Home() {
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const [gameSystem, setGameSystem] = useState('')
-  const [race, setRace] = useState('')
-  const [characterClass, setCharacterClass] = useState('')
-  const [description, setDescription] = useState('')
+  const [promptSystem, setPromptSystem] = useState('')
+  const [promptRace, setPromptRace] = useState('')
+  const [promptClass, setPromptClass] = useState('')
+  const [promptDescription, setPromptDescription] = useState('')
 
   const handleGenerate = () => {
-    if (!gameSystem || !race || !characterClass) {
+    if (!promptSystem || !promptRace || !promptClass) {
       return alert('Remplissez les champs')
     }
 
     mutate(
-      { gameSystem, class: characterClass, race, description },
+      { promptSystem, promptClass, promptRace, promptDescription },
       {
         onSuccess: () => {
           refetch()
 
-          setGameSystem('')
-          setRace('')
-          setCharacterClass('')
-          setDescription('')
+          setPromptSystem('')
+          setPromptRace('')
+          setPromptClass('')
+          setPromptDescription('')
 
           setIsOpen(false)
         },
@@ -58,7 +58,7 @@ export function Home() {
             </DialogTrigger>
 
             <DialogContent>
-              <Select value={gameSystem} onValueChange={setGameSystem}>
+              <Select value={promptSystem} onValueChange={setPromptSystem}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez l'univers du jeu" />
                 </SelectTrigger>
@@ -92,7 +92,7 @@ export function Home() {
                 </SelectContent>
               </Select>
 
-              <Select value={race} onValueChange={setRace}>
+              <Select value={promptRace} onValueChange={setPromptRace}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la race du personnage" />
                 </SelectTrigger>
@@ -116,7 +116,7 @@ export function Home() {
                 </SelectContent>
               </Select>
 
-              <Select value={characterClass} onValueChange={setCharacterClass}>
+              <Select value={promptClass} onValueChange={setPromptClass}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez la classe du personnage" />
                 </SelectTrigger>
@@ -142,8 +142,8 @@ export function Home() {
 
               <Textarea
                 placeholder="Description"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
+                value={promptDescription}
+                onChange={(event) => setPromptDescription(event.target.value)}
               />
 
               <DialogFooter>

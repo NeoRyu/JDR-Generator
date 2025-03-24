@@ -18,7 +18,11 @@
 
 4. Obtenir une clé d'API GOOGLE pour Gemini : [https://ai.google.dev/gemini-api/docs/pricing?hl=fr](https://ai.google.dev/gemini-api/docs/pricing?hl=fr)
 
-5. Mettre à jour votre fichier `.env` avec votre clé API (https://aistudio.google.com/apikey)
+5. Mettre à jour votre fichier `.env` avec votre clé API (https://aistudio.google.com/apikey) et votre username de connection windows.
+
+6. Ajouter un dossier nommé `FantasyGenerator` dans votre dossier de téléchargement 
+(`C:\Users\`{windows_username}`\Downloads\FantasyGenerator\`)
+   > Pour choisir un autre emplacement, modifiez les varibales `pathSrc` dans les fichiers `gemini.ts` et `imagen.ts`
 
 ## Générer et exécuter
 

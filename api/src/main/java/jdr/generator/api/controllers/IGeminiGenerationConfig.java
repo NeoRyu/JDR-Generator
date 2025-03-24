@@ -9,7 +9,7 @@ public interface IGeminiGenerationConfig {
     double topP = 0.8; // Probabilité cumulée maximale des jetons à prendre en compte lors de l'échantillonnage combiné Top-k et Top-p (noyau).
     double topK = 40; // Nombre maximal de jetons à prendre en compte lors de l'échantillonnage.
 
-    public Object generate(ICharacterContext data);
+    public Object generate(PromptCharacterContext data);
 
     public Object illustrate(String image);
 }
