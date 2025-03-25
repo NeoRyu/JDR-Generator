@@ -68,6 +68,12 @@ export function Home() {
             </DialogTrigger>
 
             <DialogContent>
+              <DialogClose asChild>
+                <Button variant="ghost" className="absolute right-4 top-4">
+                  <X className="h-4 w-4" />
+                  <span className="sr-only">Fermer</span>
+                </Button>
+              </DialogClose>
               <DialogTitle>Création d'un nouveau personnage</DialogTitle>
               <DialogDescription>
                 Remplissez les champs pour générer un nouveau personnage.
@@ -216,6 +222,10 @@ export function Home() {
                     </DialogTrigger>
 
                     <DialogContent>
+                      <DialogTitle>{character.name}</DialogTitle>
+                      <DialogDescription>
+                        Détails du personnage généré
+                      </DialogDescription>
                       <div className="flex flex-col">
                         <img
                           className="rounded shadow w-56 h-56 m-auto"
@@ -617,12 +627,7 @@ export function Home() {
                           </Table>
                         </ScrollArea>
                       </div>
-                      <DialogClose asChild>
-                        <Button variant="ghost" className="absolute right-4 top-4">
-                          <X className="h-4 w-4" />
-                          <span className="sr-only">Fermer</span>
-                        </Button>
-                      </DialogClose>
+
                     </DialogContent>
                   </Dialog>
                 </TableCell>
