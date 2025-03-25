@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,6 +30,7 @@ public class CharacterContextServiceImpl implements CharacterContextService {
     }
 
     @Override
+    @Transactional
     public CharacterContextEntity save(CharacterContextEntity Context) {
         return this.characterContextRepository.save(Context);
     }

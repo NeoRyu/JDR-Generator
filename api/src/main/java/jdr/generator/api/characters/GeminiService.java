@@ -3,6 +3,7 @@ package jdr.generator.api.characters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.transaction.Transactional;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
 import jdr.generator.api.characters.context.CharacterContextService;
@@ -10,6 +11,9 @@ import jdr.generator.api.characters.context.DefaultContextJson;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
+import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
+import jdr.generator.api.characters.illustration.CharacterIllustrationModel;
+import jdr.generator.api.characters.illustration.CharacterIllustrationService;
 import jdr.generator.api.config.IGeminiGenerationConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -20,10 +24,13 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Base64;
+
 
 @Service
 @RequiredArgsConstructor
 public class GeminiService implements IGeminiGenerationConfig {
+
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
@@ -32,9 +39,11 @@ public class GeminiService implements IGeminiGenerationConfig {
     private final RestTemplate restTemplate;
     private final CharacterDetailsService characterDetailsService;
     private final CharacterContextService characterContextService;
+    private final CharacterIllustrationService characterIllustrationService;
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public CharacterDetailsModel generate(DefaultContextJson data) {
         final String apiUrl = hostApiIA + "generate";
         HttpHeaders headers = new HttpHeaders();
@@ -75,6 +84,27 @@ public class GeminiService implements IGeminiGenerationConfig {
                     characterDetailsEntity.getId(), characterDetailsModel.name, characterContextModel.promptGender, characterContextEntity.getId());
 
             final String imgBlob = this.illustrate(characterDetailsModel.image);
+            if (imgBlob != null) {
+                try {
+                    JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
+                    if (imageNode != null) {
+                        byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
+
+                        // Récupérer l'entité CharacterDetailsEntity depuis la base de données
+                        CharacterDetailsEntity parent = this.characterDetailsService.findById(characterDetailsEntity.getId());
+
+                        CharacterIllustrationModel characterIllustrationModel = new CharacterIllustrationModel();
+                        characterIllustrationModel.setImageLabel(parent.getImage());
+                        characterIllustrationModel.setImageBlob(imageBytes);
+                        characterIllustrationModel.setImageDetails(parent);
+
+                        CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+                        characterIllustrationEntity = this.characterIllustrationService.save(characterIllustrationEntity);
+                    }
+                } catch (JsonProcessingException e) {
+                    LOGGER.error("Error parsing image blob: {}", e.getMessage());
+                }
+            }
 
             return characterDetailsModel;
         } catch (JsonProcessingException e) {

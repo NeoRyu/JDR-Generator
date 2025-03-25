@@ -74,3 +74,13 @@ ALTER TABLE `jdr_generator_db`.`character_details`
     ADD CONSTRAINT `fk_character_context_id`
         FOREIGN KEY (`context_id`)
             REFERENCES character_context(`id`);
+
+DROP TABLE IF EXISTS `jdr_generator_db`.`character_illustration`;
+CREATE TABLE `jdr_generator_db`.`character_illustration` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `image_label` TEXT,
+    `image_blob` LONGBLOB,
+    `image_details` INT NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`image_details`) REFERENCES `character_details`(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

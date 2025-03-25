@@ -3,6 +3,7 @@ package jdr.generator.api.characters.details;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,14 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     }
 
     @Override
+    @Transactional
     public CharacterDetailsEntity save(CharacterDetailsEntity character) {
         return this.characterDetailsRepository.save(character);
+    }
+
+    @Override
+    public CharacterDetailsEntity findById(Long id) {
+        return characterDetailsRepository.findById(id).orElse(null);
     }
 
     @Override

@@ -9,4 +9,5 @@ public interface CharacterDetailsService {
 
     CharacterDetailsEntity save(CharacterDetailsEntity character);
 
+    CharacterDetailsEntity findById(Long id);
 }

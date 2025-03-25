@@ -19,10 +19,10 @@ spring:
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5
-      connection-timeout: 30000
       idle-timeout: 600000
-      max-lifetime: 1800000
-      leak-detection-threshold: 5000
+      maxLifetime: 1800000 # 30 minutes
+      connectionTimeout: 30000 # 30 secondes
+      leakDetectionThreshold: 20000 # 20 secondes
       username: root
       password: root
     tomcat:
