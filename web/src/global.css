@@ -74,3 +74,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+.dark {
+  background-color: #111827; /* Exemple de couleur de fond sombre */
+  color: white; /* Exemple de couleur de texte clair */
+}
+
+.light {
+  background-color: white; /* Exemple de couleur de fond clair */
+  color: black; /* Exemple de couleur de texte sombre */
+}
+
+/* Styles pour le thème sombre */
+.dark input,
+.dark textarea {
+  background-color: #374151; /* Couleur de fond sombre pour les champs de formulaire */
+  color: white; /* Couleur de texte clair pour les champs de formulaire */
+  border: 1px solid #4b5563; /* Bordure légèrement plus claire */
+}
+
+/* Styles pour le thème clair */
+.light input,
+.light textarea {
+  background-color: white; /* Couleur de fond clair pour les champs de formulaire */
+  color: black; /* Couleur de texte sombre pour les champs de formulaire */
+  border: 1px solid #d1d5db; /* Bordure légèrement plus sombre */
+}
+
+/* Styles supplémentaires pour les champs de formulaire */
+input,
+textarea {
+  padding: 0.5rem; /* Espacement intérieur pour les champs de formulaire */
+  border-radius: 0.25rem; /* Bordures arrondies pour les champs de formulaire */
+  transition: border-color 0.2s ease-in-out; /* Transition douce pour la bordure */
+}
+
+/* Styles pour le focus des champs de formulaire */
+input:focus,
+textarea:focus {
+  outline: none; /* Supprime la bordure de focus par défaut */
+  border-color: #6366f1; /* Couleur de bordure de focus personnalisée */
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); /* Ombre de focus personnalisée */
+}
