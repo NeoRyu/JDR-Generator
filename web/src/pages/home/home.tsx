@@ -1,5 +1,13 @@
 import {Button} from '@/components/ui/button'
-import {Dialog, DialogContent, DialogFooter, DialogTrigger,} from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
 import {ScrollArea} from '@/components/ui/scroll-area'
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table'
@@ -7,7 +15,7 @@ import {Textarea} from '@/components/ui/textarea'
 import {useCreateCharacter} from '@/services/create-character.service'
 import {useListCharacters} from '@/services/list-characters.service'
 import dayjs from 'dayjs'
-import {Eye} from 'lucide-react'
+import {Eye, X} from 'lucide-react'
 import {useState} from 'react'
 
 
@@ -54,12 +62,17 @@ export function Home() {
 
       <main className="flex flex-col">
         <div className="flex justify-end">
-          <Dialog open={isOpen}>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button onClick={() => setIsOpen(true)}>Nouveau personnage</Button>
             </DialogTrigger>
 
             <DialogContent>
+              <DialogTitle>Création d'un nouveau personnage</DialogTitle>
+              <DialogDescription>
+                Remplissez les champs pour générer un nouveau personnage.
+              </DialogDescription>
+
               <Select value={promptSystem} onValueChange={setPromptSystem}>
                 <SelectTrigger>
                   <SelectValue placeholder="Sélectionnez l'univers du jeu" />
@@ -604,6 +617,12 @@ export function Home() {
                           </Table>
                         </ScrollArea>
                       </div>
+                      <DialogClose asChild>
+                        <Button variant="ghost" className="absolute right-4 top-4">
+                          <X className="h-4 w-4" />
+                          <span className="sr-only">Fermer</span>
+                        </Button>
+                      </DialogClose>
                     </DialogContent>
                   </Dialog>
                 </TableCell>
