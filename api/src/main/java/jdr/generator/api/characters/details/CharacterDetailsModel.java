@@ -1,11 +1,14 @@
 package jdr.generator.api.characters.details;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterDetailsModel {
@@ -142,6 +145,8 @@ public class CharacterDetailsModel {
     @JsonProperty("image")
     public String image;
 
+    public Long id;
+    public Long contextId;
     public Date createdAt;
     public Date updatedAt;
 

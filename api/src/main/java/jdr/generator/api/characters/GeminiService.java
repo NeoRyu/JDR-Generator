@@ -1,151 +1,106 @@
 package jdr.generator.api.characters;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdr.generator.api.characters.context.CharacterContextEntity;
-import jdr.generator.api.characters.context.CharacterContextMapper;
 import jdr.generator.api.characters.context.CharacterContextModel;
 import jdr.generator.api.characters.context.CharacterContextService;
+import jdr.generator.api.characters.context.DefaultContextJson;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
-import jdr.generator.api.characters.details.CharacterDetailsMapper;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
-import org.json.JSONException;
+import jdr.generator.api.config.IGeminiGenerationConfig;
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import org.springframework.web.client.RestTemplate;
 
 
 @Service
+@RequiredArgsConstructor
 public class GeminiService implements IGeminiGenerationConfig {
+    private static final Logger LOGGER = LogManager.getLogger();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    final String hostApiIA = "http://localhost:3000/";
+    private final String hostApiIA = "http://localhost:3000/";
 
-    private final CharacterDetailsService characterDetailsService;    // JPA Repository
-    private final CharacterContextService characterContextService;    // JPA Repository
-
-    public GeminiService(
-            CharacterDetailsService characterDetailsService,
-            CharacterContextService characterContextService
-    ) {
-        this.characterDetailsService = characterDetailsService;
-        this.characterContextService = characterContextService;
-    }
+    private final RestTemplate restTemplate;
+    private final CharacterDetailsService characterDetailsService;
+    private final CharacterContextService characterContextService;
+    private final ModelMapper modelMapper;
 
     @Override
     public CharacterDetailsModel generate(DefaultContextJson data) {
         final String apiUrl = hostApiIA + "generate";
-        StringBuilder jsonResponse = new StringBuilder();
-        CharacterDetailsModel characterDetailsModel;
-        try {
-            // On contact le serveur local qui va envoyer notre prompt à GEMINI
-            HttpURLConnection con = getHttpURLConnection(data, apiUrl);
-            try(BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    jsonResponse.append(responseLine);
-                }
-            }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<DefaultContextJson> request = new HttpEntity<>(data, headers);
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
+        if (response.getStatusCode() != HttpStatus.OK) {
+            LOGGER.error("API request failed with status code: {}", response.getStatusCode());
+            throw new RuntimeException("API request failed");
+        }
+
+        try {
             // Nettoyage de la réponse JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(String.valueOf(jsonResponse));
-            String innerJsonString = jsonNode.get("response").asText();
-            innerJsonString = innerJsonString
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
+            String innerJsonString = jsonNode.get("response").asText()
                     .replace("```json", "")
                     .replace("\\n", "")
-                    .replace("\\t","")
-                    .replace("\\","");
-            innerJsonString = innerJsonString.substring(1, innerJsonString.length()-1);
+                    .replace("\\t", "")
+                    .replace("\\", "");
+            innerJsonString = innerJsonString.substring(1, innerJsonString.length() - 1);
 
-            if (isValidJson(innerJsonString)) {
-                // Mapping de la réponse si le JSON est valide
-                characterDetailsModel = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
-                // On map le context ayant permis de générer le personnage
-                CharacterContextModel characterContextModel = new CharacterContextModel();
-                characterContextModel.promptSystem = data.promptSystem;
-                characterContextModel.promptRace = data.promptRace;
-                characterContextModel.promptGender = data.promptGender;
-                characterContextModel.promptClass = data.promptClass;
-                characterContextModel.promptDescription = data.promptDescription;
-                // Persistance du contexte, puis des details du personnage généré par IA lié à ce contexte
-                final CharacterContextEntity characterContextEntity = this.characterContextService.save(CharacterContextMapper.convertModelToEntity(characterContextModel));
-                final CharacterDetailsEntity characterDetailsEntity = this.characterDetailsService.save(CharacterDetailsMapper.convertModelToEntity(characterDetailsModel, characterContextEntity));
-                System.out.println("{JSON extracted} Created CharacterModel {id="+characterDetailsEntity.getId()+"} :: " + characterDetailsModel.name + " [" + characterContextModel.promptGender +" {idContext="+characterContextEntity.getId()+"}]");
-            } else {
-                // Le JSON récupéré depuis l'api GEMINI est invalide...
-                // Analyser auquel cas ce qui bug pour appliquer le correctif dans innerJsonString au-dessus !
-                characterDetailsModel = new CharacterDetailsModel();
-                System.out.println("> The JSON obtained from the AI is invalid, cleaning in place did not resolve the issue :: " + innerJsonString);
-            }
-        } catch (IOException e) {
+
+            CharacterContextModel characterContextModel = this.characterContextService.createCharacterContextModel(data);
+            final CharacterContextEntity characterContextEntity = characterContextService.save(
+                    modelMapper.map(characterContextModel, CharacterContextEntity.class)
+            );
+
+            CharacterDetailsModel characterDetailsModel = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
+            characterDetailsModel.createdAt = java.util.Date.from(java.time.Instant.now());
+            characterDetailsModel.setContextId(characterContextEntity.getId()); // set contextId
+            final CharacterDetailsEntity characterDetailsEntity = characterDetailsService.save(
+                    modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class)
+            );
+
+            LOGGER.info("Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
+                    characterDetailsEntity.getId(), characterDetailsModel.name, characterContextModel.promptGender, characterContextEntity.getId());
+
+            final String imgBlob = this.illustrate(characterDetailsModel.image);
+
+            return characterDetailsModel;
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Error parsing JSON response: {}", e.getMessage());
             throw new RuntimeException(e);
         }
-
-        try {
-            // TODO : Ajouter un blob permettant de persister et recréer à la volée l'image précédement générée par IA
-            // this.illustrate(characterDetailsModel.image);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // On retourne le model à la vue frontend WEB
-        return characterDetailsModel;
     }
-
-    public boolean isValidJson(String json) {
-        try {
-            new JSONObject(json);
-        } catch (JSONException e) {
-            System.out.println("> INVALID JSON RESPONSE");
-            return false;
-        }
-        return true;
-    }
-
 
     @Override
     public String illustrate(String data) {
         final String apiUrl = hostApiIA + "illustrate";
-        StringBuilder response = new StringBuilder();
-        try {
-            HttpURLConnection con = getHttpURLConnection(data, apiUrl);
-            try(BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8))) {
-                String responseLine = null;
-                while ((responseLine = br.readLine()) != null) {
-                    response.append(responseLine.trim());
-                }
-                System.out.println(response.toString());
-            }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("prompt", data);
+        HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            LOGGER.error("API illustrate request failed with status code: {}", response.getStatusCode());
+            throw new RuntimeException("API illustrate request failed");
         }
-        return response.toString();
+
+        LOGGER.info("Illustration API response: {}", response.getBody());
+        return response.getBody();
     }
 
-    private static HttpURLConnection getHttpURLConnection(Object data, String apiUrl) throws IOException {
-        URL url = new URL(apiUrl);
-        HttpURLConnection con = (HttpURLConnection)url.openConnection();
-        con.setRequestMethod("POST");
-        con.setRequestProperty("Content-Type", "application/json");
-        con.setRequestProperty("Accept", "application/json");
-        con.setDoOutput(true);
-
-        ObjectMapper mapper = new ObjectMapper();
-        String jsonInputString = mapper.writeValueAsString(data);
-        try(OutputStream os = con.getOutputStream()) {
-            byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
-            os.write(input, 0, input.length);
-        }
-        return con;
-    }
 }

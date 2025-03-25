@@ -88,6 +88,8 @@ function contextPrompt(data): string {
 
 // Fonction contrôleur pour gérer les conversations
 export const generateResponse = async (req: Request, res: Response) => {
+    const pathSrc: string = 'C:\\Users\\'+process.env.USER_WINDOW+'\\Downloads\\FantasyGenerator\\'
+    const txtName: string = 'FantasyGenerator-gemini_'+Math.floor(Date.now()/1000)+'.txt';
     try {
         const { prompt } = req.body;
         const contextPrompts = {
@@ -98,9 +100,6 @@ export const generateResponse = async (req: Request, res: Response) => {
             promptDescription: req.body.promptDescription,
         };
         console.log('Contexte ::', contextPrompts);
-
-        const pathSrc: string = 'C:\\Users\\'+process.env.USER_WINDOW+'\\Downloads\\FantasyGenerator\\'
-        const txtName: string = 'FantasyGenerator-gemini_'+Math.floor(Date.now()/1000)+'.txt';
 
         const result: GenerateContentResult = await model.generateContent(contextPrompt(contextPrompts));
         const responseText: string = result.response.text();

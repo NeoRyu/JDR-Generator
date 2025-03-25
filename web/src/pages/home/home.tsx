@@ -186,7 +186,7 @@ export function Home() {
           </TableHeader>
 
           <TableBody>
-            {data?.map((character: any) => (
+            {data?.data.map((character: any) => (
               <TableRow key={character.id}>
                 <TableCell>{dayjs(character.createdAt).format('DD/MM/YYYY')}</TableCell>
                 <TableCell>{character.name}</TableCell>

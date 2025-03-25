@@ -1,9 +1,12 @@
 package jdr.generator.api.characters.details;
 
+import java.util.List;
+
+
 public interface CharacterDetailsService {
 
-    CharacterDetailsEntity save(CharacterDetailsEntity character);
+    List<CharacterDetailsModel> getAllCharacters();
 
-    CharacterDetailsEntity findById(long id);
+    CharacterDetailsEntity save(CharacterDetailsEntity character);
 
 }

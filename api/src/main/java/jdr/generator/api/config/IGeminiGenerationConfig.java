@@ -1,4 +1,6 @@
-package jdr.generator.api.characters;
+package jdr.generator.api.config;
+
+import jdr.generator.api.characters.context.DefaultContextJson;
 
 /**
  * https://ai.google.dev/api/generate-content?hl=fr#generationconfig

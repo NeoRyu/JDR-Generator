@@ -1,13 +1,16 @@
 package jdr.generator.api.characters.context;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 
+@Getter
+@Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterContextModel {
+    public Long id;
 
     public String promptSystem;
     public String promptRace;
@@ -16,5 +19,4 @@ public class CharacterContextModel {
     public String promptDescription;
 
     public Date createdAt;
-
 }
