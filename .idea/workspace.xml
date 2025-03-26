@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/components/model/character.model.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/services/update-character.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
@@ -103,7 +101,7 @@
     "project.structure.last.edited": "SDKs",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "configurable.group.language",
     "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -327,8 +325,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start: dev (WEB)" />
-        <item itemvalue="npm.build (WEB)" />
         <item itemvalue="npm.start (GEMINI)" />
+        <item itemvalue="npm.build (WEB)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
       </list>
@@ -365,6 +363,7 @@
       <workItem from="1742886519002" duration="7228000" />
       <workItem from="1742893829074" duration="1296000" />
       <workItem from="1742895141473" duration="19192000" />
+      <workItem from="1742973596601" duration="4901000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />

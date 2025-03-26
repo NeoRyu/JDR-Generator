@@ -17,7 +17,7 @@ import {useListCharacters} from '@/services/list-characters.service';
 import {useUpdateCharacter} from '@/services/update-character.service';
 import dayjs from 'dayjs';
 import {Eye, Pen, X} from 'lucide-react';
-import {useState} from 'react';
+import {useRef, useState} from 'react';
 import {Character} from '@/components/model/character.model';
 import {CharacterForm} from '@/components/form/character-form';
 import {useTheme} from '@/components/theme-provider'; // Import useTheme
@@ -73,6 +73,8 @@ export function Home() {
   };
 
   const { theme } = useTheme(); // Use useTheme to access the theme
+
+  const characterFormRef = useRef<CharacterFormRef>(null); // Création de la ref
 
   return (
       <div className="h-screen flex flex-col px-4">
@@ -682,28 +684,43 @@ export function Home() {
                             </DialogTrigger>
 
                             <DialogContent className={`max-w-[90vw] w-full ${theme === 'dark' ? 'light' : 'dark'}`}>
-                              <DialogTitle>EDITION DU PERSONNAGE [ID={selectedCharacter?.id}]</DialogTitle>
-                              <DialogDescription>
-                                Modifiez les détails du personnage.
-                              </DialogDescription>
+                              <div className="flex justify-between items-start">
+                                <div style={{ maxHeight: '80vh', overflowY: 'auto', width: '80%', paddingRight: '1rem' }}>
+                                  <DialogTitle>EDITION DU PERSONNAGE</DialogTitle>
+                                  <DialogDescription>
+                                    Modifiez les détails du personnage.
+                                  </DialogDescription>
+                                </div>
+                                <div className="flex justify-end">
+                                  {selectedCharacter && (
+                                      <div style={{ textAlign: 'right', paddingRight: '1rem' }}>
+                                        {/* Rendre le bouton directement ici */}
+                                        <Button
+                                            type="button"
+                                            onClick={(e) => {
+                                              if (selectedCharacter) {
+                                                characterFormRef.current?.handleSubmit(e);
+                                              }
+                                            }}
+                                            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
+                                        >
+                                          Sauvegarder [ID={selectedCharacter?.id}]
+                                        </Button>
+                                      </div>
+                                  )}
+                                </div>
+                              </div>
+                              {/* Rendre le formulaire en dehors de la colonne de droite */}
                               {selectedCharacter && (
                                   <CharacterForm
+                                      ref={characterFormRef}
                                       initialValues={selectedCharacter}
                                       onSubmit={handleSaveCharacter}
-                                      renderSaveButton={(handleSubmit) => (
-                                          <div style={{ textAlign: 'right' }}>
-                                            <Button
-                                                type="button" // Utilisez type="button" pour éviter la soumission du formulaire par défaut
-                                                onClick={handleSubmit}
-                                                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
-                                            >
-                                              Sauvegarder
-                                            </Button>
-                                          </div>
-                                      )}
+                                      renderSaveButton={() => null} // Ne pas rendre le bouton ici, il est déjà rendu dans l'en-tête
                                   />
                               )}
                             </DialogContent>
+
                           </Dialog>
                         </div>
                       </TableCell>
