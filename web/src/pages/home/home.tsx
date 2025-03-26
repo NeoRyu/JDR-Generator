@@ -20,7 +20,7 @@ import {Eye, Pen, X} from 'lucide-react';
 import {useRef, useState} from 'react';
 import {Character} from '@/components/model/character.model';
 import {CharacterForm} from '@/components/form/character-form';
-import {useTheme} from '@/components/theme-provider'; // Import useTheme
+import {useTheme} from '@/components/theme-provider';
 
 
 export function Home() {
@@ -214,9 +214,13 @@ export function Home() {
           </div>
 
           {isListLoading ? (
-              <p>Chargement des personnages...</p>
+              <div className="loading-spiraleclispe-container">
+                <div className="loading-spiraleclispe">
+                  <span>{/* <span><span><div className="loading-spiraleclispe-container"><span><span><span><span></span></span></span></span></div></span></span> */}</span>
+                </div>
+              </div>
           ) : (
-            <Table>
+              <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Date de création</TableHead>
