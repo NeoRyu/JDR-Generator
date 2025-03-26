@@ -10,4 +10,6 @@ public interface CharacterDetailsService {
     CharacterDetailsEntity save(CharacterDetailsEntity character);
 
     CharacterDetailsEntity findById(Long id);
+
+    CharacterDetailsEntity updateCharacterDetails(Long id, CharacterDetailsModel updatedCharacter);
 }

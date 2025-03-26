@@ -61,7 +61,7 @@ export function Home() {
     );
   };
 
-  const handleSaveCharacter = async (updatedCharacter: Character) => {
+  const handleUpdateCharacter = async (updatedCharacter: Character) => {
     try {
       await updateCharacter(updatedCharacter);
       await refetch();
@@ -715,7 +715,7 @@ export function Home() {
                                   <CharacterForm
                                       ref={characterFormRef}
                                       initialValues={selectedCharacter}
-                                      onSubmit={handleSaveCharacter}
+                                      onSubmit={handleUpdateCharacter}
                                       renderSaveButton={() => null} // Ne pas rendre le bouton ici, il est déjà rendu dans l'en-tête
                                   />
                               )}

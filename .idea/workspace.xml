@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsNotFoundException.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/update-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/update-character.service.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -133,11 +136,11 @@
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\gemini\src" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="jdr.generator.api.characters.details" />
       <recent name="jdr.generator.api.characters.context" />
       <recent name="jdr.generator.api.config" />
       <recent name="jdr.generator.api.characters" />
       <recent name="jdr.generator.api" />
-      <recent name="jdr.generator.api.controllers.context" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="jdr.generator.api.characters.illustration" />
@@ -325,8 +328,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start: dev (WEB)" />
-        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (WEB)" />
+        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
       </list>
@@ -363,7 +366,7 @@
       <workItem from="1742886519002" duration="7228000" />
       <workItem from="1742893829074" duration="1296000" />
       <workItem from="1742895141473" duration="19192000" />
-      <workItem from="1742973596601" duration="4901000" />
+      <workItem from="1742973596601" duration="7616000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -589,7 +592,15 @@
       <option name="project" value="LOCAL" />
       <updated>1742907898757</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1742987762900</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1742987762900</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -617,7 +628,8 @@
     <MESSAGE value="[WIP] JDR-Generator : Génération et stockage en db sous forme de blob d'une illustration pour le personnage generate &#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XDebuggerManager">
@@ -625,7 +637,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java</url>
-          <line>28</line>
+          <line>36</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>

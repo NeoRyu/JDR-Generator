@@ -1,9 +1,11 @@
 package jdr.generator.api.characters;
 
 import jdr.generator.api.characters.context.DefaultContextJson;
+import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +24,12 @@ public class CharactersController {
     ) {
         this.geminiService = geminiService;
         this.characterDetailsService = characterDetailsService;
+    }
+
+    @PutMapping("/details/{id}")
+    @Transactional
+    public CharacterDetailsEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterDetailsModel updatedCharacter) {
+        return characterDetailsService.updateCharacterDetails(id, updatedCharacter);
     }
 
     @GetMapping
