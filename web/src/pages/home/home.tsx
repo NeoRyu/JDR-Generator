@@ -280,25 +280,23 @@ export function Home() {
                                     <DialogDescription className="character-context">
                                       <div className="flex character-context">
                                         <div className="w-55 mint">
-                                          <p>Jeu &nbsp;</p>
-                                          <p>Race &nbsp;</p>
+                                          <p>Archétype &nbsp;</p>
+                                          <p>Espèce &nbsp;</p>
                                           <p>Sexe &nbsp;</p>
-                                          <p>Classe &nbsp;</p>
                                         </div>
                                         <div className="purples">
-                                          <p>{character.context?.promptSystem}</p>
+                                          <p>{character.context?.promptClass}</p>
                                           <p>{character.context?.promptRace}</p>
                                           <p>{character.context?.promptGender}</p>
-                                          <p>{character.context?.promptClass}</p>
                                         </div>
                                       </div>
-                                      <div className="character-description">
-                                        <p><span className="mint">PROMPT : </span>
+                                      <div className="flex w-55 character-description">
+                                        <p><span className="">Description : </span>
                                           <span className="grays">{character.context?.promptDescription}</span>
                                         </p>
                                       </div>
-                                      <div className="character-description">
-                                        <p><span className="mint">IMAGE : </span>
+                                      <div className="flex w-55 character-description">
+                                        <p><span className="">Apparence : </span>
                                           <span className="grays">{character.details?.image}</span>
                                         </p>
                                       </div>
