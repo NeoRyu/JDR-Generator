@@ -5,6 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/web/src/pages/home/delete.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/pages/home/edit.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/pages/home/update.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/services/delete-character.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/global.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
@@ -370,7 +374,7 @@
       <workItem from="1742973596601" duration="8390000" />
       <workItem from="1742994492384" duration="7543000" />
       <workItem from="1743002823740" duration="8000" />
-      <workItem from="1743059927622" duration="12052000" />
+      <workItem from="1743059927622" duration="21496000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -628,7 +632,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743071399013</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1743072080838</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1743072080838</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
