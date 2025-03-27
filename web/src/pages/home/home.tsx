@@ -12,24 +12,25 @@ import {ScrollArea} from '@/components/ui/scroll-area';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
-import {useCreateCharacter} from '@/services/create-character.service';
-import {useListCharacters} from '@/services/list-characters.service';
-import {useUpdateCharacter} from '@/services/update-character.service';
 import dayjs from 'dayjs';
 import {Eye, Pen, X} from 'lucide-react';
 import {useRef, useState} from 'react';
-import {Character} from '@/components/model/character.model';
+import {Character, CharacterFull} from '@/components/model/character.model';
 import {CharacterForm} from '@/components/form/character-form';
 import {useTheme} from '@/components/theme-provider';
+import {useCreateCharacter} from '@/services/create-character.service';
+import {useUpdateCharacter} from '@/services/update-character.service';
+// @ts-ignore
+import {useListCharactersFull} from "@/services/list-characters-full.service.ts";
 
 
 export function Home() {
-  const { data, refetch, isLoading: isListLoading } = useListCharacters();
+  const { data, refetch, isLoading: isListLoading } = useListCharactersFull();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
   const { updateCharacter } = useUpdateCharacter();
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<Character | null>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
   const [modalType, setModalType] = useState<'details' | 'edit' | null>(null);
 
   const [promptSystem, setPromptSystem] = useState('');
@@ -72,14 +73,15 @@ export function Home() {
     }
   };
 
-  const { theme } = useTheme(); // Use useTheme to access the theme
+  const { theme } = useTheme();
 
-  const characterFormRef = useRef<CharacterFormRef>(null); // Création de la ref
+  const characterFormRef = useRef<CharacterFormRef>(null);
 
   return (
       <div className="h-screen flex flex-col px-4">
-        <header className="h-16 flex items-center">
-          <h2 className="text-muted-foreground">Personnages JDR</h2>
+        <header className="h-16 flex items-center sliced-wrapper">
+          <div className="sliced-top text-muted-foreground">JDR.Generator</div>
+          <div className="sliced-bottom text-muted-foreground" aria-hidden="true">JDR.Generator</div>
         </header>
 
         <main className="flex flex-col">
@@ -223,33 +225,39 @@ export function Home() {
               <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Date de création</TableHead>
-                  <TableHead>Nom</TableHead>
-                  <TableHead>Age du personnage</TableHead>
-                  <TableHead>Lieu de naissance</TableHead>
-                  <TableHead>État matrimonial</TableHead>
-                  <TableHead>A des enfants ?</TableHead>
-                  <TableHead />
+                  <TableHead className="table-head">Date de création</TableHead>
+                  <TableHead className="table-head">Nom du personnage</TableHead>
+                  <TableHead className="table-head">Age</TableHead>
+                  <TableHead className="table-head">Lieu de naissance</TableHead>
+                  <TableHead className="table-head">Profession</TableHead>
+                  <TableHead className="table-head">Nombre d'enfants</TableHead>
+                  <TableHead className="table-head"/>
                 </TableRow>
               </TableHeader>
 
               <TableBody>
-                {data?.data.map((character: Character) => (
-                    <TableRow key={character.id}>
-                      <TableCell>{dayjs(character.createdAt).format('DD/MM/YYYY')}</TableCell>
-                      <TableCell>{character.name}</TableCell>
-                      <TableCell>{character.age}</TableCell>
-                      <TableCell>{character.birthPlace}</TableCell>
-                      <TableCell>{character.maritalStatus}</TableCell>
-                      <TableCell>{character.children}</TableCell>
+                {data && Array.isArray(data?.data) ? data.data.map((character: CharacterFull) => (
+                    <TableRow key={character.details?.id}>
+                      <TableCell>{dayjs(character.details.createdAt).format('DD/MM/YYYY')}</TableCell>
+                      <TableCell>{character.details?.name}</TableCell>
+                      <TableCell>{character.details?.age}</TableCell>
+                      <TableCell>{character.details?.birthPlace}</TableCell>
+                      <TableCell>{character.details?.profession}</TableCell>
+                      <TableCell>{character.details?.children}</TableCell>
                       <TableCell>
                         <div className="flex gap-2">
-                          <Dialog open={modalType === 'details' && selectedCharacter?.id === character.id} onOpenChange={(open) => {
-                            if (!open) {
-                              setModalType(null);
-                              setSelectedCharacter(null);
-                            }
-                          }}>
+                          <Dialog
+                              open={
+                                  modalType === 'details' &&
+                                  selectedCharacter?.details.id === character.details.id
+                              }
+                              onOpenChange={(open) => {
+                                if (!open) {
+                                  setModalType(null);
+                                  setSelectedCharacter(null);
+                                }
+                              }}
+                          >
                             <DialogTrigger asChild>
                               <Button variant="outline" onClick={() => {
                                 setModalType('details');
@@ -259,405 +267,432 @@ export function Home() {
                               </Button>
                             </DialogTrigger>
 
-                            <DialogContent>
-                              <DialogTitle>{character.name}</DialogTitle>
-                              <DialogDescription>
-                                Détails du personnage généré
-                              </DialogDescription>
-                              <div className="flex flex-col">
-                                <img
-                                    className="rounded shadow w-56 h-56 m-auto"
-                                    src={character.image}
-                                    alt={character.name}
-                                />
+                            <DialogContent className={`max-w-[45vw] w-full`}>
+                              <div className="flex flex-col items-start"> {/* Disposition verticale */}
+                                <div className="flex items-start"> {/* Disposition horizontale pour le titre et l'image */}
+                                  <img
+                                      className="rounded shadow w-56 h-56 object-contain"
+                                      src={`data:image/png;base64,${character.illustration?.imageBlob}`}
+                                      alt={character.details?.image}
+                                  />
+                                  <div className="flex-1">
+                                    <DialogTitle className="character-name">{character.details?.name}</DialogTitle>
+                                    <DialogDescription className="character-context">
+                                      <div className="flex character-context">
+                                        <div className="w-55 mint">
+                                          <p>Jeu &nbsp;</p>
+                                          <p>Race &nbsp;</p>
+                                          <p>Sexe &nbsp;</p>
+                                          <p>Classe &nbsp;</p>
+                                        </div>
+                                        <div className="purples">
+                                          <p>{character.context?.promptSystem}</p>
+                                          <p>{character.context?.promptRace}</p>
+                                          <p>{character.context?.promptGender}</p>
+                                          <p>{character.context?.promptClass}</p>
+                                        </div>
+                                      </div>
+                                      <div className="character-description">
+                                        <p><span className="mint">PROMPT : </span>
+                                          <span className="grays">{character.context?.promptDescription}</span>
+                                        </p>
+                                      </div>
+                                      <div className="character-description">
+                                        <p><span className="mint">IMAGE : </span>
+                                          <span className="grays">{character.details?.image}</span>
+                                        </p>
+                                      </div>
+                                    </DialogDescription>
+                                  </div>
+                                </div>
 
-                                <ScrollArea className="h-64 mt-6">
+                                <ScrollArea className="h-64 mt-6 max-w-[45vw] w-full">
                                   <Table>
                                     <TableBody>
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Nom
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.name}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.name}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Age
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.age}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.age}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Lieu de naissance
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.birthPlace}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.birthPlace}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Lieu de résidence
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.residenceLocation}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.residenceLocation}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Raison de la résidence
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.reasonForResidence}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.reasonForResidence}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Climat
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.climate}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.climate}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Problèmes communs
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.commonProblems}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.commonProblems}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Routine journalière
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.dailyRoutine}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.dailyRoutine}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Parents en vie ?
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.parentsAlive}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.parentsAlive ? 'Oui' : 'Non'}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Détails sur les parents
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.detailsAboutParents}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.detailsAboutParents}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Sentiments par rapport aux parents
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.feelingsAboutParents}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.feelingsAboutParents}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Fraternité ?
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.siblings}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.siblings}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Enfance du personnage
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.childhoodStory}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.childhoodStory}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Amis d'enfance
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.youthFriends}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.youthFriends}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Animal de compagnie
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.pet}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.pet}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           État matrimonial
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.maritalStatus}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.maritalStatus}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
-                                          Type de partenaire en amour
+                                        <TableCell className="mint">
+                                          Type de conjoint
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.typeOfLover}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.typeOfLover}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Histoire conjugale
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.conjugalHistory}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.conjugalHistory}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
-                                          A des enfants ?
+                                        <TableCell className="mint">
+                                          Nombre d'enfants
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.children}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.children}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Education
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.education}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.education}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Profession
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.profession}
+                                        <TableCell>
+                                          {character.details?.profession}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Raison de la profession
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.reasonForProfession}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.reasonForProfession}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Préférences de travail
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.workPreferences}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.workPreferences}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Changement souhaité dans le monde
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.changeInWorld}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.changeInWorld}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Souhait personnel
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.changeInSelf}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.changeInSelf}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Objectif de vie
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.goal}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.goal}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Raison de l'objectif
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.reasonForGoal}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.reasonForGoal}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Obstacle majeur
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.biggestObstacle}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.biggestObstacle}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Surmonter les obstacles
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.overcomingObstacle}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.overcomingObstacle}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Plan en cas de succès
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.planIfSuccessful}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.planIfSuccessful}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Plan en cas d'échec
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.planIfFailed}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.planIfFailed}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Description de la personne
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.selfDescription}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.selfDescription}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Signe distinctif
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.distinctiveTrait}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.distinctiveTrait}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Description Physique
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.physicalDescription}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.physicalDescription}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Préférence vestimentaire
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.clothingPreferences}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.clothingPreferences}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Phobies
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.fears}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.fears}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Nourriture favorite
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.favoriteFood}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.favoriteFood}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Loisirs
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.hobbies}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.hobbies}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Activités de loisir
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.leisureActivities}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.leisureActivities}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Compagnons idéaux
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.idealCompany}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.idealCompany}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Attitude envers le groupe
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.attitudeTowardsGroups}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.attitudeTowardsGroups}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Vision du monde
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.attitudeTowardsWorld}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.attitudeTowardsWorld}
                                         </TableCell>
                                       </TableRow>
 
                                       <TableRow>
-                                        <TableCell className="text-muted-foreground">
+                                        <TableCell className="mint">
                                           Attitude envers les autres
                                         </TableCell>
-                                        <TableCell className="flex justify-end">
-                                          {character.attitudeTowardsPeople}
+                                        <TableCell className="flex stretch">
+                                          {character.details?.attitudeTowardsPeople}
                                         </TableCell>
                                       </TableRow>
 
@@ -670,7 +705,9 @@ export function Home() {
                           </Dialog>
 
                           <Dialog
-                              open={modalType === 'edit' && selectedCharacter?.id === character.id}
+                              open={modalType === 'edit' &&
+                                  selectedCharacter?.details.id === character.details.id
+                              }
                               onOpenChange={(open) => {
                                 if (!open) {
                                   setModalType(null);
@@ -718,7 +755,7 @@ export function Home() {
                               {selectedCharacter && (
                                   <CharacterForm
                                       ref={characterFormRef}
-                                      initialValues={selectedCharacter}
+                                      initialValues={selectedCharacter?.details}
                                       onSubmit={handleUpdateCharacter}
                                       renderSaveButton={() => null} // Ne pas rendre le bouton ici, il est déjà rendu dans l'en-tête
                                   />
@@ -729,7 +766,7 @@ export function Home() {
                         </div>
                       </TableCell>
                     </TableRow>
-                ))}
+                )) : null}
               </TableBody>
 
             </Table>

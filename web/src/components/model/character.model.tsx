@@ -20,7 +20,6 @@ export interface Character {
     conjugalHistory: string;
     children: number;
     education: string;
-
     profession: string;
     reasonForProfession: string;
     workPreferences: string;
@@ -48,4 +47,26 @@ export interface Character {
     contextId?: number;
     createdAt?: string;
     updatedAt?: string;
+}
+
+export interface CharacterContext {
+    id: number;
+    promptSystem: string;
+    promptRace: string;
+    promptGender: string;
+    promptClass: string;
+    promptDescription: string;
+    createdAt?: string;
+}
+
+export interface CharacterIllustration {
+    id: number;
+    imageLabel: string;
+    imageBlob: string; // Base64 ou URL
+}
+
+export interface CharacterFull extends Character {
+    details: Character;
+    context: CharacterContext;
+    illustration?: CharacterIllustration;
 }

@@ -188,3 +188,93 @@ textarea:focus {
   100% { transform: rotate(405deg); }
 }
 
+.sliced-wrapper {
+  display: grid;
+  place-content: center;
+  background-color: black;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(1.5rem, 1rem + 18vw, 7rem);
+  font-weight: 12;
+  text-transform: uppercase;
+  color: hsl(0, 0%, 100%);
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+.sliced-wrapper > div {
+  grid-area: 1/1/-1/-1;
+  box-sizing: border-box;
+}
+.sliced-top {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 48%, 0% 58%);
+}
+.sliced-bottom {
+  clip-path: polygon(0% 60%, 100% 50%, 100% 100%, 0% 100%);
+  color: transparent;
+  background: -webkit-linear-gradient(177deg, black 53%, hsl(0, 0%, 100%) 65%);
+  background: linear-gradient(177deg, black 53%, hsl(0, 0%, 100%) 65%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  transform: translateX(-0.02em);
+}
+
+
+@font-face {
+  font-family: 'Rocher';
+  src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
+}
+@font-palette-values --Grays {
+  font-family: Rocher;
+  base-palette: 9;
+}
+@font-palette-values --Purples {
+  font-family: Rocher;
+  base-palette: 6;
+}
+@font-palette-values --Mint {
+  font-family: Rocher;
+  base-palette: 7;
+}
+.grays {
+  font-family: 'Rocher', serif;
+  font-palette: --Grays;
+}
+.purples {
+  font-family: 'Rocher', serif;
+  font-palette: --Purples;
+}
+
+.mint {
+  font-family: 'Rocher', serif;
+  font-palette: --Mint;
+}
+
+.table-head {
+  font-family: 'Rocher', serif;
+  font-size: 1.2em;
+  margin: -0.6em 0 0;
+  color: white;
+  text-shadow: 0 0 0.05em #fff, 0 0 0.2em #05e1fe, 0 0 0.3em #05d9fe;
+}
+.character-name {
+  font-family: 'Rocher', serif;
+  text-align: left;
+  font-size: 40px;
+  align-items: center;
+  justify-content: center;
+}
+.character-context {
+  font-family: 'Rocher', serif;
+  font-size: 22px;
+  padding: 10px;
+}
+.character-description {
+  font-family: 'Rocher', serif;
+  font-size: 14px;
+  font-style: italic;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 10px;
+  max-height: 60px;
+}
+

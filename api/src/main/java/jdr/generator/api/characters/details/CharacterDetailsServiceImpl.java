@@ -1,5 +1,12 @@
 package jdr.generator.api.characters.details;
 
+import jdr.generator.api.characters.CharacterFullModel;
+import jdr.generator.api.characters.context.CharacterContextEntity;
+import jdr.generator.api.characters.context.CharacterContextModel;
+import jdr.generator.api.characters.context.CharacterContextRepository;
+import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
+import jdr.generator.api.characters.illustration.CharacterIllustrationModel;
+import jdr.generator.api.characters.illustration.CharacterIllustrationRepository;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -17,15 +25,21 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     private static final Logger logger = LoggerFactory.getLogger(CharacterDetailsServiceImpl.class);
 
     private final ModelMapper modelMapper;
-    private final CharacterDetailsRepository characterDetailsRepository;    // JPA Repository
+    private final CharacterContextRepository characterContextRepository;
+    private final CharacterDetailsRepository characterDetailsRepository;
+    private final CharacterIllustrationRepository characterIllustrationRepository;
 
     @Autowired
     public CharacterDetailsServiceImpl(
+            final ModelMapper modelMapper,
+            final CharacterContextRepository characterContextRepository,
             final CharacterDetailsRepository characterDetailsRepository,
-            final ModelMapper modelMapper
+            final CharacterIllustrationRepository characterIllustrationRepository
     ) {
         this.characterDetailsRepository = characterDetailsRepository;
         this.modelMapper = modelMapper;
+        this.characterContextRepository = characterContextRepository;
+        this.characterIllustrationRepository = characterIllustrationRepository;
     }
 
     @Override
@@ -74,6 +88,32 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
 
         } catch (Exception e) {
             logger.info("Empty list when fetching all characters details: {}", e.getMessage());
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
+    public List<CharacterFullModel> getAllCharactersFull() {
+        logger.info("Fetching all characters full details.");
+        try {
+            final List<CharacterDetailsEntity> detailsEntities = characterDetailsRepository.findAll();
+            List<CharacterFullModel> fullModels = detailsEntities.stream().map(detailsEntity -> {
+                try {
+                    Optional<CharacterContextEntity> contextEntity = characterContextRepository.findById(detailsEntity.getContextId());
+                    Optional<CharacterIllustrationEntity> illustrationEntity = characterIllustrationRepository.findByImageDetails(detailsEntity);
+                    final CharacterDetailsModel detailsModel = modelMapper.map(detailsEntity, CharacterDetailsModel.class);
+                    final CharacterContextModel contextModel = contextEntity.map(entity -> modelMapper.map(entity, CharacterContextModel.class)).orElse(null);
+                    final CharacterIllustrationModel illustrationModel = illustrationEntity.map(entity -> modelMapper.map(entity, CharacterIllustrationModel.class)).orElse(null);
+                    return new CharacterFullModel(detailsModel, contextModel, illustrationModel);
+                } catch (Exception e) {
+                    logger.error("Error processing character details: {}", detailsEntity.getId(), e);
+                    return null; // ou une valeur par défaut, ou lancez une exception
+                }
+            }).filter(java.util.Objects::nonNull).collect(Collectors.toList());
+            logger.debug("Fetched {} characters full details.", fullModels.size());
+            return fullModels;
+        } catch (Exception e) {
+            logger.info("Empty list when fetching all characters full details: {}", e.getMessage());
             return Collections.emptyList();
         }
     }

@@ -37,6 +37,11 @@ public class CharactersController {
         return characterDetailsService.getAllCharacters();
     }
 
+    @GetMapping("/full")
+    public List<CharacterFullModel> getAllCharactersFull() {
+        return characterDetailsService.getAllCharactersFull();
+    }
+
     @RequestMapping(value = {"/generate"}, method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = geminiHost)
