@@ -68,5 +68,5 @@ export interface CharacterIllustration {
 export interface CharacterFull extends Character {
     details: Character;
     context: CharacterContext;
-    illustration?: CharacterIllustration;
+    illustration: CharacterIllustration;
 }

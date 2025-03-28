@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -93,17 +92,23 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<CharacterFullModel> getAllCharactersFull() {
         logger.info("Fetching all characters full details.");
         try {
             final List<CharacterDetailsEntity> detailsEntities = characterDetailsRepository.findAll();
             List<CharacterFullModel> fullModels = detailsEntities.stream().map(detailsEntity -> {
                 try {
-                    Optional<CharacterContextEntity> contextEntity = characterContextRepository.findById(detailsEntity.getContextId());
-                    Optional<CharacterIllustrationEntity> illustrationEntity = characterIllustrationRepository.findByImageDetails(detailsEntity);
+                    // Récupération des contextes et illustrations (potentiellement en une seule requête)
+                    CharacterContextEntity contextEntity = characterContextRepository.findById(detailsEntity.getContextId())
+                            .orElseThrow(() -> new RuntimeException("Context not found for character: " + detailsEntity.getId()));
+                    CharacterIllustrationEntity illustrationEntity = characterIllustrationRepository.findByImageDetails(detailsEntity)
+                            .orElse(null); // Illustration peut être null
+
                     final CharacterDetailsModel detailsModel = modelMapper.map(detailsEntity, CharacterDetailsModel.class);
-                    final CharacterContextModel contextModel = contextEntity.map(entity -> modelMapper.map(entity, CharacterContextModel.class)).orElse(null);
-                    final CharacterIllustrationModel illustrationModel = illustrationEntity.map(entity -> modelMapper.map(entity, CharacterIllustrationModel.class)).orElse(null);
+                    final CharacterContextModel contextModel = modelMapper.map(contextEntity, CharacterContextModel.class);
+                    final CharacterIllustrationModel illustrationModel = illustrationEntity != null ? modelMapper.map(illustrationEntity, CharacterIllustrationModel.class) : null;
+
                     return new CharacterFullModel(detailsModel, contextModel, illustrationModel);
                 } catch (Exception e) {
                     logger.error("Error processing character details: {}", detailsEntity.getId(), e);

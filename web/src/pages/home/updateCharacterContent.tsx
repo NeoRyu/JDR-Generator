@@ -1,30 +1,36 @@
-import {Character, CharacterFull} from "@/components/model/character.model.tsx";
-import React, {Dispatch, SetStateAction, useRef} from "react";
-import {useTheme} from "@/components/theme-provider.tsx";
-import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from "@radix-ui/react-dialog";
-import {Button} from "@/components/ui/button.tsx";
-import {Pen} from "lucide-react";
-import {CharacterForm} from "@/components/form/character-form.tsx";
+import React, {useRef} from 'react';
+import {Button} from '@/components/ui/button';
+import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
+import {Pen} from 'lucide-react';
+import {Character, CharacterFull} from '@/components/model/character.model';
+import {CharacterForm, CharacterFormRef} from '@/components/form/character-form';
+import {useTheme} from '@/components/theme-provider';
+import {ModalTypes} from "@/pages/home/home.tsx";
 
 
-interface EditDialogProps {
+interface UpdateCharacterDialogProps {
     character: CharacterFull;
-    modalType: 'details' | 'edit' | 'delete' | null;
-    setModalType: Dispatch<SetStateAction<'details' | 'edit' | 'delete' | null>>;
+    modalType: ModalTypes;
     selectedCharacter: CharacterFull | null;
+    setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
     setSelectedCharacter: (character: CharacterFull | null) => void;
     updateCharacter: (character: Character) => Promise<void>;
 }
 
-export const EditDialog: React.FC<EditDialogProps> = ({character, modalType, selectedCharacter, setModalType, setSelectedCharacter, updateCharacter }) => {
+export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
+    character,
+    modalType,
+    selectedCharacter,
+    setModalType,
+    setSelectedCharacter,
+    updateCharacter,
+}) => {
     const { theme } = useTheme();
     const characterFormRef = useRef<CharacterFormRef>(null);
 
     return (
         <Dialog
-            open={modalType === 'edit' &&
-                selectedCharacter?.details.id === character.details.id
-            }
+            open={modalType === 'update' && selectedCharacter?.details.id === character.details.id}
             onOpenChange={(open) => {
                 if (!open) {
                     setModalType(null);
@@ -33,10 +39,15 @@ export const EditDialog: React.FC<EditDialogProps> = ({character, modalType, sel
             }}
         >
             <DialogTrigger asChild>
-                <Button onClick={() => {
-                    setModalType('edit');
-                    setSelectedCharacter(character);
-                }} variant="outline" className="button" type="button">
+                <Button
+                    onClick={() => {
+                        setModalType('update');
+                        setSelectedCharacter(character);
+                    }}
+                    className="button"
+                    type="button"
+                    variant="outline"
+                >
                     <Pen />
                 </Button>
             </DialogTrigger>
@@ -46,13 +57,14 @@ export const EditDialog: React.FC<EditDialogProps> = ({character, modalType, sel
                     <div style={{ maxHeight: '80vh', overflowY: 'auto', width: '80%', paddingRight: '1rem' }}>
                         <DialogTitle>EDITION DU PERSONNAGE</DialogTitle>
                         <DialogDescription>
-                            Modifiez les détails du personnage.
+                            [ID_CONTEXT={selectedCharacter?.context?.id ?? '??'}]
+                            [ID_DETAILS={selectedCharacter?.details?.id ?? '??'}]
+                            [ID_ILLUSTRATION={selectedCharacter?.illustration?.id ?? '??'}]
                         </DialogDescription>
                     </div>
                     <div className="flex justify-end">
                         {selectedCharacter && (
                             <div style={{ textAlign: 'right', paddingRight: '1rem' }}>
-                                {/* Rendre le bouton directement ici */}
                                 <Button
                                     type="button"
                                     onClick={(e) => {
@@ -62,23 +74,21 @@ export const EditDialog: React.FC<EditDialogProps> = ({character, modalType, sel
                                     }}
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
                                 >
-                                    Sauvegarder [ID={selectedCharacter?.id}]
+                                    Sauvegarder le personnage
                                 </Button>
                             </div>
                         )}
                     </div>
                 </div>
-                {/* Rendre le formulaire en dehors de la colonne de droite */}
                 {selectedCharacter && (
                     <CharacterForm
                         ref={characterFormRef}
                         initialValues={selectedCharacter?.details}
                         onSubmit={updateCharacter}
-                        renderSaveButton={() => null} // Ne pas rendre le bouton ici, il est déjà rendu dans l'en-tête
+                        renderSaveButton={() => null}
                     />
                 )}
             </DialogContent>
-
         </Dialog>
     );
 };

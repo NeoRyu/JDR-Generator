@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class CharacterContextServiceImpl implements CharacterContextService {
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private final CharacterContextRepository characterContextRepository;    // JPA Repository
+    private final CharacterContextRepository characterContextRepository;
     private final ModelMapper modelMapper;
 
     @Autowired
@@ -31,18 +31,26 @@ public class CharacterContextServiceImpl implements CharacterContextService {
 
     @Override
     @Transactional
-    public CharacterContextEntity save(CharacterContextEntity Context) {
-        return this.characterContextRepository.save(Context);
+    public CharacterContextEntity save(CharacterContextEntity context) {
+        LOGGER.info("Saving context: {}", context);
+        try {
+            return this.characterContextRepository.save(context);
+        } catch (Exception e) {
+            LOGGER.error("Error saving context: {}", context, e);
+            throw e;
+        }
     }
 
     @Override
     public CharacterContextEntity findById(long id) {
-        LOGGER.info("Context findById : {}", id);
-        return this.characterContextRepository.findById(id).orElse(null);
+        LOGGER.info("Context findById: {}", id);
+        return this.characterContextRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Context not found with id: " + id));
     }
 
     @Override
     public List<CharacterContextModel> getAllContexts() {
+        LOGGER.info("Fetching all contexts.");
         return this.characterContextRepository.findAll().stream()
                 .map(entity -> modelMapper.map(entity, CharacterContextModel.class))
                 .collect(Collectors.toList());
@@ -50,6 +58,7 @@ public class CharacterContextServiceImpl implements CharacterContextService {
 
     @Override
     public CharacterContextModel createCharacterContextModel(DefaultContextJson data) {
+        LOGGER.info("Creating character context model from data: {}", data);
         CharacterContextModel characterContextModel = new CharacterContextModel();
         characterContextModel.promptSystem = data.getPromptSystem();
         characterContextModel.promptRace = data.getPromptRace();
@@ -59,5 +68,4 @@ public class CharacterContextServiceImpl implements CharacterContextService {
         characterContextModel.createdAt = java.util.Date.from(java.time.Instant.now());
         return characterContextModel;
     }
-
 }
