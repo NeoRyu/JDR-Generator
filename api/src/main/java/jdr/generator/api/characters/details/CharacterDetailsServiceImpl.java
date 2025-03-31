@@ -59,18 +59,30 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     }
 
     @Override
-    public CharacterDetailsEntity updateCharacterDetails(final Long id, final CharacterDetailsModel model) {
+    public CharacterDetailsEntity updateCharacterDetails(final Long id, final CharacterFullModel model) {
         CharacterDetailsEntity entity = this.findById(id);
         if (entity != null) {
             logger.debug("Character details found for update: {}", entity);
-            modelMapper.map(model, entity);
-            CharacterDetailsEntity updatedEntity = this.characterDetailsRepository.save(entity);
-            logger.info("Character details updated for ID: {}", id);
-            return updatedEntity;
+            if (model.getDetails() != null) {
+                modelMapper.map(model.getDetails(), entity);
+                CharacterDetailsEntity updatedEntity = this.characterDetailsRepository.save(entity);
+                logger.info("Character details updated for ID: {}", id);
+                return updatedEntity;
+            } else {
+                logger.warn("Character details update failed, details are null for ID: {}", id);
+                throw new IllegalArgumentException("Character details update failed, details are null.");
+            }
         } else {
             logger.warn("Character details not found for update, ID: {}", id);
             throw new CharacterDetailsNotFoundException(id);
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteCharacter(Long id) {
+        logger.info("Deleting character details by ID: {}", id);
+        characterDetailsRepository.deleteById(id);
     }
 
     @Override
@@ -111,7 +123,7 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
 
                     return new CharacterFullModel(detailsModel, contextModel, illustrationModel);
                 } catch (Exception e) {
-                    logger.error("Error processing character details: {}", detailsEntity.getId(), e);
+                    logger.error("Error processing character details: {}, model: {}", detailsEntity.getId(), modelMapper.map(detailsEntity, CharacterDetailsModel.class), e);
                     return null; // ou une valeur par défaut, ou lancez une exception
                 }
             }).filter(java.util.Objects::nonNull).collect(Collectors.toList());

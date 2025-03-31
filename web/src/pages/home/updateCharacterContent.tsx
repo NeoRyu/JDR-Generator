@@ -1,12 +1,11 @@
 import React, {useRef} from 'react';
 import {Button} from '@/components/ui/button';
-import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
+import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from '@/components/ui/dialog';
 import {Pen} from 'lucide-react';
-import {Character, CharacterFull} from '@/components/model/character.model';
+import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
 import {CharacterForm, CharacterFormRef} from '@/components/form/character-form';
 import {useTheme} from '@/components/theme-provider';
 import {ModalTypes} from "@/pages/home/home.tsx";
-
 
 interface UpdateCharacterDialogProps {
     character: CharacterFull;
@@ -14,17 +13,17 @@ interface UpdateCharacterDialogProps {
     selectedCharacter: CharacterFull | null;
     setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
     setSelectedCharacter: (character: CharacterFull | null) => void;
-    updateCharacter: (character: Character) => Promise<void>;
+    updateCharacter: (character: CharacterDetailsModel) => Promise<void>; // Typage modifié
 }
 
 export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
-    character,
-    modalType,
-    selectedCharacter,
-    setModalType,
-    setSelectedCharacter,
-    updateCharacter,
-}) => {
+                                                                                character,
+                                                                                modalType,
+                                                                                selectedCharacter,
+                                                                                setModalType,
+                                                                                setSelectedCharacter,
+                                                                                updateCharacter,
+                                                                            }) => {
     const { theme } = useTheme();
     const characterFormRef = useRef<CharacterFormRef>(null);
 
@@ -68,8 +67,8 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
                                 <Button
                                     type="button"
                                     onClick={(e) => {
-                                        if (selectedCharacter) {
-                                            characterFormRef.current?.handleSubmit(e);
+                                        if (characterFormRef.current) { // Vérification de characterFormRef.current
+                                            characterFormRef.current.handleSubmit(e);
                                         }
                                     }}
                                     className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
@@ -83,9 +82,8 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
                 {selectedCharacter && (
                     <CharacterForm
                         ref={characterFormRef}
-                        initialValues={selectedCharacter?.details}
+                        initialValues={selectedCharacter}
                         onSubmit={updateCharacter}
-                        renderSaveButton={() => null}
                     />
                 )}
             </DialogContent>

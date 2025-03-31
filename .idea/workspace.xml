@@ -4,23 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <changelist_data name="Coupez Frédéric" email="coupez.frederic@gmail.com" automatic="false" />
-      <change afterPath="$PROJECT_DIR$/web/favicon.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/favicon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/updateCharacterContent.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharacterFullModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharacterFullModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/components/model/character.model.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/model/character.model.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/delete.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/global.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/global.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/update-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/update-character.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/updateCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/updateCharacterContent.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/create-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/delete-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/list-characters-full.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/list-characters.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/update-character.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/tsconfig.json" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -343,8 +349,8 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start: dev (WEB)" />
-        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (WEB)" />
+        <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
       </list>
@@ -386,7 +392,8 @@
       <workItem from="1743002823740" duration="8000" />
       <workItem from="1743059927622" duration="23885000" />
       <workItem from="1743145768631" duration="7028000" />
-      <workItem from="1743170210104" duration="6920000" />
+      <workItem from="1743170210104" duration="7360000" />
+      <workItem from="1743401772411" duration="17050000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -693,7 +700,8 @@
     <MESSAGE value="[WIP] JDR-Generator : Loading...&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

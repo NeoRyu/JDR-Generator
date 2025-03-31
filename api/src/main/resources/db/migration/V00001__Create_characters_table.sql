@@ -1,6 +1,13 @@
 CREATE DATABASE IF NOT EXISTS `jdr_generator_db`;
 ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 
+drop table if exists character_illustration cascade;
+
+drop table if exists character_details cascade;
+
+drop table if exists character_context cascade;
+
+
 DROP TABLE IF EXISTS `jdr_generator_db`.`character_context`;
 CREATE TABLE `jdr_generator_db`.`character_context` (
     `id` INT NOT NULL AUTO_INCREMENT,
@@ -13,7 +20,6 @@ CREATE TABLE `jdr_generator_db`.`character_context` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
--- Insertion de l'entrée avec id = 0
 INSERT INTO `jdr_generator_db`.`character_context` (`id`, `prompt_system`, `prompt_race`, `prompt_gender`, `prompt_class`, `prompt_description`)
 VALUES (1, 'Système de jeu non défini', '', 'Aucun genre spécifié', '', '');
 
@@ -67,20 +73,18 @@ CREATE TABLE `jdr_generator_db`.`character_details` (
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP,
     `context_id` INT NOT NULL DEFAULT 1,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
-
-ALTER TABLE `jdr_generator_db`.`character_details`
-    ADD CONSTRAINT `fk_character_context_id`
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_character_context_id`
         FOREIGN KEY (`context_id`)
-            REFERENCES character_context(`id`);
+            REFERENCES character_context(`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `jdr_generator_db`.`character_illustration`;
 CREATE TABLE `jdr_generator_db`.`character_illustration` (
-    `id` INT NOT NULL AUTO_INCREMENT,
-    `image_label` TEXT,
-    `image_blob` LONGBLOB,
-    `image_details` INT NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`image_details`) REFERENCES `character_details`(`id`)
+     `id` INT NOT NULL AUTO_INCREMENT,
+     `image_label` TEXT,
+     `image_blob` LONGBLOB,
+     `image_details` INT NOT NULL,
+     PRIMARY KEY (`id`),
+     FOREIGN KEY (`image_details`) REFERENCES `character_details`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;

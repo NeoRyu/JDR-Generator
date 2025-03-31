@@ -1,4 +1,6 @@
-import React from 'react';
+// readCharacterContent.tsx
+
+import {Dispatch, SetStateAction} from 'react';
 import {CharacterFull} from '@/components/model/character.model';
 import {ScrollArea} from '@/components/ui/scroll-area';
 import {Table, TableBody, TableCell, TableRow} from '@/components/ui/table';
@@ -7,17 +9,17 @@ import {Button} from '@/components/ui/button';
 import {Eye} from 'lucide-react';
 import {ModalTypes} from "@/pages/home/home.tsx";
 
-
 interface ReadCharacterContentProps {
     character: CharacterFull;
-    modalType: ModalTypes;
-    setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
     selectedCharacter: CharacterFull | null;
-    setSelectedCharacter: React.Dispatch<React.SetStateAction<CharacterFull | null>>;
+    setSelectedCharacter: Dispatch<SetStateAction<CharacterFull | null>>;
+    modalType: ModalTypes;
+    setModalType: Dispatch<SetStateAction<ModalTypes>>;
+    handleReadCharacter: (character: CharacterFull) => void;
 }
 
 export function ReadCharacterContent({ character, modalType, setModalType, selectedCharacter, setSelectedCharacter }: ReadCharacterContentProps) {
-    if (!character) {
+    if (!character || !character.details) {
         return <div>Personnage non trouvé.</div>;
     }
 
@@ -46,11 +48,19 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
             <DialogContent className={`max-w-[45vw] w-full`}>
                 <div className="flex flex-col items-start">
                     <div className="flex items-start">
-                        <img
-                            className="rounded shadow w-56 h-56 object-contain"
-                            src={`data:image/png;base64,${character.illustration?.imageBlob}`}
-                            alt={character.details?.image}
-                        />
+                        {character.illustration && character.illustration.imageBlob ? (
+                            <img
+                                className="rounded shadow w-56 h-56 object-contain"
+                                src={`data:image/png;base64,${character.illustration.imageBlob}`}
+                                alt={character.details?.image || "Illustration du personnage"}
+                            />
+                        ) : (
+                            <div className="rounded shadow w-56 h-56 no-img">
+                                <span className="text-gray-500">
+                                    {character.details?.image ? `Illustration non disponible : ${character.details.image}` : "Aucune illustration disponible"}
+                                </span>
+                            </div>
+                        )}
                         <div className="flex-1">
                             <DialogTitle className="character-name">{character.details?.name}</DialogTitle>
                             <DialogDescription className="character-context">
@@ -61,19 +71,19 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                                         <p>Sexe &nbsp;</p>
                                     </div>
                                     <div className="purples">
-                                        <p>{character.context?.promptClass}</p>
-                                        <p>{character.context?.promptRace}</p>
-                                        <p>{character.context?.promptGender}</p>
+                                        <p>{character.context?.promptClass || "Non défini"}</p>
+                                        <p>{character.context?.promptRace || "Non défini"}</p>
+                                        <p>{character.context?.promptGender || "Non défini"}</p>
                                     </div>
                                 </div>
                                 <div className="flex w-55 character-description">
                                     <p><span className="">Description : </span>
-                                        <span className="grays">{character.context?.promptDescription}</span>
+                                        <span className="grays">{character.context?.promptDescription || "Non défini"}</span>
                                     </p>
                                 </div>
                                 <div className="flex w-55 character-description">
                                     <p><span className="">Apparence : </span>
-                                        <span className="grays">{character.details?.image}</span>
+                                        <span className="grays">{character.details?.image || "Non défini"}</span>
                                     </p>
                                 </div>
                             </DialogDescription>

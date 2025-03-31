@@ -8,41 +8,34 @@ import {
 } from '@/components/ui/dialog';
 import {Button} from '@/components/ui/button';
 import {Trash2} from 'lucide-react';
-import {useDeleteCharacter} from '@/services/delete-character.service';
+import {useDeleteCharacter} from '@/services/deleteCharacter.service.ts';
 import React from 'react';
-import {ModalTypes} from "@/pages/home/home.tsx";
+import {ModalTypes} from '@/pages/home/home.tsx';
 
 
-interface DeleteCharacterContentProps {
-    characterToDeleteId: number | null;
+export interface DeleteCharacterContentProps {
+    characterId: number | null;
     modalType: ModalTypes;
     setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
-    setCharacterToDeleteId: React.Dispatch<React.SetStateAction<number | null>>;
-    deleteCharacter: (id: number) => void;
     refetch: () => void;
 }
 
 export function DeleteCharacterContent({
-   characterToDeleteId,
+   characterId,
    modalType,
    setModalType,
-   setCharacterToDeleteId,
-   deleteCharacter,
    refetch,
 }: DeleteCharacterContentProps) {
-    console.log('> characterToDeleteId:', characterToDeleteId);
     const { mutate: deleteMutation, isLoading: isDeleteLoading } = useDeleteCharacter();
 
     const handleDelete = () => {
         console.log('handleDelete called');
-        if (characterToDeleteId) {
-            console.log('characterToDeleteId:', characterToDeleteId);
-            deleteMutation(characterToDeleteId, {
+        if (characterId) {
+            console.log('characterId:', characterId);
+            deleteMutation(characterId, {
                 onSuccess: () => {
                     console.log('deleteMutation onSuccess');
-                    deleteCharacter(characterToDeleteId);
                     setModalType(null);
-                    setCharacterToDeleteId(null);
                     refetch();
                 },
                 onError: (error) => {
@@ -65,7 +58,9 @@ export function DeleteCharacterContent({
                 <Button
                     className="button-red"
                     type="button"
-                    variant="outline">
+                    variant="outline"
+                    onClick={() => setModalType('delete') }
+                >
                     <Trash2 />
                 </Button>
             </DialogTrigger>
@@ -77,10 +72,11 @@ export function DeleteCharacterContent({
                     <Button type="button" variant="secondary" onClick={() => setModalType(null)}>
                         Annuler
                     </Button>
-                    <Button type="button"
-                            variant="destructive"
-                            onClick={handleDelete}
-                            disabled={isDeleteLoading}
+                    <Button
+                        type="button"
+                        variant="destructive"
+                        onClick={handleDelete}
+                        disabled={isDeleteLoading}
                     >
                         {isDeleteLoading ? 'Suppression...' : 'Supprimer'}
                     </Button>

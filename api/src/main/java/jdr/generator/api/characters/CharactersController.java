@@ -28,8 +28,14 @@ public class CharactersController {
 
     @PutMapping("/details/{id}")
     @Transactional
-    public CharacterDetailsEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterDetailsModel updatedCharacter) {
+    public CharacterDetailsEntity updateCharacter(@PathVariable Long id, @RequestBody CharacterFullModel updatedCharacter) {
         return characterDetailsService.updateCharacterDetails(id, updatedCharacter);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCharacter(@PathVariable Long id) {
+        characterDetailsService.deleteCharacter(id);
     }
 
     @GetMapping
@@ -56,7 +62,4 @@ public class CharactersController {
         return geminiService.illustrate(imagePrompt);
     }
 
-
-
 }
-

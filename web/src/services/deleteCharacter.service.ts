@@ -1,13 +1,17 @@
 import axios from 'axios'
 import {useMutation} from 'react-query';
 
+interface DeleteCharacterResponse {
+    // Définissez les propriétés de la réponse si nécessaire
+}
 
-const deleteCharacterRequest = async (id: number): Promise<void> => {
+const deleteCharacterRequest = async (id: number): Promise<DeleteCharacterResponse> => {
     try{
         const response = await axios.delete(`/characters/${id}`);
         if (response.status !== 204) {
             throw new Error(`Unexpected status code: ${response.status}`);
         }
+        return response.data; // Retournez les données de la réponse si nécessaire
     } catch (error : any) {
         if (axios.isAxiosError(error)) {
             console.error(`Erreur : ${error.message || 'Erreur inconnue'}`);
@@ -20,7 +24,7 @@ const deleteCharacterRequest = async (id: number): Promise<void> => {
 };
 
 export const useDeleteCharacter = () => {
-    return useMutation({
+    return useMutation<DeleteCharacterResponse, Error, number>({
         mutationFn: deleteCharacterRequest,
         onSuccess: () => {
             console.log('Personnage supprimé avec succès !');

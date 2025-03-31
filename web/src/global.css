@@ -372,7 +372,6 @@ textarea:focus {
     content: '';
     position: absolute;
     inset: 0;
-    border-image-source: url('https://assets.codepen.io/4175254/mario-button-borders.png');
     border-image-slice: 50%;
     border-image-width: 40px;
     border-style: solid;
@@ -447,4 +446,11 @@ textarea:focus {
   100% {
     transform: scale(1.04, 1.08);
   }
+}
+
+.no-img {
+  border: #ACACAC dashed 2px;
+  margin-right: 10px;
+  padding: 12px;
+  text-align: justify;
 }

@@ -1,3 +1,6 @@
+// home.tsx
+
+import {useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {
   Dialog,
@@ -8,33 +11,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue,} from '@/components/ui/select';
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from '@/components/ui/table';
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {Table, TableBody, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
-import dayjs from 'dayjs';
 import {X} from 'lucide-react';
-import {useState} from 'react';
-import {Character, CharacterFull} from '@/components/model/character.model';
-import {useCreateCharacter} from '@/services/create-character.service';
-import {useUpdateCharacter} from '@/services/update-character.service';
-import {ReadCharacterContent} from "@/pages/home/readCharacterContent.tsx";
-import {UpdateCharacterDialog} from "@/pages/home/updateCharacterContent.tsx";
-import {DeleteCharacterContent} from "@/pages/home/deleteCharacterContent.tsx";
-// @ts-ignore
-import {useListCharactersFull} from "@/services/list-characters-full.service.ts";
+import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import {CharacterRow} from '@/pages/home/characterRow';
+import {getListCharactersFull} from '@/services/getListCharactersFull.service.ts';
+import {useCreateCharacter} from "@/services/createCharacter.service.ts";
+import {updateCharacter} from '@/services/updateCharacter.service.ts';
 
 
 export type ModalTypes = 'read' | 'update' | 'delete' | null;
 
 export function Home() {
-  const { data, refetch, isLoading: isListLoading } = useListCharactersFull();
+  const { data: charactersData, refetch, isLoading: isListLoading } = getListCharactersFull();
+  const updateCharacterService = updateCharacter();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
-  const { updateCharacter } = useUpdateCharacter();
+  const [modalType, setModalType] = useState<ModalTypes>(null);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
-  const [modalType, setModalType] = useState<ModalTypes>(null);
-  const [characterToDelete, setCharacterToDelete] = useState<number | null>(null);
 
   const [promptSystem, setPromptSystem] = useState('');
   const [promptRace, setPromptRace] = useState('');
@@ -60,27 +57,30 @@ export function Home() {
             setPromptDescription('');
 
             setIsOpen(false);
+            setModalType(null);
           },
         },
     );
   };
 
-  const handleUpdateCharacter = async (updatedCharacter: Character) => {
+  const handleUpdateCharacter = async (updatedCharacterDetails: CharacterDetailsModel) => {
     try {
-      await updateCharacter(updatedCharacter);
+      if (!selectedCharacter) return;
+      const fullModel: CharacterFull = {
+        ...updatedCharacterDetails,
+        details: updatedCharacterDetails,
+        context: selectedCharacter.context,
+        illustration: selectedCharacter.illustration,
+      };
+      await updateCharacterService.updateCharacter(fullModel);
       await refetch();
-      setModalType(null);
-      setSelectedCharacter(null);
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde du personnage :', error);
+      console.error('Erreur lors de la mise à jour du personnage :', error);
     }
   };
 
-  const handleDeleteCharacter = (id: number) => {
-    setCharacterToDelete(id);
-    setModalType('delete');
-  };
-
+  // @ts-ignore
+  // @ts-ignore
   return (
       <div className="h-screen flex flex-col px-4">
         <header className="h-16 flex items-center sliced-wrapper">
@@ -238,57 +238,24 @@ export function Home() {
                     <TableHead className="table-head">Archétype</TableHead>
                     <TableHead className="table-head">Objectifs</TableHead>
                     <TableHead className="table-head">Univers</TableHead>
-                    <TableHead className="table-head"/>
+                    <TableHead className="table-head" />
                   </TableRow>
                 </TableHeader>
 
                 <TableBody>
-                  {data && Array.isArray(data?.data) ? data.data.map((character: CharacterFull) => (
-                      <TableRow key={character.details?.id}>
-                        <TableCell>{dayjs(character.details.createdAt).format('DD/MM/YYYY')}</TableCell>
-                        <TableCell>{character.context?.promptGender == 'Male' ? '♂' : (character.context?.promptGender == 'Female' ? '♀' : '⚥')}</TableCell>
-                        <TableCell>{character.details?.name}</TableCell>
-                        <TableCell>{character.details?.age}</TableCell>
-                        <TableCell>{character.context?.promptRace}</TableCell>
-                        <TableCell>{character.details?.profession}</TableCell>
-                        <TableCell>{character.context?.promptClass}</TableCell>
-                        <TableCell>{character.details?.goal}</TableCell>
-                        <TableCell>{character.context?.promptSystem}</TableCell>
-                        <TableCell>
-                          <div className="flex gap-2">
-
-                            <ReadCharacterContent
-                                modalType={modalType === 'read' ? 'read' : null}
-                                setModalType={setModalType}
-                                character={character}
-                                selectedCharacter={selectedCharacter}
-                                setSelectedCharacter={setSelectedCharacter}
-                            />
-
-                            <UpdateCharacterDialog
-                                modalType={modalType === 'update' ? 'update' : null}
-                                setModalType={setModalType}
-                                character={character}
-                                selectedCharacter={selectedCharacter}
-                                setSelectedCharacter={setSelectedCharacter}
-                                updateCharacter={handleUpdateCharacter}
-                            />
-
-                            <DeleteCharacterContent
-                                modalType={modalType === 'delete' ? 'delete' : null}
-                                setModalType={setModalType}
-                                characterToDeleteId={characterToDelete}
-                                setCharacterToDeleteId={setCharacterToDelete}
-                                deleteCharacter={handleDeleteCharacter}
-                                refetch={refetch}
-                            />
-
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                  )) : null}
+                  {charactersData?.data?.map((character: CharacterFull) => (
+                      <CharacterRow
+                          key={character.details?.id}
+                          character={character}
+                          modalType={modalType}
+                          setModalType={setModalType}
+                          selectedCharacter={selectedCharacter}
+                          setSelectedCharacter={setSelectedCharacter}
+                          updateCharacter={handleUpdateCharacter}
+                          refetch={refetch}
+                      />
+                  ))}
                 </TableBody>
-
               </Table>
           )}
         </main>

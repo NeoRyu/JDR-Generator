@@ -7,13 +7,17 @@ import java.util.List;
 
 public interface CharacterDetailsService {
 
-    List<CharacterDetailsModel> getAllCharacters();
-
-    List<CharacterFullModel> getAllCharactersFull();
 
     CharacterDetailsEntity save(CharacterDetailsEntity character);
 
     CharacterDetailsEntity findById(Long id);
 
-    CharacterDetailsEntity updateCharacterDetails(Long id, CharacterDetailsModel updatedCharacter);
+    CharacterDetailsEntity updateCharacterDetails(Long id, CharacterFullModel updatedCharacter);
+
+    void deleteCharacter(Long id);
+
+    List<CharacterDetailsModel> getAllCharacters();
+
+    List<CharacterFullModel> getAllCharactersFull();
+
 }

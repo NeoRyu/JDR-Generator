@@ -1,4 +1,4 @@
-export interface Character {
+export interface CharacterDetailsModel {
     id: number;
     name: string;
     age: number;
@@ -59,14 +59,16 @@ export interface CharacterContext {
     createdAt?: string;
 }
 
+type ImageUrlOrBase64 = string;
+
 export interface CharacterIllustration {
     id: number;
     imageLabel: string;
-    imageBlob: string; // Base64 ou URL
+    imageBlob: ImageUrlOrBase64;
 }
 
-export interface CharacterFull extends Character {
-    details: Character;
+export interface CharacterFull extends CharacterDetailsModel {
+    details: CharacterDetailsModel;
     context: CharacterContext;
     illustration: CharacterIllustration;
 }

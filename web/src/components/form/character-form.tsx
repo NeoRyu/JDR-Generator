@@ -1,36 +1,37 @@
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Textarea} from '@/components/ui/textarea';
 import {Input} from '@/components/ui/input';
-import {Character} from '@/components/model/character.model';
+import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+
 
 interface CharacterFormProps {
-    initialValues: Character;
-    onSubmit: (updatedCharacter: Character) => Promise<void>;
+    initialValues: CharacterFull;
+    onSubmit: (updatedCharacter: CharacterDetailsModel) => Promise<void>;
     renderSaveButton?: (handleSubmit: (e: React.FormEvent) => void) => React.ReactNode;
 }
 
-export  interface CharacterFormRef {
+export interface CharacterFormRef {
     handleSubmit: (e: React.FormEvent) => void;
 }
 
 export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({ initialValues, onSubmit, renderSaveButton }, ref) => {
-    const [character, setCharacter] = useState<Character>(initialValues);
+    const [character, setCharacter] = useState<CharacterFull>(initialValues);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
         if (type === 'checkbox') {
             const target = e.target as HTMLInputElement;
-            setCharacter({ ...character, [name]: target.checked });
+            setCharacter({ ...character, details: { ...character.details, [name]: target.checked } });
         } else if (type === 'number') {
-            setCharacter({ ...character, [name]: Number(value) });
+            setCharacter({ ...character, details: { ...character.details, [name]: Number(value) } });
         } else {
-            setCharacter({ ...character, [name]: value });
+            setCharacter({ ...character, details: { ...character.details, [name]: value } });
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await onSubmit(character);
+        await onSubmit(character.details);
     };
 
     useImperativeHandle(ref, () => ({
@@ -51,7 +52,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="name"
                                 id="name"
                                 placeholder="Nom"
-                                value={character.name}
+                                value={character.details?.name ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -62,7 +63,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="age"
                                 id="age"
                                 placeholder="Âge"
-                                value={character.age}
+                                value={character.details?.age ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -77,14 +78,14 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                         type="checkbox"
                                         name="parentsAlive"
                                         id="parentsAlive"
-                                        checked={typeof character.parentsAlive === 'string' ? character.parentsAlive === 'true' : character.parentsAlive || false}
+                                        checked={typeof character.details?.parentsAlive === 'string' ? character.details?.parentsAlive === 'true' : character.details?.parentsAlive || false}
                                         onChange={handleChange}
                                         style={{ transform: 'scale(2)' }}
                                     />
                                     <span className="ml-2">
-                                        {typeof character.parentsAlive === 'string'
-                                            ? (character.parentsAlive === 'true' ? 'Oui' : 'Non')
-                                            : (character.parentsAlive ? 'Oui' : 'Non')}
+                                        {typeof character.details?.parentsAlive === 'string'
+                                            ? (character.details?.parentsAlive === 'true' ? 'Oui' : 'Non')
+                                            : (character.details?.parentsAlive ? 'Oui' : 'Non')}
                                     </span>
                                 </div>
                             </div>
@@ -96,7 +97,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                     name="detailsAboutParents"
                                     id="detailsAboutParents"
                                     placeholder="Détails sur les parents"
-                                    value={character.detailsAboutParents}
+                                    value={character.details?.detailsAboutParents ?? ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -107,7 +108,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                     name="feelingsAboutParents"
                                     id="feelingsAboutParents"
                                     placeholder="Sentiments par rapport aux parents"
-                                    value={character.feelingsAboutParents}
+                                    value={character.details?.feelingsAboutParents ?? ''}
                                     onChange={handleChange}
                                 />
                             </div>
@@ -122,7 +123,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="siblings"
                                 id="siblings"
                                 placeholder="Fraternité ?"
-                                value={character.siblings}
+                                value={character.details?.siblings ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -133,7 +134,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="education"
                                 id="education"
                                 placeholder="Education"
-                                value={character.education}
+                                value={character.details?.education ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -146,7 +147,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="childhoodStory"
                                 id="childhoodStory"
                                 placeholder="Enfance du personnage"
-                                value={character.childhoodStory}
+                                value={character.details?.childhoodStory ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -156,7 +157,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="youthFriends"
                                 id="youthFriends"
                                 placeholder="Amis d'enfance"
-                                value={character.youthFriends}
+                                value={character.details?.youthFriends ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -170,7 +171,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="birthPlace"
                                 id="birthPlace"
                                 placeholder="Lieu de naissance"
-                                value={character.birthPlace}
+                                value={character.details?.birthPlace ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -181,7 +182,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="climate"
                                 id="climate"
                                 placeholder="Climat"
-                                value={character.climate}
+                                value={character.details?.climate ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -195,7 +196,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="residenceLocation"
                                 id="residenceLocation"
                                 placeholder="Lieu de résidence"
-                                value={character.residenceLocation}
+                                value={character.details?.residenceLocation ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -206,7 +207,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="reasonForResidence"
                                 id="reasonForResidence"
                                 placeholder="Raison de la résidence"
-                                value={character.reasonForResidence}
+                                value={character.details?.reasonForResidence ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -220,7 +221,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="maritalStatus"
                                 id="maritalStatus"
                                 placeholder="État matrimonial"
-                                value={character.maritalStatus}
+                                value={character.details?.maritalStatus ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -231,7 +232,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="children"
                                 id="children"
                                 placeholder="A des enfants ?"
-                                value={character.children || 0}
+                                value={character.details?.children ?? 0}
                                 onChange={handleChange}
                             />
                         </div>
@@ -243,7 +244,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="typeOfLover"
                                 id="typeOfLover"
                                 placeholder="Type de partenaire en amour"
-                                value={character.typeOfLover}
+                                value={character.details?.typeOfLover ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -253,7 +254,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="conjugalHistory"
                                 id="conjugalHistory"
                                 placeholder="Histoire conjugale"
-                                value={character.conjugalHistory}
+                                value={character.details?.conjugalHistory ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -266,7 +267,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                             name="pet"
                             id="pet"
                             placeholder="Animal de compagnie"
-                            value={character.pet}
+                            value={character.details?.pet ?? ''}
                             onChange={handleChange}
                         />
                     </div>
@@ -279,7 +280,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="profession"
                                 id="profession"
                                 placeholder="Profession"
-                                value={character.profession}
+                                value={character.details?.profession ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -290,7 +291,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="reasonForProfession"
                                 id="reasonForProfession"
                                 placeholder="Raison de la profession"
-                                value={character.reasonForProfession}
+                                value={character.details?.reasonForProfession ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -303,7 +304,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="workPreferences"
                                 id="workPreferences"
                                 placeholder="Préférences de travail"
-                                value={character.workPreferences}
+                                value={character.details?.workPreferences ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -316,7 +317,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="commonProblems"
                                 id="commonProblems"
                                 placeholder="Problèmes communs"
-                                value={character.commonProblems}
+                                value={character.details?.commonProblems ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -326,7 +327,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="dailyRoutine"
                                 id="dailyRoutine"
                                 placeholder="Routine journalière"
-                                value={character.dailyRoutine}
+                                value={character.details?.dailyRoutine ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -339,7 +340,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="changeInWorld"
                                 id="changeInWorld"
                                 placeholder="Changement souhaité dans le monde"
-                                value={character.changeInWorld}
+                                value={character.details?.changeInWorld ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -349,7 +350,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="changeInSelf"
                                 id="changeInSelf"
                                 placeholder="Souhait personnel"
-                                value={character.changeInSelf}
+                                value={character.details?.changeInSelf ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -362,7 +363,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="goal"
                                 id="goal"
                                 placeholder="Objectif de vie"
-                                value={character.goal}
+                                value={character.details?.goal ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -372,7 +373,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="reasonForGoal"
                                 id="reasonForGoal"
                                 placeholder="Raison de l'objectif"
-                                value={character.reasonForGoal}
+                                value={character.details?.reasonForGoal ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -385,7 +386,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="biggestObstacle"
                                 id="biggestObstacle"
                                 placeholder="Obstacle majeur"
-                                value={character.biggestObstacle}
+                                value={character.details?.biggestObstacle ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -395,7 +396,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="overcomingObstacle"
                                 id="overcomingObstacle"
                                 placeholder="Surmonter les obstacles"
-                                value={character.overcomingObstacle}
+                                value={character.details?.overcomingObstacle ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -408,7 +409,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="planIfSuccessful"
                                 id="planIfSuccessful"
                                 placeholder="Plan en cas de succès"
-                                value={character.planIfSuccessful}
+                                value={character.details?.planIfSuccessful ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -418,7 +419,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="planIfFailed"
                                 id="planIfFailed"
                                 placeholder="Plan en cas d'échec"
-                                value={character.planIfFailed}
+                                value={character.details?.planIfFailed ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -431,7 +432,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="selfDescription"
                                 id="selfDescription"
                                 placeholder="Description de la personne"
-                                value={character.selfDescription}
+                                value={character.details?.selfDescription ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -441,7 +442,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="physicalDescription"
                                 id="physicalDescription"
                                 placeholder="Description Physique"
-                                value={character.physicalDescription}
+                                value={character.details?.physicalDescription ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -455,7 +456,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="distinctiveTrait"
                                 id="distinctiveTrait"
                                 placeholder="Signe distinctif"
-                                value={character.distinctiveTrait}
+                                value={character.details?.distinctiveTrait ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -466,7 +467,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="favoriteFood"
                                 id="favoriteFood"
                                 placeholder="Nourriture favorite"
-                                value={character.favoriteFood}
+                                value={character.details?.favoriteFood ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -479,7 +480,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="fears"
                                 id="fears"
                                 placeholder="Phobies"
-                                value={character.fears}
+                                value={character.details?.fears ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -489,7 +490,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="clothingPreferences"
                                 id="clothingPreferences"
                                 placeholder="Préférence vestimentaire"
-                                value={character.clothingPreferences}
+                                value={character.details?.clothingPreferences ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -502,7 +503,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="hobbies"
                                 id="hobbies"
                                 placeholder="Loisirs"
-                                value={character.hobbies}
+                                value={character.details?.hobbies ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -512,7 +513,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="leisureActivities"
                                 id="leisureActivities"
                                 placeholder="Activités de loisir"
-                                value={character.leisureActivities}
+                                value={character.details?.leisureActivities ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -525,7 +526,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="idealCompany"
                                 id="idealCompany"
                                 placeholder="Compagnons idéaux"
-                                value={character.idealCompany}
+                                value={character.details?.idealCompany ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -535,7 +536,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="attitudeTowardsGroups"
                                 id="attitudeTowardsGroups"
                                 placeholder="Attitude envers le groupe"
-                                value={character.attitudeTowardsGroups}
+                                value={character.details?.attitudeTowardsGroups ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -548,7 +549,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="attitudeTowardsWorld"
                                 id="attitudeTowardsWorld"
                                 placeholder="Vision du monde"
-                                value={character.attitudeTowardsWorld}
+                                value={character.details?.attitudeTowardsWorld ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -558,7 +559,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="attitudeTowardsPeople"
                                 id="attitudeTowardsPeople"
                                 placeholder="Attitude envers les autres"
-                                value={character.attitudeTowardsPeople}
+                                value={character.details?.attitudeTowardsPeople ?? ''}
                                 onChange={handleChange}
                             />
                         </div>
@@ -571,7 +572,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                             name="image"
                             id="image"
                             placeholder="Image URL"
-                            value={character.image}
+                            value={character.details?.image ?? ''}
                             onChange={handleChange}
                         />
                     </div>
@@ -584,7 +585,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="createdAt"
                                 id="createdAt"
                                 placeholder="Date de création"
-                                value={character.createdAt || ''}
+                                value={character.details?.createdAt || ''}
                                 onChange={handleChange}
                                 readOnly={true}
                             />
@@ -596,7 +597,7 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="updatedAt"
                                 id="updatedAt"
                                 placeholder="Date de mise à jour"
-                                value={character.updatedAt || ''}
+                                value={character.details?.updatedAt || ''}
                                 onChange={handleChange}
                                 readOnly={true}
                             />
@@ -608,4 +609,5 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
         </div>
     );
 });
+
 CharacterForm.displayName = 'CharacterForm';
