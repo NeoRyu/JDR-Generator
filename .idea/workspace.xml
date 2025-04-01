@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/form/character-form.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/ui/scroll-area.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/scroll-area.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/updateCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/updateCharacterContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" afterDir="false" />
-    </list>
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
     </list>
@@ -382,7 +371,7 @@
       <workItem from="1743145768631" duration="7028000" />
       <workItem from="1743170210104" duration="7360000" />
       <workItem from="1743401772411" duration="17812000" />
-      <workItem from="1743488247484" duration="4502000" />
+      <workItem from="1743488247484" duration="4936000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -664,7 +653,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743432864099</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1743492962113</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1743492962113</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -673,7 +670,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="README + removing eslint" />
     <MESSAGE value="home" />
     <MESSAGE value="FIX : Communication établie sur l'API Google AI Gemini" />
     <MESSAGE value="NICE-TO-HAVE : API Google AI Gemini :: Améliorations" />
@@ -698,7 +694,8 @@
     <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>

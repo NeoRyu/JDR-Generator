@@ -22,16 +22,16 @@ export interface DeleteCharacterContentProps {
 }
 
 export function DeleteCharacterContent({
-   character,
-   modalType,
-   setModalType,
-   refetch,
-}: DeleteCharacterContentProps) {
+                                           character,
+                                           modalType,
+                                           setModalType,
+                                           refetch,
+                                       }: DeleteCharacterContentProps) {
     const { mutate: deleteMutation, isLoading: isDeleteLoading } = useDeleteCharacter();
 
     const handleDelete = () => {
-        if (character) {
-            deleteMutation(character.id, {
+        if (character && character.details?.id) { // Ajout d'une vérification
+            deleteMutation(character.details.id, {
                 onSuccess: () => {
                     console.log('deleteMutation onSuccess');
                     setModalType(null);
@@ -41,6 +41,8 @@ export function DeleteCharacterContent({
                     console.error('deleteMutation onError:', error);
                 },
             });
+        } else {
+            console.error('character or character.id is undefined');
         }
     };
 
