@@ -133,4 +133,44 @@ public class GeminiService implements IGeminiGenerationConfig {
         return response.getBody();
     }
 
+    @Override
+    public String stats(Long characterId) {
+        CharacterDetailsEntity character = this.characterDetailsService.findById(characterId);
+        CharacterContextEntity context = this.characterContextService.findById(character.getContextId());
+        String data = "promptSystem: '" + context.getPromptSystem() +"'\n"
+                + "promptRace: '" + context.getPromptRace() +"'\n"
+                + "promptGender: '" + context.getPromptGender() +"'\n"
+                + "promptClass: '" + context.getPromptClass() +"'\n"
+                + "promptDescription: '" + context.getPromptDescription() +"'\n"
+                + "name: '" + character.getName() +"'\n"
+                + "age: '" + character.getAge() +"'\n"
+                + "education: '" + character.getEducation() +"'\n"
+                + "profession: '" + character.getProfession() +"'\n"
+                + "reasonForProfession: '" + character.getReasonForProfession() +"'\n"
+                + "workPreferences: '" + character.getWorkPreferences() +"'\n"
+                + "changeInSelf: '" + character.getChangeInSelf() +"'\n"
+                + "changeInWorld: '" + character.getChangeInWorld() +"'\n"
+                + "goal: '" + character.getGoal() +"'\n"
+                + "reasonForGoal: '" + character.getReasonForGoal() +"'\n";
+
+        final String apiUrl = hostApiIA + "stats";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("data", data);
+        HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
+        ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            LOGGER.error("API stats request failed with status code: {}", response.getStatusCode());
+            throw new RuntimeException("API stats request failed");
+        }
+
+        LOGGER.info("Statistiques API response: {}", response.getBody());
+        return response.getBody();
+    }
+
+
+
 }

@@ -22,7 +22,7 @@
 
 6. Ajouter un dossier nommé `FantasyGenerator` dans votre dossier de téléchargement 
 (`C:\Users\`{windows_username}`\Downloads\FantasyGenerator\`)
-   > Pour choisir un autre emplacement, modifiez les varibales `pathSrc` dans les fichiers `gemini.ts` et `imagen.ts`
+   > Pour choisir un autre emplacement, modifiez les variables `pathSrc` dans les fichiers du dossier 'controllers'
 
 ## Générer et exécuter
 

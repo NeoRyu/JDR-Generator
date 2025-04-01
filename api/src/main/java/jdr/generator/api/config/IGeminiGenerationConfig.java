@@ -14,4 +14,6 @@ public interface IGeminiGenerationConfig {
     public Object generate(DefaultContextJson data);
 
     public Object illustrate(String image);
+
+    public Object stats(Long characterId);
 }

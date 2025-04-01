@@ -62,4 +62,11 @@ public class CharactersController {
         return geminiService.illustrate(imagePrompt);
     }
 
+    @RequestMapping(value = {"/stats/{id}"}, method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    @CrossOrigin(origins = geminiHost)
+    public String stats(@PathVariable Long id) {
+        return geminiService.stats(id);
+    }
+
 }
