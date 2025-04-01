@@ -18,7 +18,7 @@ public class CharacterIllustrationServiceImpl implements CharacterIllustrationSe
     @Override
     @Transactional
     public CharacterIllustrationEntity save(CharacterIllustrationEntity characterIllustrationEntity) {
-        LOGGER.info("Saving illustration: {}", characterIllustrationEntity);
+        LOGGER.info("Saving illustration with prompt : {}", characterIllustrationEntity.getImageLabel());
         try {
             return characterIllustrationRepository.save(characterIllustrationEntity);
         } catch (Exception e) {

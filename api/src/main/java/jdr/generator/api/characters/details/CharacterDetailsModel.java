@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterDetailsModel {

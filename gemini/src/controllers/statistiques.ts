@@ -24,7 +24,7 @@ const conversationContext: any[] = [];
 
 // Les prompts qui seront envoyés par la suite pour générer une réponse attendue
 const basePrompt = `You are an RPG expert with extensive knowledge of various game systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be provided with information on the game system, the character's race and class, and any other information needed to define them, as well as their stats, skills, disciplines, and equipment, in the target game world, to inspire you. If the character doesn't have a world, invent one; otherwise, don't invent it yourself: be faithful and only give answers you are certain of. Here's the character's background:`;
-const askedPrompt = `Your answer must not be based solely on previous exchanges, must be in JSON format and must contain the required data (statistics, skills, disciplines, equipment and other required information) and be written in French (fr-FR), including the name of the attributes. As far as possible, the information you will generate must be based on the most recent version of the game system. I only need the missing information required to complete a player sheet that I ask you for, I already have all the information concerning the character's background, delete them from your answer (background / history / relationships).`;
+const askedPrompt = `Your answer must not be based solely on previous exchanges, must be in valid JSON format and must contain the required data (statistics, skills, disciplines, equipment and other required information) and be written in French (fr-FR), including the name of the attributes. As far as possible, the information you will generate must be based on the most recent version of the game system. I only need the missing information required to complete a player sheet that I ask you for, I already have all the information concerning the character's background, delete them from your answer (background / history / relationships).`;
 
 // Fonction contrôleur pour gérer les conversations
 export const generateStats = async (req: Request, res: Response) => {
@@ -35,8 +35,10 @@ export const generateStats = async (req: Request, res: Response) => {
         console.log('Stats pour ::', req.body.data);
 
         const result: GenerateContentResult = await model.generateContent(basePrompt + req.body.data + askedPrompt);
-        const responseText: string = result.response.text();
+        let responseText: string = result.response.text().replace("`", " ");
         console.log(responseText);
+        const parsedJson = JSON.parse(responseText);
+        responseText = JSON.stringify(parsedJson);
 
         // Stocke la conversation
         conversationContext.push([prompt, responseText]);

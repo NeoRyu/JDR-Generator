@@ -79,6 +79,7 @@ export function Home() {
 
   // @ts-ignore
   // @ts-ignore
+  // @ts-ignore
   return (
       <div className="h-screen flex flex-col px-4">
         <header className="h-16 flex items-center sliced-wrapper">
@@ -235,7 +236,7 @@ export function Home() {
                 </TableHeader>
 
                 <TableBody>
-                  {charactersData?.data?.map((character: CharacterFull) => (
+                  {(charactersData?.data as CharacterFull[] | undefined)?.map((character: CharacterFull) => (
                       <CharacterRow
                           key={character.details?.id}
                           character={character}

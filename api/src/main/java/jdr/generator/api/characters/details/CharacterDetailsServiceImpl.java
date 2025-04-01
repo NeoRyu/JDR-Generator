@@ -7,6 +7,9 @@ import jdr.generator.api.characters.context.CharacterContextRepository;
 import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
 import jdr.generator.api.characters.illustration.CharacterIllustrationModel;
 import jdr.generator.api.characters.illustration.CharacterIllustrationRepository;
+import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
+import jdr.generator.api.characters.stats.CharacterJsonDataModel;
+import jdr.generator.api.characters.stats.CharacterJsonDataService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,18 +30,22 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     private final CharacterContextRepository characterContextRepository;
     private final CharacterDetailsRepository characterDetailsRepository;
     private final CharacterIllustrationRepository characterIllustrationRepository;
+    private final CharacterJsonDataService characterJsonDataService;
+
 
     @Autowired
     public CharacterDetailsServiceImpl(
             final ModelMapper modelMapper,
             final CharacterContextRepository characterContextRepository,
             final CharacterDetailsRepository characterDetailsRepository,
-            final CharacterIllustrationRepository characterIllustrationRepository
+            final CharacterIllustrationRepository characterIllustrationRepository,
+            final CharacterJsonDataService characterJsonDataService
     ) {
         this.characterDetailsRepository = characterDetailsRepository;
         this.modelMapper = modelMapper;
         this.characterContextRepository = characterContextRepository;
         this.characterIllustrationRepository = characterIllustrationRepository;
+        this.characterJsonDataService = characterJsonDataService;
     }
 
     @Override
@@ -116,12 +123,15 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
                             .orElseThrow(() -> new RuntimeException("Context not found for character: " + detailsEntity.getId()));
                     CharacterIllustrationEntity illustrationEntity = characterIllustrationRepository.findByImageDetails(detailsEntity)
                             .orElse(null); // Illustration peut être null
+                    CharacterJsonDataEntity jsonDataEntity = characterJsonDataService.findByCharacterDetailsId(detailsEntity.getId())
+                            .orElse(null); // JsonData peut être null
 
                     final CharacterDetailsModel detailsModel = modelMapper.map(detailsEntity, CharacterDetailsModel.class);
                     final CharacterContextModel contextModel = modelMapper.map(contextEntity, CharacterContextModel.class);
                     final CharacterIllustrationModel illustrationModel = illustrationEntity != null ? modelMapper.map(illustrationEntity, CharacterIllustrationModel.class) : null;
+                    final CharacterJsonDataModel jsonDataModel = jsonDataEntity != null ? modelMapper.map(jsonDataEntity, CharacterJsonDataModel.class) : null;
 
-                    return new CharacterFullModel(detailsModel, contextModel, illustrationModel);
+                    return new CharacterFullModel(detailsModel, contextModel, illustrationModel, jsonDataModel);
                 } catch (Exception e) {
                     logger.error("Error processing character details: {}, model: {}", detailsEntity.getId(), modelMapper.map(detailsEntity, CharacterDetailsModel.class), e);
                     return null; // ou une valeur par défaut, ou lancez une exception

@@ -3,6 +3,7 @@ package jdr.generator.api.characters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
@@ -14,6 +15,9 @@ import jdr.generator.api.characters.details.CharacterDetailsService;
 import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
 import jdr.generator.api.characters.illustration.CharacterIllustrationModel;
 import jdr.generator.api.characters.illustration.CharacterIllustrationService;
+import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
+import jdr.generator.api.characters.stats.CharacterJsonDataModel;
+import jdr.generator.api.characters.stats.CharacterJsonDataService;
 import jdr.generator.api.config.IGeminiGenerationConfig;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -40,7 +44,35 @@ public class GeminiService implements IGeminiGenerationConfig {
     private final CharacterDetailsService characterDetailsService;
     private final CharacterContextService characterContextService;
     private final CharacterIllustrationService characterIllustrationService;
+    private final CharacterJsonDataService characterJsonDataService;
     private final ModelMapper modelMapper;
+
+    private String cleanJsonString(String jsonString) {
+        if (jsonString == null) {
+            return "{}";
+        }
+        try {
+            // Supprimer le préfixe "response":"```json\n"
+            jsonString = jsonString.replace("response\":\"", "");
+            jsonString = jsonString.replace("```json\\n", "");
+            jsonString = jsonString.replace("```json", "");
+            jsonString = jsonString.replace("\\n", "");
+            jsonString = jsonString.replace("\\\"", "\"");
+            jsonString = jsonString.replace("\"{", "{");
+            jsonString = jsonString.replace("}\"","}");
+
+            JsonNode rootNode = OBJECT_MAPPER.readTree(jsonString);
+            if (rootNode.isObject()) {
+                ((ObjectNode) rootNode).remove("response");
+                ((ObjectNode) rootNode).remove("json");
+            }
+            return rootNode.toString();
+
+        } catch (JsonProcessingException e) {
+            LOGGER.warn("JSON invalide lors du nettoyage : {}", jsonString, e);
+            return "{}";
+        }
+    }
 
     @Override
     @Transactional
@@ -73,9 +105,12 @@ public class GeminiService implements IGeminiGenerationConfig {
                     modelMapper.map(characterContextModel, CharacterContextEntity.class)
             );
 
-            CharacterDetailsModel characterDetailsModel = objectMapper.readValue(innerJsonString, CharacterDetailsModel.class);
-            characterDetailsModel.createdAt = java.util.Date.from(java.time.Instant.now());
-            characterDetailsModel.setContextId(characterContextEntity.getId()); // set contextId
+            CharacterDetailsModel characterDetailsModel = OBJECT_MAPPER.readValue(innerJsonString, CharacterDetailsModel.class);
+            characterDetailsModel = characterDetailsModel.toBuilder()
+                    .createdAt(java.util.Date.from(java.time.Instant.now()))
+                    .updatedAt(java.util.Date.from(java.time.Instant.now()))
+                    .contextId(characterContextEntity.getId())
+                    .build();
             final CharacterDetailsEntity characterDetailsEntity = characterDetailsService.save(
                     modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class)
             );
@@ -93,11 +128,11 @@ public class GeminiService implements IGeminiGenerationConfig {
                         // Récupérer l'entité CharacterDetailsEntity depuis la base de données
                         CharacterDetailsEntity parent = this.characterDetailsService.findById(characterDetailsEntity.getId());
 
-                        CharacterIllustrationModel characterIllustrationModel = new CharacterIllustrationModel();
-                        characterIllustrationModel.setImageLabel(parent.getImage());
-                        characterIllustrationModel.setImageBlob(imageBytes);
-                        characterIllustrationModel.setImageDetails(parent);
-
+                        final CharacterIllustrationModel characterIllustrationModel = CharacterIllustrationModel.builder()
+                                .imageLabel(parent.getImage())
+                                .imageBlob(imageBytes)
+                                .imageDetails(parent)
+                                .build();
                         CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
                         characterIllustrationEntity = this.characterIllustrationService.save(characterIllustrationEntity);
                     }
@@ -106,6 +141,21 @@ public class GeminiService implements IGeminiGenerationConfig {
                 }
             }
 
+            String statsJson = this.stats(characterDetailsEntity.getId());
+            LOGGER.info("Stats JSON: {}", statsJson);
+            try {
+                String cleanedJson = cleanJsonString(statsJson);
+                LOGGER.info("Cleaned JSON: {}", statsJson);
+                JsonNode statsJsonNode = OBJECT_MAPPER.readTree(cleanedJson);
+                this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJsonNode.toString());
+                LOGGER.info("Character JSON data saved successfully");
+            } catch (JsonProcessingException e) {
+                LOGGER.error("Erreur lors de l'analyse du JSON stats : {}", e.getMessage());
+                this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJson.isEmpty() ? "{}" : statsJson);
+                LOGGER.warn("Character JSON data saved with JSON due to parsing error.");
+            }
+
+            // FINALLY WE RETURN CHARACTER DETAILS
             return characterDetailsModel;
         } catch (JsonProcessingException e) {
             LOGGER.error("Error parsing JSON response: {}", e.getMessage());
@@ -168,9 +218,32 @@ public class GeminiService implements IGeminiGenerationConfig {
         }
 
         LOGGER.info("Statistiques API response: {}", response.getBody());
-        return response.getBody();
+        try {
+            // Nettoyage de la réponse JSON
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(response.getBody());
+            String innerJsonString = jsonNode.get("response").asText()
+                    .replace("```json", "")
+                    .replace("\\n", "")
+                    .replace("\\t", "")
+                    .replace("\\", "");
+            innerJsonString = innerJsonString.substring(1, innerJsonString.length() - 1);
+            return innerJsonString;
+        } catch (JsonProcessingException e) {
+            LOGGER.error("Error parsing JSON response: {}", e.getMessage());
+            return "{}";
+        }
     }
 
-
+    private void saveCharacterJsonData(Long characterDetailsId, String jsonData) {
+        final CharacterJsonDataModel jsonDataModel = CharacterJsonDataModel.builder()
+                .characterDetailsId(characterDetailsId)
+                .jsonData(jsonData)
+                .createdAt(java.util.Date.from(java.time.Instant.now()))
+                .updatedAt(java.util.Date.from(java.time.Instant.now()))
+                .build();
+        CharacterJsonDataEntity jsonDataEntity = modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
+        characterJsonDataService.save(jsonDataEntity);
+    }
 
 }
