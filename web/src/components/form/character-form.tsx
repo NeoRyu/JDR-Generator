@@ -2,6 +2,7 @@ import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Textarea} from '@/components/ui/textarea';
 import {Input} from '@/components/ui/input';
 import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import dayjs from "dayjs";
 
 
 interface CharacterFormProps {
@@ -43,7 +44,6 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
             {renderSaveButton && renderSaveButton(handleSubmit)}
             <div style={{ maxHeight: '80vh', overflowY: 'auto', width: '99%', paddingRight: '1rem' }}>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-
                     <div className="flex gap-4">
                         <div className="flex flex-col flex-1">
                             <label htmlFor="name" className="mb-1">Nom</label>
@@ -585,19 +585,19 @@ export const CharacterForm = forwardRef<CharacterFormRef, CharacterFormProps>(({
                                 name="createdAt"
                                 id="createdAt"
                                 placeholder="Date de création"
-                                value={character.details?.createdAt || ''}
+                                value={dayjs(character.details.createdAt).format('DD/MM/YYYY') || ''}
                                 onChange={handleChange}
                                 readOnly={true}
                             />
                         </div>
                         <div className="flex flex-col flex-1">
-                            <label htmlFor="updatedAt" className="mb-1">Date de mise à jour</label>
+                            <label htmlFor="updatedAt" className="mb-1">Date de mise à jour (si enregistrement)</label>
                             <Input
                                 type="text"
                                 name="updatedAt"
                                 id="updatedAt"
                                 placeholder="Date de mise à jour"
-                                value={character.details?.updatedAt || ''}
+                                value={dayjs(new Date()).format('DD/MM/YYYY') }
                                 onChange={handleChange}
                                 readOnly={true}
                             />

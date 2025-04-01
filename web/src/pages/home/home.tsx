@@ -4,7 +4,6 @@ import {useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -14,7 +13,6 @@ import {
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Table, TableBody, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
-import {X} from 'lucide-react';
 import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
 import {CharacterRow} from '@/pages/home/characterRow';
 import {getListCharactersFull} from '@/services/getListCharactersFull.service.ts';
@@ -96,12 +94,6 @@ export function Home() {
               </DialogTrigger>
 
               <DialogContent>
-                <DialogClose asChild>
-                  <Button variant="ghost" className="absolute right-4 top-4">
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Fermer</span>
-                  </Button>
-                </DialogClose>
                 <DialogTitle>Création d'un nouveau personnage</DialogTitle>
                 <DialogDescription>
                   Remplissez les champs pour générer un nouveau personnage.

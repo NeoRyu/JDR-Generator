@@ -78,7 +78,7 @@ export function CharacterRow({
                         key={character.details.id}
                         modalType={modalType === 'delete' ? 'delete' : null}
                         setModalType={setModalType}
-                        characterId={character.details.id}
+                        character={character}
                         refetch={refetch}
                     />
                 </div>

@@ -1,11 +1,12 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from '@/components/ui/dialog';
-import {Pen} from 'lucide-react';
+import {Loader2, Pen} from 'lucide-react';
 import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
 import {CharacterForm, CharacterFormRef} from '@/components/form/character-form';
 import {useTheme} from '@/components/theme-provider';
 import {ModalTypes} from "@/pages/home/home.tsx";
+
 
 interface UpdateCharacterDialogProps {
     character: CharacterFull;
@@ -13,19 +14,21 @@ interface UpdateCharacterDialogProps {
     selectedCharacter: CharacterFull | null;
     setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
     setSelectedCharacter: (character: CharacterFull | null) => void;
-    updateCharacter: (character: CharacterDetailsModel) => Promise<void>; // Typage modifié
+    updateCharacter: (character: CharacterDetailsModel) => Promise<void>;
 }
 
-export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
-                                                                                character,
-                                                                                modalType,
-                                                                                selectedCharacter,
-                                                                                setModalType,
-                                                                                setSelectedCharacter,
-                                                                                updateCharacter,
-                                                                            }) => {
+export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({character, modalType, selectedCharacter, setModalType, setSelectedCharacter, updateCharacter}) => {
     const { theme } = useTheme();
     const characterFormRef = useRef<CharacterFormRef>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        setIsLoading(true);
+        if (characterFormRef.current) {
+            await characterFormRef.current.handleSubmit(e);
+        }
+        setIsLoading(false);
+    };
 
     return (
         <Dialog
@@ -51,7 +54,7 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className={`max-w-[90vw] w-full ${theme === 'dark' ? 'light' : 'dark'}`}>
+            <DialogContent className={`max-w-[90vw] w-full ${theme === 'light' ? 'dark' : 'dark'}`}>
                 <div className="flex justify-between items-start">
                     <div style={{ maxHeight: '80vh', overflowY: 'auto', width: '80%', paddingRight: '1rem' }}>
                         <DialogTitle>EDITION DU PERSONNAGE</DialogTitle>
@@ -64,17 +67,20 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
                     <div className="flex justify-end">
                         {selectedCharacter && (
                             <div style={{ textAlign: 'right', paddingRight: '1rem' }}>
-                                <Button
-                                    type="button"
-                                    onClick={(e) => {
-                                        if (characterFormRef.current) { // Vérification de characterFormRef.current
-                                            characterFormRef.current.handleSubmit(e);
-                                        }
-                                    }}
-                                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
-                                >
-                                    Sauvegarder le personnage
-                                </Button>
+                                {isLoading ? (
+                                    <Button disabled className="w-full">
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Sauvegarde en cours...
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        type="button"
+                                        onClick={handleFormSubmit}
+                                        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
+                                    >
+                                        Sauvegarder le personnage
+                                    </Button>
+                                )}
                             </div>
                         )}
                     </div>

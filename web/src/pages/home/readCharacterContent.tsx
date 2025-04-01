@@ -1,5 +1,3 @@
-// readCharacterContent.tsx
-
 import {Dispatch, SetStateAction} from 'react';
 import {CharacterFull} from '@/components/model/character.model';
 import {ScrollArea} from '@/components/ui/scroll-area';
@@ -8,6 +6,8 @@ import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} fr
 import {Button} from '@/components/ui/button';
 import {Eye} from 'lucide-react';
 import {ModalTypes} from "@/pages/home/home.tsx";
+import {useTheme} from "@/components/theme-provider.tsx";
+
 
 interface ReadCharacterContentProps {
     character: CharacterFull;
@@ -19,6 +19,7 @@ interface ReadCharacterContentProps {
 }
 
 export function ReadCharacterContent({ character, modalType, setModalType, selectedCharacter, setSelectedCharacter }: ReadCharacterContentProps) {
+    const { theme } = useTheme();
     if (!character || !character.details) {
         return <div>Personnage non trouvé.</div>;
     }
@@ -45,7 +46,7 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className={`max-w-[45vw] w-full`}>
+            <DialogContent className={`max-w-[90vw] w-full ${theme === 'light' ? 'dark' : 'dark'}`} style={{ height: '90vh', paddingRight: '1rem' }}>
                 <div className="flex flex-col items-start">
                     <div className="flex items-start">
                         {character.illustration && character.illustration.imageBlob ? (
@@ -90,7 +91,7 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                         </div>
                     </div>
 
-                    <ScrollArea className="h-64 mt-6 max-w-[45vw] w-full">
+                    <ScrollArea className="mt-6 max-w-[90vw] w-full" style={{ height: '57vh', paddingRight: '1rem' }}>
                         <Table>
                             <TableBody>
                                 <TableRow>

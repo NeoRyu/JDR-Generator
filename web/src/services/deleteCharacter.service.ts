@@ -1,8 +1,9 @@
 import axios from 'axios'
 import {useMutation} from 'react-query';
 
+
 interface DeleteCharacterResponse {
-    // Définissez les propriétés de la réponse si nécessaire
+    // Définir les propriétés de la réponse si nécessaire
 }
 
 const deleteCharacterRequest = async (id: number): Promise<DeleteCharacterResponse> => {
