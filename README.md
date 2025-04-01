@@ -10,7 +10,10 @@ Intégrant Gemini et Imagen, IA de Google ; JDR-Generator propose des fonctionna
 - Prise en charge de divers systèmes de JDR.
 - Génération de personnages et illustrations via l'intégration de GoogleGenerativeAI.
 
-![{6C47D527-687B-4E6E-B699-67C900E966C3}](https://github.com/user-attachments/assets/954b6357-45af-4fcd-a839-1ac9822b3d92)
+![{4C1212F1-4893-40A2-AAA0-C7D863886299}](https://github.com/user-attachments/assets/19ede4e7-17ca-441f-9578-1b8a948b4f04)
+![{F74C2EAC-0B6C-4F65-BD67-673D4D82AA42}](https://github.com/user-attachments/assets/e3433697-63e4-449c-894a-fe00c783b5e4)
+![{CD30445B-ED84-499E-AC0F-C576AEA7B5EC}](https://github.com/user-attachments/assets/d2f43bd0-a75c-4431-834c-a6382601c661)
+![{D7526528-5432-4E65-92A8-9A44C8C71071}](https://github.com/user-attachments/assets/65dbb941-db8c-48d0-8d61-f2c64de7137e)
 
 
 ## START
