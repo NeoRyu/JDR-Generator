@@ -67,8 +67,16 @@ export interface CharacterIllustration {
     imageBlob: ImageUrlOrBase64;
 }
 
+export interface CharacterJsonData {
+    id: number;
+    jsonData: any;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
 export interface CharacterFull extends CharacterDetailsModel {
     details: CharacterDetailsModel;
     context: CharacterContext;
     illustration: CharacterIllustration;
+    jsonData: CharacterJsonData;
 }

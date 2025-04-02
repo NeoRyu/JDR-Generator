@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/characters")
 public class CharactersController {
     private final String geminiHost = "http://localhost:5173";
-    private final GeminiService geminiService;
+    private final jdr.generator.api.characters.GeminiService geminiService;
     private final CharacterDetailsService characterDetailsService;
 
     CharactersController(

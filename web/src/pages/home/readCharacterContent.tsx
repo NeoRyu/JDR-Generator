@@ -94,6 +94,47 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                     <ScrollArea className="mt-6 max-w-[90vw] w-full" style={{ height: '57vh', paddingRight: '1rem' }}>
                         <Table>
                             <TableBody>
+
+                                {character.jsonData &&
+                                    character.jsonData.jsonData &&
+                                    typeof character.jsonData.jsonData === 'string' &&
+                                    (() => {
+                                        try {
+                                            const parsedJson = JSON.parse(character.jsonData.jsonData).characterSheet;
+                                            // @ts-ignore
+                                            const renderObject = (obj: any, parentKey = '', level = 0) => {
+                                                if (!obj || typeof obj !== 'object') return null;
+                                                // @ts-ignore
+                                                return Object.keys(obj).flatMap((key, index) => {
+                                                    const fullKey = parentKey ? `${parentKey}.${key}` : key;
+                                                    const bullet = "➠".repeat(level);
+
+                                                    if (typeof obj[key] === 'object' && obj[key] !== null) {
+                                                        return [
+                                                            <TableRow key={`${fullKey}-category`}>
+                                                                <TableCell className={`purples category-${level + 1}`}>{bullet} {key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
+                                                                <TableCell className="flex stretch"></TableCell>
+                                                            </TableRow>,
+                                                            ...renderObject(obj[key], fullKey, level + 1),
+                                                        ];
+                                                    } else {
+                                                        return (
+                                                            <TableRow key={fullKey}>
+                                                                <TableCell className="mint">{bullet} {key}</TableCell>
+                                                                <TableCell className="flex stretch">{obj[key]}</TableCell>
+                                                            </TableRow>
+                                                        );
+                                                    }
+
+                                                });
+                                            };
+
+                                            return renderObject(parsedJson);
+                                        } catch (error) {
+                                            console.error("Erreur lors de l'analyse du JSON :", error);
+                                            return null;
+                                        }
+                                    })()}
                                 <TableRow>
                                     <TableCell className="mint">Nom</TableCell>
                                     <TableCell className="flex stretch">{character.details?.name}</TableCell>
