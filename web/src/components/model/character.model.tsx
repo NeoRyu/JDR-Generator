@@ -69,7 +69,7 @@ export interface CharacterIllustration {
 
 export interface CharacterJsonData {
     id: number;
-    jsonData: any;
+    jsonData: {};
     createdAt?: string;
     updatedAt?: string;
 }

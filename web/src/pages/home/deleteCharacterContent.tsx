@@ -7,12 +7,11 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog';
 import {Button} from '@/components/ui/button';
-import {Trash2} from 'lucide-react';
+import {Loader2, Trash2} from 'lucide-react';
 import {useDeleteCharacter} from '@/services/deleteCharacter.service.ts';
 import React from 'react';
 import {ModalTypes} from '@/pages/home/home.tsx';
 import {CharacterFull} from "@/components/model/character.model.tsx";
-
 
 export interface DeleteCharacterContentProps {
     character: CharacterFull | null;
@@ -30,7 +29,7 @@ export function DeleteCharacterContent({
     const { mutate: deleteMutation, isLoading: isDeleteLoading } = useDeleteCharacter();
 
     const handleDelete = () => {
-        if (character && character.details?.id) { // Ajout d'une vérification
+        if (character && character.details?.id) {
             deleteMutation(character.details.id, {
                 onSuccess: () => {
                     console.log('deleteMutation onSuccess');
@@ -60,9 +59,10 @@ export function DeleteCharacterContent({
                     className="button-red"
                     type="button"
                     variant="outline"
-                    onClick={() => setModalType('delete') }
+                    onClick={() => setModalType('delete')}
+                    disabled={isDeleteLoading} // Désactiver le bouton pendant le chargement
                 >
-                    <Trash2 />
+                    {isDeleteLoading ? <Loader2 className="animate-spin" /> : <Trash2 />}
                 </Button>
             </DialogTrigger>
 
@@ -81,9 +81,9 @@ export function DeleteCharacterContent({
                         type="button"
                         variant="destructive"
                         onClick={handleDelete}
-                        disabled={isDeleteLoading}
+                        disabled={isDeleteLoading} // Désactiver le bouton pendant le chargement
                     >
-                        {isDeleteLoading ? 'Suppression...' : 'Supprimer'}
+                        {isDeleteLoading ? <Loader2 className="animate-spin" /> : 'Supprimer'}
                     </Button>
                 </DialogFooter>
             </DialogContent>

@@ -3,7 +3,6 @@ package jdr.generator.api.characters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
@@ -52,21 +51,28 @@ public class GeminiService implements IGeminiGenerationConfig {
             return "{}";
         }
         try {
-            // Supprimer le préfixe "response":"```json\n"
-            jsonString = jsonString.replace("response\":\"", "");
-            jsonString = jsonString.replace("```json\\n", "");
-            jsonString = jsonString.replace("```json", "");
-            jsonString = jsonString.replace("\\n", "");
-            jsonString = jsonString.replace("\\\"", "\"");
-            jsonString = jsonString.replace("\"{", "{");
-            jsonString = jsonString.replace("}\"","}");
-
             JsonNode rootNode = OBJECT_MAPPER.readTree(jsonString);
-            if (rootNode.isObject()) {
-                ((ObjectNode) rootNode).remove("response");
-                ((ObjectNode) rootNode).remove("json");
+            JsonNode responseNode = rootNode.get("response");
+
+            if (responseNode == null) {
+                // La clé "response" est absente, retourner le JSON tel quel (sans modifications)
+                LOGGER.warn("Clé 'response' absente dans la réponse JSON, retournant le JSON tel quel.");
+                return jsonString; // Retourner la chaîne JSON originale
             }
-            return rootNode.toString();
+
+            String innerJsonString = responseNode.asText();
+
+            // Vérifier si innerJsonString est un objet JSON valide
+            if (innerJsonString.startsWith("{") && innerJsonString.endsWith("}")) {
+                // innerJsonString est un objet JSON valide, le retourner tel quel
+                return innerJsonString;
+            } else {
+                // innerJsonString n'est pas un objet JSON valide, tenter de le nettoyer
+                JsonNode innerJsonNode = OBJECT_MAPPER.readTree(innerJsonString);
+
+                // Ne jamais supprimer les accolades `{` et `}`
+                return innerJsonNode.toString();
+            }
 
         } catch (JsonProcessingException e) {
             LOGGER.warn("JSON invalide lors du nettoyage : {}", jsonString, e);
@@ -145,9 +151,8 @@ public class GeminiService implements IGeminiGenerationConfig {
             LOGGER.info("Stats JSON: {}", statsJson);
             try {
                 String cleanedJson = cleanJsonString(statsJson);
-                LOGGER.info("Cleaned JSON: {}", statsJson);
-                JsonNode statsJsonNode = OBJECT_MAPPER.readTree(cleanedJson);
-                this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJsonNode.toString());
+                LOGGER.info("Cleaned JSON: {}", cleanedJson);
+                this.saveCharacterJsonData(characterDetailsEntity.getId(), cleanedJson);
                 LOGGER.info("Character JSON data saved successfully");
             } catch (JsonProcessingException e) {
                 LOGGER.error("Erreur lors de l'analyse du JSON stats : {}", e.getMessage());
@@ -218,24 +223,10 @@ public class GeminiService implements IGeminiGenerationConfig {
         }
 
         LOGGER.info("Statistiques API response: {}", response.getBody());
-        try {
-            // Nettoyage de la réponse JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(response.getBody());
-            String innerJsonString = jsonNode.get("response").asText()
-                    .replace("```json", "")
-                    .replace("\\n", "")
-                    .replace("\\t", "")
-                    .replace("\\", "");
-            innerJsonString = innerJsonString.substring(1, innerJsonString.length() - 1);
-            return innerJsonString;
-        } catch (JsonProcessingException e) {
-            LOGGER.error("Error parsing JSON response: {}", e.getMessage());
-            return "{}";
-        }
+        return response.getBody();
     }
 
-    private void saveCharacterJsonData(Long characterDetailsId, String jsonData) {
+    private void saveCharacterJsonData(Long characterDetailsId, String jsonData) throws JsonProcessingException {
         final CharacterJsonDataModel jsonDataModel = CharacterJsonDataModel.builder()
                 .characterDetailsId(characterDetailsId)
                 .jsonData(jsonData)

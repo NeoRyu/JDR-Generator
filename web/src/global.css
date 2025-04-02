@@ -242,7 +242,6 @@ textarea:focus {
   font-family: 'Rocher', serif;
   font-palette: --Purples;
 }
-
 .mint {
   font-family: 'Rocher', serif;
   font-palette: --Mint;
@@ -453,4 +452,17 @@ textarea:focus {
   margin-right: 10px;
   padding: 12px;
   text-align: justify;
+}
+
+.tab-trigger-style {
+  flex: 1;
+  padding: 0.5rem;
+  margin-top: 15px;
+  font-family: 'Rocher', serif;
+}
+.tab-trigger-style.active {
+  background-color: rgb(50 50 50);
+}
+.tab-trigger-style:not(.active) {
+  background-color: rgb(0 0 0);
 }

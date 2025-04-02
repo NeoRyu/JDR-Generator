@@ -69,6 +69,7 @@ export function Home() {
         details: updatedCharacterDetails,
         context: selectedCharacter.context,
         illustration: selectedCharacter.illustration,
+        jsonData: selectedCharacter.jsonData,
       };
       await updateCharacterService.updateCharacter(fullModel);
       await refetch();
