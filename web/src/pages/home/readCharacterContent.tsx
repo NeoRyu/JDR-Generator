@@ -6,8 +6,8 @@ import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} fr
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@radix-ui/react-tabs';
-import {Eye} from "lucide-react";
-import {Button} from '@/components/ui/button'; // Importation du type Button
+import {Eye} from 'lucide-react';
+import {Button} from '@/components/ui/button';
 
 interface ReadCharacterContentProps {
     character: CharacterFull;
@@ -21,25 +21,38 @@ interface ReadCharacterContentProps {
 const renderJsonData = (jsonData: any, level = 0): JSX.Element[] => {
     if (!jsonData || typeof jsonData !== 'object') return [];
 
+    let keyIndex = 0; // Initialize a unique key index
+
     return Object.entries(jsonData).flatMap(([key, value]) => {
         const bullet = "➠".repeat(level);
 
         if (Array.isArray(value)) {
             return [
-                <TableRow key={`${key}-category`}>
+                <TableRow key={`${key}-category-${level}-${keyIndex++}`}>
                     <TableCell className={`purples category-${level + 1}`}>{bullet} {key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
                     <TableCell className="flex stretch"></TableCell>
                 </TableRow>,
-                ...value.map((item, index) => (
-                    <TableRow key={`${key}-${index}`}>
-                        <TableCell className="mint">{bullet} {index + 1}</TableCell>
-                        <TableCell className="flex stretch">{String(item)}</TableCell>
-                    </TableRow>
-                )),
+                ...value.flatMap((item, index) => {
+                    if (typeof item === 'object' && item !== null) {
+                        return Object.entries(item).map(([itemKey, itemValue]) => (
+                            <TableRow key={`${key}-${index}-${itemKey}-${level}-${keyIndex++}`}>
+                                <TableCell className="mint">{bullet} {itemKey}</TableCell>
+                                <TableCell className="flex stretch">{String(itemValue)}</TableCell>
+                            </TableRow>
+                        ));
+                    } else {
+                        return (
+                            <TableRow key={`${key}-${index}-${level}-${keyIndex++}`}>
+                                <TableCell className="mint">{bullet} {index + 1}</TableCell>
+                                <TableCell className="flex stretch">{String(item)}</TableCell>
+                            </TableRow>
+                        );
+                    }
+                }),
             ];
         } else if (typeof value === 'object' && value !== null) {
             return [
-                <TableRow key={`${key}-category`}>
+                <TableRow key={`${key}-category-${level}-${keyIndex++}`}>
                     <TableCell className={`purples category-${level + 1}`}>{bullet} {key.charAt(0).toUpperCase() + key.slice(1)}</TableCell>
                     <TableCell className="flex stretch"></TableCell>
                 </TableRow>,
@@ -47,7 +60,7 @@ const renderJsonData = (jsonData: any, level = 0): JSX.Element[] => {
             ];
         } else {
             return (
-                <TableRow key={key}>
+                <TableRow key={`${key}-${level}-${keyIndex++}`}>
                     <TableCell className="mint">{bullet} {key}</TableCell>
                     <TableCell className="flex stretch">{String(value)}</TableCell>
                 </TableRow>
@@ -69,7 +82,7 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
         parsedJson = character.jsonData && character.jsonData.jsonData && typeof character.jsonData.jsonData === 'string'
             ? JSON.parse(character.jsonData.jsonData)
             : null;
-        console.log("Parsed JSON:", parsedJson); // Ajout d'un log pour vérifier le JSON analysé
+        if (parsedJson) console.log("Parsed JSON:", parsedJson);
     } catch (error) {
         console.error("Erreur lors de l'analyse du JSON :", error);
     }
@@ -88,10 +101,15 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
             }}
         >
             <DialogTrigger asChild>
-                <Button onClick={() => {
-                    setModalType('read');
-                    setSelectedCharacter(character);
-                }} className="button" type="button" variant="outline" >
+                <Button
+                    onClick={() => {
+                        setModalType('read');
+                        setSelectedCharacter(character);
+                    }}
+                    className="button"
+                    type="button"
+                    variant="outline"
+                >
                     <Eye />
                 </Button>
             </DialogTrigger>
