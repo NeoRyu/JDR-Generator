@@ -16,18 +16,21 @@ interface CharacterRowProps {
     setModalType: Dispatch<SetStateAction<ModalTypes>>;
     selectedCharacter: CharacterFull | null;
     setSelectedCharacter: Dispatch<SetStateAction<CharacterFull | null>>;
-    updateCharacter: (updatedCharacter: CharacterDetailsModel) => Promise<void>; // Modified type here
+    updateCharacter: (updatedCharacter: CharacterDetailsModel) => Promise<void>;
     refetch: () => void;
+    onCharacterDeleted: (characterId: number) => void;
+    deletingCharacters: number[];
+    setDeletingCharacters: Dispatch<SetStateAction<number[]>>;
 }
 
-export function CharacterRow({character, modalType, setModalType, selectedCharacter, setSelectedCharacter, updateCharacter, refetch}: CharacterRowProps) {
+export function CharacterRow({character, modalType, setModalType, selectedCharacter, setSelectedCharacter, updateCharacter, refetch, onCharacterDeleted, deletingCharacters, setDeletingCharacters}: CharacterRowProps) {
 
     const handleReadCharacter = (character: CharacterFull) => {
         setSelectedCharacter(character);
         setModalType('read');
     };
 
-    const handleUpdateCharacter = async (updatedCharacter: CharacterDetailsModel) => { // Modified type here
+    const handleUpdateCharacter = async (updatedCharacter: CharacterDetailsModel) => {
         try {
             await updateCharacter(updatedCharacter);
             await refetch();
@@ -38,8 +41,10 @@ export function CharacterRow({character, modalType, setModalType, selectedCharac
         }
     };
 
+    const isDeleting = deletingCharacters.includes(character.details.id);
+
     return (
-        <TableRow key={character.details.id}>
+        <TableRow key={character.details.id} style={{ backgroundColor: isDeleting ? 'rgba(255, 0, 0, 0.1)' : 'transparent' }}>
             <TableCell>{dayjs(character.details.createdAt).format('DD/MM/YYYY')}</TableCell>
             <TableCell>{character.context?.promptGender == 'Male' ? '♂' : (character.context?.promptGender == 'Female' ? '♀' : '⚥')}</TableCell>
             <TableCell>{character.details.name}</TableCell>
@@ -51,7 +56,6 @@ export function CharacterRow({character, modalType, setModalType, selectedCharac
             <TableCell>{character.context?.promptSystem}</TableCell>
             <TableCell>
                 <div className="flex gap-2">
-                    {/* BOUTON POUR VISUALISER LES DETAILS DU PERSONNAGE */}
                     <ReadCharacterContent
                         modalType={modalType === 'read' ? 'read' : null}
                         setModalType={setModalType}
@@ -60,7 +64,6 @@ export function CharacterRow({character, modalType, setModalType, selectedCharac
                         setSelectedCharacter={setSelectedCharacter}
                         handleReadCharacter={handleReadCharacter}
                     />
-                    {/* BOUTON POUR METTRE A JOUR LES DETAILS DU PERSONNAGE */}
                     <UpdateCharacterDialog
                         modalType={modalType === 'update' ? 'update' : null}
                         setModalType={setModalType}
@@ -69,13 +72,16 @@ export function CharacterRow({character, modalType, setModalType, selectedCharac
                         setSelectedCharacter={setSelectedCharacter}
                         updateCharacter={handleUpdateCharacter}
                     />
-                    {/* BOUTON POUR SUPPRIMER UN PERSONNAGE */}
                     <DeleteCharacterContent
-                        key={character.details.id}
                         modalType={modalType === 'delete' ? 'delete' : null}
                         setModalType={setModalType}
                         character={character}
+                        selectedCharacter={selectedCharacter}
+                        setSelectedCharacter={setSelectedCharacter}
                         refetch={refetch}
+                        onCharacterDeleted={onCharacterDeleted}
+                        deletingCharacters={deletingCharacters}
+                        setDeletingCharacters={setDeletingCharacters}
                     />
                 </div>
             </TableCell>

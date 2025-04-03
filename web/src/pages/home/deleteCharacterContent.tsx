@@ -1,21 +1,33 @@
 // deleteCharacterContent.tsx
-import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import {Button} from '@/components/ui/button';
 import {Loader2, Trash2} from 'lucide-react';
 import {useDeleteCharacter} from '@/services/deleteCharacter.service.ts';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {ModalTypes} from '@/pages/home/home.tsx';
 import {CharacterFull} from "@/components/model/character-full.model.tsx";
 
 
 export interface DeleteCharacterContentProps {
-    character: CharacterFull | null;
+    character: CharacterFull;
+    selectedCharacter: CharacterFull | null;
+    setSelectedCharacter: Dispatch<SetStateAction<CharacterFull | null>>;
     modalType: ModalTypes;
     setModalType: React.Dispatch<React.SetStateAction<ModalTypes>>;
     refetch: () => void;
+    onCharacterDeleted: (characterId: number) => void;
+    deletingCharacters: number[];
+    setDeletingCharacters: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-export function DeleteCharacterContent({character, modalType, setModalType, refetch}: DeleteCharacterContentProps) {
+export function DeleteCharacterContent({ character, modalType, setModalType, selectedCharacter, setSelectedCharacter, refetch, onCharacterDeleted, deletingCharacters, setDeletingCharacters }: DeleteCharacterContentProps) {
     const { mutate: deleteMutation, isLoading: isDeleteLoading } = useDeleteCharacter();
 
     const handleDelete = () => {
@@ -24,7 +36,10 @@ export function DeleteCharacterContent({character, modalType, setModalType, refe
                 onSuccess: () => {
                     console.log('deleteMutation onSuccess');
                     setModalType(null);
+                    setSelectedCharacter(null);
                     refetch();
+                    onCharacterDeleted(character.details.id);
+                    setDeletingCharacters(deletingCharacters.filter(id => id !== character.details.id));
                 },
                 onError: (error) => {
                     console.error('deleteMutation onError:', error);
@@ -37,10 +52,16 @@ export function DeleteCharacterContent({character, modalType, setModalType, refe
 
     return (
         <Dialog
-            open={modalType === 'delete'}
+            open={
+                modalType === 'delete'
+                && selectedCharacter?.details.id === character.details.id
+            }
             onOpenChange={(open) => {
                 if (!open) {
                     setModalType(null);
+                    setSelectedCharacter(null);
+                } else {
+                    setSelectedCharacter(character);
                 }
             }}
         >

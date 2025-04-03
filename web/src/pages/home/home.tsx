@@ -1,5 +1,5 @@
 // home.tsx
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {
   Dialog,
@@ -28,9 +28,16 @@ export type ModalTypes = 'read' | 'update' | 'delete' | null;
 
 export function Home() {
   const { data: charactersData, refetch, isLoading: isListLoading } = getListCharactersFull();
+  const [localCharactersData, setLocalCharactersData] = useState<CharacterFull[] | undefined>(undefined);
+  useEffect(() => {
+    if (charactersData && Array.isArray(charactersData.data)) {
+      setLocalCharactersData(charactersData.data);
+    }
+  }, [charactersData, localCharactersData]);
+
   const updateCharacterService = updateCharacter();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
-
+  const [deletingCharacters, setDeletingCharacters] = useState<number[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
   const [modalType, setModalType] = useState<ModalTypes>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -56,6 +63,7 @@ export function Home() {
             setPromptDescription('');
             setIsOpen(false);
             setModalType(null);
+            setSelectedCharacter(null);
           },
         },
     );
@@ -73,8 +81,19 @@ export function Home() {
       };
       await updateCharacterService.updateCharacter(fullModel);
       await refetch();
+      setModalType(null);
+      setSelectedCharacter(null);
     } catch (error) {
       console.error('Erreur lors de la mise à jour du personnage :', error);
+    }
+  };
+
+  const handleCharacterDeleted = (characterId: number) => {
+    setDeletingCharacters([...deletingCharacters, characterId]);
+    if (localCharactersData) {
+      const updatedCharacters = localCharactersData.filter((char: CharacterFull) => char.details.id !== characterId);
+      setLocalCharactersData([...updatedCharacters]);
+      refetch();
     }
   };
 
@@ -171,7 +190,7 @@ export function Home() {
                 </TableHeader>
                 <TableBody>
                   {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
-                  {(charactersData?.data as CharacterFull[] | undefined)?.map((character: CharacterFull) => (
+                  {localCharactersData?.map((character: CharacterFull) => (
                       <CharacterRow
                           key={character.details?.id}
                           character={character}
@@ -181,6 +200,9 @@ export function Home() {
                           setSelectedCharacter={setSelectedCharacter}
                           updateCharacter={handleUpdateCharacter}
                           refetch={refetch}
+                          onCharacterDeleted={handleCharacterDeleted}
+                          deletingCharacters={deletingCharacters}
+                          setDeletingCharacters={setDeletingCharacters}
                       />
                   ))}
                 </TableBody>

@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
@@ -337,10 +338,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.start: dev (WEB)" />
+        <item itemvalue="npm.build (WEB)" />
         <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.build (GEMINI)" />
         <item itemvalue="npm.clean (GEMINI)" />
-        <item itemvalue="npm.build (WEB)" />
       </list>
     </recent_temporary>
   </component>
@@ -387,7 +388,7 @@
       <workItem from="1743594968649" duration="9414000" />
       <workItem from="1743661621574" duration="2182000" />
       <workItem from="1743665846655" duration="4268000" />
-      <workItem from="1743687981916" duration="1733000" />
+      <workItem from="1743687981916" duration="8108000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -725,7 +726,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743667885592</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1743690516086</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1743690516086</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -734,7 +743,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Cleaning and reorder JSON attributes&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
@@ -759,7 +767,8 @@
     <MESSAGE value="[OK] JDR-Generator : FIX&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
