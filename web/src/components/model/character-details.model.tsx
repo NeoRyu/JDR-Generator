@@ -48,35 +48,3 @@ export interface CharacterDetailsModel {
     createdAt?: string;
     updatedAt?: string;
 }
-
-export interface CharacterContext {
-    id: number;
-    promptSystem: string;
-    promptRace: string;
-    promptGender: string;
-    promptClass: string;
-    promptDescription: string;
-    createdAt?: string;
-}
-
-type ImageUrlOrBase64 = string;
-
-export interface CharacterIllustration {
-    id: number;
-    imageLabel: string;
-    imageBlob: ImageUrlOrBase64;
-}
-
-export interface CharacterJsonData {
-    id: number;
-    jsonData: {};
-    createdAt?: string;
-    updatedAt?: string;
-}
-
-export interface CharacterFull extends CharacterDetailsModel {
-    details: CharacterDetailsModel;
-    context: CharacterContext;
-    illustration: CharacterIllustration;
-    jsonData: CharacterJsonData;
-}

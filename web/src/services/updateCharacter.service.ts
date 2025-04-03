@@ -1,9 +1,11 @@
+// updateCharacter.service.tsx
 import axios from 'axios';
-import {CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
+
 
 function cleanData(value: any): any {
     if (typeof value === 'string') {
-        return value; //.replace(/"/g, ' ');
+        return value;
     }
     if (typeof value === 'object' && value !== null) {
         if (Array.isArray(value)) {

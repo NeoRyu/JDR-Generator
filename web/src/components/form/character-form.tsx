@@ -1,10 +1,15 @@
+// character-form.tsx
 import React, {forwardRef, useImperativeHandle, useState} from 'react';
 import {Textarea} from '@/components/ui/textarea';
 import {Input} from '@/components/ui/input';
-import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
+import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
+
 import dayjs from "dayjs";
 
-
+// TODO : Etendre la fonctionnalité pour permettre d'éditer aussi les context (pour la vue details et globale),
+//  illustration (dont la description et generation)
+//  et stats (plus complexe ici car va nécessiter de parcourir un json aux key inconnues et parfois identiques pour éditer, supprimer ou ajouter...)
 interface CharacterFormProps {
     initialValues: CharacterFull;
     onSubmit: (updatedCharacter: CharacterDetailsModel) => Promise<void>;

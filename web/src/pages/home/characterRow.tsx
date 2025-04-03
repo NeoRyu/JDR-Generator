@@ -1,13 +1,14 @@
-// CharacterRow.tsx
-
+// characterRow.tsx
 import {TableCell, TableRow} from '@/components/ui/table';
 import dayjs from 'dayjs';
-import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
+import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
 import {ReadCharacterContent} from "@/pages/home/readCharacterContent.tsx";
 import {UpdateCharacterDialog} from "@/pages/home/updateCharacterContent.tsx";
 import {DeleteCharacterContent} from "@/pages/home/deleteCharacterContent.tsx";
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {Dispatch, SetStateAction} from "react";
+
 
 interface CharacterRowProps {
     character: CharacterFull;
@@ -19,15 +20,7 @@ interface CharacterRowProps {
     refetch: () => void;
 }
 
-export function CharacterRow({
-                                 character,
-                                 modalType,
-                                 setModalType,
-                                 selectedCharacter,
-                                 setSelectedCharacter,
-                                 updateCharacter,
-                                 refetch,
-                             }: CharacterRowProps) {
+export function CharacterRow({character, modalType, setModalType, selectedCharacter, setSelectedCharacter, updateCharacter, refetch}: CharacterRowProps) {
 
     const handleReadCharacter = (character: CharacterFull) => {
         setSelectedCharacter(character);
@@ -58,6 +51,7 @@ export function CharacterRow({
             <TableCell>{character.context?.promptSystem}</TableCell>
             <TableCell>
                 <div className="flex gap-2">
+                    {/* BOUTON POUR VISUALISER LES DETAILS DU PERSONNAGE */}
                     <ReadCharacterContent
                         modalType={modalType === 'read' ? 'read' : null}
                         setModalType={setModalType}
@@ -66,6 +60,7 @@ export function CharacterRow({
                         setSelectedCharacter={setSelectedCharacter}
                         handleReadCharacter={handleReadCharacter}
                     />
+                    {/* BOUTON POUR METTRE A JOUR LES DETAILS DU PERSONNAGE */}
                     <UpdateCharacterDialog
                         modalType={modalType === 'update' ? 'update' : null}
                         setModalType={setModalType}
@@ -74,6 +69,7 @@ export function CharacterRow({
                         setSelectedCharacter={setSelectedCharacter}
                         updateCharacter={handleUpdateCharacter}
                     />
+                    {/* BOUTON POUR SUPPRIMER UN PERSONNAGE */}
                     <DeleteCharacterContent
                         key={character.details.id}
                         modalType={modalType === 'delete' ? 'delete' : null}

@@ -1,8 +1,10 @@
+// updateCharacterContent.tsx
 import React, {useRef, useState} from 'react';
 import {Button} from '@/components/ui/button';
 import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from '@/components/ui/dialog';
 import {Loader2, Pen} from 'lucide-react';
-import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
+import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
 import {CharacterForm, CharacterFormRef} from '@/components/form/character-form';
 import {useTheme} from '@/components/theme-provider';
 import {ModalTypes} from "@/pages/home/home.tsx";

@@ -1,23 +1,20 @@
 // home.tsx
-
 import {useState} from 'react';
 import {Button} from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
 import {Table, TableBody, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
-import {CharacterDetailsModel, CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
+import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
 import {CharacterRow} from '@/pages/home/characterRow';
 import {getListCharactersFull} from '@/services/getListCharactersFull.service.ts';
 import {useCreateCharacter} from "@/services/createCharacter.service.ts";
 import {updateCharacter} from '@/services/updateCharacter.service.ts';
+import {gameUniverses} from "@/pages/home/listes/gameUniverses.tsx";
+import {characterRaces} from "@/pages/home/listes/characterRaces.tsx";
+import {characterGenders} from "@/pages/home/listes/characterGenders.tsx";
+import {characterClasses} from "@/pages/home/listes/characterClasses.tsx";
 
 
 export type ModalTypes = 'read' | 'update' | 'delete' | null;
@@ -26,11 +23,10 @@ export function Home() {
   const { data: charactersData, refetch, isLoading: isListLoading } = getListCharactersFull();
   const updateCharacterService = updateCharacter();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
-  const [modalType, setModalType] = useState<ModalTypes>(null);
+
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
-
+  const [modalType, setModalType] = useState<ModalTypes>(null);
   const [isOpen, setIsOpen] = useState(false);
-
   const [promptSystem, setPromptSystem] = useState('');
   const [promptRace, setPromptRace] = useState('');
   const [promptGender, setPromptGender] = useState('');
@@ -41,19 +37,16 @@ export function Home() {
     if (!promptSystem || !promptGender) {
       return alert('Remplissez les champs');
     }
-
     mutate(
         { promptSystem, promptClass, promptGender, promptRace, promptDescription },
         {
           onSuccess: () => {
             refetch();
-
             setPromptSystem('');
             setPromptRace('');
             setPromptGender('');
             setPromptClass('');
             setPromptDescription('');
-
             setIsOpen(false);
             setModalType(null);
           },
@@ -78,128 +71,80 @@ export function Home() {
     }
   };
 
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
       <div className="h-screen flex flex-col px-4">
+        {/* HEADER : JDR.Generator */}
         <header className="h-16 flex items-center sliced-wrapper">
           <div className="sliced-top text-muted-foreground">JDR.Generator</div>
           <div className="sliced-bottom text-muted-foreground" aria-hidden="true">JDR.Generator</div>
         </header>
 
         <main className="flex flex-col">
+
+          {/* CREATION DE NOUVEAUX PERSONNAGES */}
           <div className="flex justify-end">
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              {/* BOUTON DE CREATION DE PERSONNAGE */}
               <DialogTrigger asChild>
                 <Button className="button-aura" onClick={() => setIsOpen(true)}>Nouveau personnage</Button>
               </DialogTrigger>
-
+              {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
               <DialogContent>
                 <DialogTitle>Création d'un nouveau personnage</DialogTitle>
                 <DialogDescription>
                   Remplissez les champs pour générer un nouveau personnage.
                 </DialogDescription>
-
+                {/* UNIVERS DE JEU */}
                 <Select value={promptSystem} onValueChange={setPromptSystem}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez l'univers du jeu" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="undefined">Univers générique</SelectItem>
-                    <SelectItem value="Aria">Aria</SelectItem>
-                    <SelectItem value="Ars Magica">Ars Magica</SelectItem>
-                    <SelectItem value="Brigandyne">Brigandyne</SelectItem>
-                    <SelectItem value="Chill">Chill</SelectItem>
-                    <SelectItem value="COPS">COPS</SelectItem>
-                    <SelectItem value="Cyberpunk RED">Cyberpunk RED</SelectItem>
-                    <SelectItem value="Call of Cthulhu">L'Appel de Cthulhu</SelectItem>
-                    <SelectItem value="Das Schwarze Auge">L'Œil noir</SelectItem>
-                    <SelectItem value="Dune">Dune</SelectItem>
-                    <SelectItem value="Dungeons & Dragons">Donjons & Dragons</SelectItem>
-                    <SelectItem value="Legends of the five Rings">La Légende des Cinq Anneaux</SelectItem>
-                    <SelectItem value="Lone Wolf">Loup Solitaire</SelectItem>
-                    <SelectItem value="Maléfices">Maléfices</SelectItem>
-                    <SelectItem value="Midnight">Midnight</SelectItem>
-                    <SelectItem value="Nightprowler">Nightprowler</SelectItem>
-                    <SelectItem value="Pathfinder">Pathfinder</SelectItem>
-                    <SelectItem value="Rêve de Dragon">Rêve de Dragon</SelectItem>
-                    <SelectItem value="Shadowrun">Shadowrun</SelectItem>
-                    <SelectItem value="Shaan">Shaan</SelectItem>
-                    <SelectItem value="Star Wars">Star Wars</SelectItem>
-                    <SelectItem value="Vermine">Vermine</SelectItem>
-                    <SelectItem value="Vampire The Masquerade">Vampire : La Mascarade</SelectItem>
-                    <SelectItem value="Warhammer Fantasy Roleplay">Warhammer Fantasy Roleplay</SelectItem>
-                    <SelectItem value="Warhammer 40K">Warhammer 40K</SelectItem>
-                    <SelectItem value="Würm">Würm</SelectItem>
+                    {gameUniverses.map(universe => (
+                        <SelectItem key={universe.value} value={universe.value}>{universe.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-
+                {/* ESPECE DU PERSONNAGE */}
                 <Select value={promptRace} onValueChange={setPromptRace}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez la race du personnage" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Human">Humain</SelectItem>
-                    <SelectItem value="Elf">Elfe</SelectItem>
-                    <SelectItem value="Dwarf">Nain</SelectItem>
-                    <SelectItem value="Halfling">Halfling</SelectItem>
-                    <SelectItem value="Orc">Orc</SelectItem>
-                    <SelectItem value="Gnome">Gnome</SelectItem>
-                    <SelectItem value="Tiefling">Tiefling</SelectItem>
-                    <SelectItem value="Dragonborn">Draconien</SelectItem>
-                    <SelectItem value="Half-Elf">Demi-Elfe</SelectItem>
-                    <SelectItem value="Half-Orc">Demi-Orc</SelectItem>
-                    <SelectItem value="Tabaxi">Tabaxi</SelectItem>
-                    <SelectItem value="Firbolg">Firbolg</SelectItem>
-                    <SelectItem value="Aarakocra">Aarakocra</SelectItem>
-                    <SelectItem value="Kenku">Kenku</SelectItem>
-                    <SelectItem value="Goliath">Goliath</SelectItem>
-                    <SelectItem value="Aasimar">Aasimar</SelectItem>
+                    {characterRaces.map(race => (
+                        <SelectItem key={race.value} value={race.value}>{race.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-
+                {/* GENRE DU PERSONNAGE */}
                 <Select value={promptGender} onValueChange={setPromptGender}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez le sexe du personnage" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Male">Masculin</SelectItem>
-                    <SelectItem value="Female">Féminin</SelectItem>
-                    <SelectItem value="Non-binary">Autre</SelectItem>
+                    {characterGenders.map(gender => (
+                        <SelectItem key={gender.value} value={gender.value}>{gender.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-
+                {/* ARCHETYPE DU PERSONNAGE */}
                 <Select value={promptClass} onValueChange={setPromptClass}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionnez la classe du personnage" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Warrior">Guerrier</SelectItem>
-                    <SelectItem value="Wizard">Mage</SelectItem>
-                    <SelectItem value="Rogue">Voleur</SelectItem>
-                    <SelectItem value="Cleric">Clerc</SelectItem>
-                    <SelectItem value="Paladin">Paladin</SelectItem>
-                    <SelectItem value="Bard">Barde</SelectItem>
-                    <SelectItem value="Druid">Druide</SelectItem>
-                    <SelectItem value="Sorcerer">Sorcier</SelectItem>
-                    <SelectItem value="Monk">Moine</SelectItem>
-                    <SelectItem value="Ranger">Ranger</SelectItem>
-                    <SelectItem value="Barbarian">Barbare</SelectItem>
-                    <SelectItem value="Warlock">Magicien</SelectItem>
-                    <SelectItem value="Fighter">Combattant</SelectItem>
-                    <SelectItem value="Necromancer">Nécromant</SelectItem>
-                    <SelectItem value="Alchemist">Alchimiste</SelectItem>
-                    <SelectItem value="Summoner">Invocateur</SelectItem>
+                    {characterClasses.map(classe => (
+                        <SelectItem key={classe.value} value={classe.value}>{classe.label}</SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-
+                {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GENERATION */}
                 <Textarea
                     placeholder="Description"
                     value={promptDescription}
                     onChange={(event) => setPromptDescription(event.target.value)}
                 />
-
+                {/* BOUTON GENERER */}
                 <DialogFooter>
                   <Button
                       type="button"
@@ -215,12 +160,12 @@ export function Home() {
 
           {isListLoading ? (
               <div className="loading-spiraleclispe-container">
-                <div className="loading-spiraleclispe">
-                  <span>{/* <span><span><div className="loading-spiraleclispe-container"><span><span><span><span></span></span></span></span></div></span></span> */}</span>
-                </div>
+                <div className="loading-spiraleclispe"><span>
+                  {/* ANIMATION LOADING */}
+                </span></div>
               </div>
           ) : (
-              <Table>
+              <Table> {/* LISTE HEADER DES PERSONNAGES DEJA CREES */}
                 <TableHeader>
                   <TableRow>
                     <TableHead className="table-head">Date de création</TableHead>
@@ -235,8 +180,7 @@ export function Home() {
                     <TableHead className="table-head" />
                   </TableRow>
                 </TableHeader>
-
-                <TableBody>
+                <TableBody> {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
                   {(charactersData?.data as CharacterFull[] | undefined)?.map((character: CharacterFull) => (
                       <CharacterRow
                           key={character.details?.id}

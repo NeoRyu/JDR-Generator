@@ -1,5 +1,6 @@
+// readCharacterContent.tsx
 import {Dispatch, SetStateAction, useState} from 'react';
-import {CharacterFull} from '@/components/model/character.model';
+import {CharacterFull} from '@/components/model/character-full.model.tsx';
 import {ScrollArea} from '@/components/ui/scroll-area';
 import {Table, TableBody, TableCell, TableRow} from '@/components/ui/table';
 import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger} from '@/components/ui/dialog';
@@ -8,6 +9,7 @@ import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@radix-ui/react-tabs';
 import {Eye} from 'lucide-react';
 import {Button} from '@/components/ui/button';
+
 
 interface ReadCharacterContentProps {
     character: CharacterFull;

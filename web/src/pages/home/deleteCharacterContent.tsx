@@ -1,17 +1,12 @@
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
-} from '@/components/ui/dialog';
+// deleteCharacterContent.tsx
+import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
 import {Button} from '@/components/ui/button';
 import {Loader2, Trash2} from 'lucide-react';
 import {useDeleteCharacter} from '@/services/deleteCharacter.service.ts';
 import React from 'react';
 import {ModalTypes} from '@/pages/home/home.tsx';
-import {CharacterFull} from "@/components/model/character.model.tsx";
+import {CharacterFull} from "@/components/model/character-full.model.tsx";
+
 
 export interface DeleteCharacterContentProps {
     character: CharacterFull | null;
@@ -20,12 +15,7 @@ export interface DeleteCharacterContentProps {
     refetch: () => void;
 }
 
-export function DeleteCharacterContent({
-                                           character,
-                                           modalType,
-                                           setModalType,
-                                           refetch,
-                                       }: DeleteCharacterContentProps) {
+export function DeleteCharacterContent({character, modalType, setModalType, refetch}: DeleteCharacterContentProps) {
     const { mutate: deleteMutation, isLoading: isDeleteLoading } = useDeleteCharacter();
 
     const handleDelete = () => {

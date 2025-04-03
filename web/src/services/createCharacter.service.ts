@@ -1,9 +1,11 @@
+// createCharacter.service.tsx
 import axios from 'axios'
 import {useMutation} from 'react-query'
 
+
 function cleanData(chaine: string | undefined): string | undefined {
     if (!chaine) return chaine;
-    return chaine; //.replace(/"/g, ' ');
+    return chaine;
 }
 
 export const useCreateCharacter = () => {
