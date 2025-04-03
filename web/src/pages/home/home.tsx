@@ -1,20 +1,27 @@
 // home.tsx
 import {useState} from 'react';
 import {Button} from '@/components/ui/button';
-import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger,} from '@/components/ui/dialog';
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import {Table, TableBody, TableHead, TableHeader, TableRow} from '@/components/ui/table';
 import {Textarea} from '@/components/ui/textarea';
 import {CharacterFull} from '@/components/model/character-full.model.tsx';
-import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
+import {CharacterDetailsModel} from '@/components/model/character-details.model.tsx';
 import {CharacterRow} from '@/pages/home/characterRow';
 import {getListCharactersFull} from '@/services/getListCharactersFull.service.ts';
-import {useCreateCharacter} from "@/services/createCharacter.service.ts";
+import {useCreateCharacter} from '@/services/createCharacter.service.ts';
 import {updateCharacter} from '@/services/updateCharacter.service.ts';
-import {gameUniverses} from "@/pages/home/listes/gameUniverses.tsx";
-import {characterRaces} from "@/pages/home/listes/characterRaces.tsx";
-import {characterGenders} from "@/pages/home/listes/characterGenders.tsx";
-import {characterClasses} from "@/pages/home/listes/characterClasses.tsx";
+import {gameUniverses} from '@/pages/home/listes/gameUniverses.tsx';
+import {characterRaces} from '@/pages/home/listes/characterRaces.tsx';
+import {characterGenders} from '@/pages/home/listes/characterGenders.tsx';
+import {characterClasses} from '@/pages/home/listes/characterClasses.tsx';
+import CustomSelect from '@/components/ui/customSelect.tsx';
 
 
 export type ModalTypes = 'read' | 'update' | 'delete' | null;
@@ -80,13 +87,14 @@ export function Home() {
         </header>
 
         <main className="flex flex-col">
-
           {/* CREATION DE NOUVEAUX PERSONNAGES */}
           <div className="flex justify-end">
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               {/* BOUTON DE CREATION DE PERSONNAGE */}
               <DialogTrigger asChild>
-                <Button className="button-aura" onClick={() => setIsOpen(true)}>Nouveau personnage</Button>
+                <Button className="button-aura" onClick={() => setIsOpen(true)}>
+                  Nouveau personnage
+                </Button>
               </DialogTrigger>
               {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
               <DialogContent>
@@ -95,49 +103,33 @@ export function Home() {
                   Remplissez les champs pour générer un nouveau personnage.
                 </DialogDescription>
                 {/* UNIVERS DE JEU */}
-                <Select value={promptSystem} onValueChange={setPromptSystem}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez l'univers du jeu" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {gameUniverses.map(universe => (
-                        <SelectItem key={universe.value} value={universe.value}>{universe.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                    options={gameUniverses}
+                    value={promptSystem}
+                    onChange={setPromptSystem}
+                    placeholder="Sélectionnez l'univers du jeu ou saisissez une valeur"
+                />
                 {/* ESPECE DU PERSONNAGE */}
-                <Select value={promptRace} onValueChange={setPromptRace}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez la race du personnage" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {characterRaces.map(race => (
-                        <SelectItem key={race.value} value={race.value}>{race.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                    options={characterRaces}
+                    value={promptRace}
+                    onChange={setPromptRace}
+                    placeholder="Sélectionnez la race du personnage ou saisissez une valeur"
+                />
                 {/* GENRE DU PERSONNAGE */}
-                <Select value={promptGender} onValueChange={setPromptGender}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez le sexe du personnage" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {characterGenders.map(gender => (
-                        <SelectItem key={gender.value} value={gender.value}>{gender.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                    options={characterGenders}
+                    value={promptGender}
+                    onChange={setPromptGender}
+                    placeholder="Sélectionnez le sexe du personnage ou saisissez une valeur"
+                />
                 {/* ARCHETYPE DU PERSONNAGE */}
-                <Select value={promptClass} onValueChange={setPromptClass}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez la classe du personnage" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {characterClasses.map(classe => (
-                        <SelectItem key={classe.value} value={classe.value}>{classe.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <CustomSelect
+                    options={characterClasses}
+                    value={promptClass}
+                    onChange={setPromptClass}
+                    placeholder="Sélectionnez la classe du personnage ou saisissez une valeur"
+                />
                 {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GENERATION */}
                 <Textarea
                     placeholder="Description"
@@ -146,11 +138,7 @@ export function Home() {
                 />
                 {/* BOUTON GENERER */}
                 <DialogFooter>
-                  <Button
-                      type="button"
-                      disabled={isCreateLoading}
-                      onClick={handleGenerate}
-                  >
+                  <Button type="button" disabled={isCreateLoading} onClick={handleGenerate}>
                     {isCreateLoading ? 'Génération...' : 'Générer !'}
                   </Button>
                 </DialogFooter>
@@ -160,12 +148,13 @@ export function Home() {
 
           {isListLoading ? (
               <div className="loading-spiraleclispe-container">
-                <div className="loading-spiraleclispe"><span>
-                  {/* ANIMATION LOADING */}
-                </span></div>
+                <div className="loading-spiraleclispe">
+                  <span>{/* ANIMATION LOADING */}</span>
+                </div>
               </div>
           ) : (
-              <Table> {/* LISTE HEADER DES PERSONNAGES DEJA CREES */}
+              <Table>
+                {/* LISTE HEADER DES PERSONNAGES DEJA CREES */}
                 <TableHeader>
                   <TableRow>
                     <TableHead className="table-head">Date de création</TableHead>
@@ -180,7 +169,8 @@ export function Home() {
                     <TableHead className="table-head" />
                   </TableRow>
                 </TableHeader>
-                <TableBody> {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
+                <TableBody>
+                  {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
                   {(charactersData?.data as CharacterFull[] | undefined)?.map((character: CharacterFull) => (
                       <CharacterRow
                           key={character.details?.id}

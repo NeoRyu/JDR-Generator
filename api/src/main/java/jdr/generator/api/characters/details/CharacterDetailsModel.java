@@ -1,6 +1,7 @@
 package jdr.generator.api.characters.details;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.*;
 
 import java.util.Date;
@@ -38,6 +39,7 @@ public class CharacterDetailsModel {
     public String dailyRoutine;
 
     @JsonProperty("parentsAlive")
+    @JsonDeserialize(using = CustomBooleanDeserializer.class)
     public Boolean parentsAlive;
 
     @JsonProperty("detailsAboutParents")
@@ -68,7 +70,8 @@ public class CharacterDetailsModel {
     public String conjugalHistory;
 
     @JsonProperty("children")
-    public Integer children; // TODO : List<Character>
+    @JsonDeserialize(using = CustomIntegerDeserializer.class)
+    public Integer children; // TODO : List<Character> ?
 
     @JsonProperty("education")
     public String education;

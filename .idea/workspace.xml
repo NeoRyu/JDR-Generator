@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/listes/characterClasses.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/listes/characterGenders.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/listes/characterRaces.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/src/pages/home/listes/gameUniverses.tsx" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -23,8 +24,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
-        <option value="Class" />
         <option value="Kotlin Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -85,7 +86,7 @@
     &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/web/src/pages/home/listes&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/web/src/components/model&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -128,11 +129,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src\components\model" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini\src\controllers" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\db.migration" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
@@ -385,6 +386,8 @@
       <workItem from="1743574957036" duration="10480000" />
       <workItem from="1743594968649" duration="9414000" />
       <workItem from="1743661621574" duration="2182000" />
+      <workItem from="1743665846655" duration="4268000" />
+      <workItem from="1743687981916" duration="1733000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -714,7 +717,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743604275346</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1743667885592</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1743667885592</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -723,7 +734,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Cleaning and reorder JSON attributes&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
@@ -748,7 +758,8 @@
     <MESSAGE value="[WIP] JDR-Generator : WIP : Génération de statistiques, compétences, et autres informations requises par le système de jeu en prenant en compte le contexte saisi par l'utilisateur et quelques infos background générés préalablement afin de permettre a terme de remplir une fiche PJ automatiquement...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
 </project>
