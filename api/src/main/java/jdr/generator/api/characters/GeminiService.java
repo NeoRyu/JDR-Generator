@@ -18,6 +18,7 @@ import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
 import jdr.generator.api.characters.stats.CharacterJsonDataModel;
 import jdr.generator.api.characters.stats.CharacterJsonDataService;
 import jdr.generator.api.config.IGeminiGenerationConfig;
+import jdr.generator.api.scala.HelloWorld;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -83,6 +84,8 @@ public class GeminiService implements IGeminiGenerationConfig {
     @Override
     @Transactional
     public CharacterDetailsModel generate(DefaultContextJson data) {
+        HelloWorld.main(new String[]{});
+
         final String apiUrl = hostApiIA + "generate";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

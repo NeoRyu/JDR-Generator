@@ -13,7 +13,7 @@
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>api</name>
-    <description>JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA pour communiquer avec la database MySQL ajoutée via FlywayDb, l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une interface frontend en React Typescript.</description>
+    <description>JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA + SCALA pour communiquer avec la database MySQL ajoutée via FlywayDb, l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une interface frontend en React Typescript.</description>
     <url>https://github.com/NeoRyu/JDR-Generator.git</url>
 
     <licenses>
@@ -33,8 +33,12 @@
 
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <scala.version>2.13.15</scala.version>
+        <scala.compiler.alchim31>4.9.5</scala.compiler.alchim31>
         <spring-ai.version>1.0.0-M6</spring-ai.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -107,6 +111,17 @@
             <version>2.7.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.alchim31.maven</groupId>
+            <artifactId>scala-maven-plugin</artifactId>
+            <version>${scala.compiler.alchim31}</version>
+        </dependency>
+
     </dependencies>
     <dependencyManagement>
         <dependencies>
@@ -121,7 +136,42 @@
     </dependencyManagement>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>net.alchim31.maven</groupId>
+                    <artifactId>scala-maven-plugin</artifactId>
+                    <version>${scala.compiler.alchim31}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
+            <plugin>
+                <groupId>net.alchim31.maven</groupId>
+                <artifactId>scala-maven-plugin</artifactId>
+                <version>${scala.compiler.alchim31}</version>
+                <executions>
+                    <execution>
+                        <id>scala-compile-first</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>scala-test-compile</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
