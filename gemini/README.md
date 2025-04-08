@@ -133,7 +133,10 @@ L'IA se base sur ce contexte pour générer les détails du background du person
 }
 ```
 
-Après génération de l'illustration par l'IA basée sur l'attribut "image" dans les details, l'IA génère des stats basées sur le contexte et plusieurs attributs précédemment générés dans les détails :
+Après génération de l'illustration par l'IA basée sur l'attribut "image" dans les details :
+![jdr-generator-imagen_1744109609](https://github.com/user-attachments/assets/ed1983d5-a33a-4577-aa03-af62f5b3a68d)
+
+L'IA va génèrer des stats basées sur le contexte et plusieurs attributs précédemment générés dans les détails :
 ```json
 {
     "nom": "Zik Zapboum",
@@ -223,3 +226,7 @@ Après génération de l'illustration par l'IA basée sur l'attribut "image" dan
 ```
 
 Les stats sont stockés sous format JSON dans la base de données car les attributs peuvent (et seront certainement) différent d'une génération à une autre, le contexte du systeme de jeu étant le principal facteur qui déterminera la génération de ce json complexe.
+
+Tout les outputs seront par ailleurs persistés sous forme de fichiers dans le dossier jdr-generator que l'utilisateur doit au préalable créer :
+![{E4A6A851-EFE2-4B6C-BD46-FE07B1DD2311}](https://github.com/user-attachments/assets/bfbbdb66-1bc2-4e4f-aec2-6d2250397d27)
+Ceci va permettre de pouvoir transporter les infos sur un autre support au besoin sans devoir utiliser l'application.
