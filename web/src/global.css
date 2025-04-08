@@ -255,6 +255,7 @@ textarea:focus {
   text-shadow: 0 0 0.05em #fff, 0 0 0.2em #05e1fe, 0 0 0.3em #05d9fe;
 }
 .character-name {
+  padding: 10px;
   font-family: 'Rocher', serif;
   text-align: left;
   font-size: 40px;
@@ -274,7 +275,7 @@ textarea:focus {
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 10px;
-  max-height: 80px;
+  max-height: 120px;
 }
 
 .button-aura {

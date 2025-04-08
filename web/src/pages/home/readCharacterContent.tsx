@@ -120,30 +120,33 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                     <div className="flex items-start">
                         {character.illustration && character.illustration.imageBlob ? (
                             <img
-                                className="rounded shadow w-56 h-56 object-contain"
+                                className="rounded shadow w-64 h-64 object-contain"
                                 src={`data:image/png;base64,${character.illustration.imageBlob}`}
                                 alt={character.details?.image || "Illustration du personnage"}
                             />
                         ) : (
-                            <div className="rounded shadow w-56 h-56 no-img">
+                            <div className="rounded shadow w-64 h-64 no-img">
                                 <span className="text-gray-500">
                                     {character.details?.image ? `Illustration non disponible : ${character.details.image}` : "Aucune illustration disponible"}
                                 </span>
                             </div>
                         )}
                         <div className="flex-1">
-                            <DialogTitle className="character-name">{character.details?.name}</DialogTitle>
+                            <DialogTitle className="character-name">
+                                {character.context?.promptGender == 'Male' ? '♂' : (character.context?.promptGender == 'Female' ? '♀' : '⚥')}&nbsp;
+                                {character.details?.name}
+                            </DialogTitle>
                             <DialogDescription className="character-context">
                                 <div className="flex character-context">
                                     <div className="w-55 mint">
+                                        <p>Système de jeu &nbsp;</p>
                                         <p>Archétype &nbsp;</p>
                                         <p>Espèce &nbsp;</p>
-                                        <p>Sexe &nbsp;</p>
                                     </div>
                                     <div className="purples">
+                                        <p>{character.context?.promptSystem || "Non défini"}</p>
                                         <p>{character.context?.promptClass || "Non défini"}</p>
                                         <p>{character.context?.promptRace || "Non défini"}</p>
-                                        <p>{character.context?.promptGender || "Non défini"}</p>
                                     </div>
                                 </div>
                                 <div className="flex w-55 character-description">
@@ -177,10 +180,10 @@ export function ReadCharacterContent({ character, modalType, setModalType, selec
                             <ScrollArea className="mt-6 max-w-[90vw] w-full" style={{ height: '50vh', paddingRight: '1rem' }}>
                                 <Table className="flex-1">
                                     <TableBody>
-                                        <TableRow>
+                                        {/*<TableRow>
                                             <TableCell className="mint">Nom</TableCell>
                                             <TableCell className="flex stretch">{character.details?.name}</TableCell>
-                                        </TableRow>
+                                        </TableRow>*/}
                                         <TableRow>
                                             <TableCell className="mint">Age</TableCell>
                                             <TableCell className="flex stretch">{character.details?.age}</TableCell>
