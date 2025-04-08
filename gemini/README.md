@@ -229,4 +229,7 @@ Les stats sont stockés sous format JSON dans la base de données car les attrib
 
 Tout les outputs seront par ailleurs persistés sous forme de fichiers dans le dossier jdr-generator que l'utilisateur doit au préalable créer :
 ![{E4A6A851-EFE2-4B6C-BD46-FE07B1DD2311}](https://github.com/user-attachments/assets/bfbbdb66-1bc2-4e4f-aec2-6d2250397d27)
-Ceci va permettre de pouvoir transporter les infos sur un autre support au besoin sans devoir utiliser l'application.
+Ceci va permettre de pouvoir transporter les infos sur un autre support au besoin sans devoir utiliser l'application...
+
+Autrement l'application permet une visualisation de la génération de manière propre :
+![{B69171A6-64B3-4F66-A684-BA4110A4B42A}](https://github.com/user-attachments/assets/d1e9bf61-099f-4f05-a211-3dfd3feaa029)
