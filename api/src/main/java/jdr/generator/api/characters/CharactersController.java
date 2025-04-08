@@ -4,6 +4,7 @@ import jdr.generator.api.characters.context.DefaultContextJson;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
+import jdr.generator.api.scala.ScalaTests;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,7 @@ public class CharactersController {
 
     @GetMapping("/full")
     public List<CharacterFullModel> getAllCharactersFull() {
+        ScalaTests.main(new String[]{});
         return characterDetailsService.getAllCharactersFull();
     }
 
