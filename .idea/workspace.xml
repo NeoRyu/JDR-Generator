@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
     </list>
@@ -85,7 +82,7 @@
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/web",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -128,9 +125,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src\components\model" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini\src\controllers" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\db.migration" />
     </key>
@@ -396,15 +393,7 @@
       <workItem from="1743665846655" duration="4268000" />
       <workItem from="1743687981916" duration="8404000" />
       <workItem from="1744008220846" duration="12936000" />
-      <workItem from="1744094379723" duration="11605000" />
-    </task>
-    <task id="LOCAL-00001" summary="README">
-      <option name="closed" value="true" />
-      <created>1742308143097</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1742308143097</updated>
+      <workItem from="1744094379723" duration="11996000" />
     </task>
     <task id="LOCAL-00002" summary="README + removing eslint">
       <option name="closed" value="true" />
@@ -782,7 +771,23 @@
       <option name="project" value="LOCAL" />
       <updated>1744110367082</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744110940822</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1744110940822</updated>
+    </task>
+    <task id="LOCAL-00050" summary="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744111084846</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1744111084846</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -791,7 +796,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Fixed WEB context prompt + adding prompt gender + fix flyway init sql script&#10;-&gt; TODO : Save response into database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Refactored and fixed persistance IA response and context into database.&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : FIX first character_context inserted&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
@@ -816,7 +820,8 @@
     <MESSAGE value="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator :&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
