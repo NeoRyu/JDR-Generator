@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__scala_sdk_2_13_15.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -399,7 +396,7 @@
       <workItem from="1743665846655" duration="4268000" />
       <workItem from="1743687981916" duration="8404000" />
       <workItem from="1744008220846" duration="12936000" />
-      <workItem from="1744094379723" duration="10458000" />
+      <workItem from="1744094379723" duration="11605000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -777,7 +774,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744107155707</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744110367082</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1744110367082</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

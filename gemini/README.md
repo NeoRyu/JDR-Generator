@@ -79,7 +79,7 @@ L'utilisateur saisi ce contexte lors de la création d'un nouveau personnage :
   "prompt_race": "Gobelin",
   "prompt_gender": "Male",
   "prompt_class": "Artificier",
-  "prompt_description": Banni de sa communauté pour ses expériences explosives et son ouverture d'esprit aux autres éspèces,  ce gobelin plus intelligent que la moyenne a récemment rejoint la civilisation humaine. De par ses origines, il n'est pas apprécié par la population locale de son nouveau lieu de résidence, et les autorités le confondent souvent avec un ennemis. Il a trouvé refuge dans une maison abandonné en périphérie de la ville, dans l'attente de compagnons qui sauront apprécier ses talents et ne s'arrêteront pas à ses origines."
+  "prompt_description": "Banni de sa communauté pour ses expériences explosives et son ouverture d'esprit aux autres éspèces,  ce gobelin plus intelligent que la moyenne a récemment rejoint la civilisation humaine. De par ses origines, il n'est pas apprécié par la population locale de son nouveau lieu de résidence, et les autorités le confondent souvent avec un ennemis. Il a trouvé refuge dans une maison abandonné en périphérie de la ville, dans l'attente de compagnons qui sauront apprécier ses talents et ne s'arrêteront pas à ses origines."
 }
 ```
 
