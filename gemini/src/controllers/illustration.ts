@@ -18,8 +18,8 @@ const imagenPrompt = 'Using Imagen3, generate an illustration in a heroic-fantas
 
 // Fonction contrôleur pour gérer les conversations
 export const generateImage = async (req: Request, res: Response): Promise<void> => {
-    const pathSrc: string = 'C:\\Users\\'+process.env.USER_WINDOW+'\\Downloads\\FantasyGenerator\\'
-    const imgName: string = 'FantasyGenerator-imagen_'+Math.floor(Date.now()/1000)+'.png';
+    const pathSrc: string = 'C:\\Users\\'+process.env.USER_WINDOW+'\\Downloads\\'+process.env.DOWNLOAD_FOLDER+'\\'
+    const imgName: string = process.env.DOWNLOAD_FOLDER+'-imagen_'+Math.floor(Date.now()/1000)+'.png';
     try {
         console.log('generateImage :: prompt recu :', req.body.prompt); // Log du prompt reçu
         const prompt = req.body.prompt;

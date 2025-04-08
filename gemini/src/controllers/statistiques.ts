@@ -27,8 +27,8 @@ const askedPrompt = "Your answer must not be based solely on previous exchanges,
 
 // Fonction contrôleur pour gérer les conversations
 export const generateStats = async (req: Request, res: Response) => {
-    const pathSrc: string = 'C:\\Users\\' + process.env.USER_WINDOW + '\\Downloads\\FantasyGenerator\\';
-    const txtName: string = 'FantasyGenerator-gemini_' + Math.floor(Date.now() / 1000) + '_stats.txt';
+    const pathSrc: string = 'C:\\Users\\' + process.env.USER_WINDOW + '\\Downloads\\'+process.env.DOWNLOAD_FOLDER+'\\';
+    const txtName: string = process.env.DOWNLOAD_FOLDER+'-gemini_' + Math.floor(Date.now() / 1000) + '_stats.txt';
     try {
         const { prompt } = req.body;
         console.log('Stats pour ::', req.body.data);

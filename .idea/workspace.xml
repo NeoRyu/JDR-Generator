@@ -4,14 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/PythonScriptGeneratorExecutor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/components/ui/customSelect.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/characterRow.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/deleteCharacterContent.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/pages/home/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/api/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/background.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/background.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/statistiques.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/statistiques.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -59,6 +63,14 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="LineStatusTrackerManager">
+    <file path="$PROJECT_DIR$/gemini/.env">
+      <ranges>
+        <range start1="0" end1="1" start2="0" end2="2" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
+        <range start1="6" end1="7" start2="7" end2="10" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
+      </ranges>
+    </file>
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -72,6 +84,8 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
     &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
     &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
     &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
@@ -106,10 +120,10 @@
     &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
     &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
     &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;SDKs&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;configurable.group.language&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;Console&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -137,6 +151,8 @@
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\db.migration" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\python" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\db" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\FantasyGenerator\gemini\src" />
@@ -165,11 +181,13 @@
         <option value="js.build_tools.npm" />
       </set>
     </option>
+    <option name="openRunningConfigInTab" value="true" />
   </component>
-  <component name="RunManager" selected="npm.build (WEB)">
+  <component name="RunManager" selected="Application.run (API)">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
+      <option name="VM_PARAMETERS" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -188,7 +206,22 @@
     <configuration name="build (API)" type="MavenRunConfiguration" factoryName="Maven" folderName="API">
       <MavenSettings>
         <option name="myGeneralSettings" />
-        <option name="myRunnerSettings" />
+        <option name="myRunnerSettings">
+          <MavenRunnerSettings>
+            <option name="delegateBuildToMaven" value="false" />
+            <option name="environmentProperties">
+              <map />
+            </option>
+            <option name="jreName" value="#USE_PROJECT_JDK" />
+            <option name="mavenProperties">
+              <map />
+            </option>
+            <option name="passParentEnv" value="true" />
+            <option name="runMavenInBackground" value="true" />
+            <option name="skipTests" value="false" />
+            <option name="vmOptions" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
+          </MavenRunnerSettings>
+        </option>
         <option name="myRunnerParameters">
           <MavenRunnerParameters>
             <option name="cmdOptions" />
@@ -295,16 +328,6 @@
       <envs />
       <method v="2" />
     </configuration>
-    <configuration name="clean (GEMINI)" type="js.build_tools.npm" folderName="GEMINI" temporary="true">
-      <package-json value="$PROJECT_DIR$/gemini/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="clean" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
     <configuration name="start (GEMINI)" type="js.build_tools.npm" folderName="GEMINI" temporary="true">
       <package-json value="$PROJECT_DIR$/gemini/package.json" />
       <command value="run" />
@@ -327,8 +350,8 @@
     </configuration>
     <list>
       <item itemvalue="Application.run (API)" />
+      <item itemvalue="Application.PythonScriptGeneratorExecutor" />
       <item itemvalue="Maven.build (API)" />
-      <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
       <item itemvalue="npm.build (WEB)" />
@@ -340,8 +363,6 @@
         <item itemvalue="npm.start: dev (WEB)" />
         <item itemvalue="npm.build (WEB)" />
         <item itemvalue="npm.start (GEMINI)" />
-        <item itemvalue="npm.build (GEMINI)" />
-        <item itemvalue="npm.clean (GEMINI)" />
       </list>
     </recent_temporary>
   </component>
@@ -388,7 +409,9 @@
       <workItem from="1743594968649" duration="9414000" />
       <workItem from="1743661621574" duration="2182000" />
       <workItem from="1743665846655" duration="4268000" />
-      <workItem from="1743687981916" duration="8108000" />
+      <workItem from="1743687981916" duration="8404000" />
+      <workItem from="1744008220846" duration="12936000" />
+      <workItem from="1744094379723" duration="2012000" />
     </task>
     <task id="LOCAL-00001" summary="README">
       <option name="closed" value="true" />
@@ -734,7 +757,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743690516086</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1743696362332</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1743696362332</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -743,7 +774,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
@@ -768,7 +798,12 @@
     <MESSAGE value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
