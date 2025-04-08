@@ -1,10 +1,10 @@
 # JDR-Generator
 
 ## Description
-JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un 
-monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA pour communiquer avec la
-database MySQL ajoutée via FlywayDb, l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une 
-interface frontend en React Typescript.
+JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un
+monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA (intégration de SCALA
+en parallèle pour l'excerice) permettant de communiquer avec la database MySQL ajoutée via FlywayDb,
+l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une interface frontend en React Typescript.
 
 ## Caractéristiques principales: 
 - Génération automatisée de caractères pour Jeux De Rôles
