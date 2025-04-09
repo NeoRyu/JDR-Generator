@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/Ord.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaDate.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/CarConso.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/IntSet.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperator.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/Ord.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -58,6 +59,9 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 0
 }</component>
@@ -71,6 +75,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.CarTest.executor": "Run",
     "Application.PythonScriptExecutor.executor": "Run",
     "Application.PythonScriptExecutorWithEngine.executor": "Run",
     "Application.ScalaTests.executor": "Run",
@@ -173,7 +178,20 @@
     </option>
     <option name="openRunningConfigInTab" value="true" />
   </component>
-  <component name="RunManager" selected="Application.ScalaTests">
+  <component name="RunManager" selected="Application.CarTest">
+    <configuration name="CarTest" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="jdr.generator.api.scala.CarTest" />
+      <module name="api" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="jdr.generator.api.scala.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="ScalaTests" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.scala.ScalaTests" />
       <module name="api" />
@@ -311,16 +329,6 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
-    <configuration name="build (GEMINI)" type="js.build_tools.npm" folderName="GEMINI" temporary="true">
-      <package-json value="$PROJECT_DIR$/gemini/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="build" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
     <configuration name="build (WEB)" type="js.build_tools.npm" folderName="WEB" temporary="true">
       <package-json value="$PROJECT_DIR$/web/package.json" />
       <command value="run" />
@@ -354,9 +362,9 @@
     <list>
       <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
+      <item itemvalue="Application.CarTest" />
       <item itemvalue="Application.ScalaTests" />
       <item itemvalue="Maven.build (API)" />
-      <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start: dev (WEB)" />
@@ -364,11 +372,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.CarTest" />
         <item itemvalue="Application.ScalaTests" />
         <item itemvalue="npm.start (GEMINI)" />
         <item itemvalue="npm.start: dev (WEB)" />
         <item itemvalue="npm.build (WEB)" />
-        <item itemvalue="npm.build (GEMINI)" />
       </list>
     </recent_temporary>
   </component>
@@ -417,15 +425,10 @@
       <workItem from="1743665846655" duration="4268000" />
       <workItem from="1743687981916" duration="8404000" />
       <workItem from="1744008220846" duration="12936000" />
-      <workItem from="1744094379723" duration="18331000" />
-    </task>
-    <task id="LOCAL-00004" summary="home">
-      <option name="closed" value="true" />
-      <created>1742388931470</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1742388931470</updated>
+      <workItem from="1744094379723" duration="20403000" />
+      <workItem from="1744180069736" duration="1178000" />
+      <workItem from="1744184387074" duration="2975000" />
+      <workItem from="1744188612133" duration="5864000" />
     </task>
     <task id="LOCAL-00005" summary="home">
       <option name="closed" value="true" />
@@ -811,7 +814,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744112158332</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744120176580</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1744120176580</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -820,7 +831,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Fixed WEB context prompt + adding prompt gender + fix flyway init sql script&#10;-&gt; TODO : Save response into database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB." />
     <MESSAGE value="[WIP] JDR-Generator : Refactored and fixed persistance IA response and context into database.&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : FIX first character_context inserted&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
@@ -845,7 +855,8 @@
     <MESSAGE value="[OK] JDR-Generator :&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">

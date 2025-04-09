@@ -40,4 +40,26 @@ class ScalaRational(n: Int, d: Int) extends Ordered[ScalaRational] {
     else 0
   }
 
+  def test(): Unit = {
+    // 3/ Scala n'a pas de type prédéfini pour représenter les nombres rationnels, ScalaRational va y remédier
+    val r1 = new ScalaRational(1, 2)
+    val r2 = new ScalaRational(1, 3)
+    println(s"3/ Tests avec les nombres rationnels $r1 et $r2")
+
+    println(s"$r1 + $r2 = ${r1 + r2}")
+    println(s"$r1 - $r2 = ${r1 - r2}")
+    println(s"$r1 * $r2 = ${r1 * r2}")
+    println(s"$r1 / $r2 = ${r1 / r2}")
+
+    println(s"$r1 == $r2: ${r1 == r2}")
+    println(s"$r1 < $r2: ${r1 < r2}")
+    println(s"$r1 > $r2: ${r1 > r2}")
+    println(s"$r1 <= $r2: ${r1 <= r2}")
+    println(s"$r1 >= $r2: ${r1 >= r2}")
+
+    val sortedRationals = List(new ScalaRational(3, 4), new ScalaRational(1, 2), new ScalaRational(2, 3)).sorted
+    println(s"> Rationnels triés: $sortedRationals")
+  }
+
 }
+
