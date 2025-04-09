@@ -12,7 +12,30 @@ class Reference[T] {
   // def getRef(): T = contenu                    // Méthode avec paramètre vide - ex : cellule.getMe()
 }
 
+/*
+val = variable immutable
+var = var mutable
+def = function
+trait = class abstraite
+ */
+
 object ScalaTests {
+
+  case class Personne(name : String,addr: String, age: String)
+
+  // COLLECTIONS
+  var l = List(1,2,3,4,5)
+  val s = Set(3,6,9,12,15)
+  val m = Map("a" -> 1, "b" -> 2, "c" -> 3, "d" -> 4, "e" -> 5)
+  var planetes = List(("Mercure", 57.9), ("Venus", 108.2), ("Mars", 227.9), ("Jupiter", 778.3))
+  /*
+  List = mutable
+  Set = immutable
+  Map = immutable
+   */
+
+  // Ajout d'une fonction idiomatique de suppression d'une planète dans une List
+  def remove(item: (String,Double), list: List[(String,Double)]): List[(String,Double)] = list diff List(item)
 
   def main(args: Array[String]): Unit = {
     // 1/ Test de la redéfinition de Date
@@ -30,6 +53,27 @@ object ScalaTests {
 
     // 4/ Classe abstraite / trait sur des ensemble (Set) de Int
     ScalaIntSetTests()
+
+    // 5/ Jeu d'essai sur des collections
+    println("5.1-1/ List : " + l.head)
+    l = 10 :: l
+    println("5.1-2/ List : " + l.head + " || " + l(0)) // List(1,2,3,4,5)
+    println("5.2/ Set: " + s(3)) // Set(3,6,9,12,15)
+    println("5.3/ Map: " + m("b")) // Map("a" -> 1, "b" -> 2, "c" -> 3, "d" -> 4, "e" -> 5)
+    planetes = ("Terre", 149.6) :: planetes
+    planetes.foreach {
+      case ("Terre", distance) =>
+        println(s"5.5-1/ Notre planète est à une distance de $distance millions de km du Soleil")
+      case _ =>
+    }
+    planetes = remove(planetes.head, planetes)
+    planetes.foreach {
+      case ("Terre", distance) => println(s"5.5-2/ Ce message ne dois pas apparaitre")
+      case _ =>
+    }
+
+
+
   }
 
   private def ScalaRationalTests(): Unit = {

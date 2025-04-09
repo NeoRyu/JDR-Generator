@@ -35,7 +35,7 @@ class CarConso(
 }
 
 
-object CarTest extends App {
+object CarConsoTest extends App {
   val maVoiture = new CarConso(50.0, 10.0, 8.5, 11.2)
   println(s"maVoiture : 65L dans le reservoir, avec une conso de 12L/100km en mixte|moyenne, 8.5L/100 sur route et 11.2L/100 en conso urbaine")
   maVoiture.kmParPlein("Route")

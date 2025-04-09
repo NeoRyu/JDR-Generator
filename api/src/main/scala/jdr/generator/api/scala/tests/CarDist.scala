@@ -35,8 +35,7 @@ class CarDist(
 
 }
 
-
-object CarTest extends App {
+object CarDistTest {
   val maVoiture = new CarDist(50.0, 10)
   println(s"maVoiture : 50L dans le reservoir, 10Km par L")
   maVoiture.kmParPlein("Route")
