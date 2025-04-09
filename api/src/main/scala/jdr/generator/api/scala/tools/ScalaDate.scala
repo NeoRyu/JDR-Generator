@@ -1,5 +1,8 @@
 package jdr.generator.api.scala.tools
 
+// jdr.generator.api.scala.tools.TypescriptOperator.Ord
+
+
 class ScalaDate(a: Int, m: Int, j: Int) extends Ord {
   private def annee: Int = a
   private def mois: Int = m

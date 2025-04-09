@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/CarConso.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/IntSet.scala" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperator.scala" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarDist.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/Ord.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/CarConso.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarConso.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaTests.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/ScalaTests.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaDate.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaDate.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperators.scala" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -95,7 +94,7 @@
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tests",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -428,15 +427,7 @@
       <workItem from="1744094379723" duration="20403000" />
       <workItem from="1744180069736" duration="1178000" />
       <workItem from="1744184387074" duration="2975000" />
-      <workItem from="1744188612133" duration="5864000" />
-    </task>
-    <task id="LOCAL-00005" summary="home">
-      <option name="closed" value="true" />
-      <created>1742391521623</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1742391521623</updated>
+      <workItem from="1744188612133" duration="8305000" />
     </task>
     <task id="LOCAL-00006" summary="home">
       <option name="closed" value="true" />
@@ -822,7 +813,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744120176580</updated>
     </task>
-    <option name="localTasksCounter" value="54" />
+    <task id="LOCAL-00054" summary="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744195741030</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1744195741030</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -831,7 +830,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Refactored and fixed persistance IA response and context into database.&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : FIX first character_context inserted&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
     <MESSAGE value="[WIP] JDR-Generator : Génération et stockage en db sous forme de blob d'une illustration pour le personnage generate &#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP)." />
@@ -856,7 +854,8 @@
     <MESSAGE value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">

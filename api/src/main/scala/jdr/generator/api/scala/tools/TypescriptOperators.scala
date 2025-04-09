@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2025 [COUPEZ Frédéric]
  *
- * This specific file (TypescriptOperator.scala) is based on code from:
+ * This specific file (TypescriptOperators.scala) is based on code from:
  * https://github.com/NeoRyu/JDR-Generator/tree/main/api/src/main/scala/jdr/generator/api/scala/tools
  * and is under a MIT License. The rest of the application is under an Apache License, Version 2.0.
  *
@@ -40,7 +40,7 @@ trait Ord {
 
 
 // Création d'opérateur Typescript que j'affectionne transposé dans Scala !
-object TypescriptOperator {
+object TypescriptOperators {
 
   // ------------------------------------------------------------------------------------------
   // Opérateur Ternaire

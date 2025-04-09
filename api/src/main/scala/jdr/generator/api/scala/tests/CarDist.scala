@@ -1,11 +1,11 @@
-package jdr.generator.api.scala
+package jdr.generator.api.scala.tests
 
-import jdr.generator.api.scala.tools.TypescriptOperator._
+import jdr.generator.api.scala.tools.TypescriptOperators._
 
 
-class CarConso(
-  kmParLitre: Double,
+class CarDist(
   litreParPlein: Double,
+  kmParLitre: Double,
   kmParLitreRoute: Double = 0.0,
   kmParLitreUrbain: Double = 0.0,
   kmParLitreMixte: Double = 0.0,
@@ -13,7 +13,7 @@ class CarConso(
   var kml: Double = kmParLitre
   var kmlr: Double = (kmParLitreRoute == 0.0) ? kml :: kmParLitreRoute
   var kmlu: Double = (kmParLitreUrbain == 0.0) ? kml :: kmParLitreUrbain
-  var kmlm: Double = kmParLitreMixte ?? kml
+  var kmlm: Double = (kmParLitreMixte == 0.0) ? kml :: kmParLitreMixte
   var lpp: Double = litreParPlein
   var kpp: Double = 0.0
 
@@ -28,7 +28,7 @@ class CarConso(
       case "route" => kmlr * lpp
       case "urbain" => kmlu * lpp
       case "mixte" => kmlm * lpp
-      case _ => kml * lpp
+      case _ => 0.0
     }
     println(s"Kilomètres par plein ($typeConso) : $kppByType")
   }
@@ -37,19 +37,11 @@ class CarConso(
 
 
 object CarTest extends App {
-  val maVoiture = new CarConso(10, 50.0, 8.5, 11.2, 10.0)
-  println(s"maVoiture : 10Km par L, 50L dans le reservoir, 8.5Km par L en conso route, 11.2Km/L conso urbain, 10Km/L conso mixte")
+  val maVoiture = new CarDist(50.0, 10)
+  println(s"maVoiture : 50L dans le reservoir, 10Km par L")
   maVoiture.kmParPlein("Route")
   maVoiture.kmParPlein("Urbain")
   maVoiture.kmParPlein("Mixte")
-  maVoiture.kmParPlein("Mer")
-  maVoiture.kmParPlein()
-
-  val maSecondeVoiture = new CarConso(12.0, 65.0)
-  println(s"maVoiture : 10Km par L, 50L dans le reservoir, 8.5Km par L en conso route, 11.2Km/L conso urbain, 10Km/L conso mixte")
-  maSecondeVoiture.kmParPlein("Route")
-  maSecondeVoiture.kmParPlein("Urbain")
-  maSecondeVoiture.kmParPlein("Mixte")
-  maSecondeVoiture.kmParPlein("Mer") // Test avec un type non reconnu
-  maSecondeVoiture.kmParPlein() // Test avec un type non reconnu
+  maVoiture.kmParPlein() // Test sans type = mixte
+  maVoiture.kmParPlein("Mer") // Test avec un type non reconnu
 }

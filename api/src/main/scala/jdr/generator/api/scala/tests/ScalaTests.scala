@@ -1,4 +1,4 @@
-package jdr.generator.api.scala
+package jdr.generator.api.scala.tests
 
 import jdr.generator.api.scala.tools._
 
