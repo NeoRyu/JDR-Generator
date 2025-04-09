@@ -16,7 +16,7 @@ class Car(vehicleName: String) extends AvgSpeed {
 object CitroenC6 {
   private val honda = new Car("Citroen C6")
   private val hondaConso = new CarConso(72,10,8.5,11.2,10.0)
-  private val hondaDist = new CarDist(72,10,8.5,11.2,10.0)
+  private val hondaDist = new CarDist(72d,10d,8.5,11.2,10.0)
 
   def main(args: Array[String]): Unit = {
     // Tests de notations INFIX sur des méthodes intégrées et personnalisées
