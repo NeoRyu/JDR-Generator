@@ -28,6 +28,7 @@
 
 package jdr.generator.api.scala.tools
 
+
 // Équivalence de Comparable en Java
 // Les traits sont des classes abstraites conçues pour être ajoutées à d'autres classes.
 // Un trait permet d'ajouter certaines méthodes ou certains champs à une classe encore inconnue.
