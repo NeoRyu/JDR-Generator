@@ -15,7 +15,7 @@ l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une inter
 ## START
 
 ### Pré-requis
-- JAVA Correto v17
+- JAVA 17
 - maven
 
 ### Installation
@@ -27,4 +27,6 @@ git clone https://github.com/NeoRyu/JDR-Generator.git
 cd JDR-Generator
 ```
 
-...TODO : WIP
+- Synchroniser le projet Maven pour telecharger les dependances
+- Lancer ensuite le service maven "build (API)" : clean install package
+- Ne reste plus qu'a run l'application java : jdr.generator.api.ApiApplication

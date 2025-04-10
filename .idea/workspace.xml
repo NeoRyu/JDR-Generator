@@ -30,6 +30,11 @@
         <option value="NeoRyu &lt;coupez.frederic@gmail.com&gt;" />
       </list>
     </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
   </component>
@@ -78,6 +83,7 @@
     "Application.ScalaTests.executor": "Run",
     "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
     "Application.run (API).executor": "Run",
+    "Application.start (API).executor": "Run",
     "Maven.api [clean,install].executor": "Run",
     "Maven.api [clean,package,install].executor": "Run",
     "Maven.api [clean].executor": "Run",
@@ -90,7 +96,7 @@
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "tests",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala",
     "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tests",
@@ -131,7 +137,7 @@
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
-    <option name="lastReportId" value="gxw5G" />
+    <option name="lastReportId" value="lNlMj" />
     <option name="linkedProjectId" value="7x1LP" />
     <option name="linkedProjectName" value="JDR-Generator" />
     <option name="organizationId" value="p9oL4" />
@@ -321,6 +327,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
       <item itemvalue="Maven.build (API)" />
