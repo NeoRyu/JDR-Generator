@@ -2,7 +2,6 @@ package jdr.generator.api.tools;
 
 import org.python.util.PythonInterpreter;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -28,9 +27,6 @@ public class PythonScriptGeneratorExecutor {
             interpreter.execfile(pythonFilePath);
         } catch (Exception e) {
             System.err.println("Erreur lors de l'exécution du script Python : " + e.getMessage());
-        } finally {
-            // Optionnel : Supprimer le fichier temporaire après l'exécution
-            new File(pythonFilePath).delete();
         }
     }
 

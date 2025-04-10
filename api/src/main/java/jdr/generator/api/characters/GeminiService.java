@@ -141,7 +141,7 @@ public class GeminiService implements IGeminiGenerationConfig {
                                 .imageDetails(parent)
                                 .build();
                         CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-                        characterIllustrationEntity = this.characterIllustrationService.save(characterIllustrationEntity);
+                        this.characterIllustrationService.save(characterIllustrationEntity);
                     }
                 } catch (JsonProcessingException e) {
                     LOGGER.error("Error parsing image blob: {}", e.getMessage());
