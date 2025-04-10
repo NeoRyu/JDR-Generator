@@ -1,8 +1,5 @@
 # JDR-Generator
 
-NB : Branches tests pour acceder aux tests SCALA :
-> Exemple : https://github.com/NeoRyu/JDR-Generator/blob/tests/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperators.scala
-
 ## Description
 JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un
 monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA (intégration de SCALA
