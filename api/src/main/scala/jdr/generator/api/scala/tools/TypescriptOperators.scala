@@ -120,7 +120,7 @@ object TypescriptOperators {
      * Evaluates the `condition`. If true, it checks the `defaultValue` for null-like values based on its type.
      * If the `condition` is false, it returns the `defaultValue`.
      * @param defaultValue The value to return if the `condition` is false or if the `condition` is true and `defaultValue` is null-like.
-     * @param asT An implicit conversion from type `B` to `Boolean`.
+     * @param asT An implicit conversion from type `B` to T `Boolean`.
      * @tparam R The result type, which must be a supertype of `T`.
      * @return The `defaultValue` (potentially cast to `R`) based on the condition and the value of `defaultValue`.
      *
@@ -129,7 +129,7 @@ object TypescriptOperators {
      * > example 3: val emptyString: String = ("" != "value" ?? "default") // emptyString will be "default"
      * > example 4: val zeroDouble: Double = (0.0 != 1.0 ?? 5.0) // zeroDouble will be 5.0
      */
-    def ??[R >: T](defaultValue: => R)(implicit asT: B => Boolean): R = {
+    def ??[R >: T](defaultValue: => R)(implicit asT: B => T): R = {
       if (condition) {
         defaultValue match {
           case opt: Option[_] => opt.getOrElse(defaultValue).asInstanceOf[R] // If Option is None, return defaultValue
