@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperators.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperators.scala" afterDir="false" />
-    </list>
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
     </list>
@@ -426,15 +423,7 @@
       <workItem from="1744203243756" duration="5939000" />
       <workItem from="1744266610228" duration="5718000" />
       <workItem from="1744292630928" duration="1200000" />
-      <workItem from="1744352461379" duration="10549000" />
-    </task>
-    <task id="LOCAL-00017" summary="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742553191980</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1742553191980</updated>
+      <workItem from="1744352461379" duration="11002000" />
     </task>
     <task id="LOCAL-00018" summary="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
       <option name="closed" value="true" />
@@ -820,7 +809,15 @@
       <option name="project" value="LOCAL" />
       <updated>1744363432091</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744364718951</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1744364718951</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -840,7 +837,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Fix user update character_details from ux front to database !&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -865,7 +861,8 @@
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperators permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">

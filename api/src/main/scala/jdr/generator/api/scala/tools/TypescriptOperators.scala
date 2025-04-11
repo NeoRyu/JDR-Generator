@@ -135,7 +135,7 @@ object TypescriptOperators {
           case opt: Option[_] => opt.getOrElse(defaultValue).asInstanceOf[R] // If Option is None, return defaultValue
           case s: String => if (s.isEmpty) defaultValue.asInstanceOf[R] else s.asInstanceOf[R] // If String is empty, return defaultValue
           case d: Double => if (d == 0.0) defaultValue.asInstanceOf[R] else d.asInstanceOf[R] // If Double is zero, return defaultValue
-          case other => defaultValue // For other types, just return defaultValue
+          case _ => defaultValue // For other types, just return defaultValue
         }
       } else defaultValue // If the condition is false, return defaultValue
     }
@@ -164,13 +164,19 @@ object TypescriptOperators {
    * Implicit class that provides a Typescript-like nullish coalescing operator (`??`) for `Double`, checking for zero.
    * If the `value` is `0.0`, it returns the `defaultValue`; otherwise, it returns the `value`.
    * @param value The `Double` value to check.
-   * @tparam B The result type, which must be a supertype of `Double`.
    * @return The `value` if it's not 0.0, otherwise the `defaultValue`.
    *
    * > example : val value: Double = 3.14 ?? 1.0 // value will be 3.14
    * > example : val zeroValue: Double = 0.0 ?? 1.0 // zeroValue will be 1.0
    */
   implicit class NotZeroOrValueDouble(value: Double) {
+    /**
+     * Returns the `value` if it is not equal to `0.0`.
+     * If the `value` is exactly `0.0`, it returns the `defaultValue`.
+     * @param defaultValue The value to return if `value` is `0.0`.
+     * @tparam B The result type, which must be a supertype of `Double`.
+     * @return The original `value` if it's not zero, otherwise the `defaultValue`.
+     */
     def ??[B >: Double](defaultValue: => B): B = if (value != 0.0) value else defaultValue
   }
 
