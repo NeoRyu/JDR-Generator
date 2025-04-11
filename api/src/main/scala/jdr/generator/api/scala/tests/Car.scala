@@ -50,7 +50,7 @@ class Car(test: String = "undefined") extends Vehicle(test) with osef {
 
   def calcTotalCost(nbCar: Int, model: String): Unit = {
     val taxe = 1.2; // TVA de 20%
-    val taxePercent: String = "(TVA " + (taxe * 100 - 100) + "% incl.)"
+    val taxePercent: String = "(TVA " + (taxe * 100 - 100) + "% incl.)" // Il s'agit d'une pure function, accessible n'importe ou dans cette methode
     val cost = Map(
       "Citroen C6" -> 50450.51,
       "Citroen C3" -> 15750.43,

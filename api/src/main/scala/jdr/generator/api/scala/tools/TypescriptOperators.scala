@@ -1,3 +1,5 @@
+package jdr.generator.api.scala.tools
+
 /*
  * Copyright (c) 2025 [COUPEZ Frédéric]
  *
@@ -25,8 +27,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-package jdr.generator.api.scala.tools
 
 /**
  * Java's Comparable equivalent.
