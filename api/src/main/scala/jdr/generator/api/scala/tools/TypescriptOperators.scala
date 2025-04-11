@@ -2,7 +2,7 @@
  * Copyright (c) 2025 [COUPEZ Frédéric]
  *
  * This specific file (TypescriptOperators.scala) is based on code from:
- * https://github.com/NeoRyu/JDR-Generator/tree/main/api/src/main/scala/jdr/generator/api/scala/tools
+ * https://github.com/NeoRyu/JDR-Generator/tree/tests/api/src/main/scala/jdr/generator/api/scala/tools
  * and is under a MIT License. The rest of the application is under an Apache License, Version 2.0.
  *
  * MIT License
