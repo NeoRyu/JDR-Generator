@@ -2,7 +2,6 @@
 import axios from 'axios';
 import {CharacterFull} from '@/components/model/character-full.model.tsx';
 
-
 function cleanData(value: any): any {
     if (typeof value === 'string') {
         return value;
@@ -30,13 +29,15 @@ function validateData(characterFull: CharacterFull) {
     }
 }
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // Fallback
+
 export const updateCharacter = () => {
     const updateCharacter = async (characterFull: CharacterFull) => {
         try {
             validateData(characterFull);
             const cleanedData = cleanData(characterFull);
             cleanedData.updatedAt = new Date().toISOString().slice(0, 16);
-            const response = await axios.put(`/characters/details/${characterFull.details.id}`, cleanedData);
+            const response = await axios.put(`${API_BASE_URL}/characters/details/${characterFull.details.id}`, cleanedData);
             return response.data;
         } catch (error: any) {
             if (error.response) {

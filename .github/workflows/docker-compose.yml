@@ -6,12 +6,23 @@ services:
     ports:
       - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3307/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000 # Ajout délais
       SPRING_DATASOURCE_USERNAME: root # ATTENTION: Sécurité !
       SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
       SPRING_JPA_HIBERNATE_DDL_AUTO: none
-    depends_on: # Indique que ce service dépend de mysql-container
-      - mysql-container
+      # Ajout des propriétés HikariCP pour la reconnexion
+      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000 # 30 seconds
+      SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
+      SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0 # Infinite wait
+      SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: 1800000 # 30 minutes
+    depends_on: # Indique que ce service dépend de mysql-container et attend sa santé
+      mysql-container:
+        condition: service_healthy # Attendre que le service MySQL soit sain
+    healthcheck: # Ajout d'un healthcheck pour l'API (utile si d'autres services en dépendent)
+      test: "curl -f http://api-container:8080/actuator/health || exit 1" # Vérifier l'endpoint health de Spring Boot
+      interval: 10s
+      timeout: 5s
+      retries: 5
     # Les liens ('links') sont généralement remplacés par 'depends_on' et la résolution DNS par nom de service en Docker Compose v3+
     # Vous pouvez ajouter mem_limit ou d'autres configurations spécifiques à Elastic Beanstalk ici si nécessaire
 
@@ -20,7 +31,10 @@ services:
     ports:
       - "80:80" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     depends_on:
-      - api-container # Dépend du conteneur API
+      api-container:
+        condition: service_healthy # Dépend du conteneur API sain
+    environment:
+      REACT_APP_API_URL: http://api-container:8080 # URL de l'API pour le frontend
 
   gemini-container:
     image: eli256/jdr-generator-gemini:latest # Votre image Docker Hub
@@ -30,16 +44,24 @@ services:
       PORT: 3000 # Variable d'environnement pour l'application Gemini
 
   mysql-container:
-    image: mysql:5.7 # Image MySQL avec version spécifique
+    image: mysql:5.7 # Image MySQL avec version spécifique :5.7
     ports:
-      - "3306:3306" # Mapping port hôte:port conteneur (optionnel, utile pour debug)
+      - "3307:3306" # Mapping port hôte:port conteneur (optionnel, utile pour debug)
     environment:
       MYSQL_ROOT_PASSWORD: root # ATTENTION: Sécurité !
       MYSQL_DATABASE: jdr_generator_db
     volumes: # Configuration des volumes pour la persistance
       - mysql-data:/var/lib/mysql # 'mysql-data' fait référence au volume défini ci-dessous
+    healthcheck: # Ajout d'un healthcheck pour MySQL
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 # Définition des volumes nommés pour la persistance
 volumes:
   mysql-data: # Nom du volume
     driver: local # Type de driver pour le volume (par défaut 'local' utilise le stockage de l'hôte EC2)
+networks:
+  default: # Le réseau par défaut est suffisant, mais vous pouvez le nommer explicitement si vous le souhaitez
+    name: jdr-network # Nommez le réseau pour plus de clarté

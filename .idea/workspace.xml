@@ -4,14 +4,31 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/workflows/deploy.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gemini/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/Dockerfile" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <change afterPath="$PROJECT_DIR$/.docker/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-build.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-compose.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-debug.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-push.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-restart.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-run.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.docker/docker-stop.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Build_Network.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Run_All.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Stop_All.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/start__API_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/CorsConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/api/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00002__Create_character_json_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00002__Create_character_json_data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -26,9 +43,9 @@
       <list>
         <option value="Interface" />
         <option value="Kotlin Class" />
-        <option value="Class" />
         <option value="Scala Class" />
         <option value="Scala Worksheet" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -97,6 +114,11 @@
     "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
     "Application.run (API).executor": "Run",
     "Application.start (API).executor": "Run",
+    "Batch.docker-compose.executor": "Run",
+    "Batch.docker-debug.executor": "Run",
+    "Batch.docker-push.executor": "Run",
+    "Batch.docker-restart.executor": "Run",
+    "Docker.workflows: Compose Deployment.executor": "Run",
     "Maven.api [clean,install].executor": "Run",
     "Maven.api [clean,package,install].executor": "Run",
     "Maven.api [clean].executor": "Run",
@@ -109,11 +131,16 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
+    "Shell Script.Docker Build API.executor": "Run",
+    "Shell Script.Docker Build Network.executor": "Run",
+    "Shell Script.Docker Run All.executor": "Run",
+    "Shell Script.Docker Stop All.executor": "Run",
     "Spring Boot.ApiApplication.executor": "Run",
     "git-widget-placeholder": "tests",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/gemini",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.docker/docker-push.bat",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -136,7 +163,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "settings.qodana",
+    "settings.editor.selected.configurable": "terminal",
     "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
@@ -171,18 +198,18 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala\tools" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src\components\model" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\docker" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala\tests" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\python" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="jdr.generator.api.kotlin" />
@@ -205,55 +232,61 @@
       <set>
         <option value="Application" />
         <option value="MavenRunConfiguration" />
+        <option value="ShConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
         <option value="js.build_tools.npm" />
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.m0v">
-    <configuration name="Car" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="jdr.generator.api.scala.tests.Car" />
-      <module name="api" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="jdr.generator.api.scala.tests.Models" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="CarTest" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="jdr.generator.api.scala.tests.CarTest" />
-      <module name="api" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="jdr.generator.api.scala.tests.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ScalaTests" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="jdr.generator.api.scala.tests.ScalaTests" />
-      <module name="api" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="jdr.generator.api.scala.tests.Models" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Batch.docker-debug">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
       <option name="VM_PARAMETERS" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-compose" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-compose.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-debug" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-debug.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-push" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-push.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-restart" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-restart.bat" />
+      <option name="PARAMETERS" value="" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -339,30 +372,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="m0v" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="api" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="SDK_NAME" value="Python 3.12" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/m0v.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="Python.FlaskServer">
       <module name="FantasyGenerator" />
       <option name="ENV_FILES" value="" />
@@ -375,6 +384,36 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="launchJavascriptDebuger" value="false" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Docker - COMPLETE RESTART" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/.docker/docker-restart.bat" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+      <option name="INTERPRETER_PATH" value="$PROJECT_DIR$/../../../../Windows/System32/WindowsPowerShell/v1.0/powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Docker Hub PUSH" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/.docker/docker-push.bat" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+      <option name="INTERPRETER_PATH" value="$PROJECT_DIR$/../../../../Windows/System32/WindowsPowerShell/v1.0/powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
       <method v="2" />
     </configuration>
     <configuration name="ApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="API" nameIsGenerated="true">
@@ -398,28 +437,43 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <configuration name="workflows: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value=".github/workflows/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
-      <item itemvalue="Application.CarTest" />
-      <item itemvalue="Application.ScalaTests" />
-      <item itemvalue="Application.Car" />
+      <item itemvalue="Batch.docker-compose" />
+      <item itemvalue="Batch.docker-debug" />
+      <item itemvalue="Batch.docker-push" />
+      <item itemvalue="Batch.docker-restart" />
+      <item itemvalue="Docker.workflows: Compose Deployment" />
       <item itemvalue="Maven.build (API)" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start (WEB)" />
-      <item itemvalue="Python.m0v" />
+      <item itemvalue="Shell Script.Docker Build Network" />
+      <item itemvalue="Shell Script.Docker Run All" />
+      <item itemvalue="Shell Script.Docker Stop All" />
+      <item itemvalue="Shell Script.Docker - COMPLETE RESTART" />
+      <item itemvalue="Shell Script.Docker Hub PUSH" />
       <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.m0v" />
-        <item itemvalue="Application.CarTest" />
-        <item itemvalue="Application.ScalaTests" />
-        <item itemvalue="Application.Car" />
+        <item itemvalue="Batch.docker-debug" />
+        <item itemvalue="Batch.docker-compose" />
+        <item itemvalue="Batch.docker-push" />
+        <item itemvalue="Batch.docker-restart" />
+        <item itemvalue="Docker.workflows: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -484,15 +538,9 @@
       <workItem from="1744776683745" duration="1997000" />
       <workItem from="1744869853411" duration="7309000" />
       <workItem from="1744956435524" duration="4633000" />
-      <workItem from="1745302793928" duration="24686000" />
-    </task>
-    <task id="LOCAL-00024" summary="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742829907913</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1742829907913</updated>
+      <workItem from="1745302793928" duration="25107000" />
+      <workItem from="1745568080536" duration="9526000" />
+      <workItem from="1745589504208" duration="5911000" />
     </task>
     <task id="LOCAL-00025" summary="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
       <option name="closed" value="true" />
@@ -878,7 +926,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745332560079</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745567299843</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1745567299843</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -898,7 +954,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Loading...&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -923,7 +978,8 @@
     <MESSAGE value="[PYTHON] JDR-Generator : Simul-clic&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[SCALA] JDR-Generator&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">

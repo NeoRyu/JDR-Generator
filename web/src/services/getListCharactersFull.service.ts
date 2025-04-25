@@ -3,16 +3,17 @@ import {useQuery} from 'react-query';
 import axios, {AxiosResponse} from 'axios';
 import {CharacterFull} from '@/components/model/character-full.model.tsx';
 
-
 export interface CharactersResponse {
     data: CharacterFull[];
 }
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // Fallback
 
 export const getListCharactersFull = () => {
     return useQuery<AxiosResponse<CharactersResponse>, Error>(
         'charactersFull',
         async () => {
-            return await axios.get<CharactersResponse>('/characters/full'); // Correction ici
+            return await axios.get<CharactersResponse>(`${API_BASE_URL}/characters/full`); // Correction ici
         }
     );
 };

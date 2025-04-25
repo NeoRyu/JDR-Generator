@@ -71,7 +71,7 @@ CREATE TABLE `jdr_generator_db`.`character_details` (
     `attitude_towards_people` TEXT  NOT NULL,
     `image` TEXT  NOT NULL,
     `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `updated_at` TIMESTAMP,
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `context_id` INT NOT NULL DEFAULT 1,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_character_context_id`
