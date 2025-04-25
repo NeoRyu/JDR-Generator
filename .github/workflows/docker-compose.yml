@@ -1,0 +1,45 @@
+version: '3.8' # Utilisation de la version 3 de Docker Compose
+
+services:
+  api-container:
+    image: eli256/jdr-generator-api:latest # Votre image Docker Hub
+    ports:
+      - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam
+      SPRING_DATASOURCE_USERNAME: root # ATTENTION: Sécurité !
+      SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none
+    depends_on: # Indique que ce service dépend de mysql-container
+      - mysql-container
+    # Les liens ('links') sont généralement remplacés par 'depends_on' et la résolution DNS par nom de service en Docker Compose v3+
+    # Vous pouvez ajouter mem_limit ou d'autres configurations spécifiques à Elastic Beanstalk ici si nécessaire
+
+  web-container:
+    image: eli256/jdr-generator-web:latest # Votre image Docker Hub
+    ports:
+      - "80:80" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+    depends_on:
+      - api-container # Dépend du conteneur API
+
+  gemini-container:
+    image: eli256/jdr-generator-gemini:latest # Votre image Docker Hub
+    ports:
+      - "8082:3000" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+    environment:
+      PORT: 3000 # Variable d'environnement pour l'application Gemini
+
+  mysql-container:
+    image: mysql:5.7 # Image MySQL avec version spécifique
+    ports:
+      - "3306:3306" # Mapping port hôte:port conteneur (optionnel, utile pour debug)
+    environment:
+      MYSQL_ROOT_PASSWORD: root # ATTENTION: Sécurité !
+      MYSQL_DATABASE: jdr_generator_db
+    volumes: # Configuration des volumes pour la persistance
+      - mysql-data:/var/lib/mysql # 'mysql-data' fait référence au volume défini ci-dessous
+
+# Définition des volumes nommés pour la persistance
+volumes:
+  mysql-data: # Nom du volume
+    driver: local # Type de driver pour le volume (par défaut 'local' utilise le stockage de l'hôte EC2)
