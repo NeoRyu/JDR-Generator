@@ -38,7 +38,7 @@ REM Construction de l'image 'eli256/jdr-generator-web' et lancement du conteneur
 (
     cd web && docker build -t %WEB_IMAGE% .
 ) && (
-    docker run -d --name jdr-web --network jdr-generator-net -p 80:80 -e REACT_APP_API_URL=http://jdr-api:8080 %WEB_IMAGE%
+    docker run -d --name jdr-web --network jdr-generator-net -p 80:80 -e VITE_API_URL=http://jdr-api:8080 %WEB_IMAGE%
 )
 
 REM Push des images vers Docker Hub

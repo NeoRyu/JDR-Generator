@@ -9,6 +9,8 @@ services:
     ports:
       - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
+      OPENAI_API_URL: http://openai-container:3000 # URL du service OpenAI dans le réseau Docker
+      GEMINI_API_URL: http://gemini-container:3000 # URL du service Gemini dans le réseau Docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000 # Ajout délais
       SPRING_DATASOURCE_USERNAME: root # ATTENTION: Sécurité !
       SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
@@ -34,13 +36,15 @@ services:
     build:
       context: ../../web
       dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'web'
+      args: # Ajout des arguments de build pour passer VITE_API_URL
+        - 'VITE_API_URL=${VITE_API_URL}'
     ports:
       - "80:80" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     depends_on:
       api-container:
         condition: service_healthy # Dépend du conteneur API sain
     environment:
-      REACT_APP_API_URL: http://api-container:8080 # URL de l'API pour le frontend
+      VITE_API_URL: http://api-container:8080 # URL de l'API pour le frontend
     networks:
       - jdr-network
 
@@ -53,6 +57,18 @@ services:
       - "8082:3000" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
       PORT: 3000 # Variable d'environnement pour l'application Gemini
+    networks:
+      - jdr-network
+
+  openai-container:
+    image: eli256/jdr-generator-openai:latest
+    build:
+      context: ../../openai
+      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'openai'
+    ports:
+      - "8083:3000" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+    environment:
+      PORT: 3000 # Variable d'environnement pour l'application OpenAI
     networks:
       - jdr-network
 

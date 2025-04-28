@@ -17,13 +17,15 @@ public class CharactersController {
     private final String geminiHost = "http://localhost:5173";
     private final jdr.generator.api.characters.GeminiService geminiService;
     private final CharacterDetailsService characterDetailsService;
+    private final OpenaiService openaiService;
 
     CharactersController(
             GeminiService geminiService,
-            CharacterDetailsService characterDetailsService
-    ) {
+            CharacterDetailsService characterDetailsService,
+            OpenaiService openaiService) {
         this.geminiService = geminiService;
         this.characterDetailsService = characterDetailsService;
+        this.openaiService = openaiService;
     }
 
     @PutMapping("/details/{id}")
@@ -59,7 +61,7 @@ public class CharactersController {
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = geminiHost)
     public String illustrate(@RequestBody String imagePrompt) {
-        return geminiService.illustrate(imagePrompt);
+        return openaiService.illustrate(imagePrompt);
     }
 
     @RequestMapping(value = {"/stats/{id}"}, method = RequestMethod.POST)

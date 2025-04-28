@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/characters': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:8080', // Ce proxy est pour le serveur de dev seulement
         changeOrigin: true,
       },
     },

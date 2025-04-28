@@ -24,6 +24,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -38,7 +40,8 @@ public class GeminiService implements IGeminiGenerationConfig {
     private static final Logger LOGGER = LogManager.getLogger();
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-    private final String hostApiIA = "http://localhost:3000/";
+    @Value("${GEMINI_API_URL}")
+    private String hostApiIA;
 
     private final RestTemplate restTemplate;
     private final CharacterDetailsService characterDetailsService;
@@ -46,6 +49,9 @@ public class GeminiService implements IGeminiGenerationConfig {
     private final CharacterIllustrationService characterIllustrationService;
     private final CharacterJsonDataService characterJsonDataService;
     private final ModelMapper modelMapper;
+
+    @Qualifier("openaiService")
+    private final OpenaiService openaiService;
 
     private String cleanJsonString(String jsonString) {
         if (jsonString == null) {
@@ -84,7 +90,7 @@ public class GeminiService implements IGeminiGenerationConfig {
     @Override
     @Transactional
     public CharacterDetailsModel generate(DefaultContextJson data) {
-        final String apiUrl = hostApiIA + "generate";
+        final String apiUrl = hostApiIA + "/generate";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<DefaultContextJson> request = new HttpEntity<>(data, headers);
@@ -125,7 +131,7 @@ public class GeminiService implements IGeminiGenerationConfig {
             LOGGER.info("Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
                     characterDetailsEntity.getId(), characterDetailsModel.name, characterContextModel.promptGender, characterContextEntity.getId());
 
-            final String imgBlob = this.illustrate(characterDetailsModel.image);
+            final String imgBlob = this.openaiService.illustrate(characterDetailsModel.image);
             if (imgBlob != null) {
                 try {
                     JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
@@ -173,7 +179,7 @@ public class GeminiService implements IGeminiGenerationConfig {
 
     @Override
     public String illustrate(String data) {
-        final String apiUrl = hostApiIA + "illustrate";
+        final String apiUrl = hostApiIA + "/illustrate";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -211,7 +217,7 @@ public class GeminiService implements IGeminiGenerationConfig {
                 + "goal: '" + character.getGoal() +"'\n"
                 + "reasonForGoal: '" + character.getReasonForGoal() +"'\n";
 
-        final String apiUrl = hostApiIA + "stats";
+        final String apiUrl = hostApiIA + "/stats";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

@@ -1,16 +1,11 @@
-cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator
+REM Assurez-vous d'être connecté à Docker Hub
 docker login
-cd api
-docker pull maven:3.8.5-openjdk-17
-docker pull eclipse-temurin:17-jre-alpine
-docker build -t eli256/jdr-generator-api:latest .
+REM Naviguation vers le répertoire de docker-compose.yml
+cd C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows
+REM Construit toutes les images définies dans docker-compose.yml
+docker-compose build
+REM Pousse chaque image en utilisant les noms définis dans docker-compose.yml
 docker push eli256/jdr-generator-api:latest
-cd ..
-cd web
-docker build -t eli256/jdr-generator-web:latest .
 docker push eli256/jdr-generator-web:latest
-cd ..
-cd gemini
-docker build -t eli256/jdr-generator-gemini:latest .
 docker push eli256/jdr-generator-gemini:latest
-cd ..
+echo "Toutes les images ont été poussées vers le Docker Hub https://hub.docker.com/repositories/eli256 !"

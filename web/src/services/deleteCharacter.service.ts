@@ -6,7 +6,7 @@ interface DeleteCharacterResponse {
     // Définir les propriétés de la réponse si nécessaire
 }
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080'; // Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080'; // Fallback
 
 const deleteCharacterRequest = async (id: number): Promise<DeleteCharacterResponse> => {
     try {

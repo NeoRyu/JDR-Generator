@@ -26,4 +26,4 @@ REM Démarrage des conteneurs
 docker run -d --name jdr-mysql --network jdr-generator-net -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=jdr_generator mysql:latest
 docker run -d --name jdr-api --network jdr-generator-net -p 8080:8080 -e SPRING_PROFILES_ACTIVE=docker -e SPRING_DATASOURCE_URL="jdbc:mysql://jdr-mysql:3306/jdr_generator?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&port=3307" -e SPRING_DATASOURCE_USERNAME=root -e SPRING_DATASOURCE_PASSWORD=root eli256/jdr-generator-api:latest
 docker run -d --name jdr-gemini --network jdr-generator-net -p 3000:3000 eli256/jdr-generator-gemini:latest
-docker run -d --name jdr-web --network jdr-generator-net -p 80:80 -e REACT_APP_API_URL=http://jdr-api:8080 eli256/jdr-generator-web:latest
+docker run -d --name jdr-web --network jdr-generator-net -p 80:80 -e VITE_API_URL=http://jdr-api:8080 eli256/jdr-generator-web:latest
