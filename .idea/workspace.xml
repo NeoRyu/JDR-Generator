@@ -5,30 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/.docker/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-build.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-compose.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-debug.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-push.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-restart.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-run.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.docker/docker-stop.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Build_Network.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Run_All.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/Docker_Stop_All.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/start__API_.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/CorsConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__scala_sdk_2_13_15.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Maven__scala_sdk_2_13_15.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/api/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00001__Create_characters_table.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00002__Create_character_json_data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/db/migration/V00002__Create_character_json_data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -140,7 +123,7 @@
     "git-widget-placeholder": "tests",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.docker/docker-push.bat",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -238,7 +221,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Batch.docker-debug">
+  <component name="RunManager" selected="Shell Script.docker-build">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
@@ -250,7 +233,7 @@
     <configuration name="docker-compose" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="JDR-Generator" />
       <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="docker-compose.bat" />
       <option name="PARAMETERS" value="" />
@@ -261,7 +244,7 @@
     <configuration name="docker-debug" type="BatchConfigurationType" factoryName="Batch" temporary="true">
       <module name="JDR-Generator" />
       <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="docker-debug.bat" />
       <option name="PARAMETERS" value="" />
@@ -460,6 +443,7 @@
       <item itemvalue="npm.start (GEMINI)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start (WEB)" />
+      <item itemvalue="Shell Script.docker-build" />
       <item itemvalue="Shell Script.Docker Build Network" />
       <item itemvalue="Shell Script.Docker Run All" />
       <item itemvalue="Shell Script.Docker Stop All" />
@@ -541,6 +525,7 @@
       <workItem from="1745302793928" duration="25107000" />
       <workItem from="1745568080536" duration="9526000" />
       <workItem from="1745589504208" duration="5911000" />
+      <workItem from="1745821456866" duration="5481000" />
     </task>
     <task id="LOCAL-00025" summary="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
       <option name="closed" value="true" />

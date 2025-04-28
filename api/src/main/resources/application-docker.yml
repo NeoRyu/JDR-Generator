@@ -7,9 +7,9 @@ spring:
   application:
     name: api
   datasource:
-    hostname: jdr-mysql # Utiliser le nom du service Docker
+    hostname: mysql-container # Utiliser le nom du service Docker
     port: 3306
-    schema-name: jdr_generator
+    schema-name: jdr_generator_db
     args: "?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&port=3307"
     url: jdbc:mysql://${spring.datasource.hostname}:${spring.datasource.port}/${spring.datasource.schema-name}${spring.datasource.args}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -37,11 +37,11 @@ spring:
     password: ${spring.datasource.password}
     baseline-on-migrate: true
     locations: [ "classpath:db/migration" ]
-    schemas: jdr_generator # Utiliser le nom du schéma correct
+    schemas: jdr_generator_db # Utiliser le nom du schéma correct
     fail-on-missing-locations: true
   jpa:
     #  SHOW VARIABLES LIKE "%version%"; ## check InnoDB version ::
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect # Corrigé
     properties:
       org.hibernate.flushMode: COMMIT
     show-sql: false
