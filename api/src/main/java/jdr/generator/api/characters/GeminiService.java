@@ -18,7 +18,6 @@ import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
 import jdr.generator.api.characters.stats.CharacterJsonDataModel;
 import jdr.generator.api.characters.stats.CharacterJsonDataService;
 import jdr.generator.api.config.IGeminiGenerationConfig;
-import jdr.generator.api.scala.ScalaMessage;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -190,7 +189,7 @@ public class GeminiService implements IGeminiGenerationConfig {
                 LOGGER.warn("Character JSON stats data saved with raw JSON due to parsing error.");
             }
 
-            ScalaMessage.main(new String[]{});
+            // ScalaMessage.main(new String[]{});
 
             return characterDetailsModel;
         } catch (JsonProcessingException e) {

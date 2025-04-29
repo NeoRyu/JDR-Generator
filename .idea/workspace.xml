@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/PythonScriptGeneratorExecutor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaMessage.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarConso.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarDist.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/ScalaTests.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/ScalaTests.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/IntSet.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaDate.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" beforeDir="false" />
-    </list>
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +111,7 @@
     "Shell Script.Docker Run All.executor": "Run",
     "Shell Script.Docker Stop All.executor": "Run",
     "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "#4 on Merging aws",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
     "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/openai",
@@ -166,7 +154,7 @@
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
   </component>
   <component name="QodanaCloudProjectLink">
-    <option name="lastReportId" value="lNlMj" />
+    <option name="lastReportId" value="b70YB" />
     <option name="linkedProjectId" value="7x1LP" />
     <option name="linkedProjectName" value="JDR-Generator" />
     <option name="organizationId" value="p9oL4" />
@@ -462,11 +450,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.workflows: Compose Deployment" />
+        <item itemvalue="Batch.docker-restart" />
         <item itemvalue="Batch.docker-push" />
         <item itemvalue="Batch.docker-debug" />
         <item itemvalue="Batch.docker-compose" />
-        <item itemvalue="Batch.docker-restart" />
-        <item itemvalue="Docker.workflows: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
