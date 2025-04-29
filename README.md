@@ -1,5 +1,9 @@
 # JDR-Generator
 
+NB : Branches tests pour acceder aux tests SCALA :
+> Exemple : https://github.com/NeoRyu/JDR-Generator/blob/tests/api/src/main/scala/jdr/generator/api/scala/tools/TypescriptOperators.scala
+
+
 ## Description
 
 JDR-Generator est une application complète pour la création de personnages de jeux de rôle (JDR). Ce projet est structuré comme un monorepo et est conçu pour fonctionner en local. Il comprend :
