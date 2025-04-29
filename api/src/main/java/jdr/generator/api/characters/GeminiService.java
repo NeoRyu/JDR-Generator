@@ -27,11 +27,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
-
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -87,6 +90,44 @@ public class GeminiService implements IGeminiGenerationConfig {
         }
     }
 
+    @Async
+    protected CompletableFuture<Void> generateIllustrationAsync(CharacterDetailsEntity characterDetailsEntity) {
+        LOGGER.info("Démarrage asynchrone de la génération d'illustration pour le personnage {{id={}}}", characterDetailsEntity.getId());
+        try {
+            final String imgBlob = this.openaiService.illustrate(characterDetailsEntity.getImage());
+            if (imgBlob != null) {
+                try {
+                    JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
+                    if (imageNode != null) {
+                        byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
+
+                        final CharacterIllustrationModel characterIllustrationModel = CharacterIllustrationModel.builder()
+                                .imageLabel(characterDetailsEntity.getImage())
+                                .imageBlob(imageBytes)
+                                .imageDetails(characterDetailsEntity)
+                                .build();
+                        CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+                        this.characterIllustrationService.save(characterIllustrationEntity);
+                        LOGGER.info("Illustration générée et enregistrée pour le personnage {{id={}}}", characterDetailsEntity.getId());
+                    }
+                } catch (JsonProcessingException e) {
+                    LOGGER.error("Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}", characterDetailsEntity.getId(), e.getMessage());
+                }
+            } else {
+                LOGGER.warn("La génération d'illustration a retourné un blob null pour le personnage {{id={}}}", characterDetailsEntity.getId());
+            }
+        } catch (HttpClientErrorException e) {
+            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (client) pour le personnage {{id={}}} : Status={}, Body={}",
+                    characterDetailsEntity.getId(), e.getStatusCode(), e.getResponseBodyAsString());
+        } catch (HttpServerErrorException e) {
+            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (serveur) pour le personnage {{id={}}} : Status={}, Body={}",
+                    characterDetailsEntity.getId(), e.getStatusCode(), e.getResponseBodyAsString());
+        } catch (Exception e) {
+            LOGGER.error("Erreur inattendue lors de la génération d'illustration pour le personnage {{id={}}} : {}", characterDetailsEntity.getId(), e.getMessage());
+        }
+        return CompletableFuture.completedFuture(null);
+    }
+
     @Override
     @Transactional
     public CharacterDetailsModel generate(DefaultContextJson data) {
@@ -100,6 +141,9 @@ public class GeminiService implements IGeminiGenerationConfig {
             LOGGER.error("API request failed with status code: {}", response.getStatusCode());
             throw new RuntimeException("API request failed");
         }
+
+        CharacterDetailsModel characterDetailsModel;
+        CharacterDetailsEntity characterDetailsEntity;
 
         try {
             // Nettoyage de la réponse JSON
@@ -118,41 +162,21 @@ public class GeminiService implements IGeminiGenerationConfig {
                     modelMapper.map(characterContextModel, CharacterContextEntity.class)
             );
 
-            CharacterDetailsModel characterDetailsModel = OBJECT_MAPPER.readValue(innerJsonString, CharacterDetailsModel.class);
+            characterDetailsModel = OBJECT_MAPPER.readValue(innerJsonString, CharacterDetailsModel.class);
             characterDetailsModel = characterDetailsModel.toBuilder()
                     .createdAt(java.util.Date.from(java.time.Instant.now()))
                     .updatedAt(java.util.Date.from(java.time.Instant.now()))
                     .contextId(characterContextEntity.getId())
                     .build();
-            final CharacterDetailsEntity characterDetailsEntity = characterDetailsService.save(
+            characterDetailsEntity = characterDetailsService.save(
                     modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class)
             );
 
             LOGGER.info("Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
                     characterDetailsEntity.getId(), characterDetailsModel.name, characterContextModel.promptGender, characterContextEntity.getId());
 
-            final String imgBlob = this.openaiService.illustrate(characterDetailsModel.image);
-            if (imgBlob != null) {
-                try {
-                    JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
-                    if (imageNode != null) {
-                        byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
-
-                        // Récupérer l'entité CharacterDetailsEntity depuis la base de données
-                        CharacterDetailsEntity parent = this.characterDetailsService.findById(characterDetailsEntity.getId());
-
-                        final CharacterIllustrationModel characterIllustrationModel = CharacterIllustrationModel.builder()
-                                .imageLabel(parent.getImage())
-                                .imageBlob(imageBytes)
-                                .imageDetails(parent)
-                                .build();
-                        CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-                        this.characterIllustrationService.save(characterIllustrationEntity);
-                    }
-                } catch (JsonProcessingException e) {
-                    LOGGER.error("Error parsing image blob: {}", e.getMessage());
-                }
-            }
+            // Lancement asynchrone de la génération de l'illustration
+            generateIllustrationAsync(characterDetailsEntity);
 
             String statsJson = this.stats(characterDetailsEntity.getId());
             LOGGER.info("Stats JSON: {}", statsJson);
@@ -201,21 +225,21 @@ public class GeminiService implements IGeminiGenerationConfig {
     public String stats(Long characterId) {
         CharacterDetailsEntity character = this.characterDetailsService.findById(characterId);
         CharacterContextEntity context = this.characterContextService.findById(character.getContextId());
-        String data = "promptSystem: '" + context.getPromptSystem() +"'\n"
-                + "promptRace: '" + context.getPromptRace() +"'\n"
-                + "promptGender: '" + context.getPromptGender() +"'\n"
-                + "promptClass: '" + context.getPromptClass() +"'\n"
-                + "promptDescription: '" + context.getPromptDescription() +"'\n"
-                + "name: '" + character.getName() +"'\n"
-                + "age: '" + character.getAge() +"'\n"
-                + "education: '" + character.getEducation() +"'\n"
-                + "profession: '" + character.getProfession() +"'\n"
-                + "reasonForProfession: '" + character.getReasonForProfession() +"'\n"
-                + "workPreferences: '" + character.getWorkPreferences() +"'\n"
-                + "changeInSelf: '" + character.getChangeInSelf() +"'\n"
-                + "changeInWorld: '" + character.getChangeInWorld() +"'\n"
-                + "goal: '" + character.getGoal() +"'\n"
-                + "reasonForGoal: '" + character.getReasonForGoal() +"'\n";
+        String data = "promptSystem: '" + context.getPromptSystem() + "'\n"
+                + "promptRace: '" + context.getPromptRace() + "'\n"
+                + "promptGender: '" + context.getPromptGender() + "'\n"
+                + "promptClass: '" + context.getPromptClass() + "'\n"
+                + "promptDescription: '" + context.getPromptDescription() + "'\n"
+                + "name: '" + character.getName() + "'\n"
+                + "age: '" + character.getAge() + "'\n"
+                + "education: '" + character.getEducation() + "'\n"
+                + "profession: '" + character.getProfession() + "'\n"
+                + "reasonForProfession: '" + character.getReasonForProfession() + "'\n"
+                + "workPreferences: '" + character.getWorkPreferences() + "'\n"
+                + "changeInSelf: '" + character.getChangeInSelf() + "'\n"
+                + "changeInWorld: '" + character.getChangeInWorld() + "'\n"
+                + "goal: '" + character.getGoal() + "'\n"
+                + "reasonForGoal: '" + character.getReasonForGoal() + "'\n";
 
         final String apiUrl = hostApiIA + "/stats";
         HttpHeaders headers = new HttpHeaders();

@@ -4,43 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/docker_build.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/OpenaiService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/.ebignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/app.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/src/controllers/background.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/openai/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.docker/docker-compose.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.docker/docker-compose.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.docker/docker-debug.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.docker/docker-debug.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.docker/docker-push.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.docker/docker-push.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.docker/docker-restart.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.docker/docker-restart.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/web/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/createCharacter.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/deleteCharacter.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/getListCharactersFull.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/updateCharacter.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/vite.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/vite.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/background.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/background.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/background.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/background.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
-      <change afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,82 +85,81 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Application.Car.executor": "Run",
-    "Application.CarTest.executor": "Run",
-    "Application.CitroenC6.executor": "Run",
-    "Application.Honda.executor": "Run",
-    "Application.PythonScriptExecutor.executor": "Run",
-    "Application.PythonScriptExecutorWithEngine.executor": "Run",
-    "Application.PythonScriptGeneratorExecutor.executor": "Run",
-    "Application.ScalaTests.executor": "Run",
-    "Application.Voiture.executor": "Run",
-    "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
-    "Application.run (API).executor": "Run",
-    "Application.start (API).executor": "Run",
-    "Batch.docker-compose.executor": "Run",
-    "Batch.docker-debug.executor": "Run",
-    "Batch.docker-push.executor": "Run",
-    "Batch.docker-restart.executor": "Run",
-    "Docker.workflows: Compose Deployment.executor": "Run",
-    "Maven.api [clean,install].executor": "Run",
-    "Maven.api [clean,package,install].executor": "Run",
-    "Maven.api [clean].executor": "Run",
-    "Maven.build (API).executor": "Run",
-    "Python.m0v.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
-    "Shell Script.Docker Build API.executor": "Run",
-    "Shell Script.Docker Build Network.executor": "Run",
-    "Shell Script.Docker Run All.executor": "Run",
-    "Shell Script.Docker Stop All.executor": "Run",
-    "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "aws",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/openai",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.build (1).executor": "Run",
-    "npm.build (GEMINI).executor": "Run",
-    "npm.build (OPENAI).executor": "Run",
-    "npm.build (WEB).executor": "Run",
-    "npm.build.executor": "Run",
-    "npm.build2.executor": "Run",
-    "npm.clean (GEMINI).executor": "Run",
-    "npm.clean (OPENAI).executor": "Run",
-    "npm.clean.executor": "Run",
-    "npm.start (GEMINI).executor": "Run",
-    "npm.start (WEB).executor": "Run",
-    "npm.start.executor": "Run",
-    "npm.start: dev (WEB).executor": "Run",
-    "npm.start: dev.executor": "Run",
-    "npm.start:dev.executor": "Run",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "terminal",
-    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\openai\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.Car.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CarTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CitroenC6.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Honda.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptGeneratorExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Voiture.executor&quot;: &quot;Run&quot;,
+    &quot;Application.jdr.generator.api.scala.tests.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
+    &quot;Application.start (API).executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-compose.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-debug.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-restart.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.workflows: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.build (API).executor&quot;: &quot;Run&quot;,
+    &quot;Python.m0v.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Shell Script.Docker - COMPLETE RESTART.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build API.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build Network.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Run All.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Stop All.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;aws&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/openai&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build (1).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.build2.executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\openai\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="QodanaCIConfigService">
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
@@ -559,15 +533,8 @@
       <workItem from="1745302793928" duration="25107000" />
       <workItem from="1745568080536" duration="9526000" />
       <workItem from="1745589504208" duration="5911000" />
-      <workItem from="1745821456866" duration="28555000" />
-    </task>
-    <task id="LOCAL-00026" summary="[WIP] JDR-Generator : Génération et stockage en db sous forme de blob d'une illustration pour le personnage generate &#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742905890904</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1742905890904</updated>
+      <workItem from="1745821456866" duration="35783000" />
+      <workItem from="1745914598806" duration="1675000" />
     </task>
     <task id="LOCAL-00027" summary="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -953,7 +920,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745827153723</updated>
     </task>
-    <option name="localTasksCounter" value="75" />
+    <task id="LOCAL-00075" summary="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745852241328</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1745852241328</updated>
+    </task>
+    <option name="localTasksCounter" value="76" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -973,7 +948,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -998,7 +972,8 @@
     <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <option name="LAST_COMMIT_MESSAGE" value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
