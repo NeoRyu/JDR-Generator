@@ -1,235 +1,229 @@
-# JDR-Generator
+# JDR-Generator API (Gemini)
 
 ## Description
-JDR-Generator est une application interactive pour la création de personnages RPG. Ce projet est structuré comme un
-monorepo tournant en localhost ; contenant à la fois deux API backend, l'un développé en JAVA (intégration de SCALA
-en parallèle pour l'excerice) permettant de communiquer avec la database MySQL ajoutée via FlywayDb,
-l'autre avec NESTJS pour communiquer avec les API de Google Gemini, et une interface frontend en React Typescript.
 
-## Caractéristiques principales:
-- Génération automatisée de caractères pour Jeux De Rôles
-- Interface interactive pour la création et la visualisation des personnages générés à partir d'un contexte.
-- Prise en charge de divers systèmes de JDR.
-- Génération de personnages et illustrations via l'intégration de GoogleGenerativeAI.
+Ce module contient l'API backend développée avec NestJS, dédiée à l'interaction avec les APIs de Google Gemini. Son rôle principal est de permettre la génération de texte (descriptions de personnages, statistiques) et d'images pour les personnages de jeux de rôle, enrichissant ainsi l'expérience utilisateur de JDR-Generator.
 
-# API : Google Generative AI
+## Caractéristiques Principales
 
-**Ce projet inclut le code source pour interagir avec Gemini à partir d'une API REST de base développée en Node.js avec Express et TypeScript.**
+* **Interaction avec Google Gemini :** Utilise les fonctionnalités de Google Gemini pour la génération de contenu.
+* **API REST :** Fournit une API RESTful pour accéder aux fonctionnalités de génération.
+* **Génération de Texte :** Crée des descriptions détaillées et des statistiques de personnages basées sur un contexte donné.
+* **Génération d'Images :** Génère des illustrations de personnages.
+* **Développement avec NestJS :** Utilise NestJS (Node.js et TypeScript) pour une architecture robuste et évolutive.
 
-## Configuration requise
+## Technologies Utilisées
 
-1. Installer Node.js : [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
+* Node.js
+* NestJS (TypeScript)
+* Google Gemini API
 
-2. Installer TypeScript
+
+## Notes Importantes
+
+* **Sécurité des clés API :** Traitez votre clé API Google Gemini avec la plus grande précaution. Ne la partagez jamais publiquement. Utilisez toujours des variables d'environnement pour la stocker.
+
+
+## Configuration Requise
+
+1.  **Installer Node.js :** Téléchargez et installez Node.js depuis [https://nodejs.org/en/download/](https://nodejs.org/en/download/) (Version recommandée : LTS).
+
+2.  **Installer TypeScript (globalement) :**
+
     ```sh
     npm install -g typescript
     ```
 
-3. Installer les dépendances requises
+3.  **Installer les dépendances du projet :**
+
     ```sh
     npm install
     ```
 
-4. Obtenir une clé d'API GOOGLE pour Gemini : [https://ai.google.dev/gemini-api/docs/pricing?hl=fr](https://ai.google.dev/gemini-api/docs/pricing?hl=fr)
+## Configuration
 
-5. Mettre à jour votre fichier `.env` avec votre clé API (https://aistudio.google.com/apikey) et votre username de connection windows.
+1.  **Obtenir une clé d'API Google pour Gemini :**
 
-6. Ajouter un dossier nommé `jdr-generator` (ou tout autre nom que vous définirez dans le fichier `.env` pour `DOWNLOAD_FOLDER`) dans votre dossier de téléchargement 
-(`C:\Users\`{windows_username}`\Downloads\jdr-generator\`)
-   > Pour choisir un autre emplacement, modifiez les variables `pathSrc` dans les fichiers du dossier 'controllers'
+    * Accédez à la documentation de Google Gemini pour les détails sur l'obtention d'une clé d'API : [https://ai.google.dev/gemini-api/docs/pricing?hl=fr](https://ai.google.dev/gemini-api/docs/pricing?hl=fr)
+    * Vous pouvez généralement obtenir votre clé API depuis la console Google Cloud ou un service similaire (par exemple, Google AI Studio).
 
-## Générer et exécuter
+2.  **Configurer les variables d'environnement :**
 
-- Pour supprimer le dossier `dist` (nécessaire avant un rebuild) :
+    * Créez un fichier `.env` à la racine du projet (s'il n'existe pas déjà).
+    * Ajoutez les variables d'environnement suivantes à ce fichier :
+
+        ```
+        GOOGLE_API_KEY=YOUR_GEMINI_API_KEY  # Remplacez par votre clé API Gemini
+        DOWNLOAD_FOLDER=jdr-generator       # Nom du dossier de téléchargement (peut être personnalisé)
+        # WINDOWS_USERNAME=your_windows_username # (Optionnel, si nécessaire pour les chemins)
+        ```
+
+    * **Important :** Ne commitez jamais votre fichier `.env` contenant des clés API dans un dépôt public.
+
+3.  **Configurer le dossier de téléchargement :**
+
+    * Par défaut, les JSON et les images générés seront enregistrés dans un dossier nommé `jdr-generator` dans votre dossier de téléchargements.
+    * Créez ce dossier manuellement si vous ne l'avez pas déjà :
+
+        * Windows : `C:\Users\{your_windows_username}\Downloads\jdr-generator\`  (Remplacez `{your_windows_username}` par votre nom d'utilisateur Windows)
+    * Pour personnaliser l'emplacement du dossier de téléchargement, modifiez la variable `DOWNLOAD_FOLDER` dans le fichier `.env`.
+    * **Note :** Si vous personnalisez le dossier de téléchargement, assurez-vous d'ajuster les chemins en conséquence dans les fichiers du dossier `controllers` (si nécessaire).
+
+## Générer et Exécuter
+
+1.  **Supprimer le dossier `dist` (avant une nouvelle compilation) :**
+
     ```sh
     rd /s /q dist
     ```
 
-- Pour compiler le code JS à partir du code source TypeScript.
+    * (Cette commande est pour Windows. Pour d'autres systèmes d'exploitation, utilisez l'équivalent `rm -rf dist`.)
+
+2.  **Compiler le code TypeScript :**
+
     ```sh
     tsc
     ```
 
-- Pour démarrer le serveur depuis le dossier compilé (`dist`).
+    * Cela compile le code TypeScript en JavaScript et place le résultat dans le dossier `dist`.
+
+3.  **Démarrer le serveur :**
+
     ```sh
     node dist/app.js
     ```
 
-## Tester les endpoints
+    * Cela exécute le serveur NestJS à partir du code JavaScript compilé.
 
-- Exécuter une requête POST sur http://localhost:3000/generate pour obtenir le JSON d'un personnage généré depuis Gemini
-  > A noter que les JSON et images seront ajoutés dans le dossier configuré dans le fichier `.env`
+## API Endpoints
 
-- Exécuter une requête POST sur http://localhost:3000/illustrate en ajoutant dans le body en raw le contenu de l'attribut "image" obtenu précédemment pour générer une illustration, exemple :
-    ```json
-    { "prompt" : "Using Imagen3, generate an illustration in a heroic-fantasy style, but not realistic, close to that of the French illustrator Grosnez (https://www.artstation.com/grosnez) based on this prompt: Une femme élégante aux longs cheveux bruns et aux yeux verts, portant un chapeau d'aventurière et tenant une carte ancienne." }
+(À compléter avec la liste complète des points de terminaison de l'API, leurs méthodes HTTP, les paramètres attendus, les formats de requête et de réponse, et des exemples. Ceci est crucial pour l'intégration avec le frontend et pour les tests.)
+
+Voici une version plus détaillée basée sur votre exemple :
+
+* **`POST /generate`**
+
+    * **Description :** Génère les détails d'un personnage RPG à partir d'un contexte fourni.
+    * **Requête :**
+
+        * **Méthode :** `POST`
+        * **URL :** `http://localhost:3000/generate`
+        * **Corps (raw/JSON) :**
+
+            ```json
+            {
+              "prompt_system": "Nom du système de jeu (ex: Dungeons & Dragons)",
+              "prompt_race": "Race du personnage",
+              "prompt_gender": "Genre du personnage",
+              "prompt_class": "Classe du personnage",
+              "prompt_description": "Description du contexte du personnage"
+            }
+            ```
+
+    * **Réponse :**
+
+        * **Format :** JSON
+        * **Contenu :** Un objet JSON contenant les détails du personnage générés (nom, âge, histoire, etc.).
+        * **Exemple :** (Voir l'exemple de réponse que vous avez fourni dans votre description)
+
+* **`POST /illustrate`**
+
+    * **Description :** Génère une illustration pour le personnage en utilisant la description d'image générée précédemment.
+    * **Requête :**
+
+        * **Méthode :** `POST`
+        * **URL :** `http://localhost:3000/illustrate`
+        * **Corps (raw/JSON) :**
+
+            ```json
+            {
+              "prompt": "Prompt pour la génération d'image (basé sur l'attribut 'image' généré précédemment)"
+            }
+            ```
+
+    * **Réponse :**
+
+        * **Format :** JSON (peut contenir une URL vers l'image, ou les données de l'image encodées)
+
+* **`POST /stats`**
+
+    * **Description :** Génère les statistiques du personnage (force, dextérité, etc.) en fonction du contexte et des détails du personnage générés.
+    * **Requête :**
+
+        * **Méthode :** `POST`
+        * **URL :** `http://localhost:3000/stats`
+        * **Corps (raw/JSON) :**
+
+            ```json
+            {
+              "prompt": "Objet JSON contenant les détails du personnage (voir l'exemple que vous avez fourni)"
+            }
+            ```
+
+    * **Réponse :**
+
+        * **Format :** JSON
+        * **Contenu :** Un objet JSON contenant les statistiques du personnage (force, dextérité, etc.). (Voir l'exemple de réponse que vous avez fourni)
+
+## Sortie des Données
+
+* Les données générées (JSON et images) sont enregistrées sous forme de fichiers dans le dossier de téléchargement configuré (`DOWNLOAD_FOLDER` dans le fichier `.env`).
+* Par défaut, ce dossier est `jdr-generator` dans le dossier de téléchargements de l'utilisateur.
+
+## Docker (Optionnel)
+
+(Si vous souhaitez ajouter des instructions pour l'utilisation de Docker avec cette API, vous pouvez les inclure ici. Cela pourrait inclure la construction d'une image Docker, l'exécution du conteneur, et éventuellement un exemple de `docker-compose.yml` si vous utilisez Docker Compose au niveau du monorepo.)
+
+Exemple :
+
+### Construction de l'image Docker
+
+1.  **Construire l'image Docker :**
+
+    ```bash
+    docker build -t jdr-generator-gemini .
     ```
 
-- Exécuter une requête POST sur http://localhost:3000/stats en ajoutant dans le body en raw un contenu plus complexe basé sur les détails obtenus précédemment pour générer un json contenant diverses traits de statistiques, exemple :
-    ```json
-    { "prompt" : "promptSystem: 'context.PromptSystem', promptRace: 'context.PromptRace', promptGender: 'context.PromptGender', promptClass: 'context.PromptClass', promptDescription: 'context.PromptDescription', name: 'details.Name', age: 'details.Age', education: 'details.Education', profession: 'details.Profession', reasonForProfession: 'details.ReasonForProfession', workPreferences: 'details.WorkPreferences', changeInSelf: 'details.ChangeInSelf', changeInWorld: 'details.ChangeInWorld', goal: 'details.Goal', reasonForGoal: 'details.ReasonForGoal'" }
+    (Assurez-vous d'être dans le répertoire `gemini` ou spécifiez le chemin du `Dockerfile`.)
+
+### Exécution du Conteneur Docker
+
+1.  **Exécuter le conteneur :**
+
+    ```bash
+    docker run -p 3000:3000 -e GOOGLE_API_KEY=YOUR_GEMINI_API_KEY jdr-generator-gemini
     ```
 
-## Exemple de génération avec un contexte personnalisé :
+    (Expose l'API sur le port 3000. Remplacez `YOUR_GEMINI_API_KEY` par votre clé API.)
 
-L'utilisateur saisi ce contexte lors de la création d'un nouveau personnage :
-```json
-{
-  "prompt_system": "Dungeons & Dragons",
-  "prompt_race": "Gobelin",
-  "prompt_gender": "Male",
-  "prompt_class": "Artificier",
-  "prompt_description": "Banni de sa communauté pour ses expériences explosives et son ouverture d'esprit aux autres éspèces,  ce gobelin plus intelligent que la moyenne a récemment rejoint la civilisation humaine. De par ses origines, il n'est pas apprécié par la population locale de son nouveau lieu de résidence, et les autorités le confondent souvent avec un ennemis. Il a trouvé refuge dans une maison abandonné en périphérie de la ville, dans l'attente de compagnons qui sauront apprécier ses talents et ne s'arrêteront pas à ses origines."
-}
+### Docker Compose (Si vous utilisez Docker Compose au niveau du monorepo)
+
+1.  **S'assurer que le service `gemini` est correctement configuré dans `docker-compose.yml` :**
+
+    ```yaml
+    services:
+      gemini:
+        build:
+          context: ./gemini
+          dockerfile: Dockerfile
+        ports:
+          - "3000:3000"
+        environment:
+          GOOGLE_API_KEY: YOUR_GEMINI_API_KEY
+        # depends_on: # Si nécessaire
+        #   - ...
+    ```
+
+2.  **Démarrer le service :**
+
+    ```bash
+    docker-compose up -d gemini
+    ```
+
+## Licence
+
+```markdow
+Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
 ```
-
-L'IA se base sur ce contexte pour générer les détails du background du personnage :
-```json
-{
-    "name": "Zik Zapboum",
-    "age": 17,
-    "birthPlace": "Un terrier gobelin oublié, quelque part dans les collines.",
-    "residenceLocation": "Une maison abandonnée à la périphérie de la ville.",
-    "reasonForResidence": "Refuge après avoir été banni de sa communauté et cherchant un endroit où ses talents sont appréciés.",
-    "climate": "Variable, mais préfère les environnements tempérés pour éviter les problèmes d'humidité avec ses inventions.",
-    "commonProblems": "Préjugés des habitants, confusions avec des ennemis, manque de ressources pour ses expériences.",
-    "dailyRoutine": "Récupérer des matériaux, bricoler, expérimenter, éviter les ennuis avec les autorités locales.",
-    "parentsAlive": false,
-    "detailsAboutParents": "Probablement morts dans une explosion ou mangés par quelque chose de plus gros. Zik ne s'en souvient pas très bien.",
-    "feelingsAboutParents": "Indifférent. Les gobelins ne s'attachent pas beaucoup à leurs parents.",
-    "siblings": "Beaucoup de frères et sœurs, mais il ne les connaît pas.",
-    "childhoodStory": "A toujours été fasciné par les choses qui explosent et les mécanismes complexes, ce qui l'a conduit à être banni.",
-    "youthFriends": "Aucun. Les autres gobelins le trouvaient bizarre et dangereux.",
-    "pet": "Un rat mécanique qu'il a construit, nommé 'Clac'.",
-    "maritalStatus": "Célibataire",
-    "typeOfLover": "Quelqu'un d'intelligent, d'ouvert d'esprit et qui ne le juge pas sur son apparence.",
-    "conjugalHistory": "Aucune. Les relations amoureuses ne sont pas une priorité pour lui.",
-    "children": 0,
-    "education": "Autodidacte. A appris en observant, en expérimentant et en volant des livres.",
-    "profession": "Artificier (en herbe)",
-    "reasonForProfession": "Passion pour la création et l'amélioration des choses.",
-    "workPreferences": "Travaux impliquant de la créativité, de la résolution de problèmes et des explosions contrôlées.",
-    "changeInSelf": "Devenir un artificier reconnu et respecté, malgré ses origines.",
-    "changeInWorld": "Créer des inventions qui améliorent la vie des gens (ou qui font boum de manière spectaculaire).",
-    "goal": "Construire l'invention ultime, qui prouvera sa valeur au monde.",
-    "reasonForGoal": "Désir de prouver qu'il est plus qu'un simple gobelin.",
-    "biggestObstacle": "Le manque de ressources, les préjugés et sa propre tendance à faire exploser les choses.",
-    "overcomingObstacle": "Persévérance, ingéniosité et une bonne dose de chance.",
-    "planIfSuccessful": "Ouvrir un atelier et partager ses connaissances avec d'autres.",
-    "planIfFailed": "Retourner dans les collines et recommencer à bricoler en secret.",
-    "selfDescription": "Un gobelin intelligent, excentrique et un peu fou, avec un talent pour les explosions.",
-    "distinctiveTrait": "Des cheveux verts hérissés à cause de ses expériences électriques.",
-    "physicalDescription": "Petit, peau verte, yeux jaunes brillants, toujours couvert de suie et de graisse.",
-    "clothingPreferences": "Vêtements pratiques et résistants, avec beaucoup de poches pour ranger ses outils et ses composants.",
-    "fears": "Être incompris, retourner à la vie misérable d'un gobelin sans intérêt.",
-    "favoriteFood": "Champignons (de préférence ceux qui brillent dans le noir).",
-    "leisureActivities": "Bricoler, lire des livres sur la science et la magie, observer les réactions chimiques.",
-    "hobbies": "Créer de nouvelles inventions, collectionner des pièces détachées, faire des expériences explosives (en toute sécurité, bien sûr).",
-    "idealCompany": "Des compagnons aventureux, intelligents et tolérants, qui apprécient son génie (et ses explosions).",
-    "attitudeTowardsGroups": "Au début méfiant, mais loyal envers ceux qui gagnent sa confiance.",
-    "attitudeTowardsWorld": "Curieux et optimiste, malgré les difficultés.",
-    "attitudeTowardsPeople": "Prudent, mais espère trouver des amis et des alliés.",
-    "image": "Un gobelin vert, couvert de suie, avec des cheveux hérissés et des lunettes de protection sur le nez, tenant un étrange appareil fumant."
-}
-```
-
-Après génération de l'illustration par l'IA basée sur l'attribut "image" dans les details :
-![jdr-generator-imagen_1744109609](https://github.com/user-attachments/assets/ed1983d5-a33a-4577-aa03-af62f5b3a68d)
-
-L'IA va génèrer des stats basées sur le contexte et plusieurs attributs précédemment générés dans les détails :
-```json
-{
-    "nom": "Zik Zapboum",
-    "race": "Gobelin",
-    "classe": "Artificier",
-    "niveau": 1,
-    "alignement": "Chaotique Neutre",
-    "points_de_vie": 9,
-    "jets_de_des_de_vie": "1d8",
-    "bonus_de_maîtrise": "+2",
-    "statistiques": {
-        "force": 8,
-        "dexterite": 14,
-        "constitution": 13,
-        "intelligence": 15,
-        "sagesse": 10,
-        "charisme": 12
-    },
-    "modificateurs": {
-        "force": "-1",
-        "dexterite": "+2",
-        "constitution": "+1",
-        "intelligence": "+2",
-        "sagesse": "+0",
-        "charisme": "+1"
-    },
-    "jets_de_sauvegarde": {
-        "force": "-1",
-        "dexterite": "+2",
-        "constitution": "+1",
-        "intelligence": "+4",
-        "sagesse": "+0",
-        "charisme": "+1"
-    },
-    "compétences": {
-        "acrobaties": "+2",
-        "arcane": "+4",
-        "athletisme": "-1",
-        "discretion": "+4",
-        "histoire": "+2",
-        "investigation": "+4",
-        "manipulation_des_outils": "+4 (Outils de bricoleur)",
-        "nature": "+2",
-        "perception": "+0",
-        "persuasion": "+1"
-    },
-    "langues": [
-        "Commun",
-        "Gobelin"
-    ],
-    "équipement": [
-        "Arbalète légère",
-        "20 carreaux",
-        "Un paquet d'outils de bricoleur",
-        "Un poignard",
-        "Un sac à dos",
-        "Une couverture",
-        "Une boîte à amadou",
-        "10 torches",
-        "Une gourde",
-        "50 pieds de corde de chanvre",
-        "Un jeu d'osselets",
-        "Un costume de voyage",
-        "15 pièces d'or"
-    ],
-    "capacités_de_classe": [
-        "Infusion d'artisanat",
-        "Connaissance de l'artisanat",
-        "Outils requis : Pour lancer un sort d'artificier, vous devez posséder des outils de bricoleur ou d'artisanat dans votre main libre."
-    ],
-    "sorts_connus": [
-        "Réparation",
-        "Lumière",
-        "Trait de givre"
-    ],
-    "infusions_connues": [
-        "Arme infusée",
-        "Armure infusée"
-    ],
-    "sous_classe": "Artificier Alchimiste",
-    "capacités_de_sous_classe": [
-        "Distillateur expérimental",
-        "Bouteille alchimique"
-    ],
-    "notes": "Zik Zapboum a une affinité particulière pour les explosifs et les gadgets qui font 'boum'. Il est maladroit en société mais brillant dans son atelier."
-}
-```
-
-Les stats sont stockés sous format JSON dans la base de données car les attributs peuvent (et seront certainement) différent d'une génération à une autre, le contexte du systeme de jeu étant le principal facteur qui déterminera la génération de ce json complexe.
-
-Tout les outputs seront par ailleurs persistés sous forme de fichiers dans le dossier jdr-generator que l'utilisateur doit au préalable créer :
-![{E4A6A851-EFE2-4B6C-BD46-FE07B1DD2311}](https://github.com/user-attachments/assets/bfbbdb66-1bc2-4e4f-aec2-6d2250397d27)
-Ceci va permettre de pouvoir transporter les infos sur un autre support au besoin sans devoir utiliser l'application...
-
-Autrement l'application permet une visualisation de la génération de manière propre :
-![{B69171A6-64B3-4F66-A684-BA4110A4B42A}](https://github.com/user-attachments/assets/d1e9bf61-099f-4f05-a211-3dfd3feaa029)

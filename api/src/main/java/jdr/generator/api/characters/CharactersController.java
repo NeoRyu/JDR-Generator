@@ -60,7 +60,7 @@ public class CharactersController {
     @RequestMapping(value = {"/illustrate"}, method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     @CrossOrigin(origins = geminiHost)
-    public String illustrate(@RequestBody String imagePrompt) {
+    public byte[] illustrate(@RequestBody String imagePrompt) {
         return openaiService.illustrate(imagePrompt);
     }
 

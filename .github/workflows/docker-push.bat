@@ -8,4 +8,5 @@ REM Pousse chaque image en utilisant les noms définis dans docker-compose.yml
 docker push eli256/jdr-generator-api:latest
 docker push eli256/jdr-generator-web:latest
 docker push eli256/jdr-generator-gemini:latest
+docker push eli256/jdr-generator-openai:latest
 echo "Toutes les images ont été poussées vers le Docker Hub https://hub.docker.com/repositories/eli256 !"

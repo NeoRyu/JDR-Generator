@@ -36,7 +36,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
-@Service
+@Service("geminiService")
 @RequiredArgsConstructor
 public class GeminiService implements IGeminiGenerationConfig {
 
@@ -92,9 +92,9 @@ public class GeminiService implements IGeminiGenerationConfig {
 
     @Async
     protected CompletableFuture<Void> generateIllustrationAsync(CharacterDetailsEntity characterDetailsEntity) {
-        LOGGER.info("Démarrage asynchrone de la génération d'illustration pour le personnage {{id={}}}", characterDetailsEntity.getId());
+        LOGGER.info("Démarrage asynchrone de la génération d'illustration via Imagen (GeminiService) pour le personnage {{id={}}}", characterDetailsEntity.getId());
         try {
-            final String imgBlob = this.openaiService.illustrate(characterDetailsEntity.getImage());
+            final String imgBlob = this.illustrate(characterDetailsEntity.getImage());
             if (imgBlob != null) {
                 try {
                     JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
@@ -114,16 +114,16 @@ public class GeminiService implements IGeminiGenerationConfig {
                     LOGGER.error("Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}", characterDetailsEntity.getId(), e.getMessage());
                 }
             } else {
-                LOGGER.warn("La génération d'illustration a retourné un blob null pour le personnage {{id={}}}", characterDetailsEntity.getId());
+                LOGGER.warn("La génération d'illustration via Imagen (GeminiService) a retourné un blob null pour le personnage {{id={}}}", characterDetailsEntity.getId());
             }
         } catch (HttpClientErrorException e) {
-            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (client) pour le personnage {{id={}}} : Status={}, Body={}",
+            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (client) via Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
                     characterDetailsEntity.getId(), e.getStatusCode(), e.getResponseBodyAsString());
         } catch (HttpServerErrorException e) {
-            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (serveur) pour le personnage {{id={}}} : Status={}, Body={}",
+            LOGGER.error("Erreur lors de l'appel à l'API d'illustration (serveur) via Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
                     characterDetailsEntity.getId(), e.getStatusCode(), e.getResponseBodyAsString());
         } catch (Exception e) {
-            LOGGER.error("Erreur inattendue lors de la génération d'illustration pour le personnage {{id={}}} : {}", characterDetailsEntity.getId(), e.getMessage());
+            LOGGER.error("Erreur inattendue lors de la génération d'illustration via Imagen (GeminiService) pour le personnage {{id={}}} : {}", characterDetailsEntity.getId(), e.getMessage());
         }
         return CompletableFuture.completedFuture(null);
     }
@@ -138,15 +138,15 @@ public class GeminiService implements IGeminiGenerationConfig {
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
-            LOGGER.error("API request failed with status code: {}", response.getStatusCode());
-            throw new RuntimeException("API request failed");
+            LOGGER.error("API Gemini /generate request failed with status code: {}", response.getStatusCode());
+            throw new RuntimeException("API Gemini /generate request failed");
         }
 
         CharacterDetailsModel characterDetailsModel;
         CharacterDetailsEntity characterDetailsEntity;
 
         try {
-            // Nettoyage de la réponse JSON
+            // Nettoyage spécifique de la réponse Gemini (VERSION FONCTIONNELLE)
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(response.getBody());
             String innerJsonString = jsonNode.get("response").asText()
@@ -155,7 +155,6 @@ public class GeminiService implements IGeminiGenerationConfig {
                     .replace("\\t", "")
                     .replace("\\", "");
             innerJsonString = innerJsonString.substring(1, innerJsonString.length() - 1);
-
 
             CharacterContextModel characterContextModel = this.characterContextService.createCharacterContextModel(data);
             final CharacterContextEntity characterContextEntity = characterContextService.save(
@@ -175,35 +174,35 @@ public class GeminiService implements IGeminiGenerationConfig {
             LOGGER.info("Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
                     characterDetailsEntity.getId(), characterDetailsModel.name, characterContextModel.promptGender, characterContextEntity.getId());
 
-            // Lancement asynchrone de la génération de l'illustration
-            generateIllustrationAsync(characterDetailsEntity);
+            // Lancement asynchrone de la génération de l'illustration via OpenaiService
+            this.openaiService.generateIllustrationAsync(characterDetailsEntity);
 
             String statsJson = this.stats(characterDetailsEntity.getId());
-            LOGGER.info("Stats JSON: {}", statsJson);
+            LOGGER.info("Stats JSON generated by GeminiService: {}", statsJson);
             try {
-                String cleanedJson = cleanJsonString(statsJson);
-                LOGGER.info("Cleaned JSON: {}", cleanedJson);
+                String cleanedJson = cleanJsonString(statsJson); // Utilisation de la méthode cleanJsonString (version fonctionnelle)
+                LOGGER.info("Cleaned Stats JSON: {}", cleanedJson);
                 this.saveCharacterJsonData(characterDetailsEntity.getId(), cleanedJson);
-                LOGGER.info("Character JSON data saved successfully");
+                LOGGER.info("Character JSON stats data saved successfully");
             } catch (JsonProcessingException e) {
-                LOGGER.error("Erreur lors de l'analyse du JSON stats : {}", e.getMessage());
+                LOGGER.error("Erreur lors de l'analyse du JSON stats généré par GeminiService : {}", e.getMessage());
                 this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJson.isEmpty() ? "{}" : statsJson);
-                LOGGER.warn("Character JSON data saved with JSON due to parsing error.");
+                LOGGER.warn("Character JSON stats data saved with raw JSON due to parsing error.");
             }
 
-            // FINALLY WE RETURN CHARACTER DETAILS
             ScalaMessage.main(new String[]{});
 
             return characterDetailsModel;
         } catch (JsonProcessingException e) {
-            LOGGER.error("Error parsing JSON response: {}", e.getMessage());
+            LOGGER.error("Error parsing JSON response from Gemini: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
 
+
     @Override
     public String illustrate(String data) {
-        final String apiUrl = hostApiIA + "/illustrate";
+        final String apiUrl = hostApiIA + "illustrate";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -251,11 +250,11 @@ public class GeminiService implements IGeminiGenerationConfig {
         ResponseEntity<String> response = restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
         if (response.getStatusCode() != HttpStatus.OK) {
-            LOGGER.error("API stats request failed with status code: {}", response.getStatusCode());
-            throw new RuntimeException("API stats request failed");
+            LOGGER.error("API Gemini /stats request failed with status code: {}", response.getStatusCode());
+            throw new RuntimeException("API Gemini /stats request failed");
         }
 
-        LOGGER.info("Statistiques API response: {}", response.getBody());
+        LOGGER.info("Statistiques API response (from Gemini): {}", response.getBody());
         return response.getBody();
     }
 
