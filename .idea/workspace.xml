@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="AnalysisUIOptions">
-    <option name="CUSTOM_SCOPE_NAME" value="All Places" />
-  </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Qodana + tests Scala&#10;- GITHUB : Ajout d'un CI/CD Qodana permettant de générer des rapports de sécurité&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/PythonScriptGeneratorExecutor.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/ScalaMessage.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarConso.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/CarDist.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/ScalaTests.scala" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tests/ScalaTests.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/IntSet.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaDate.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/scala/jdr/generator/api/scala/tools/ScalaRational.scala" beforeDir="false" />
     </list>
-    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
-      <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
-    </list>
+    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,8 +28,9 @@
       <list>
         <option value="Interface" />
         <option value="Kotlin Class" />
-        <option value="Class" />
+        <option value="Scala Class" />
         <option value="Scala Worksheet" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -35,6 +40,11 @@
         <option value="Coupez Frédéric &lt;coupez.frederic@gmail.com&gt;" />
         <option value="NeoRyu &lt;coupez.frederic@gmail.com&gt;" />
       </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="tests" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="SIGN_OFF_COMMIT" value="true" />
@@ -59,7 +69,9 @@
   &quot;isMigrated&quot;: true
 }</component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Security Analysis" />
+    <option name="proportion" value="0.33432615" />
+    <option name="selectedTabId" value="CurrentFile" />
+    <option name="showPreview" value="true" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="2" />
@@ -74,64 +86,81 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.CarTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Honda.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ScalaTests.executor&quot;: &quot;Run&quot;,
-    &quot;Application.jdr.generator.api.scala.tests.ScalaTests.executor&quot;: &quot;Run&quot;,
-    &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.build (API).executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tests&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.build (1).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build.executor&quot;: &quot;Run&quot;,
-    &quot;npm.build2.executor&quot;: &quot;Run&quot;,
-    &quot;npm.clean (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.clean.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.qodana&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Car.executor": "Run",
+    "Application.CarTest.executor": "Run",
+    "Application.CitroenC6.executor": "Run",
+    "Application.Honda.executor": "Run",
+    "Application.PythonScriptExecutor.executor": "Run",
+    "Application.PythonScriptExecutorWithEngine.executor": "Run",
+    "Application.PythonScriptGeneratorExecutor.executor": "Run",
+    "Application.ScalaTests.executor": "Run",
+    "Application.Voiture.executor": "Run",
+    "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
+    "Application.run (API).executor": "Run",
+    "Application.start (API).executor": "Run",
+    "Batch.docker-compose.executor": "Run",
+    "Batch.docker-debug.executor": "Run",
+    "Batch.docker-push.executor": "Run",
+    "Batch.docker-restart.executor": "Run",
+    "Docker.workflows: Compose Deployment.executor": "Run",
+    "Maven.api [clean,install].executor": "Run",
+    "Maven.api [clean,package,install].executor": "Run",
+    "Maven.api [clean].executor": "Run",
+    "Maven.build (API).executor": "Run",
+    "Python.m0v.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
+    "Shell Script.Docker Build API.executor": "Run",
+    "Shell Script.Docker Build Network.executor": "Run",
+    "Shell Script.Docker Run All.executor": "Run",
+    "Shell Script.Docker Stop All.executor": "Run",
+    "Spring Boot.ApiApplication.executor": "Run",
+    "git-widget-placeholder": "#4 on Merging aws",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/openai",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "npm.build (1).executor": "Run",
+    "npm.build (GEMINI).executor": "Run",
+    "npm.build (OPENAI).executor": "Run",
+    "npm.build (WEB).executor": "Run",
+    "npm.build.executor": "Run",
+    "npm.build2.executor": "Run",
+    "npm.clean (GEMINI).executor": "Run",
+    "npm.clean (OPENAI).executor": "Run",
+    "npm.clean.executor": "Run",
+    "npm.start (GEMINI).executor": "Run",
+    "npm.start (WEB).executor": "Run",
+    "npm.start.executor": "Run",
+    "npm.start: dev (WEB).executor": "Run",
+    "npm.start: dev.executor": "Run",
+    "npm.start:dev.executor": "Run",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\openai\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="QodanaCIConfigService">
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
@@ -142,22 +171,6 @@
     <option name="linkedProjectName" value="JDR-Generator" />
     <option name="organizationId" value="p9oL4" />
     <option name="userId" value="b81m0" />
-  </component>
-  <component name="QodanaHighlightedReportService">
-    <option name="cloudReportPersistedInfo">
-      <CloudReportPersistedInfo>
-        <option name="projectId" value="7x1LP" />
-        <option name="reportId" value="lNlMj" />
-      </CloudReportPersistedInfo>
-    </option>
-  </component>
-  <component name="QodanaIsSelectedPersistenceService">
-    <option name="selectedOrLoading" value="true" />
-  </component>
-  <component name="QodanaReportsService">
-    <option name="descriptions">
-      <ReportDescription path="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\qodana.sarif.json" reportGuid="284d42cb-f02c-4b03-87ef-d92fc30f20c3" reportId="JDR-Generator/qodana/2025-04-10" />
-    </option>
   </component>
   <component name="QodanaSettings">
     <option name="autoLoadCloudReport" value="true" />
@@ -173,28 +186,28 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\openai" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala\tools" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web\src\components\model" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini\src\controllers" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\docker" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala\tests" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources\python" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\web" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="jdr.generator.api.kotlin" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="jdr.generator.api.scala.tools" />
       <recent name="jdr.generator" />
       <recent name="jdr.generator.api.characters.details" />
       <recent name="jdr.generator.api.characters.context" />
       <recent name="jdr.generator.api.config" />
-      <recent name="jdr.generator.api.characters" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="jdr.generator.api.scala" />
@@ -207,12 +220,65 @@
       <set>
         <option value="Application" />
         <option value="MavenRunConfiguration" />
+        <option value="ShConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
         <option value="js.build_tools.npm" />
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="npm.start (GEMINI)">
+  <component name="RunManager" selected="Batch.docker-push">
+    <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
+      <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
+      <module name="api" />
+      <option name="VM_PARAMETERS" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-compose" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-compose.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-debug" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-debug.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-push" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-push.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-restart" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="./.docker" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-restart.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="FantasyGenerator" />
       <method v="2">
@@ -308,6 +374,36 @@
       <option name="launchJavascriptDebuger" value="false" />
       <method v="2" />
     </configuration>
+    <configuration name="Docker - COMPLETE RESTART" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/.docker/docker-restart.bat" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+      <option name="INTERPRETER_PATH" value="$PROJECT_DIR$/../../../../Windows/System32/WindowsPowerShell/v1.0/powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="Docker Hub PUSH" type="ShConfigurationType">
+      <option name="SCRIPT_TEXT" value="" />
+      <option name="INDEPENDENT_SCRIPT_PATH" value="false" />
+      <option name="SCRIPT_PATH" value="$PROJECT_DIR$/.docker/docker-push.bat" />
+      <option name="SCRIPT_OPTIONS" value="" />
+      <option name="INDEPENDENT_SCRIPT_WORKING_DIRECTORY" value="true" />
+      <option name="SCRIPT_WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="INDEPENDENT_INTERPRETER_PATH" value="false" />
+      <option name="INTERPRETER_PATH" value="$PROJECT_DIR$/../../../../Windows/System32/WindowsPowerShell/v1.0/powershell.exe" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="EXECUTE_IN_TERMINAL" value="true" />
+      <option name="EXECUTE_SCRIPT_FILE" value="true" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <configuration name="ApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" folderName="API" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="api" />
@@ -329,17 +425,50 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
+    <configuration name="workflows: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
+      <deployment type="docker-compose.yml">
+        <settings>
+          <option name="sourceFilePath" value=".github/workflows/docker-compose.yml" />
+        </settings>
+      </deployment>
+      <method v="2" />
+    </configuration>
     <list>
       <item itemvalue="Application.start (API)" />
+      <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
+      <item itemvalue="Batch.docker-compose" />
+      <item itemvalue="Batch.docker-debug" />
+      <item itemvalue="Batch.docker-push" />
+      <item itemvalue="Batch.docker-restart" />
+      <item itemvalue="Docker.workflows: Compose Deployment" />
       <item itemvalue="Maven.build (API)" />
+      <item itemvalue="Node.js.bin\www" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
+      <item itemvalue="npm.clean (OPENAI)" />
+      <item itemvalue="npm.build (OPENAI)" />
+      <item itemvalue="npm.start (OPENAI)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start (WEB)" />
+      <item itemvalue="Shell Script.docker-build" />
+      <item itemvalue="Shell Script.Docker Build Network" />
+      <item itemvalue="Shell Script.Docker Run All" />
+      <item itemvalue="Shell Script.Docker Stop All" />
+      <item itemvalue="Shell Script.Docker - COMPLETE RESTART" />
+      <item itemvalue="Shell Script.Docker Hub PUSH" />
       <item itemvalue="Spring Boot.ApiApplication" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Batch.docker-push" />
+        <item itemvalue="Batch.docker-debug" />
+        <item itemvalue="Batch.docker-compose" />
+        <item itemvalue="Batch.docker-restart" />
+        <item itemvalue="Docker.workflows: Compose Deployment" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SeleniumInternalSettingsState">
     <option name="lastUrl" value="http://localhost:3000/generate" />
@@ -391,120 +520,22 @@
       <workItem from="1744184387074" duration="2975000" />
       <workItem from="1744188612133" duration="10454000" />
       <workItem from="1744203243756" duration="5939000" />
-      <workItem from="1744266610228" duration="6626000" />
-      <workItem from="1744273683901" duration="940000" />
-    </task>
-    <task id="LOCAL-00015" summary="INITIAL COMMIT : &#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [----] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742477158840</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1742477158840</updated>
-    </task>
-    <task id="LOCAL-00016" summary="[WIP] JDR-Generator : Cleaning and reorder JSON attributes&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742483279010</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1742483279010</updated>
-    </task>
-    <task id="LOCAL-00017" summary="[WIP] JDR-Generator : Add a JAVA API endpoint, requires creating a MySQL Database&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742553191980</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1742553191980</updated>
-    </task>
-    <task id="LOCAL-00018" summary="[WIP] JDR-Generator : WIP MySQL Database connection...&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- TODO [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- TODO [3333] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742567370009</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1742567370009</updated>
-    </task>
-    <task id="LOCAL-00019" summary="[WIP] JDR-Generator : WEB &gt; API &gt; GEMINI &gt; API (&gt; WEB)&#10;-&gt; TODO : Malformed JSON response from GEMINI... Middleware API need repair that before map json to POJO object to save in MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742813657174</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1742813657174</updated>
-    </task>
-    <task id="LOCAL-00020" summary="[WIP] JDR-Generator : Fixed malformed JSON response get from GEMINI and map to POJO&#10;-&gt; TODO : Save POJO object into MySQL database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742817730813</created>
-      <option name="number" value="00020" />
-      <option name="presentableId" value="LOCAL-00020" />
-      <option name="project" value="LOCAL" />
-      <updated>1742817730813</updated>
-    </task>
-    <task id="LOCAL-00021" summary="[WIP] JDR-Generator : Fixed WEB context prompt + adding prompt gender + fix flyway init sql script&#10;-&gt; TODO : Save response into database.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un contexte (TODO : à transmettre à Gemini) pour affichage des personnages générés par IA.&#10;- WIP [3000] : Création d'une API permettant la communication avec les IA de Google, stockage du résultat JSON sous forme de fichier txt dans un folder downloads de windows, et de l'image générée par Gemini via Imagen3 dans ce meme folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL ou d'une DB embarquée pour stocker les résultats générés.&#10;- WIP [8080] : Création d'un middleware / API afin de relier la communication entre WEB, GEMINI et la DB.">
-      <option name="closed" value="true" />
-      <created>1742822740579</created>
-      <option name="number" value="00021" />
-      <option name="presentableId" value="LOCAL-00021" />
-      <option name="project" value="LOCAL" />
-      <updated>1742822740579</updated>
-    </task>
-    <task id="LOCAL-00022" summary="[WIP] JDR-Generator : Refactored and fixed persistance IA response and context into database.&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742828462691</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1742828462691</updated>
-    </task>
-    <task id="LOCAL-00023" summary="[WIP] JDR-Generator : FIX first character_context inserted&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742828730271</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1742828730271</updated>
-    </task>
-    <task id="LOCAL-00024" summary="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742829907913</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1742829907913</updated>
-    </task>
-    <task id="LOCAL-00025" summary="[WIP] JDR-Generator : ...&#10;- TODO : générer une illustration dans la foulée et la stocker dans un BLOB en db&#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742899052002</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1742899052002</updated>
-    </task>
-    <task id="LOCAL-00026" summary="[WIP] JDR-Generator : Génération et stockage en db sous forme de blob d'une illustration pour le personnage generate &#10;- TODO : fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- WIP [5173] : Prémisse d'interface WEB permettant de sélectionner un context pour affichage (TODO) des personnages générés par IA.&#10;- OK [3000] : API permettant la communication avec les IA de Google + stockage du résultat JSON sous forme de fichier txt dans le folder downloads de l'utilisateur, ainsi que de l'image générée par Gemini via Imagen3 dans ce même folder.&#10;- WIP [3306] : Mise en place d'une DB MySQL.&#10;- WIP [8080] : Création d'une API middleware reliant les modules WEB (WIP), GEMINI (OK) et la base de données (WIP).">
-      <option name="closed" value="true" />
-      <created>1742905890904</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1742905890904</updated>
-    </task>
-    <task id="LOCAL-00027" summary="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1742907210655</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1742907210655</updated>
-    </task>
-    <task id="LOCAL-00028" summary="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1742907898757</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1742907898757</updated>
+      <workItem from="1744266610228" duration="5718000" />
+      <workItem from="1744292630928" duration="1200000" />
+      <workItem from="1744352461379" duration="16926000" />
+      <workItem from="1744381776127" duration="2749000" />
+      <workItem from="1744611225887" duration="7696000" />
+      <workItem from="1744700308173" duration="1690000" />
+      <workItem from="1744703751900" duration="5609000" />
+      <workItem from="1744716699906" duration="7582000" />
+      <workItem from="1744776683745" duration="1997000" />
+      <workItem from="1744869853411" duration="7309000" />
+      <workItem from="1744956435524" duration="4633000" />
+      <workItem from="1745302793928" duration="25107000" />
+      <workItem from="1745568080536" duration="9526000" />
+      <workItem from="1745589504208" duration="5911000" />
+      <workItem from="1745821456866" duration="35783000" />
+      <workItem from="1745914598806" duration="17794000" />
     </task>
     <task id="LOCAL-00029" summary="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -778,15 +809,127 @@
       <option name="project" value="LOCAL" />
       <updated>1744272140965</updated>
     </task>
-    <task id="LOCAL-00063" summary="[OK] JDR-Generator : Qodana + tests Scala&#10;- GITHUB : Ajout d'un CI/CD Qodana permettant de générer des rapports de sécurité&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+    <task id="LOCAL-00063" summary="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
-      <created>1744272637952</created>
+      <created>1744276061167</created>
       <option name="number" value="00063" />
       <option name="presentableId" value="LOCAL-00063" />
       <option name="project" value="LOCAL" />
-      <updated>1744272637952</updated>
+      <updated>1744276061167</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744285901654</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1744285901654</updated>
+    </task>
+    <task id="LOCAL-00065" summary="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744363432090</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1744363432091</updated>
+    </task>
+    <task id="LOCAL-00066" summary="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744364718951</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1744364718951</updated>
+    </task>
+    <task id="LOCAL-00067" summary="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744364935511</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1744364935511</updated>
+    </task>
+    <task id="LOCAL-00068" summary="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744365151562</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1744365151562</updated>
+    </task>
+    <task id="LOCAL-00069" summary="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744365265582</created>
+      <option name="number" value="00069" />
+      <option name="presentableId" value="LOCAL-00069" />
+      <option name="project" value="LOCAL" />
+      <updated>1744365265582</updated>
+    </task>
+    <task id="LOCAL-00070" summary="[PYTHON] JDR-Generator : Simul-clic&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744701347797</created>
+      <option name="number" value="00070" />
+      <option name="presentableId" value="LOCAL-00070" />
+      <option name="project" value="LOCAL" />
+      <updated>1744701347798</updated>
+    </task>
+    <task id="LOCAL-00071" summary="[SCALA] JDR-Generator&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1744776747719</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1744776747720</updated>
+    </task>
+    <task id="LOCAL-00072" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745332560079</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1745332560079</updated>
+    </task>
+    <task id="LOCAL-00073" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745567299843</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1745567299843</updated>
+    </task>
+    <task id="LOCAL-00074" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745827153723</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1745827153723</updated>
+    </task>
+    <task id="LOCAL-00075" summary="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745852241328</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1745852241328</updated>
+    </task>
+    <task id="LOCAL-00076" summary="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on tente de passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745916321449</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1745916321450</updated>
+    </task>
+    <task id="LOCAL-00077" summary="[DOCKER] JDR-Generator : WIP :: erreur 400 avec Dall-E d'OpenAI...&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;clear&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;clear&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;clear&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;// POWERSHELL POLICY&#10;Get-ExecutionPolicy -List&#10;Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
+      <option name="closed" value="true" />
+      <created>1745920301105</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1745920301105</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -806,16 +949,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view list of character generated.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Fix frontend modal console errors ; upgrade UX ; get and view details of character a generated.&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Fix user update character_details from ux front to database !&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Loading...&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[WIP] JDR-Generator : Ajout d'unFavicon, restructuration de la page UPDATE, externalisation des components buttons afin d'alléger la page home.tsx&#10;- TODO WIP : Delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Fix delete button&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : WIP : Génération de statistiques, compétences, et autres informations requises par le système de jeu en prenant en compte le contexte saisi par l'utilisateur et quelques infos background générés préalablement afin de permettre a terme de remplir une fiche PJ automatiquement...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -830,12 +963,25 @@
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperators permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <MESSAGE value="[OK] JDR-Generator : Qodana + tests Scala&#10;- GITHUB : Ajout d'un CI/CD Qodana permettant de générer des rapports de sécurité&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Qodana + tests Scala&#10;- GITHUB : Ajout d'un CI/CD Qodana permettant de générer des rapports de sécurité&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[TESTS] JDR-Generator : Apprentissage développement SCALA&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[SCALA] JDR-Generator : TypescriptOperators object &amp; Ord trait descriptions&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[PYTHON] JDR-Generator : Simul-clic&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[SCALA] JDR-Generator&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on tente de passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[DOCKER] JDR-Generator : WIP :: erreur 400 avec Dall-E d'OpenAI...&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;clear&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;clear&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;clear&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;// POWERSHELL POLICY&#10;Get-ExecutionPolicy -List&#10;Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
+    <MESSAGE value="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
+    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/JDR_Generator$m0v.coverage" NAME="m0v Coverage Results" MODIFIED="1744778247300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
   </component>
 </project>

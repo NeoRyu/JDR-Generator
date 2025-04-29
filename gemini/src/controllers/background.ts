@@ -23,7 +23,7 @@ const model: GenerativeModel = genAI.getGenerativeModel({
 const conversationContext: any[] = [];
 
 // Les prompts qui seront envoyés par la suite pour générer une réponse attendue
-const basePrompt = `You are an expert in RPGs, with extensive knowledge of various gaming systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be informed about the game system, the character's race, class, and perhaps some description to inspire you. Your response must not rely on previous exchanges, must be in JSON format only, with the following data filled in, and the texts need to be in French (fr-FR), except for the name:
+const basePrompt = `You are an expert in RPGs, with extensive knowledge of various gaming systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be informed about the game system, the character's race, class, and perhaps some description to inspire you. Your response must not rely on previous exchanges, must be in JSON format only, with the following data filled in, and the texts need to be in French (fr-FR), except for the 'image' which should be in English and the 'name' which should be appropriate for the game universe provided in the context:
         example answer:
         '''
         {
@@ -70,7 +70,7 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
             'attitudeTowardsGroups': 'Préfère l\\'action individuelle, mais respecte la force de chacun des compagnons du groupe.',
             'attitudeTowardsWorld': 'Sa vision du monde est optimiste et ouvert d'esprit.',
             'attitudeTowardsPeople': 'Amical mais prudent envers les inconnus.',
-            'image': 'Un homme grand et musclé aux cheveux bruns et aux yeux verts, équipé d'une armure légère et d'un marteau de forgereon.'
+            'image': "A tall and muscular man with short brown hair and green eyes, equipped with light armor and a blacksmith's hammer."
         }
         '''
 `;

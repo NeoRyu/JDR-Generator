@@ -3,7 +3,7 @@ CREATE TABLE `jdr_generator_db`.`character_json_data` (
   `character_details_id` INT NOT NULL,
   `json_data` JSON NOT NULL,
   `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` TIMESTAMP,
+  `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   CONSTRAINT `fk_character_details_json_data`
       FOREIGN KEY (`character_details_id`)
