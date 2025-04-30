@@ -12,6 +12,8 @@ jobs:
       api_image: jdr-generator-api:latest
       web_image: jdr-generator-web:latest
       gemini_image: jdr-generator-gemini:latest
+      openai_image: jdr-generator-openai:latest
+
 
     steps:
       - name: Checkout code
@@ -59,6 +61,18 @@ jobs:
       # Push Gemini image to Docker Hub
       - name: Push Gemini image
         run: docker push ${{ steps.build-gemini.outputs.image }}
+
+      # Build OpenAI image
+      - name: Build OpenAI image
+        id: build-openai
+        working-directory: ./openai
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest .
+        outputs:
+         image: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+
+      # Push OpenAi image to Docker Hub
+      - name: Push OpenAI image
+        run: docker push ${{ steps.build-openai.outputs.image }}
 
   deploy:
     needs: build-and-push

@@ -4,8 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
-    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
+      <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,7 +36,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="tests" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -91,6 +96,7 @@
     "Application.start (API).executor": "Run",
     "Batch.docker-compose.executor": "Run",
     "Batch.docker-debug.executor": "Run",
+    "Batch.docker-push (1).executor": "Run",
     "Batch.docker-push.executor": "Run",
     "Batch.docker-restart.executor": "Run",
     "Docker.workflows: Compose Deployment.executor": "Run",
@@ -111,7 +117,7 @@
     "Shell Script.Docker Run All.executor": "Run",
     "Shell Script.Docker Stop All.executor": "Run",
     "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "aws",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
     "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/openai",
@@ -140,7 +146,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\openai\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   },
   "keyToStringList": {
@@ -214,22 +220,11 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Batch.docker-push">
+  <component name="RunManager" selected="Batch.docker-push (1)">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
       <option name="VM_PARAMETERS" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="docker-compose" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="JDR-Generator" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="./.docker" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="docker-compose.bat" />
-      <option name="PARAMETERS" value="" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -240,6 +235,17 @@
       <option name="WORKING_DIRECTORY" value="./.docker" />
       <option name="PARENT_ENVS" value="true" />
       <option name="SCRIPT_NAME" value="docker-debug.bat" />
+      <option name="PARAMETERS" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="docker-push (1)" type="BatchConfigurationType" factoryName="Batch" temporary="true">
+      <module name="JDR-Generator" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SCRIPT_NAME" value="docker-push.bat" />
       <option name="PARAMETERS" value="" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -425,7 +431,7 @@
       <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
-      <item itemvalue="Batch.docker-compose" />
+      <item itemvalue="Batch.docker-push (1)" />
       <item itemvalue="Batch.docker-debug" />
       <item itemvalue="Batch.docker-push" />
       <item itemvalue="Batch.docker-restart" />
@@ -450,11 +456,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Batch.docker-push (1)" />
         <item itemvalue="Docker.workflows: Compose Deployment" />
         <item itemvalue="Batch.docker-restart" />
         <item itemvalue="Batch.docker-push" />
         <item itemvalue="Batch.docker-debug" />
-        <item itemvalue="Batch.docker-compose" />
       </list>
     </recent_temporary>
   </component>
@@ -524,14 +530,6 @@
       <workItem from="1745589504208" duration="5911000" />
       <workItem from="1745821456866" duration="35783000" />
       <workItem from="1745914598806" duration="17794000" />
-    </task>
-    <task id="LOCAL-00029" summary="[WIP] JDR-Generator : Fix ux edit modal save button&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1742987762900</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1742987762900</updated>
     </task>
     <task id="LOCAL-00030" summary="[WIP] JDR-Generator : Fix user update character_details from ux front to database !&#10;- TODO : get blob png to integrate illustration in details modal.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -917,7 +915,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745920301105</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <option name="closed" value="true" />
+      <created>1745936538851</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1745936538851</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -937,7 +943,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[OK] JDR-Generator : Fix delete button&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[WIP] JDR-Generator : WIP : Génération de statistiques, compétences, et autres informations requises par le système de jeu en prenant en compte le contexte saisi par l'utilisateur et quelques infos background générés préalablement afin de permettre a terme de remplir une fiche PJ automatiquement...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -962,7 +967,8 @@
     <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on tente de passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[DOCKER] JDR-Generator : WIP :: erreur 400 avec Dall-E d'OpenAI...&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;clear&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;clear&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;clear&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;// POWERSHELL POLICY&#10;Get-ExecutionPolicy -List&#10;Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
+    <MESSAGE value="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
+    <option name="LAST_COMMIT_MESSAGE" value="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
