@@ -32,14 +32,14 @@ Ce module est une application Node.js/Express/TypeScript conçue pour fournir un
    * Vous pouvez également configurer ces variables dans votre fichier `docker-compose.yml` si vous utilisez Docker.
    * Ajoutez les variables suivantes au fichier `.env` :
 
-      * `PORT`: Le port sur lequel le serveur Express écoutera (par exemple, 3000).
+      * `PORT`: Le port sur lequel le serveur Express écoutera (par exemple, 3002).
       * `API_KEY`: Votre clé API OpenAI secrète.
       * `DOWNLOAD_FOLDER`: Le nom du sous-dossier dans `/app/downloads/` où les images générées seront enregistrées à l'intérieur du conteneur Docker (doit correspondre à la configuration de votre service API et aux montages de volume, si applicable). Si vous n'utilisez pas Docker, ce sera le chemin relatif dans votre système de fichiers.
 
    * Exemple de fichier `.env` :
 
        ```
-       PORT=3000
+       PORT=3002
        API_KEY=sk-votre-cle-api-openai
        DOWNLOAD_FOLDER=jdr-generator
        ```
@@ -73,7 +73,7 @@ Ce module est une application Node.js/Express/TypeScript conçue pour fournir un
        npm run start # ou node dist/index.js (si vous avez compilé manuellement)
        ```
 
-   * Le serveur écoutera sur le port spécifié dans la variable d'environnement `PORT` (par défaut, 3000).
+   * Le serveur écoutera sur le port spécifié dans la variable d'environnement `PORT` (par défaut, 3002).
 
 ### API Endpoint
 
@@ -81,7 +81,7 @@ Ce module est une application Node.js/Express/TypeScript conçue pour fournir un
 
    * **Description :** Génère une image à partir d'une invite textuelle.
    * **Méthode :** `POST`
-   * **URL :** `http://localhost:{PORT}/illustrate` (Remplacez `{PORT}` par le port configuré, par exemple, `http://localhost:3000/illustrate`)
+   * **URL :** `http://localhost:{PORT}/illustrate` (Remplacez `{PORT}` par le port configuré, par exemple, `http://localhost:3002/illustrate`)
    * **Corps de la requête :**
 
       * **Format :** JSON
@@ -148,13 +148,14 @@ CMD [ "npm", "start" ]
 ### Construction de l'image Docker
 
 ```bash
-docker build -t jdr-generator-openai .
+cd C:\<projects_repositories_path>\JDR-Generator\api
+docker build -t jdr-generator-openai -f Dockerfile .
 ```
 ### Exécution du conteneur Docker
 
 ```bash
-docker run -p 3000:3000 \
-           -e PORT=3000 \
+docker run -p 3002:3002 \
+           -e PORT=3002 \
            -e API_KEY=sk-votre-cle-api-openai \
            -e DOWNLOAD_FOLDER=jdr-generator \
            -v /chemin/vers/vos/telechargements:/app/downloads \
@@ -162,7 +163,7 @@ docker run -p 3000:3000 \
 ```
 
 * Remplacez `/chemin/vers/vos/telechargements` par le chemin réel sur votre machine hôte où vous souhaitez enregistrer les images.
-* Assurez-vous que le port (`3000` dans cet exemple) correspond à la variable `PORT` et aux ports exposés.
+* Assurez-vous que le port (`3002` dans cet exemple) correspond à la variable `PORT` et aux ports exposés.
 
 ### Docker Compose (Si vous utilisez Docker Compose au niveau du monorepo)
 
@@ -175,9 +176,9 @@ services:
       context: ./openai
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3002:3002"
     environment:
-      PORT: 3000
+      PORT: 3002
       API_KEY: sk-votre-cle-api-openai
       DOWNLOAD_FOLDER: jdr-generator
     volumes:

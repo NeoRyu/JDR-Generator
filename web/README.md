@@ -55,7 +55,7 @@ Ce module contient l'interface utilisateur web de JDR-Generator, développée av
     * Exemple :
 
         ```
-        REACT_APP_API_URL=http://localhost:3000  # URL de l'API NestJS
+        REACT_APP_API_URL=http://localhost:3001  # URL de l'API NestJS
         ```
 
     * **Note :** Les variables d'environnement dans React doivent généralement être préfixées par `REACT_APP_`.
@@ -68,7 +68,7 @@ Ce module contient l'interface utilisateur web de JDR-Generator, développée av
     npm run start:dev
     ```
 
-    * Cette commande lance l'application en mode développement avec rechargement automatique des modifications. Vous pourrez accéder à l'application dans votre navigateur à l'adresse indiquée (généralement `http://localhost:3000`).
+    * Cette commande lance l'application en mode développement avec rechargement automatique des modifications. Vous pourrez accéder à l'application dans votre navigateur à l'adresse indiquée (ex `http://localhost:3001`).
 
     * Si vous souhaitez simplement démarrer l'application en mode production (après avoir construit le projet), vous pouvez utiliser :
 
@@ -306,7 +306,55 @@ Voici une description détaillée des interactions :
             return { updateCharacter };
         };
         ```
-      
+
+## Docker (Optionnel - Exécution Locale)
+
+### Construction de l'image Docker
+
+1.  **Construire l'image Docker locale :**
+
+    ```bash
+        cd C:\<projects_repositories_path>\JDR-Generator\web
+        docker build -t jdr-generator -f Dockerfile .
+    ```
+
+    (Assurez-vous d'être dans le répertoire `web`.)
+
+### Exécution du Conteneur Docker Local
+
+1.  **Exécuter le conteneur Docker local :**
+
+    ```bash
+        docker run -p 3004:3003 jdr-generator
+    ```
+
+    (Expose l'application web sur le port 3004 de votre machine hôte, mappé au port 3003 du conteneur.)
+
+### Docker Compose Local
+
+1.  **S'assurer que le service `web-container` est correctement configuré dans `docker-compose.local.yml` :**
+
+    ```yaml
+        services:
+            web-container:
+                build:
+                    context: ./web
+                    dockerfile: Dockerfile
+                ports:
+                    - "3001:3001"
+                environment:
+                    VITE_API_URL: http://api-container:8081 # Exemple pour communiquer avec l'API Java via Docker Network 
+                    VITE_NEST_API_URL: http://gemini-container:3001 # Exemple pour communiquer avec l'API Gemini via Docker Network
+                depends_on:
+                    - api-container
+    ```
+
+2.  **Démarrer le service via Docker Compose local :**
+
+    ```bash
+        docker-compose -f docker-compose.local.yml up -d web-container
+    ```
+    
 ## Licence
 ```markdow
 Apache License

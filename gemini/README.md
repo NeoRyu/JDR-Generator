@@ -107,7 +107,7 @@ Voici une version plus détaillée basée sur votre exemple :
     * **Requête :**
 
         * **Méthode :** `POST`
-        * **URL :** `http://localhost:3000/generate`
+        * **URL :** `http://localhost:3001/generate`
         * **Corps (raw/JSON) :**
 
             ```json
@@ -132,7 +132,7 @@ Voici une version plus détaillée basée sur votre exemple :
     * **Requête :**
 
         * **Méthode :** `POST`
-        * **URL :** `http://localhost:3000/illustrate`
+        * **URL :** `http://localhost:3002/illustrate`
         * **Corps (raw/JSON) :**
 
             ```json
@@ -151,7 +151,7 @@ Voici une version plus détaillée basée sur votre exemple :
     * **Requête :**
 
         * **Méthode :** `POST`
-        * **URL :** `http://localhost:3000/stats`
+        * **URL :** `http://localhost:3001/stats`
         * **Corps (raw/JSON) :**
 
             ```json
@@ -170,55 +170,69 @@ Voici une version plus détaillée basée sur votre exemple :
 * Les données générées (JSON et images) sont enregistrées sous forme de fichiers dans le dossier de téléchargement configuré (`DOWNLOAD_FOLDER` dans le fichier `.env`).
 * Par défaut, ce dossier est `jdr-generator` dans le dossier de téléchargements de l'utilisateur.
 
-## Docker (Optionnel)
-
-(Si vous souhaitez ajouter des instructions pour l'utilisation de Docker avec cette API, vous pouvez les inclure ici. Cela pourrait inclure la construction d'une image Docker, l'exécution du conteneur, et éventuellement un exemple de `docker-compose.yml` si vous utilisez Docker Compose au niveau du monorepo.)
-
-Exemple :
+## Docker (Optionnel - Exécution Locale)
 
 ### Construction de l'image Docker
 
-1.  **Construire l'image Docker :**
+1.  **Construire l'image Docker locale :**
 
     ```bash
-    docker build -t jdr-generator-gemini .
+    cd C:\<projects_repositories_path>\JDR-Generator\openai
+    docker build -t jdr-generator-openai -f Dockerfile .
     ```
 
-    (Assurez-vous d'être dans le répertoire `gemini` ou spécifiez le chemin du `Dockerfile`.)
+    (Assurez-vous d'être dans le répertoire `openai`.)
 
-### Exécution du Conteneur Docker
+### Exécution du Conteneur Docker Local
 
-1.  **Exécuter le conteneur :**
+1.  **Exécuter le conteneur Docker local :**
 
     ```bash
-    docker run -p 3000:3000 -e GOOGLE_API_KEY=YOUR_GEMINI_API_KEY jdr-generator-gemini
+    docker run -p 3001:3001 \
+               -e PORT=3001 \
+               -e API_KEY=sk-votre-cle-api-openai \
+               -e DOWNLOAD_FOLDER=jdr-generator \
+               -v /chemin/vers/vos/telechargements:/app/downloads \
+               jdr-generator-openai
     ```
 
-    (Expose l'API sur le port 3000. Remplacez `YOUR_GEMINI_API_KEY` par votre clé API.)
+    * Remplacez `/chemin/vers/vos/telechargements` par le chemin réel sur votre machine hôte où vous souhaitez enregistrer les images.
+    * Assurez-vous que le port (`3001` sur l'hôte mappé à `3001` dans le conteneur dans cet exemple) correspond à la variable `PORT` et aux ports exposés.
 
-### Docker Compose (Si vous utilisez Docker Compose au niveau du monorepo)
+### Docker Compose Local
 
-1.  **S'assurer que le service `gemini` est correctement configuré dans `docker-compose.yml` :**
+1.  **S'assurer que le service `openai-container` est correctement configuré dans `docker-compose.local.yml` :**
 
     ```yaml
     services:
-      gemini:
+      openai-container:
         build:
-          context: ./gemini
+          context: ./openai
           dockerfile: Dockerfile
         ports:
-          - "3000:3000"
+          - "3001:3001"
         environment:
-          GOOGLE_API_KEY: YOUR_GEMINI_API_KEY
+          PORT: 3001
+          API_KEY: sk-votre-cle-api-openai
+          DOWNLOAD_FOLDER: jdr-generator
+        volumes:
+          - /chemin/vers/vos/telechargements:/app/downloads
         # depends_on: # Si nécessaire
         #   - ...
     ```
 
-2.  **Démarrer le service :**
+2.  **Démarrer le service via Docker Compose local :**
 
     ```bash
-    docker-compose up -d gemini
+    docker-compose -f docker-compose.local.yml up -d openai-container
     ```
+
+## Sécurité
+
+* **Clé API :** Sécurisez votre clé API OpenAI. Ne l'incluez jamais directement dans votre code. Utilisez toujours des variables d'environnement.
+* **Validation :** Validez les données d'entrée (par exemple, la longueur et le format de l'invite) pour éviter les erreurs et les abus.
+* **Limitation de débit :** Envisagez d'implémenter une limitation de débit pour éviter la surcharge de l'API OpenAI et les coûts excessifs.
+
 
 ## Licence
 

@@ -21,5 +21,5 @@ RUN npm run build
 # Définit la commande pour démarrer l'application
 CMD ["node", "dist/app.js"]
 
-# Expose le port sur lequel l'API Gemini s'exécute (port 3000 selon tes informations)
-EXPOSE 3000
+# Expose le port sur lequel l'API Gemini s'exécute
+EXPOSE 3001

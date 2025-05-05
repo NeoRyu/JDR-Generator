@@ -73,6 +73,7 @@ Elle utilise une base de données MySQL pour stocker ces informations et FlywayD
     * Sinon, vous pouvez exécuter le fichier JAR créé dans le répertoire `target` :
 
         ```bash
+        cd C:\<projects_repositories_path>\JDR-Generator\api
         java -jar target/nom-de-l-application.jar
         ```
 
@@ -153,7 +154,7 @@ Exemple :
 2.  **Démarrer le service :**
 
     ```bash
-    docker-compose up -d api
+    docker-compose -f docker-compose.local.yml up -d api-container
     ```
 
 ## Licence

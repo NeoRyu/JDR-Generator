@@ -1,98 +1,113 @@
-version: '3.8' # Utilisation de la version 3 de Docker Compose
+version: '3.8'
 
 services:
+  mysql-container:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: jdr_generator_db
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
   api-container:
     image: eli256/jdr-generator-api:latest
-    build:
-      context: ../../api
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'api'
     ports:
-      - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "8080:8080"
     environment:
-      OPENAI_API_URL: http://openai-container:3000 # URL du service OpenAI dans le réseau Docker
-      GEMINI_API_URL: http://gemini-container:3000 # URL du service Gemini dans le réseau Docker
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000 # Ajout délais
-      SPRING_DATASOURCE_USERNAME: root # ATTENTION: Sécurité !
-      SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
+      GEMINI_API_URL: http://gemini-container:3001/gemini
+      OPENAI_API_URL: http://openai-container:3002/openai
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
       SPRING_JPA_HIBERNATE_DDL_AUTO: none # Flyway gère le schéma
-      # Ajout des propriétés HikariCP pour la reconnexion
-      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000 # 30 seconds
+      SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000
       SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
-      # SUPPRIMÉ: SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0
-      SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: 1800000 # 30 minutes
-    depends_on: # Indique que ce service dépend de mysql-container et attend sa santé
+      SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: 1800000
+    depends_on:
       mysql-container:
-        condition: service_healthy # Attendre que le service MySQL soit sain
-    healthcheck: # Ajout d'un healthcheck pour l'API (utile si d'autres services en dépendent)
+        condition: service_healthy
+    healthcheck:
       test: "curl -f http://localhost:8080/actuator/health || exit 1"
-      interval: 10s
-      timeout: 5s
+      interval: 30s
+      timeout: 10s
       retries: 5
-    networks:
-      - jdr-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 2g
 
   web-container:
     image: eli256/jdr-generator-web:latest
-    build:
-      context: ../../web
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'web'
-      args: # Ajout des arguments de build pour passer VITE_API_URL
-        - 'VITE_API_URL=${VITE_API_URL}'
     ports:
-      - "80:80" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "80:80"
+    environment:
+      VITE_API_URL: http://api-container:8080
     depends_on:
       api-container:
-        condition: service_healthy # Dépend du conteneur API sain
-    environment:
-      VITE_API_URL: http://api-container:8080 # URL de l'API pour le frontend
-    networks:
-      - jdr-network
-
-  gemini-container:
-    image: eli256/jdr-generator-gemini:latest
-    build:
-      context: ../../gemini
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'gemini'
-    ports:
-      - "8082:3000" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
-    environment:
-      PORT: 3000 # Variable d'environnement pour l'application Gemini
-    networks:
-      - jdr-network
-
-  openai-container:
-    image: eli256/jdr-generator-openai:latest
-    build:
-      context: ../../openai
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'openai'
-    ports:
-      - "8083:3000" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
-    environment:
-      PORT: 3000 # Variable d'environnement pour l'application OpenAI
-    networks:
-      - jdr-network
-
-  mysql-container:
-    image: mysql:5.7 # Pas de build pour l'image officielle MySQL (version 5.7)
-    ports:
-      - "3307:3306" # Mapping port hôte:port conteneur (3007 utile pour debug)
-    environment:
-      MYSQL_ROOT_PASSWORD: root # ATTENTION: Sécurité !
-      MYSQL_DATABASE: jdr_generator_db
-    volumes: # Configuration des volumes pour la persistance
-      - mysql-data:/var/lib/mysql # 'mysql-data' fait référence au volume défini ci-dessous
-    healthcheck: # Ajout d'un healthcheck pour MySQL
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
-    networks:
-      - jdr-network
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
 
-# Définition des volumes nommés pour la persistance
+  gemini-container:
+    image: eli256/jdr-generator-gemini:latest
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/gemini/healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
+  openai-container:
+    image: eli256/jdr-generator-openai:latest
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3002/openai/healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
 volumes:
-  mysql-data: # Nom du volume
-    driver: local # Type de driver pour le volume (par défaut 'local' utilise le stockage de l'hôte EC2)
-networks:
-  jdr-network: # Définition explicite du réseau
-    driver: bridge
+  mysql-data:
+    driver: local

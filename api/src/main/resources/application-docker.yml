@@ -3,6 +3,10 @@ logging:
     ROOT: INFO
     org.springboot.security: INFO
 
+# Configuration de l'URL de l'API des IA
+GEMINI_API_URL: http://gemini-container:3001/gemini
+OPENAI_API_URL: http://openai-container:3002/openai
+
 spring:
   application:
     name: api

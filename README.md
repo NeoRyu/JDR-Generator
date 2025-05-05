@@ -48,6 +48,9 @@ JDR-Generator est une application complète pour la création de personnages de 
 * **Conflits de ports :** Les différentes parties du projet (API Java, API NestJS, Web) peuvent utiliser des ports différents. Si vous rencontrez des conflits, vous devrez peut-être modifier les configurations de port.
 * **Documentation Supplémentaire :** Chaque module (api, gemini, web) devrait avoir son propre README avec des instructions plus détaillées.
 * **Scripts NestJS :** Les commandes `clean`, `build` et `start` pour l'API NestJS font référence aux scripts définis dans le fichier `package.json` du répertoire `gemini`.
+* **Fichiers Docker Compose :** Ce projet utilise deux fichiers `docker-compose` distincts :
+    * `docker-compose.yml` : Configuration pour le déploiement sur AWS Elastic Beanstalk.
+    * `docker-compose.local.yml` : Configuration optimisée pour l'exécution locale.
 
 ## Captures d'écran
 
@@ -188,165 +191,165 @@ Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compos
 
 **Commandes Docker Utiles :**
 
-**Note importante :** Adaptez les chemins d'accès aux répertoires si nécessaire. Les exemples ci-dessous sont basés sur des chemins Windows.
+**Note importante :** Adaptez les chemins d'accès aux répertoires si nécessaire. Les exemples ci-dessous concernent l'exécution locale et utilisent le fichier `docker-compose.local.yml`. Pour le déploiement sur AWS, référez-vous à la documentation Elastic Beanstalk concernant l'upload du fichier `docker-compose.yml`.
 
 ### 1. Construction et Démarrage des Images Docker
 
-Cette commande construit toutes les images Docker définies dans le fichier `docker-compose.yml` et les démarre en mode détaché (-d). Elle supprime également les conteneurs et les volumes existants pour repartir d'une base propre.
+Cette commande construit toutes les images Docker définies dans le fichier `docker-compose.local.yml` et les démarre en mode détaché (-d). Elle supprime également les conteneurs et les volumes existants pour repartir d'une base propre.
 
 ```bash
 cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
 clear
-docker-compose down # Arrête et supprime les conteneurs
-docker volume rm workflows_mysql-data # Supprime le volume MySQL (attention : perd les données !)
-docker-compose up --build -d # Construit les images et démarre les conteneurs
+docker-compose -f docker-compose.local.yml down # Arrête et supprime les conteneurs locaux
+docker volume rm workflows_mysql-data # Supprime le volume MySQL local (attention : perd les données !)
+docker-compose -f docker-compose.local.yml up --build -d # Construit les images et démarre les conteneurs locaux
 ```
 
-Attention : La suppression du volume workflows_mysql-data entraîne la perte de toutes les données de la base de données. Utilisez cette commande avec précaution.
+Attention : La suppression du volume workflows_mysql-data entraîne la perte de toutes les données de la base de données locale. Utilisez cette commande avec précaution.
 
 ### 2. API Backend Java
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    cd C:\<projects_repositories_path>\JDR-Generator\api
-    mvn clean install package # Compile et package l'application Java
-    cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
-    docker-compose build --no-cache api-container # Construit l'image Docker pour l'API Java
-    ```
+```bash
+cd C:\<projects_repositories_path>\JDR-Generator\api
+mvn clean install package # Compile et package l'application Java
+cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
+docker-compose -f docker-compose.local.yml build --no-cache api-container # Construit l'image Docker locale pour l'API Java
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d api-container # Démarre le conteneur de l'API Java
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d api-container # Démarre le conteneur local de l'API Java
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs api-container # Affiche les logs du conteneur de l'API Java
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs api-container # Affiche les logs du conteneur local de l'API Java
+```
 
 * **Accès au shell du conteneur :**
 
-    ```bash
-    docker-compose exec api-container sh # Ouvre un shell dans le conteneur
-    env # Affiche les variables d'environnement
-    exit # Quitte le shell
-    ```
+```bash
+docker-compose -f docker-compose.local.yml exec api-container sh # Ouvre un shell dans le conteneur local
+env # Affiche les variables d'environnement
+exit # Quitte le shell
+```
 
 ### 3. Gemini API
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build --no-cache gemini-container # Construit l'image Docker pour l'API Gemini
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build --no-cache gemini-container # Construit l'image Docker locale pour l'API Gemini
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d gemini-container # Démarre le conteneur de l'API Gemini
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d gemini-container # Démarre le conteneur local de l'API Gemini
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs gemini-container # Affiche les logs du conteneur de l'API Gemini
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs gemini-container # Affiche les logs du conteneur local de l'API Gemini
+```
 
 ### 4. Open AI API
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build --no-cache openai-container # Construit l'image Docker pour l'API OpenAI
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build --no-cache openai-container # Construit l'image Docker locale pour l'API OpenAI
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d openai-container # Démarre le conteneur de l'API OpenAI
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d openai-container # Démarre le conteneur local de l'API OpenAI
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs openai-container # Affiche les logs du conteneur de l'API OpenAI
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs openai-container # Affiche les logs du conteneur local de l'API OpenAI
+```
 
 * **Exécution de commandes dans le conteneur et appel à l'API OpenAI :**
 
-    ```bash
-    cd C:\<projects_repositories_path>\JDR-Generator\openai
-    docker exec -it workflows-openai-container-1 sh # Ouvre un shell interactif dans le conteneur
-    apk update # Met à jour la liste des paquets (peut être nécessaire)
-    apk add curl --no-cache # Installe curl (outil de ligne de commande pour faire des requêtes HTTP)
+```bash
+cd C:\<projects_repositories_path>\JDR-Generator\openai
+docker exec -it workflows-openai-container-1 sh # Ouvre un shell interactif dans le conteneur local
+apk update # Met à jour la liste des paquets (peut être nécessaire)
+apk add curl --no-cache # Installe curl (outil de ligne de commande pour faire des requêtes HTTP)
 
-    # Exemple d'appel à l'API OpenAI pour générer une image (DALL-E)
-    curl -X POST \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer YOUR_API_KEY" # Remplacez YOUR_API_KEY par votre clé API OpenAI
-      -H "OpenAI-Version: 2020-10-01" \
-      -H "OpenAI-Organization: YOUR_ORG_ID" # Remplacez YOUR_ORG_ID par votre ID d'organisation OpenAI (si applicable)
-      -d '{
-        "model": "dall-e-2",
-        "prompt": "A simple red cube.",
-        "n": 1,
-        "response_format": "b64_json"
-      }' \
-      [https://api.openai.com/v1/images/generations](https://api.openai.com/v1/images/generations)
-    ```
+# Exemple d'appel à l'API OpenAI pour générer une image (DALL-E)
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" # Remplacez YOUR_API_KEY par votre clé API OpenAI
+  -H "OpenAI-Version: 2020-10-01" \
+  -H "OpenAI-Organization: YOUR_ORG_ID" # Remplacez YOUR_ORG_ID par votre ID d'organisation OpenAI (si applicable)
+  -d '{
+	"model": "dall-e-2",
+	"prompt": "A simple red cube.",
+	"n": 1,
+	"response_format": "b64_json"
+  }' \
+  [https://api.openai.com/v1/images/generations](https://api.openai.com/v1/images/generations)
+```
 
-  **Important :** Remplacez `YOUR_API_KEY` et `YOUR_ORG_ID` par vos propres informations d'identification OpenAI.
+**Important :** Remplacez `YOUR_API_KEY` et `YOUR_ORG_ID` par vos propres informations d'identification OpenAI.
 
-    **Mini-Tutoriel : Configuration OpenAI**
+**Mini-Tutoriel : Configuration OpenAI**
 
-    Pour utiliser correctement l'API OpenAI, suivez ces étapes :
+Pour utiliser correctement l'API OpenAI, suivez ces étapes :
 
-    1.  **Créez un compte OpenAI :** Rendez-vous sur [https://platform.openai.com/signup](https://platform.openai.com/signup) et créez un compte.
-    2.  **Accédez aux paramètres de l'organisation :** Une fois connecté, allez dans les paramètres de votre compte et sélectionnez "Organization" (voir l'image {EC98F7BA-3A74-42F6-8D7C-FDB32F1696F0}.png).
-    3.  **Récupérez votre Organization ID :** Copiez votre "Organization ID" (par exemple, `org-2EMhFJ8w5cK51s0L9dQgxMk`). Vous en aurez besoin si votre code l'exige.
-    4.  **Générez une clé API :** Dans les paramètres de votre compte, allez dans la section "API keys" et créez une nouvelle clé API. Copiez cette clé précieusement, car vous ne pourrez pas la revoir après sa création.
-    5.  **Vérifiez vos limites d'utilisation :** Consultez la section "Usage" pour comprendre vos limites d'utilisation et mettre en place des alertes ou des limites de dépenses si nécessaire (voir l'image {6E7B2422-3B57-4E67-BB4C-DBDE3D9BD638}.png).
-    6.  **Configurez les variables d'environnement :** Dans votre projet, assurez-vous d'avoir un fichier `.env` ou une méthode similaire pour stocker vos informations sensibles. Ajoutez-y votre clé API OpenAI et votre Organization ID (si nécessaire). Exemple :
-        ```
-        API_KEY=sk-your-openai-api-key
-        ORG_ID=org-your-organization-id
-        ```
-    7.  **Sécurisez votre clé API :** Ne partagez jamais votre clé API publiquement (par exemple, dans votre code source). Utilisez toujours des variables d'environnement pour la stocker en toute sécurité.
-  
+1.  **Créez un compte OpenAI :** Rendez-vous sur [https://platform.openai.com/signup](https://platform.openai.com/signup) et créez un compte.
+2.  **Accédez aux paramètres de l'organisation :** Une fois connecté, allez dans les paramètres de votre compte et sélectionnez "Organization" (voir l'image {EC98F7BA-3A74-42F6-8D7C-FDB32F1696F0}.png).
+3.  **Récupérez votre Organization ID :** Copiez votre "Organization ID" (par exemple, `org-2EMhFJ8w5cK51s0L9dQgxMk`). Vous en aurez besoin si votre code l'exige.
+4.  **Générez une clé API :** Dans les paramètres de votre compte, allez dans la section "API keys" et créez une nouvelle clé API. Copiez cette clé précieusement, car vous ne pourrez pas la revoir après sa création.
+5.  **Vérifiez vos limites d'utilisation :** Consultez la section "Usage" pour comprendre vos limites d'utilisation et mettre en place des alertes ou des limites de dépenses si nécessaire (voir l'image {6E7B2422-3B57-4E67-BB4C-DBDE3D9BD638}.png).
+6.  **Configurez les variables d'environnement :** Dans votre projet, assurez-vous d'avoir un fichier `.env` ou une méthode similaire pour stocker vos informations sensibles. Ajoutez-y votre clé API OpenAI et votre Organization ID (si nécessaire). Exemple :
+```
+API_KEY=sk-your-openai-api-key
+ORG_ID=org-your-organization-id
+```
+7.  **Sécurisez votre clé API :** Ne partagez jamais votre clé API publiquement (par exemple, dans votre code source). Utilisez toujours des variables d'environnement pour la stocker en toute sécurité.
+
 
 ### 5. Web Frontend UX
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build web-container # Construit l'image Docker pour l'interface web
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build web-container # Construit l'image Docker locale pour l'interface web
+```
 
 ### 6. Commandes Docker Diverses
 
 * **Liste des conteneurs en cours d'exécution :**
 
-    ```bash
-    docker-compose ps
-    ```
+```bash
+docker-compose -f docker-compose.local.yml ps # Liste les conteneurs locaux
+```
 
 * **Redémarrage des conteneurs :**
 
-    ```bash
-    docker-compose restart
-    ```
+```bash
+docker-compose -f docker-compose.local.yml restart # Redémarre les conteneurs locaux
+```
 
 * **Construction et taggage d'une image Docker (exemple pour l'API Java) :**
 
-    ```bash
-    docker build -t <votre_nom_utilisateur_docker>/jdr-generator-api:latest . # Construit l'image et la taggue
-    ```
+```bash
+docker build -t <votre_nom_utilisateur_docker>/jdr-generator-api:latest -f api/Dockerfile . # Construit et taggue l'image locale de l'API Java
+```
 
 ### 7. PowerShell Policy (si nécessaire)
 
@@ -356,6 +359,105 @@ Si vous rencontrez des problèmes d'exécution de scripts PowerShell, vous devre
 Get-ExecutionPolicy -List # Affiche les stratégies d'exécution actuelles
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
+
+## Déploiement et Accès AWS
+
+Cette section fournit des informations sur l'accès à l'application déployée sur les instances EC2 d'AWS et les commandes Docker courantes utilisées pour son administration.
+
+**1. Connexion à l'Instance EC2 avec PuTTY :**
+
+Pour établir une connexion SSH à l'instance EC2 en utilisant PuTTY :
+
+* **Configuration de l'Hôte :** Spécifiez l'adresse IP publique de l'instance EC2 comme nom d'hôte.
+* **Port :** Assurez-vous que la connexion est configurée pour utiliser le port 22 (le port SSH par défaut).
+* **Authentification :**
+    * Dans la configuration de PuTTY, naviguez vers "Connection" -> "SSH" -> "Auth".
+    * Chargez le fichier `.ppk` (clé privée) associé à votre instance EC2 dans le champ "Private key file for authentication". Cette clé est essentielle pour un accès sécurisé.
+* **Nom d'Utilisateur (Optionnel) :**
+    * Le nom d'utilisateur par défaut pour les instances Amazon Linux est généralement `ec2-user`.
+    * Pour éviter de saisir le nom d'utilisateur manuellement, vous pouvez le configurer dans PuTTY sous "Connection" -> "Data" dans le champ "Auto-login username".
+
+**2. Commandes Docker Courantes sur l'Instance EC2 :**
+
+Une fois connecté à l'instance EC2 via SSH, les commandes Docker suivantes sont fréquemment utilisées pour gérer les conteneurs déployés :
+
+* **Liste des Conteneurs en Cours d'Exécution :**
+     ```bash
+     sudo docker ps
+     ```
+  Cette commande affiche une liste de tous les conteneurs Docker actuellement en cours d'exécution sur l'instance. Elle fournit des informations telles que l'ID du conteneur, l'image utilisée, l'état et les ports exposés.
+
+* **Afficher les Journaux d'un Conteneur :**
+     ```bash
+     sudo docker logs <ID-CONT>
+     ```
+  Remplacez `<ID-CONT>` par l'ID du conteneur (obtenu avec `docker ps`) pour afficher les journaux d'un conteneur spécifique. Cela est utile pour diagnostiquer les problèmes et surveiller l'activité de l'application.
+
+* **Suivre les Journaux d'un Conteneur en Temps Réel :**
+     ```bash
+     sudo docker logs -f <ID-CONT>
+     ```
+  Cette commande est similaire à `docker logs`, mais elle diffuse en continu les journaux, vous permettant de les surveiller en temps réel. Utilisez `Ctrl+C` pour arrêter le suivi des journaux.
+
+* **Redémarrer le Service Docker :**
+     ```bash
+     sudo systemctl restart docker
+     ```
+  Cette commande redémarre le service Docker sur l'instance EC2. Cela peut être nécessaire dans certaines situations, par exemple après une mise à jour de la configuration de Docker, mais utilisez-la avec prudence car cela interrompra brièvement tous les conteneurs en cours d'exécution.
+
+* **Afficher les Images Docker :**
+     ```bash
+     sudo docker images
+     ```
+  Cette commande liste toutes les images Docker présentes sur l'instance EC2. Cela peut être utile pour vérifier quelles versions des images sont utilisées et pour libérer de l'espace disque en supprimant les images inutilisées.
+
+* **Arrêter un Conteneur :**
+     ```bash
+     sudo docker stop <ID-CONT>
+     ```
+  Cette commande arrête un conteneur en cours d'exécution. Remplacez `<ID-CONT>` par l'ID du conteneur à arrêter.
+
+* **Démarrer un Conteneur Arrêté :**
+     ```bash
+     sudo docker start <ID-CONT>
+     ```
+  Cette commande démarre un conteneur qui a été précédemment arrêté. Remplacez `<ID-CONT>` par l'ID du conteneur à démarrer.
+
+* **Exécuter une Commande dans un Conteneur :**
+     ```bash
+     sudo docker exec -it <ID-CONT> <commande>
+     ```
+  Cette commande permet d'exécuter une commande à l'intérieur d'un conteneur en cours d'exécution. L'option `-it` permet une interaction avec le conteneur (par exemple, ouvrir un shell Bash).  Exemple : `sudo docker exec -it mon-conteneur bash`
+
+* **Afficher les Statistiques d'Utilisation des Ressources :**
+     ```bash
+     sudo docker stats
+     ```
+  Cette commande affiche les statistiques d'utilisation des ressources (CPU, mémoire, E/S) pour tous les conteneurs en cours d'exécution. Cela peut être utile pour surveiller les performances et identifier les conteneurs qui consomment trop de ressources.
+
+* **Supprimer un Conteneur :**
+     ```bash
+     sudo docker rm <ID-CONT>
+     ```
+  Cette commande supprime un conteneur arrêté. Remplacez `<ID-CONT>` par l'ID du conteneur à supprimer. Soyez prudent, car cette action est irréversible.
+
+* **Supprimer une Image Docker :**
+     ```bash
+     sudo docker rmi <ID-IMAGE>
+     ```
+  Cette commande supprime une image Docker. Remplacez `<ID-IMAGE>` par l'ID ou le nom de l'image à supprimer. Utilisez-la avec précaution, car cela libérera de l'espace disque, mais empêchera le déploiement de nouveaux conteneurs à partir de cette image tant qu'elle n'est pas retéléchargée.
+
+* **Afficher les Réseaux Docker :**
+     ```bash
+     sudo docker network ls
+     ```
+  Cette commande liste les réseaux Docker disponibles sur l'instance. Cela peut être utile pour comprendre comment les conteneurs communiquent entre eux.
+
+* **Inspecter un Réseau Docker :**
+     ```bash
+     sudo docker network inspect <NOM-RESEAU>
+     ```
+  Cette commande affiche des informations détaillées sur un réseau Docker spécifique, y compris les conteneurs qui y sont connectés. Remplacez `<NOM-RESEAU>` par le nom du réseau.
 
 ## Licence
 

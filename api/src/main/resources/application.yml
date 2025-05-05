@@ -4,8 +4,8 @@ logging:
     org.springboot.security: INFO
 
 # Configuration de l'URL de l'API des IA
-GEMINI_API_URL: http://localhost:3000
-OPENAI_API_URL: http://localhost:3000
+GEMINI_API_URL: http://localhost:3001/gemini
+OPENAI_API_URL: http://localhost:3002/openai
 
 spring:
   application:

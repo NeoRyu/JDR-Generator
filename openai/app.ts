@@ -9,12 +9,15 @@ import {generateStats} from "./src/controllers/statistiques";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 app.use(bodyParser.json());
 
-app.post("/generate", generateResponse);
-app.post("/illustrate", generateImage);
-app.post("/stats", generateStats);
+app.post("/openai/generate", generateResponse);
+app.post("/openai/illustrate", generateImage);
+app.post("/openai/stats", generateStats);
+app.get('/openai/healthcheck', (req, res) => {
+    res.status(200).json({ status: 'OK', port: parseInt(process.env.PORT || '3002', 10) });
+});
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

@@ -1,48 +1,104 @@
 {
-  "AWSEBDockerrunVersion": 2,
+  "AWSEBDockerrunVersion": "2",
   "containerDefinitions": [
+    {
+      "name": "mysql-container",
+      "image": "mysql:5.7",
+      "essential": true,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "hostPort": 3306,
+          "containerPort": 3306
+        }
+      ],
+      "environment": [
+        {
+          "name": "MYSQL_ROOT_PASSWORD",
+          "value": "root"
+        },
+        {
+          "name": "MYSQL_DATABASE",
+          "value": "jdr_generator_db"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "mysql-data",
+          "containerPath": "/var/lib/mysql"
+        }
+      ]
+    },
     {
       "name": "api-container",
       "image": "eli256/jdr-generator-api:latest",
       "essential": true,
-      "memory": 512,
+      "memory": 2048,
       "portMappings": [
         {
-          "hostPort": 8081,
+          "hostPort": 8080,
           "containerPort": 8080
         }
       ],
       "environment": [
         {
-          "Name": "SPRING_DATASOURCE_URL",
-          "Value": "jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam"
+          "name": "GEMINI_API_URL",
+          "value": "http://gemini-container:3001/gemini"
         },
         {
-          "Name": "SPRING_DATASOURCE_USERNAME",
-          "Value": "root"
+          "name": "OPENAI_API_URL",
+          "value": "http://openai-container:3002/openai"
         },
         {
-          "Name": "SPRING_DATASOURCE_PASSWORD",
-          "Value": "root"
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000"
         },
         {
-          "Name": "SPRING_JPA_HIBERNATE_DDL_AUTO",
-          "Value": "none"
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_JPA_HIBERNATE_DDL_AUTO",
+          "value": "none"
+        },
+        {
+          "name": "SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT",
+          "value": "30000"
+        },
+        {
+          "name": "SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE",
+          "value": "10"
+        },
+        {
+          "name": "SPRING_DATASOURCE_HIKARI_MAX_LIFETIME",
+          "value": "1800000"
         }
       ],
       "links": [
-        "mysql-container"
+        "mysql-container",
+        "gemini-container",
+        "openai-container"
       ]
     },
     {
       "name": "web-container",
       "image": "eli256/jdr-generator-web:latest",
       "essential": true,
-      "memory": 256,
+      "memory": 1024,
       "portMappings": [
         {
           "hostPort": 80,
           "containerPort": 80
+        }
+      ],
+      "environment": [
+        {
+          "name": "VITE_API_URL",
+          "value": "http://api-container:8080"
         }
       ],
       "links": [
@@ -53,54 +109,44 @@
       "name": "gemini-container",
       "image": "eli256/jdr-generator-gemini:latest",
       "essential": true,
-      "memory": 256,
+      "memory": 1024,
       "portMappings": [
         {
-          "hostPort": 8082,
-          "containerPort": 3000
+          "hostPort": 3001,
+          "containerPort": 3001
         }
       ],
       "environment": [
         {
-          "Name": "PORT",
-          "Value": "3000"
+          "name": "PORT",
+          "value": "3001"
         }
       ]
     },
     {
-      "name": "mysql-container",
-      "image": "mysql:5.7",
+      "name": "openai-container",
+      "image": "eli256/jdr-generator-openai:latest",
       "essential": true,
-      "memory": 512,
-      "environment": [
-        {
-          "Name": "MYSQL_ROOT_PASSWORD",
-          "Value": "root"
-        },
-        {
-          "Name": "MYSQL_DATABASE",
-          "Value": "jdr_generator_db"
-        }
-      ],
+      "memory": 1024,
       "portMappings": [
         {
-          "hostPort": 3306,
-          "containerPort": 3306
+          "hostPort": 3002,
+          "containerPort": 3002
         }
       ],
-      "mountPoints": [
+      "environment": [
         {
-          "SourceVolume": "mysql-data",
-          "ContainerPath": "/var/lib/mysql"
+          "name": "PORT",
+          "value": "3002"
         }
       ]
     }
   ],
-  "Volumes": [
+  "volumes": [
     {
-      "Name": "mysql-data",
-      "Host": {
-        "SourcePath": "/var/lib/mysql"
+      "name": "mysql-data",
+      "host": {
+        "sourcePath": "/var/lib/mysql"
       }
     }
   ]
