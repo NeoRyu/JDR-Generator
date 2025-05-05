@@ -4,27 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.local.yml" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/aws-sha.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/api/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/openai/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/openai/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/web/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
     </list>
@@ -78,51 +63,6 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
-  <component name="LineStatusTrackerManager">
-    <file path="$PROJECT_DIR$/.idea/workspace.xml">
-      <ranges>
-        <range start1="7" end1="7" start2="7" end2="25" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="8" end1="8" start2="26" end2="27" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="9" end1="10" start2="28" end2="28" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="60" end1="60" start2="78" end2="123" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="78" end1="147" start2="141" end2="212" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="148" end1="151" start2="213" end2="216" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="153" end1="154" start2="218" end2="219" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="179" end1="179" start2="244" end2="245" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="183" end1="184" start2="249" end2="249" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="228" end1="229" start2="293" end2="294" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="231" end1="232" start2="296" end2="297" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="233" end1="234" start2="298" end2="299" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="239" end1="240" start2="304" end2="305" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="242" end1="243" start2="307" end2="308" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="250" end1="251" start2="315" end2="316" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="253" end1="254" start2="318" end2="319" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="255" end1="256" start2="320" end2="321" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="283" end1="283" start2="348" end2="395" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="430" end1="430" start2="542" end2="543" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="431" end1="432" start2="544" end2="544" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="435" end1="435" start2="547" end2="548" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="456" end1="456" start2="569" end2="570" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="459" end1="460" start2="573" end2="573" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="529" end1="546" start2="642" end2="644" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="923" end1="924" start2="1021" end2="1038" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/gemini/.env">
-      <ranges>
-        <range start1="0" end1="1" start2="0" end2="1" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
-        <range start1="4" end1="5" start2="4" end2="5" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="7" end1="8" start2="7" end2="8" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
-      </ranges>
-    </file>
-    <file path="$PROJECT_DIR$/openai/.env">
-      <ranges>
-        <range start1="0" end1="2" start2="0" end2="2" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
-        <range start1="6" end1="7" start2="6" end2="7" changelist="ba5f8568-163e-4622-8a32-851760208b19" />
-        <range start1="9" end1="10" start2="9" end2="10" changelist="46fdb49d-ebbb-4a71-8c51-fb94ba060067" />
-      </ranges>
-    </file>
-  </component>
   <component name="ProblemsViewState">
     <option name="proportion" value="0.33432615" />
     <option name="selectedTabId" value="CurrentFile" />
@@ -643,15 +583,7 @@
       <workItem from="1745821456866" duration="35783000" />
       <workItem from="1745914598806" duration="17794000" />
       <workItem from="1745995481835" duration="21167000" />
-      <workItem from="1746426065385" duration="16961000" />
-    </task>
-    <task id="LOCAL-00033" summary="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1743072080838</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1743072080838</updated>
+      <workItem from="1746426065385" duration="24516000" />
     </task>
     <task id="LOCAL-00034" summary="[WIP] JDR-Generator : Intégration du blob png comme image, gros update graphique&#10;&gt; TODO : Delete Character (wip)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -1037,7 +969,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745998823080</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <option name="closed" value="true" />
+      <created>1746447753205</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1746447753205</updated>
+    </task>
+    <option name="localTasksCounter" value="83" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1057,7 +997,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP] JDR-Generator : WIP : Génération de statistiques, compétences, et autres informations requises par le système de jeu en prenant en compte le contexte saisi par l'utilisateur et quelques infos background générés préalablement afin de permettre a terme de remplir une fiche PJ automatiquement...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : FIX tableaux d'objets dans le JSON + duplicate key de react&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Génération de listes (create new character) + separation des models front pour une meilleure lisibilité&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -1082,7 +1021,8 @@
     <MESSAGE value="[DOCKER] JDR-Generator : WIP :: erreur 400 avec Dall-E d'OpenAI...&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;clear&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;clear&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;clear&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;// POWERSHELL POLICY&#10;Get-ExecutionPolicy -List&#10;Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : Ready-merge-request to main&#10;&#10;[TODO GITHUB] Test d'ajout de CI/CD via la configuration GitHub Actions&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration d'un environnement AWS Elastic Beanstalk" />
     <MESSAGE value="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
-    <option name="LAST_COMMIT_MESSAGE" value="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
+    <MESSAGE value="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
