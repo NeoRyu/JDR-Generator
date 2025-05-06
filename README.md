@@ -459,6 +459,79 @@ Une fois connecté à l'instance EC2 via SSH, les commandes Docker suivantes son
      ```
   Cette commande affiche des informations détaillées sur un réseau Docker spécifique, y compris les conteneurs qui y sont connectés. Remplacez `<NOM-RESEAU>` par le nom du réseau.
 
+* **Liste des Volumes Docker :**
+
+    ```bash
+    sudo docker volume ls
+    ```
+
+  Cette commande affiche une liste de tous les volumes Docker présents sur le système. Les volumes sont utilisés pour persister les données générées et utilisées par les conteneurs.
+
+* **Inspecter un Volume Docker :**
+
+    ```bash
+    sudo docker volume inspect mysql-data
+    ```
+
+  Remplacez `mysql-data` par le nom du volume que vous souhaitez inspecter. Cette commande affiche des informations détaillées sur le volume, comme son point de montage et son driver.
+
+* **Suivre les Journaux du Service Docker :**
+
+    ```bash
+    sudo journalctl -fu docker.service
+    ```
+
+  Cette commande affiche les journaux du service Docker en temps réel, ce qui est utile pour diagnostiquer les problèmes liés au moteur Docker lui-même.
+
+* **Décrire les Événements Elastic Beanstalk :**
+
+    ```bash
+    aws elasticbeanstalk describe-events --environment-name Jdr-generator-app-env-2 --region eu-west-3
+    ```
+
+  Cette commande (nécessite l'AWS CLI) récupère les événements récents de l'environnement Elastic Beanstalk spécifié. Cela aide à comprendre l'état de déploiement et les éventuelles erreurs.  Remplacez `Jdr-generator-app-env-2` par le nom de votre environnement et `eu-west-3` par la région AWS.
+
+* **Afficher l'État du Service Docker :**
+
+    ```bash
+    sudo systemctl status docker
+    ```
+
+  Cette commande affiche l'état actuel du service Docker (en cours d'exécution, arrêté, etc.) et les éventuels messages d'erreur.
+
+* **Afficher les Connexions Réseau :**
+
+    ```bash
+    sudo netstat -tulnp
+    ```
+
+  Cette commande affiche une liste de toutes les connexions réseau actives et en écoute sur le système. Elle est utile pour vérifier quels ports sont utilisés par quels processus.
+
+
+* **Afficher les Journaux d'un Conteneur :**
+
+    ```bash
+    sudo docker logs mysql-container
+    sudo docker logs api-container
+    sudo docker logs web-container
+    sudo docker logs gemini-container
+    sudo docker logs openai-container
+    ```
+
+  Remplacez `mysql-container`, `api-container`, etc., par le nom du conteneur (ou son ID) pour afficher les journaux d'un conteneur spécifique. Cela est utile pour diagnostiquer les problèmes et surveiller l'activité de l'application.
+
+* **Résoudre les Noms d'Hôtes des Conteneurs (DNS) :**
+
+    ```bash
+    nslookup mysql-container
+    nslookup api-container
+    nslookup web-container
+    nslookup gemini-container
+    nslookup openai-container
+    ```
+
+  Ces commandes utilisent `nslookup` pour vérifier si le système peut résoudre les noms d'hôtes des conteneurs (par exemple, `mysql-container`). Ceci est important pour la communication entre les conteneurs.  Si la résolution échoue, cela peut indiquer des problèmes de réseau Docker.
+
 ## Licence
 
 ```markdow
