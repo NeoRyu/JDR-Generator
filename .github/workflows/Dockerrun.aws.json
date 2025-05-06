@@ -66,22 +66,12 @@
           "value": "none"
         },
         {
-          "name": "SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT",
-          "value": "30000"
-        },
-        {
-          "name": "SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE",
-          "value": "10"
-        },
-        {
-          "name": "SPRING_DATASOURCE_HIKARI_MAX_LIFETIME",
-          "value": "1800000"
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "prod"
         }
       ],
       "links": [
-        "mysql-container",
-        "gemini-container",
-        "openai-container"
+        "mysql-container"
       ]
     },
     {
@@ -125,7 +115,7 @@
     },
     {
       "name": "openai-container",
-      "image": "eli256/jdr-generator-openai@sha256:7f9783b6f6d3f503b55ae625eba621710f0188df50b6c4db7fcdebf402fa5c45",
+      "image": "eli256/jdr-generator-openai@sha256:4b490f84ba40c31ff06f97e641328557a57199a4e21a24681a2b00223f640f36",
       "essential": true,
       "memory": 1024,
       "portMappings": [
