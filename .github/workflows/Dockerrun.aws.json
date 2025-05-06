@@ -171,7 +171,7 @@
     {
       "name": "mysql-data",
       "host": {
-        "sourcePath": "/var/lib/mysql"
+        "sourcePath": "/var/app/current/mysql-data"
       }
     }
   ]
