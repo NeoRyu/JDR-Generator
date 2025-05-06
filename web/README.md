@@ -55,7 +55,7 @@ Ce module contient l'interface utilisateur web de JDR-Generator, développée av
     * Exemple :
 
         ```
-        REACT_APP_API_URL=http://localhost:3001  # URL de l'API NestJS
+        VITE_API_URL=http://localhost:3001  # URL de l'API NestJS
         ```
 
     * **Note :** Les variables d'environnement dans React doivent généralement être préfixées par `REACT_APP_`.

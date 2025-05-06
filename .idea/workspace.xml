@@ -5,9 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;sudo docker logs current-api-container-1&#10;&#10;sudo docker exec -it b5321aa9e998 nslookup mysql-container&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/.ebextensions/healthcheck.config" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/workflows/aws.zip" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/aws-sha.zip" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/web/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -584,15 +588,7 @@
       <workItem from="1745914598806" duration="17794000" />
       <workItem from="1745995481835" duration="21167000" />
       <workItem from="1746426065385" duration="24713000" />
-      <workItem from="1746512399891" duration="9461000" />
-    </task>
-    <task id="LOCAL-00035" summary="[OK] JDR-Generator : Gros refacto + delete character&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1743432864099</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1743432864099</updated>
+      <workItem from="1746512399891" duration="12748000" />
     </task>
     <task id="LOCAL-00036" summary="[UX] JDR-Generator : Amélioration graphique pour rendre l'ensemble cohérent et plus accessible.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -978,7 +974,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746455716095</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;sudo docker logs current-api-container-1&#10;&#10;sudo docker exec -it b5321aa9e998 nslookup mysql-container&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
+      <option name="closed" value="true" />
+      <created>1746532692342</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1746532692343</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
