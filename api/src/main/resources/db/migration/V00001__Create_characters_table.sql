@@ -1,12 +1,7 @@
 CREATE DATABASE IF NOT EXISTS `jdr_generator_db`;
 #ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 
-drop table if exists character_illustration cascade;
-
-drop table if exists character_details cascade;
-
-drop table if exists character_context cascade;
-
+DROP TABLE IF EXISTS `character_illustration`, `character_details`, `character_context`, `character_json_data` CASCADE;
 
 DROP TABLE IF EXISTS `jdr_generator_db`.`character_context`;
 CREATE TABLE `jdr_generator_db`.`character_context` (

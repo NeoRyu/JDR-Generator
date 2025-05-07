@@ -2,12 +2,12 @@ version: '3.8'
 
 services:
   mysql-container:
-    image: mysql:5.7
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: jdr_generator_db
     ports:
       - "3306:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: jdr_generator_db
     volumes:
       - mysql-data:/var/lib/mysql
     healthcheck:
@@ -30,9 +30,9 @@ services:
     environment:
       GEMINI_API_URL: http://gemini-container:3001/gemini
       OPENAI_API_URL: http://openai-container:3002/openai
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=10000&socketTimeout=10000
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: root1234
       SPRING_JPA_HIBERNATE_DDL_AUTO: none # Flyway gère le schéma
       # SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0 # Attente infinie pour la connexion
       SPRING_HIKARI_CONNECTION_TIMEOUT: 30000
@@ -116,4 +116,3 @@ services:
 
 volumes:
   mysql-data:
-    driver: local

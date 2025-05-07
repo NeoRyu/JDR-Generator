@@ -4,7 +4,7 @@
     {
       "name": "mysql-container",
       "hostname": "mysql-container",
-      "image": "mysql:5.7",
+      "image": "mysql:8.0",
       "essential": true,
       "memory": 1024,
       "portMappings": [
@@ -16,7 +16,7 @@
       "environment": [
         {
           "name": "MYSQL_ROOT_PASSWORD",
-          "value": "root"
+          "value": "root1234"
         },
         {
           "name": "MYSQL_DATABASE",
@@ -59,15 +59,11 @@
         },
         {
           "name": "SPRING_DATASOURCE_PASSWORD",
-          "value": "root"
+          "value": "root1234"
         },
         {
           "name": "SPRING_JPA_HIBERNATE_DDL_AUTO",
           "value": "none"
-        },
-        {
-          "name": "SPRING_PROFILES_ACTIVE",
-          "value": "prod"
         },
         {
           "name": "GEMINI_API_URL",
