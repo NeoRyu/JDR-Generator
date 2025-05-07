@@ -16,7 +16,7 @@ app.post("/gemini/generate", generateResponse);
 app.post("/gemini/illustrate", generateImage);
 app.post("/gemini/stats", generateStats);
 app.get('/gemini/healthcheck', (req, res) => {
-    res.status(200).json({ status: 'OK', port: parseInt(process.env.PORT || '3002', 10) });
+    res.status(200).json({ status: 'OK', port: parseInt(process.env.PORT || '3001', 10) });
 });
 
 app.listen(port, () => {
