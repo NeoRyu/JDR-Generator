@@ -53,38 +53,14 @@ jobs:
   build-and-push-api:
     name: Build and push api image
     needs: login-dockerhub
+    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'api/') || contains(github.event.commits.*.added, 'api/') || contains(github.event.commits.*.removed, 'api/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Check for API changes
-        id: check_api_changes
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const commits = context.payload.commits;
-            let apiChanged = false;
-            
-            if (commits) {
-              for (const commit of commits) {
-                const files = commit.files || [];
-                for (const file of files) {
-                  if (file.filename && file.filename.startsWith('api/')) {
-                    apiChanged = true;
-                    break;
-                  }
-                }
-                if (apiChanged) break;
-              }
-            }
-            core.setOutput('api_changed', apiChanged);
-      - name: Debug Output api_changed
-        run: echo "api_changed output ${{ steps.check_api_changes.outputs.api_changed }}"
       - name: Set up Docker Buildx
-        if: steps.check_api_changes.outputs.api_changed == 'true' || github.event.inputs.force_rebuild == 'true'
         uses: docker/setup-buildx-action@v2
       - name: Build and push Docker image
-        if: steps.check_api_changes.outputs.api_changed == 'true' || github.event.inputs.force_rebuild == 'true' && needs.login-dockerhub.outputs.logged_in == 'true'
         uses: docker/build-push-action@v3
         with:
           context: ./api
