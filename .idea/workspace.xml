@@ -548,15 +548,7 @@
       <workItem from="1746426065385" duration="24713000" />
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
-      <workItem from="1746685738417" duration="13659000" />
-    </task>
-    <task id="LOCAL-00053" summary="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1744120176580</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1744120176580</updated>
+      <workItem from="1746685738417" duration="13994000" />
     </task>
     <task id="LOCAL-00054" summary="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -942,7 +934,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746706934264</updated>
     </task>
-    <option name="localTasksCounter" value="102" />
+    <task id="LOCAL-00102" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746708447175</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1746708447175</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
