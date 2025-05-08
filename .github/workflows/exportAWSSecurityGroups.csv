@@ -1,0 +1,4 @@
+GroupId,GroupName,VpcId,Description,OwnerId,InboundRulesCount,OutboundRulesCount,Tags
+sg-02bfd1602f02d7db6,JDR-GENERATOR-DB,vpc-0aef418a44f90ac01,Controler l acces aux instances EC2 qui hebergent la base de donnees,724772091536,1,1,"JDR:SECURITY,Name:JDR-GENERATOR-DB"
+sg-0395d1faa71bfaaa6,JDR-GENERATOR-LOAD-BALANCER,vpc-0aef418a44f90ac01,Controler le trafic qui atteint le Load Balancer,724772091536,2,1,"Name:JDR-GENERATOR-LOAD-BALANCER,JDR:SECURITY"
+sg-0d6c98188d2516e03,JDR-GENERATOR-APP-INSTANCES,vpc-0aef418a44f90ac01,Controler le trafic qui entre et sort des instances EC2,724772091536,6,1,"JDR:SECURITY,Name:JDR-GENERATOR-APP-INSTANCES"

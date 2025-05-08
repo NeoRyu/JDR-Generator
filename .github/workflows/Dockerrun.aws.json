@@ -39,7 +39,7 @@
     {
       "name": "api-container",
       "hostname": "api-container",
-      "image": "eli256/jdr-generator-api@sha256:7f9783b6f6d3f503b55ae625eba621710f0188df50b6c4db7fcdebf402fa5c45",
+      "image": "eli256/jdr-generator-api@sha256:4cf1c1e5c848552caf3b9614843a1e40c8943fad84d8d889531eec079065dcaf",
       "imagePullPolicy": "Always",
       "essential": true,
       "memory": 2048,
