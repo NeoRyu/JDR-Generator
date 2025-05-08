@@ -60,6 +60,7 @@ jobs:
           script: console.log('Checked out code at:', ${{ needs.common_steps.outputs.checkout_path }});
       - name: Build and push Docker image
         run: |
+          ls -l
           cd api
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}
