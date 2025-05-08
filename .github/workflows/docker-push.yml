@@ -63,22 +63,17 @@ jobs:
         with:
           script: |
             const commits = context.payload.commits;
-            core.info('Commits object:');
-            core.info(JSON.stringify(commits, null, 2));
             let apiChanged = false;
+            
             if (commits) {
               for (const commit of commits) {
-                core.info('Commit:');
-                core.info(JSON.stringify(commit, null, 2));
                 const files = commit.files || [];
-                core.info('Files in this commit:');
-                core.info(JSON.stringify(files, null, 2));
                 for (const file of files) {
-                  if (file.filename && file.filename.startsWith('api/')) {
-                    apiChanged = true;
-                    break;
-                  }
+                if (file.filename && file.filename.startsWith('api/')) {
+                  apiChanged = true;
+                  break;
                 }
+              }
                 if (apiChanged) break;
               }
             }
