@@ -11,6 +11,9 @@ COPY package*.json ./
 # Installe les dépendances
 RUN npm install
 
+# Supprime le répertoire dist avant la construction
+RUN rm -rf dist
+
 # Copie tout le code source de l'API Gemini
 # Le chemin est maintenant relatif au répertoire 'gemini'
 COPY . .

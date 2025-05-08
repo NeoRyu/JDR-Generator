@@ -1,12 +1,19 @@
 # Utilise une image Node.js comme base pour l'étape de build
 FROM node:20-alpine AS builder
+
 # Définit le répertoire de travail dans le conteneur pour l'étape de build
 WORKDIR /app
+
 # Copie les fichiers package.json et package-lock.json (ou yarn.lock)
 # Le chemin est maintenant relatif au répertoire 'web'
 COPY package*.json ./
+
 # Installe les dépendances
 RUN npm install
+
+# Supprime le répertoire dist avant la construction
+RUN rm -rf dist
+
 # Copie tout le code source de l'application web
 # Le chemin est maintenant relatif au répertoire 'web'
 COPY . .
