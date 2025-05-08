@@ -43,6 +43,7 @@ jobs:
           context: ${{ github.workspace }}/api
           file: ${{ github.workspace }}/api/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+          push: true
 
   build-and-push-gemini:
     name: Build and push GEMINI docker image
@@ -67,6 +68,7 @@ jobs:
           context: ${{ github.workspace }}/gemini
           file: ${{ github.workspace }}/gemini/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+          push: true
 
   build-and-push-openai:
     name: Build and push OPENAI docker image
@@ -91,6 +93,7 @@ jobs:
           context: ${{ github.workspace }}/openai
           file: ${{ github.workspace }}/openai/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+          push: true
 
   build-and-push-web:
     name: Build and push WEB docker image
@@ -115,3 +118,4 @@ jobs:
           context: ${{ github.workspace }}/web
           file: ${{ github.workspace }}/web/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+          push: true
