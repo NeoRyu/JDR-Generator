@@ -57,14 +57,14 @@ jobs:
       - name: Use Common Steps Output
         uses: actions/github-script@v7
         with:
-          script: console.log('Checked out code at:', context.needs.common_steps.outputs.checkout_path);
+          script: console.log('Checked out code at:', ${{ needs.common_steps.outputs.checkout_path }});
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./api
-          file: ./api/Dockerfile
-          push: ${{ needs.login-dockerhub.outputs.logged_in }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+        run: |
+          cd api
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
 
   build-and-push-gemini:
     name: Build and push GEMINI docker image
@@ -75,12 +75,12 @@ jobs:
       contents: read
     steps:
       - name: Build and push Docker docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./gemini
-          file: ./gemini/Dockerfile
-          push: ${{ needs.login-dockerhub.outputs.logged_in }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+        run: |
+          cd gemini
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
 
   build-and-push-openai:
     name: Build and push OPENAI docker image
@@ -91,12 +91,12 @@ jobs:
       contents: read
     steps:
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./openai
-          file: ./openai/Dockerfile
-          push: ${{ needs.login-dockerhub.outputs.logged_in }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+        run: |
+          cd openai
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
 
   build-and-push-web:
     name: Build and push WEB docker image
@@ -107,9 +107,9 @@ jobs:
       contents: read
     steps:
       - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./web
-          file: ./web/Dockerfile
-          push: ${{ needs.login-dockerhub.outputs.logged_in }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+        run: |
+          cd web
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
