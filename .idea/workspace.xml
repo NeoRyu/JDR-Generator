@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
@@ -550,31 +548,7 @@
       <workItem from="1746426065385" duration="24713000" />
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
-      <workItem from="1746685738417" duration="20645000" />
-    </task>
-    <task id="LOCAL-00070" summary="[PYTHON] JDR-Generator : Simul-clic&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1744701347797</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1744701347798</updated>
-    </task>
-    <task id="LOCAL-00071" summary="[SCALA] JDR-Generator&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1744776747719</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1744776747720</updated>
-    </task>
-    <task id="LOCAL-00072" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1745332560079</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1745332560079</updated>
+      <workItem from="1746685738417" duration="21064000" />
     </task>
     <task id="LOCAL-00073" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -944,7 +918,31 @@
       <option name="project" value="LOCAL" />
       <updated>1746714587295</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746715364509</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1746715364509</updated>
+    </task>
+    <task id="LOCAL-00120" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746715526523</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1746715526523</updated>
+    </task>
+    <task id="LOCAL-00121" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746715722068</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1746715722068</updated>
+    </task>
+    <option name="localTasksCounter" value="122" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
