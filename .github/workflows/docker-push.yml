@@ -35,7 +35,6 @@ jobs:
   build-and-push-web:
     name: Build and push web image
     needs: login-dockerhub
-    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'web/') || contains(github.event.commits.*.added, 'web/') || contains(github.event.commits.*.removed, 'web/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -53,7 +52,6 @@ jobs:
   build-and-push-api:
     name: Build and push api image
     needs: login-dockerhub
-    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'api/') || contains(github.event.commits.*.added, 'api/') || contains(github.event.commits.*.removed, 'api/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -71,7 +69,6 @@ jobs:
   build-and-push-gemini:
     name: Build and push gemini image
     needs: login-dockerhub
-    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'gemini/') || contains(github.event.commits.*.added, 'gemini/') || contains(github.event.commits.*.removed, 'gemini/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -89,7 +86,6 @@ jobs:
   build-and-push-openai:
     name: Build and push openai image
     needs: login-dockerhub
-    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'openai/') || contains(github.event.commits.*.added, 'openai/') || contains(github.event.commits.*.removed, 'openai/')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
