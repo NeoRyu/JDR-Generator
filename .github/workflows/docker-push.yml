@@ -62,40 +62,40 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-              const commits = context.payload.commits;
-              core.info('Commits object:');
-              core.info(JSON.stringify(commits, null, 2));
-              
-              let apiChanged = false;
-              if (commits) {
+            const commits = context.payload.commits;
+            core.info('Commits object:');
+            core.info(JSON.stringify(commits, null, 2));
+            
+            let apiChanged = false;
+            if (commits) {
               for (const commit of commits) {
-              core.info('Commit:');
-              core.info(JSON.stringify(commit, null, 2));
-              
-              const files = [];
-              if (commit.modified) {
-              files.push(...commit.modified);
+                core.info('Commit:');
+                core.info(JSON.stringify(commit, null, 2));
+            
+                const files = [];
+                if (commit.modified) {
+                  files.push(...commit.modified);
+                }
+                if (commit.added) {
+                  files.push(...commit.added);
+                }
+                if (commit.removed) {
+                  files.push(...commit.removed);
+                }
+            
+                core.info('Files in this commit:');
+                core.info(JSON.stringify(files, null, 2));
+            
+                for (const file of files) {
+                  if (file.startsWith('api/')) {
+                    apiChanged = true;
+                    break;
+                  }
+                }
+                if (apiChanged) break;
+              }
             }
-              if (commit.added) {
-              files.push(...commit.added);
-            }
-              if (commit.removed) {
-              files.push(...commit.removed);
-            }
-              
-              core.info('Files in this commit:');
-              core.info(JSON.stringify(files, null, 2));
-              
-              for (const file of files) {
-              if (file.startsWith('api/')) {
-              apiChanged = true;
-              break;
-            }
-            }
-              if (apiChanged) break;
-            }
-            }
-              core.setOutput('api_changed', apiChanged);
+            core.setOutput('api_changed', apiChanged);
       - name: Set up Docker Buildx
         if: steps.check_api_changes.outputs.api_changed == 'true' || github.event.inputs.force_rebuild == 'true'
         uses: docker/setup-buildx-action@v2
