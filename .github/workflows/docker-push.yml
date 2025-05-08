@@ -1,55 +1,105 @@
-name: Docker Push
+name: Build and push Docker images
 
 on:
   push:
-    branches: [ "githubactions" ] # TODO : Modifier à "main" une fois testé
+    branches:
+      - githubactions
+      - main
+    paths:
+      - 'api/**'
+      - 'web/**'
+      - 'gemini/**'
+      - 'openai/**'
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        type: boolean
+        description: 'Force la reconstruction de toutes les images (même sans changements)'
+        required: false
+        default: false
 
 jobs:
-  build-and-push:
-    name: Build and push Docker images
+  login-dockerhub:
+    name: Login to Docker Hub
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-
+    outputs:
+      logged_in: ${{ steps.login.outcome == 'success' }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Login to Docker Hub
+        id: login
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push web image
-        run: |
-          cd web
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+  build-and-push-web:
+    name: Build and push web image
+    needs: login-dockerhub
+    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'web/') || contains(github.event.commits.*.added, 'web/') || contains(github.event.commits.*.removed, 'web/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./web
+          file: ./web/Dockerfile
+          push: ${{ needs.login-dockerhub.outputs.logged_in }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
 
-      - name: Build and push api image
-        run: |
-          cd api
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+  build-and-push-api:
+    name: Build and push api image
+    needs: login-dockerhub
+    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'api/') || contains(github.event.commits.*.added, 'api/') || contains(github.event.commits.*.removed, 'api/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./api
+          file: ./api/Dockerfile
+          push: ${{ needs.login-dockerhub.outputs.logged_in }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
 
-      - name: Build and push gemini image
-        run: |
-          cd gemini
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+  build-and-push-gemini:
+    name: Build and push gemini image
+    needs: login-dockerhub
+    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'gemini/') || contains(github.event.commits.*.added, 'gemini/') || contains(github.event.commits.*.removed, 'gemini/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./gemini
+          file: ./gemini/Dockerfile
+          push: ${{ needs.login-dockerhub.outputs.logged_in }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
 
-      - name: Build and push openai image
-        run: |
-          cd openai
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}
-          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+  build-and-push-openai:
+    name: Build and push openai image
+    needs: login-dockerhub
+    if: github.event.inputs.force_rebuild == 'true' || contains(github.event.commits.*.modified, 'openai/') || contains(github.event.commits.*.added, 'openai/') || contains(github.event.commits.*.removed, 'openai/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./openai
+          file: ./openai/Dockerfile
+          push: ${{ needs.login-dockerhub.outputs.logged_in }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest

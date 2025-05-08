@@ -180,6 +180,14 @@ JDR-Generator/
 
 Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compose. Cela simplifie la configuration de l'environnement et assure une cohérence entre les différents déploiements.
 
+**Analyse des Images Docker :**
+
+* Le module **web** utilise un processus de build en deux étapes :
+    * Une première image Node.js est utilisée pour builder l'application React avec Vite.
+    * Les fichiers statiques buildés sont ensuite copiés dans une image Nginx, qui sert l'application web.
+* Les modules **gemini** et **openai** utilisent des images Node.js pour exécuter leurs applications NestJS (TypeScript) après la compilation.
+* Le module **api** utilise une image Maven pour builder l'application Java (qui inclut également du code Scala). L'image finale pour l'exécution sera une image JRE (Java Runtime Environment).
+
 **Pré-requis :**
 
 * Docker
@@ -359,6 +367,22 @@ Si vous rencontrez des problèmes d'exécution de scripts PowerShell, vous devre
 Get-ExecutionPolicy -List # Affiche les stratégies d'exécution actuelles
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
+
+
+## Intégration de GitHub Actions
+
+Ce projet utilise GitHub Actions pour automatiser la construction et la publication des images Docker vers Docker Hub lors de chaque push sur les branches spécifiées (actuellement `githubactions` et `main`). 
+Le workflow est défini dans le fichier `.github/workflows/docker-push.yml`, ce fichier est automatiquement détecté par Github.
+Les dernières images dockerisée sont disponible ici : https://hub.docker.com/repositories/eli256
+
+**Fonctionnement actuel :**
+
+Lors d'un push, le workflow effectue les étapes suivantes :
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
+3.  **Build et push des images :** Pour chaque module (`web`, `api`, `gemini`, `openai`), l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub.
+
 
 ## Licence
 

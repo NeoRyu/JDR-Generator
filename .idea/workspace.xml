@@ -4,15 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[STAND-BY] JDR-Generator : AWS - ec2-user&#10;&gt; Echec de mise en place d'un déploiement avec le fichier aws.zip via l'environnement multi container docker depuis une application Elastic Beanstalk sur une instance EC2 avec base de données RDS et VPC et stockage S3... &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/docker-push.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/Dockerrun.aws.json" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/aws/Dockerrun.aws.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/aws.zip" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/aws/aws.zip" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/aws/deploy-aws.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/aws/docker-compose.aws.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.github/workflows/exportAWSSecurityGroups.csv" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/aws/exportAWSSecurityGroups.csv" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-push.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-push.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -130,7 +125,7 @@
     "git-widget-placeholder": "githubactions",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/resources",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows/aws",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -190,11 +185,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\aws" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\resources" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\openai" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\gemini" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\aws" />
@@ -557,15 +552,7 @@
       <workItem from="1746426065385" duration="24713000" />
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
-      <workItem from="1746685738417" duration="7321000" />
-    </task>
-    <task id="LOCAL-00043" summary="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1743690516086</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1743690516086</updated>
+      <workItem from="1746685738417" duration="10751000" />
     </task>
     <task id="LOCAL-00044" summary="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -951,7 +938,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746692155443</updated>
     </task>
-    <option name="localTasksCounter" value="92" />
+    <task id="LOCAL-00092" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746698027308</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1746698027308</updated>
+    </task>
+    <option name="localTasksCounter" value="93" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -971,7 +966,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[OK] JDR-Generator : FEAT : Ajout de la possibilité de saisir manuellement les contextes en plus des listes déjà en place, offrant à l'utilisateur tout loisir de customiser le personnage qui sera généré. &#10;- FIX : Ajout d'un correctif sur la deserialization du json pour mapping dans le model details, Integer et Boolean pouvant initialement être incorrect si Gemini se permet de ne pas suivre le format de sortie attendu en retournant une chaine de caractère&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : MAJOR FIX : delete du bon character selected !&#10;- WIP : colorisation de la row ou autre indication visuelle à faire pendant que la suppression s'effectue...&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator :&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -996,7 +990,8 @@
     <MESSAGE value="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;sudo docker logs current-api-container-1&#10;&#10;sudo docker exec -it b5321aa9e998 nslookup mysql-container&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <MESSAGE value="[WIP] JDR-Generator : AWS - Modification des configs et repush d'images rebuilder sur dockerhub&#10;&#10;ec2-user&#10;&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <MESSAGE value="[STAND-BY] JDR-Generator : AWS - ec2-user&#10;&gt; Echec de mise en place d'un déploiement avec le fichier aws.zip via l'environnement multi container docker depuis une application Elastic Beanstalk sur une instance EC2 avec base de données RDS et VPC et stockage S3... &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
-    <option name="LAST_COMMIT_MESSAGE" value="[STAND-BY] JDR-Generator : AWS - ec2-user&#10;&gt; Echec de mise en place d'un déploiement avec le fichier aws.zip via l'environnement multi container docker depuis une application Elastic Beanstalk sur une instance EC2 avec base de données RDS et VPC et stockage S3... &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
+    <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
