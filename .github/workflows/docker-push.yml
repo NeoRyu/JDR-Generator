@@ -25,6 +25,8 @@ jobs:
     outputs:
       logged_in: ${{ steps.login.outcome == 'success' }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
       - name: Login to Docker Hub
         id: login
         uses: docker/login-action@v2
@@ -32,32 +34,30 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  build-and-push-web:
-    name: Build and push web image
-    needs: login-dockerhub
+  common_steps:
+    name: Common Steps
     runs-on: ubuntu-latest
+    outputs:
+      checkout_path: ${{ steps.checkout.outputs.path }}
     steps:
       - name: Checkout code
+        id: checkout
         uses: actions/checkout@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v3
-        with:
-          context: ./web
-          file: ./web/Dockerfile
-          push: ${{ needs.login-dockerhub.outputs.logged_in }}
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
 
   build-and-push-api:
-    name: Build and push api image
-    needs: login-dockerhub
+    name: Build and push API docker image
+    needs: [login-dockerhub, common_steps]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+      - name: Use Common Steps Output
+        uses: actions/github-script@v7
+        with:
+          script: console.log('Checked out code at:', context.needs.common_steps.outputs.checkout_path);
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -67,15 +67,14 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
 
   build-and-push-gemini:
-    name: Build and push gemini image
-    needs: login-dockerhub
+    name: Build and push GEMINI docker image
+    needs: [login-dockerhub, common_steps]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Build and push Docker image
+      - name: Build and push Docker docker image
         uses: docker/build-push-action@v3
         with:
           context: ./gemini
@@ -84,14 +83,13 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
 
   build-and-push-openai:
-    name: Build and push openai image
-    needs: login-dockerhub
+    name: Build and push OPENAI docker image
+    needs: [login-dockerhub, common_steps]
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
@@ -99,3 +97,19 @@ jobs:
           file: ./openai/Dockerfile
           push: ${{ needs.login-dockerhub.outputs.logged_in }}
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+
+  build-and-push-web:
+    name: Build and push WEB docker image
+    needs: [login-dockerhub, common_steps]
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: ./web
+          file: ./web/Dockerfile
+          push: ${{ needs.login-dockerhub.outputs.logged_in }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
