@@ -360,6 +360,178 @@ Get-ExecutionPolicy -List # Affiche les stratégies d'exécution actuelles
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
+## Déploiement et Accès AWS
+
+Cette section fournit des informations sur l'accès à l'application déployée sur les instances EC2 d'AWS et les commandes Docker courantes utilisées pour son administration.
+
+**1. Connexion à l'Instance EC2 avec PuTTY :**
+
+Pour établir une connexion SSH à l'instance EC2 en utilisant PuTTY :
+
+* **Configuration de l'Hôte :** Spécifiez l'adresse IP publique de l'instance EC2 comme nom d'hôte.
+* **Port :** Assurez-vous que la connexion est configurée pour utiliser le port 22 (le port SSH par défaut).
+* **Authentification :**
+    * Dans la configuration de PuTTY, naviguez vers "Connection" -> "SSH" -> "Auth".
+    * Chargez le fichier `.ppk` (clé privée) associé à votre instance EC2 dans le champ "Private key file for authentication". Cette clé est essentielle pour un accès sécurisé.
+* **Nom d'Utilisateur (Optionnel) :**
+    * Le nom d'utilisateur par défaut pour les instances Amazon Linux est généralement `ec2-user`.
+    * Pour éviter de saisir le nom d'utilisateur manuellement, vous pouvez le configurer dans PuTTY sous "Connection" -> "Data" dans le champ "Auto-login username".
+
+**2. Commandes Docker Courantes sur l'Instance EC2 :**
+
+Une fois connecté à l'instance EC2 via SSH, les commandes Docker suivantes sont fréquemment utilisées pour gérer les conteneurs déployés :
+
+* **Liste des Conteneurs en Cours d'Exécution :**
+     ```bash
+     sudo docker ps
+     ```
+  Cette commande affiche une liste de tous les conteneurs Docker actuellement en cours d'exécution sur l'instance. Elle fournit des informations telles que l'ID du conteneur, l'image utilisée, l'état et les ports exposés.
+
+* **Afficher les Journaux d'un Conteneur :**
+     ```bash
+     sudo docker logs <ID-CONT>
+     ```
+  Remplacez `<ID-CONT>` par l'ID du conteneur (obtenu avec `docker ps`) pour afficher les journaux d'un conteneur spécifique. Cela est utile pour diagnostiquer les problèmes et surveiller l'activité de l'application.
+
+* **Suivre les Journaux d'un Conteneur en Temps Réel :**
+     ```bash
+     sudo docker logs -f <ID-CONT>
+     ```
+  Cette commande est similaire à `docker logs`, mais elle diffuse en continu les journaux, vous permettant de les surveiller en temps réel. Utilisez `Ctrl+C` pour arrêter le suivi des journaux.
+
+* **Redémarrer le Service Docker :**
+     ```bash
+     sudo systemctl restart docker
+     ```
+  Cette commande redémarre le service Docker sur l'instance EC2. Cela peut être nécessaire dans certaines situations, par exemple après une mise à jour de la configuration de Docker, mais utilisez-la avec prudence car cela interrompra brièvement tous les conteneurs en cours d'exécution.
+
+* **Afficher les Images Docker :**
+     ```bash
+     sudo docker images
+     ```
+  Cette commande liste toutes les images Docker présentes sur l'instance EC2. Cela peut être utile pour vérifier quelles versions des images sont utilisées et pour libérer de l'espace disque en supprimant les images inutilisées.
+
+* **Arrêter un Conteneur :**
+     ```bash
+     sudo docker stop <ID-CONT>
+     ```
+  Cette commande arrête un conteneur en cours d'exécution. Remplacez `<ID-CONT>` par l'ID du conteneur à arrêter.
+
+* **Démarrer un Conteneur Arrêté :**
+     ```bash
+     sudo docker start <ID-CONT>
+     ```
+  Cette commande démarre un conteneur qui a été précédemment arrêté. Remplacez `<ID-CONT>` par l'ID du conteneur à démarrer.
+
+* **Exécuter une Commande dans un Conteneur :**
+     ```bash
+     sudo docker exec -it <ID-CONT> <commande>
+     ```
+  Cette commande permet d'exécuter une commande à l'intérieur d'un conteneur en cours d'exécution. L'option `-it` permet une interaction avec le conteneur (par exemple, ouvrir un shell Bash).  Exemple : `sudo docker exec -it mon-conteneur bash`
+
+* **Afficher les Statistiques d'Utilisation des Ressources :**
+     ```bash
+     sudo docker stats
+     ```
+  Cette commande affiche les statistiques d'utilisation des ressources (CPU, mémoire, E/S) pour tous les conteneurs en cours d'exécution. Cela peut être utile pour surveiller les performances et identifier les conteneurs qui consomment trop de ressources.
+
+* **Supprimer un Conteneur :**
+     ```bash
+     sudo docker rm <ID-CONT>
+     ```
+  Cette commande supprime un conteneur arrêté. Remplacez `<ID-CONT>` par l'ID du conteneur à supprimer. Soyez prudent, car cette action est irréversible.
+
+* **Supprimer une Image Docker :**
+     ```bash
+     sudo docker rmi <ID-IMAGE>
+     ```
+  Cette commande supprime une image Docker. Remplacez `<ID-IMAGE>` par l'ID ou le nom de l'image à supprimer. Utilisez-la avec précaution, car cela libérera de l'espace disque, mais empêchera le déploiement de nouveaux conteneurs à partir de cette image tant qu'elle n'est pas retéléchargée.
+
+* **Afficher les Réseaux Docker :**
+     ```bash
+     sudo docker network ls
+     ```
+  Cette commande liste les réseaux Docker disponibles sur l'instance. Cela peut être utile pour comprendre comment les conteneurs communiquent entre eux.
+
+* **Inspecter un Réseau Docker :**
+     ```bash
+     sudo docker network inspect <NOM-RESEAU>
+     ```
+  Cette commande affiche des informations détaillées sur un réseau Docker spécifique, y compris les conteneurs qui y sont connectés. Remplacez `<NOM-RESEAU>` par le nom du réseau.
+
+* **Liste des Volumes Docker :**
+
+    ```bash
+    sudo docker volume ls
+    ```
+
+  Cette commande affiche une liste de tous les volumes Docker présents sur le système. Les volumes sont utilisés pour persister les données générées et utilisées par les conteneurs.
+
+* **Inspecter un Volume Docker :**
+
+    ```bash
+    sudo docker volume inspect mysql-data
+    ```
+
+  Remplacez `mysql-data` par le nom du volume que vous souhaitez inspecter. Cette commande affiche des informations détaillées sur le volume, comme son point de montage et son driver.
+
+* **Suivre les Journaux du Service Docker :**
+
+    ```bash
+    sudo journalctl -fu docker.service
+    ```
+
+  Cette commande affiche les journaux du service Docker en temps réel, ce qui est utile pour diagnostiquer les problèmes liés au moteur Docker lui-même.
+
+* **Décrire les Événements Elastic Beanstalk :**
+
+    ```bash
+    aws elasticbeanstalk describe-events --environment-name Jdr-generator-app-env-2 --region eu-west-3
+    ```
+
+  Cette commande (nécessite l'AWS CLI) récupère les événements récents de l'environnement Elastic Beanstalk spécifié. Cela aide à comprendre l'état de déploiement et les éventuelles erreurs.  Remplacez `Jdr-generator-app-env-2` par le nom de votre environnement et `eu-west-3` par la région AWS.
+
+* **Afficher l'État du Service Docker :**
+
+    ```bash
+    sudo systemctl status docker
+    ```
+
+  Cette commande affiche l'état actuel du service Docker (en cours d'exécution, arrêté, etc.) et les éventuels messages d'erreur.
+
+* **Afficher les Connexions Réseau :**
+
+    ```bash
+    sudo netstat -tulnp
+    ```
+
+  Cette commande affiche une liste de toutes les connexions réseau actives et en écoute sur le système. Elle est utile pour vérifier quels ports sont utilisés par quels processus.
+
+
+* **Afficher les Journaux d'un Conteneur :**
+
+    ```bash
+    sudo docker logs mysql-container
+    sudo docker logs api-container
+    sudo docker logs web-container
+    sudo docker logs gemini-container
+    sudo docker logs openai-container
+    ```
+
+  Remplacez `mysql-container`, `api-container`, etc., par le nom du conteneur (ou son ID) pour afficher les journaux d'un conteneur spécifique. Cela est utile pour diagnostiquer les problèmes et surveiller l'activité de l'application.
+
+* **Résoudre les Noms d'Hôtes des Conteneurs (DNS) :**
+
+    ```bash
+    nslookup mysql-container
+    nslookup api-container
+    nslookup web-container
+    nslookup gemini-container
+    nslookup openai-container
+    ```
+
+  Ces commandes utilisent `nslookup` pour vérifier si le système peut résoudre les noms d'hôtes des conteneurs (par exemple, `mysql-container`). Ceci est important pour la communication entre les conteneurs.  Si la résolution échoue, cela peut indiquer des problèmes de réseau Docker.
+
 ## Licence
 
 ```markdow

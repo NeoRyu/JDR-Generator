@@ -1,0 +1,55 @@
+name: Docker Push
+
+on:
+  push:
+    branches: [ "githubactions" ] # TODO : Modifier à "main" une fois testé
+
+jobs:
+  build-and-push:
+    name: Build and push Docker images
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push web image
+        run: |
+          cd web
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
+
+      - name: Build and push api image
+        run: |
+          cd api
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
+
+      - name: Build and push gemini image
+        run: |
+          cd gemini
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
+
+      - name: Build and push openai image
+        run: |
+          cd openai
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} .
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
