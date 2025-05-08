@@ -1,7 +1,8 @@
 logging:
   level:
-    ROOT: INFO
-    org.springboot.security: INFO
+    ROOT: WARN
+    org.springboot.security: ERROR
+    jdr.generator.api: DEBUG
 
 # Configuration de l'URL de l'API des IA
 GEMINI_API_URL: http://gemini-container:3001/gemini
@@ -71,3 +72,5 @@ server:
       enabled: true
       force: true
 
+# Indique si l'application s'exécute dans un environnement Docker
+is-running-in-docker: ${IS_DOCKER:false}

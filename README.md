@@ -377,8 +377,11 @@ Les dernières images dockerisée sont disponible ici : https://hub.docker.com/r
 
 **Fonctionnement actuel :**
 
-Lors d'un push, le workflow effectue les étapes suivantes :
+Le workflow actuel est configuré pour s'exécuter lors de chaque push sur les branches `githubactions` et `main`, mais **ne construira et ne poussera une image Docker que si des modifications ont été détectées dans le dossier source correspondant** (api/, web/, gemini/, openai/).
+Il est également possible de déclencher manuellement le workflow via l'interface GitHub Actions avec une option pour forcer la reconstruction de toutes les images.
+Grâce à cette configuration, seuls les modules ayant subi des modifications verront leur image Docker reconstruite et poussée, optimisant ainsi le temps d'exécution du workflow et l'utilisation des ressources.
 
+Lors d'un push, le workflow effectue les étapes suivantes :
 1.  **Checkout du code :** Récupère la dernière version du code source.
 2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
 3.  **Build et push des images :** Pour chaque module (`web`, `api`, `gemini`, `openai`), l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub.

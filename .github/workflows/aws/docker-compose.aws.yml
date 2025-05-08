@@ -28,6 +28,8 @@ services:
     ports:
       - "8080:8080"
     environment:
+      IS_DOCKER: "true"
+      SPRING_PROFILES_ACTIVE: docker
       GEMINI_API_URL: http://gemini-container:3001/gemini
       OPENAI_API_URL: http://openai-container:3002/openai
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=10000&socketTimeout=10000
