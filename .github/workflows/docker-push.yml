@@ -69,15 +69,17 @@ jobs:
               for (const commit of commits) {
                 const files = commit.files || [];
                 for (const file of files) {
-                if (file.filename && file.filename.startsWith('api/')) {
-                  apiChanged = true;
-                  break;
+                  if (file.filename && file.filename.startsWith('api/')) {
+                    apiChanged = true;
+                    break;
+                  }
                 }
-              }
                 if (apiChanged) break;
               }
             }
             core.setOutput('api_changed', apiChanged);
+      - name: Debug Output api_changed
+        run: echo "api_changed output ${{ steps.check_api_changes.outputs.api_changed }}"
       - name: Set up Docker Buildx
         if: steps.check_api_changes.outputs.api_changed == 'true' || github.event.inputs.force_rebuild == 'true'
         uses: docker/setup-buildx-action@v2
