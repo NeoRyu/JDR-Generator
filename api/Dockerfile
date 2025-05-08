@@ -1,6 +1,3 @@
-# Définit la variable d'environnement pour activer le profil Docker de Spring
-ENV SPRING_PROFILES_ACTIVE=docker
-
 # Utilise l'image Maven avec OpenJDK 17 comme environnement de build (nommé 'builder')
 FROM maven:3.8.5-openjdk-17 AS builder
 
