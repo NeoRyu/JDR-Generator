@@ -30,8 +30,10 @@ jobs:
       - name: Check for API changes
         id: api_changes
         run: |
-          git fetch --depth=2 origin ${{ github.base_ref }}
-          changed_files=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }})
+          # Tentative de récupération du commit parent pour les événements push
+          base_ref=$(git rev-parse --abbrev-ref HEAD^ || echo "${{ github.sha }}~1")
+          git fetch --depth=2 origin "$base_ref"
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           if echo "$changed_files" | grep -q '^api/'; then
             echo "::set-output name=modified::true"
           else
@@ -68,8 +70,10 @@ jobs:
       - name: Check for GEMINI changes
         id: gemini_changes
         run: |
-          git fetch --depth=2 origin ${{ github.base_ref }}
-          changed_files=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }})
+          # Tentative de récupération du commit parent pour les événements push
+          base_ref=$(git rev-parse --abbrev-ref HEAD^ || echo "${{ github.sha }}~1")
+          git fetch --depth=2 origin "$base_ref"
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           if echo "$changed_files" | grep -q '^gemini/'; then
             echo "::set-output name=modified::true"
           else
