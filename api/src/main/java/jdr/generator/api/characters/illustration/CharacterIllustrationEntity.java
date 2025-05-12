@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/** Represents the illustration data associated with a character. */
 @Entity
 @Builder
 @NoArgsConstructor
@@ -14,18 +15,18 @@ import lombok.NoArgsConstructor;
 @Data
 @Table(name = "character_illustration")
 public class CharacterIllustrationEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(name = "image_label", columnDefinition = "TEXT")
-    private String imageLabel;
+  @Column(name = "image_label", columnDefinition = "TEXT")
+  private String imageLabel;
 
-    @Lob
-    @Column(name = "image_blob")
-    private byte[] imageBlob;
+  @Lob
+  @Column(name = "image_blob")
+  private byte[] imageBlob;
 
-    @ManyToOne
-    @JoinColumn(name = "image_details", referencedColumnName = "id")
-    private CharacterDetailsEntity imageDetails;
+  @ManyToOne
+  @JoinColumn(name = "image_details", referencedColumnName = "id")
+  private CharacterDetailsEntity imageDetails;
 }

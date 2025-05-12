@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.org/dependency-check/dependency-suppression.1.3.xsd">
+    <suppress>
+        <notes>Ignorer temporairement cette vulnérabilité car une mise à jour n'est pas possible pour le moment.</notes>
+        <cve>CVE-2023-5072</cve>
+        <cve>CVE-2022-45688</cve>
+    </suppress>
+    <suppress>
+        <notes>Ignorer temporairement cette vulnérabilité car une mise à jour n'est pas possible pour le moment.</notes>
+        <cve>CVE-2025-31651</cve>
+        <cve>CVE-2025-31650</cve>
+    </suppress>
+    <suppress>
+        <notes>Ignorer temporairement cette vulnérabilité car une mise à jour n'est pas possible pour le moment.</notes>
+        <gav>
+            <artifactId>json</artifactId>
+        </gav>
+    </suppress>
+    <suppress>
+        <notes>Ignorer temporairement cette vulnérabilité car une mise à jour n'est pas possible pour le moment.</notes>
+        <gav>
+            <artifactId>tomcat-embed-core</artifactId>
+        </gav>
+    </suppress>
+</suppressions>

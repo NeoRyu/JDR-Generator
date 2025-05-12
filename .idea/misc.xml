@@ -3,7 +3,15 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.12" />
   </component>
+  <component name="EntryPointsManager">
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="org.springframework.scheduling.annotation.Async" />
+    </list>
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/../FantasyGenerator/api" />
+  </component>
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
