@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - githubactions
+      - main
     paths:
       - 'api/**'
       - 'web/**'
@@ -16,7 +17,6 @@ on:
         required: false
         default: false
         description: 'Forcer la reconstruction des images'
-
 
 jobs:
   build-and-push-api:
@@ -41,9 +41,9 @@ jobs:
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^api/'; then
-           echo "::set-output name=modified::true"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-           echo "::set-output name=modified::false"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -86,9 +86,9 @@ jobs:
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^gemini/'; then
-            echo "::set-output name=modified::true"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=modified::false"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -131,9 +131,9 @@ jobs:
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^openai/'; then
-            echo "::set-output name=modified::true"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=modified::false"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -176,9 +176,9 @@ jobs:
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^web/'; then
-            echo "::set-output name=modified::true"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-            echo "::set-output name=modified::false"
+             echo "modified=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
