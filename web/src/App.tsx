@@ -1,7 +1,6 @@
-import { ThemeProvider } from '@/components/theme-provider'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { Home } from './pages/home/home'
-
+import {ThemeProvider} from '@/components/theme-provider'
+import {QueryClient, QueryClientProvider} from 'react-query'
+import {Home} from './pages/home/home'
 
 const queryClient = new QueryClient()
 

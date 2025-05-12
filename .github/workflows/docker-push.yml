@@ -13,9 +13,10 @@ on:
     inputs:
       force_rebuild:
         type: boolean
-        description: 'Force la reconstruction de tout ou partie des images (uniquement si il y a des changements)'
         required: false
         default: false
+        description: 'Forcer la reconstruction des images'
+
 
 jobs:
   build-and-push-api:
@@ -35,35 +36,33 @@ jobs:
           base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
           # Si base_ref est vide (premier commit), utiliser un hash nul
           if [[ -z "$base_ref" ]]; then
-          base_ref=$(git hash-object -t tree /dev/null)
+           base_ref=$(git hash-object -t tree /dev/null)
           fi
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^api/'; then
-          echo "::set-output name=modified::true"
+           echo "::set-output name=modified::true"
           else
-          echo "::set-output name=modified::false"
+           echo "::set-output name=modified::false"
           fi
-      - name: Output API modified status
-        run: echo "API modified ${{ steps.api_changes.outputs.modified }}"
       - name: Login to Docker Hub
-        if: steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/login-action@v2
         id: login
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
-        if: steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/setup-buildx-action@v2
       - name: Build and push API docker image
-        if: steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/api
           file: ${{ github.workspace }}/api/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: ${{ steps.login.outcome == 'success' && (steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true') }}
 
   build-and-push-gemini:
     name: Build and push GEMINI docker image
@@ -91,26 +90,24 @@ jobs:
           else
             echo "::set-output name=modified::false"
           fi
-      - name: Output GEMINI modified status
-        run: echo "GEMINI modified ${{ steps.gemini_changes.outputs.modified }}"
       - name: Login to Docker Hub
-        if: steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/login-action@v2
         id: login
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
-        if: steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/setup-buildx-action@v2
       - name: Build and push GEMINI docker image
-        if: steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/gemini
           file: ${{ github.workspace }}/gemini/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: ${{ steps.login.outcome == 'success' && (steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true') }}
 
   build-and-push-openai:
     name: Build and push OPENAI docker image
@@ -124,31 +121,38 @@ jobs:
       - name: Check for OPENAI changes
         id: openai_changes
         run: |
-          git fetch --depth=2 origin ${{ github.base_ref }}
-          changed_files=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }})
-          if echo "$changed_files" | grep -q '^openai/'; then
+          git fetch --depth=2 origin ${{ github.sha }}
+          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
+          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
+          # Si base_ref est vide (premier commit), utiliser un hash nul
+          if [[ -z "$base_ref" ]]; then
+            base_ref=$(git hash-object -t tree /dev/null)
+          fi
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
+          if echo "$changed_files" | grep -E '^openai/'; then
             echo "::set-output name=modified::true"
           else
             echo "::set-output name=modified::false"
           fi
       - name: Login to Docker Hub
-        if: steps.openai_changes.outputs.openai == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/login-action@v2
         id: login
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
-        if: steps.openai_changes.outputs.openai == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/setup-buildx-action@v2
       - name: Build and push OPENAI docker image
-        if: steps.openai_changes.outputs.openai == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/openai
           file: ${{ github.workspace }}/openai/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.openai_changes.outputs.openai == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: ${{ steps.login.outcome == 'success' && (steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true') }}
 
   build-and-push-web:
     name: Build and push WEB docker image
@@ -162,28 +166,35 @@ jobs:
       - name: Check for WEB changes
         id: web_changes
         run: |
-          git fetch --depth=2 origin ${{ github.base_ref }}
-          changed_files=$(git diff --name-only ${{ github.base_ref }}...${{ github.sha }})
-          if echo "$changed_files" | grep -q '^web/'; then
+          git fetch --depth=2 origin ${{ github.sha }}
+          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
+          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
+          # Si base_ref est vide (premier commit), utiliser un hash nul
+          if [[ -z "$base_ref" ]]; then
+            base_ref=$(git hash-object -t tree /dev/null)
+          fi
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
+          if echo "$changed_files" | grep -E '^web/'; then
             echo "::set-output name=modified::true"
           else
             echo "::set-output name=modified::false"
           fi
       - name: Login to Docker Hub
-        if: steps.web_changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/login-action@v2
         id: login
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Set up Docker Buildx
-        if: steps.web_changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/setup-buildx-action@v2
       - name: Build and push WEB docker image
-        if: steps.web_changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true'
+        if: ${{ steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
         uses: docker/build-push-action@v3
         with:
           context: ${{ github.workspace }}/web
           file: ${{ github.workspace }}/web/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.web_changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: ${{ steps.login.outcome == 'success' && (steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true') }}

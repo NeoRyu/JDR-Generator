@@ -551,15 +551,7 @@
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
       <workItem from="1746685738417" duration="21380000" />
-      <workItem from="1747031240346" duration="3542000" />
-    </task>
-    <task id="LOCAL-00087" summary="[WIP] JDR-Generator : AWS - Modification des configs et repush d'images rebuilder sur dockerhub&#10;&#10;ec2-user&#10;&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
-      <option name="closed" value="true" />
-      <created>1746610321815</created>
-      <option name="number" value="00087" />
-      <option name="presentableId" value="LOCAL-00087" />
-      <option name="project" value="LOCAL" />
-      <updated>1746610321815</updated>
+      <workItem from="1747031240346" duration="3945000" />
     </task>
     <task id="LOCAL-00088" summary="[WIP] JDR-Generator : AWS - Modification des configs et repush d'images rebuilder sur dockerhub&#10;&#10;ec2-user&#10;&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
       <option name="closed" value="true" />
@@ -945,7 +937,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747034633428</updated>
     </task>
-    <option name="localTasksCounter" value="136" />
+    <task id="LOCAL-00136" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747034908028</created>
+      <option name="number" value="00136" />
+      <option name="presentableId" value="LOCAL-00136" />
+      <option name="project" value="LOCAL" />
+      <updated>1747034908028</updated>
+    </task>
+    <option name="localTasksCounter" value="137" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
