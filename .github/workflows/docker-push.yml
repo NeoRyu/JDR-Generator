@@ -38,6 +38,7 @@ jobs:
             base_ref=$(git hash-object -t tree /dev/null)
           fi
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -q '^api/'; then
             echo "::set-output name=modified::true"
           else
