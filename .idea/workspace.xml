@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-push.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/docker-push.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
@@ -77,85 +80,85 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Application.Car.executor": "Run",
-    "Application.CarTest.executor": "Run",
-    "Application.CitroenC6.executor": "Run",
-    "Application.Honda.executor": "Run",
-    "Application.PythonScriptExecutor.executor": "Run",
-    "Application.PythonScriptExecutorWithEngine.executor": "Run",
-    "Application.PythonScriptGeneratorExecutor.executor": "Run",
-    "Application.ScalaTests.executor": "Run",
-    "Application.Voiture.executor": "Run",
-    "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
-    "Application.run (API).executor": "Run",
-    "Application.start (API).executor": "Run",
-    "Batch.docker-compose.executor": "Run",
-    "Batch.docker-debug.executor": "Run",
-    "Batch.docker-push (1).executor": "Run",
-    "Batch.docker-push.executor": "Run",
-    "Batch.docker-push.local.executor": "Run",
-    "Batch.docker-restart.executor": "Run",
-    "Docker.workflows: Compose Deployment.executor": "Run",
-    "Maven.api [clean,install].executor": "Run",
-    "Maven.api [clean,package,install].executor": "Run",
-    "Maven.api [clean].executor": "Run",
-    "Maven.build (API) (docker).executor": "Run",
-    "Maven.build (API).executor": "Run",
-    "Python.m0v.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
-    "Shell Script.Docker Build API.executor": "Run",
-    "Shell Script.Docker Build Network.executor": "Run",
-    "Shell Script.Docker Run All.executor": "Run",
-    "Shell Script.Docker Stop All.executor": "Run",
-    "Shell Script.docker-build.executor": "Run",
-    "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "githubactions",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows/aws",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.build (1).executor": "Run",
-    "npm.build (GEMINI).executor": "Run",
-    "npm.build (OPENAI).executor": "Run",
-    "npm.build (WEB).executor": "Run",
-    "npm.build.executor": "Run",
-    "npm.build2.executor": "Run",
-    "npm.clean (GEMINI).executor": "Run",
-    "npm.clean (OPENAI).executor": "Run",
-    "npm.clean.executor": "Run",
-    "npm.start (GEMINI).executor": "Run",
-    "npm.start (WEB).executor": "Run",
-    "npm.start.executor": "Run",
-    "npm.start: dev (WEB).executor": "Run",
-    "npm.start: dev.executor": "Run",
-    "npm.start:dev.executor": "Run",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
-    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.Car.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CarTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CitroenC6.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Honda.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptGeneratorExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Voiture.executor&quot;: &quot;Run&quot;,
+    &quot;Application.jdr.generator.api.scala.tests.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
+    &quot;Application.start (API).executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-compose.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-debug.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push (1).executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push.local.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-restart.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.workflows: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.build (API) (docker).executor&quot;: &quot;Run&quot;,
+    &quot;Maven.build (API).executor&quot;: &quot;Run&quot;,
+    &quot;Python.m0v.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Shell Script.Docker - COMPLETE RESTART.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build API.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build Network.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Run All.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Stop All.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.docker-build.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;githubactions&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows/aws&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build (1).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.build2.executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="QodanaCIConfigService">
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
@@ -548,15 +551,8 @@
       <workItem from="1746426065385" duration="24713000" />
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
-      <workItem from="1746685738417" duration="21064000" />
-    </task>
-    <task id="LOCAL-00073" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator&#10;docker login&#10;cd api/&#10;docker pull maven:3.8.5-openjdk-17&#10;docker pull eclipse-temurin:17-jre-alpine&#10;docker build -t eli256/jdr-generator-api:latest .&#10;docker push eli256/jdr-generator-api:latest&#10;cd ..&#10;cd web/&#10;docker build -t eli256/jdr-generator-web:latest .&#10;docker push eli256/jdr-generator-web:latest&#10;cd ..&#10;cd gemini/&#10;docker build -t eli256/jdr-generator-gemini:latest .&#10;docker push eli256/jdr-generator-gemini:latest&#10;cd ..&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
-      <option name="closed" value="true" />
-      <created>1745567299843</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1745567299843</updated>
+      <workItem from="1746685738417" duration="21380000" />
+      <workItem from="1747031240346" duration="488000" />
     </task>
     <task id="LOCAL-00074" summary="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]">
       <option name="closed" value="true" />
@@ -942,7 +938,15 @@
       <option name="project" value="LOCAL" />
       <updated>1746715722068</updated>
     </task>
-    <option name="localTasksCounter" value="122" />
+    <task id="LOCAL-00122" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1746715950026</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1746715950026</updated>
+    </task>
+    <option name="localTasksCounter" value="123" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

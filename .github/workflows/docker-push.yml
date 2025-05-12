@@ -14,7 +14,7 @@ on:
     inputs:
       force_rebuild:
         type: boolean
-        description: 'Force la reconstruction de toutes les images (même sans changements)'
+        description: 'Force la reconstruction de tout ou partie des images (uniquement si il y a des changements)'
         required: false
         default: false
 
@@ -53,7 +53,7 @@ jobs:
           context: ${{ github.workspace }}/api
           file: ${{ github.workspace }}/api/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-api:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: true
 
   build-and-push-gemini:
     name: Build and push GEMINI docker image
@@ -89,7 +89,7 @@ jobs:
           context: ${{ github.workspace }}/gemini
           file: ${{ github.workspace }}/gemini/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-gemini:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: true
 
   build-and-push-openai:
     name: Build and push OPENAI docker image
@@ -125,7 +125,7 @@ jobs:
           context: ${{ github.workspace }}/openai
           file: ${{ github.workspace }}/openai/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-openai:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.openai_changes.outputs.openai == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: true
 
   build-and-push-web:
     name: Build and push WEB docker image
@@ -161,4 +161,4 @@ jobs:
           context: ${{ github.workspace }}/web
           file: ${{ github.workspace }}/web/Dockerfile
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:${{ github.sha }}, ${{ secrets.DOCKERHUB_USERNAME }}/jdr-generator-web:latest
-          push: ${{ steps.login.outcome == 'success' && (steps.web_changes.outputs.web == 'true' || github.event.inputs.force_rebuild == 'true') }}
+          push: true
