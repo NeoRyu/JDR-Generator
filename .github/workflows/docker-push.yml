@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - githubactions
-      - main
     paths:
       - 'api/**'
       - 'web/**'
