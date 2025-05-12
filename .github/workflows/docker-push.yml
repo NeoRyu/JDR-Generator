@@ -31,13 +31,13 @@ jobs:
         id: api_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Récupérer l'hash du commit précédent (s'il existe)
-          previous_sha=$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})
-          # Si aucun commit précédent n'est trouvé, utiliser un hash nul pour la comparaison
-          if [[ -z "$previous_sha" ]]; then
-            previous_sha=$(git hash-object -t tree /dev/null)
+          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
+          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
+          # Si base_ref est vide (premier commit), utiliser un hash nul
+          if [[ -z "$base_ref" ]]; then
+            base_ref=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$previous_sha"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           if echo "$changed_files" | grep -q '^api/'; then
             echo "::set-output name=modified::true"
           else
@@ -75,17 +75,17 @@ jobs:
         id: gemini_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Récupérer l'hash du commit précédent (s'il existe)
-          previous_sha=$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})
-          # Si aucun commit précédent n'est trouvé, utiliser un hash nul pour la comparaison
-          if [[ -z "$previous_sha" ]]; then
-           previous_sha=$(git hash-object -t tree /dev/null)
+          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
+          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
+          # Si base_ref est vide (premier commit), utiliser un hash nul
+          if [[ -z "$base_ref" ]]; then
+            base_ref=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$previous_sha"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           if echo "$changed_files" | grep -q '^gemini/'; then
-           echo "::set-output name=modified::true"
+            echo "::set-output name=modified::true"
           else
-           echo "::set-output name=modified::false"
+            echo "::set-output name=modified::false"
           fi
       - name: Login to Docker Hub
         if: steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true'
