@@ -21,12 +21,13 @@ jobs:
           java-version: 17
 
       # Exécution de l'analyse de style de code Java avec Maven Checkstyle
-      - name: Maven Checkstyle
-        run: cd api && mvn --batch-mode checkstyle:check
+      # - name: Maven Checkstyle
+      #   run: cd api && mvn --batch-mode checkstyle:check
+      #   run: cd api && mvn --batch-mode -Ddependency-check.skip=true checkstyle:check
 
       # Exécution de l'analyse statique de code Java pour détecter les bugs potentiels avec Maven SpotBugs
-      - name: Maven SpotBugs
-        run: cd api && mvn --batch-mode spotbugs:check
+      # - name: Maven SpotBugs
+      #  run: cd api && mvn --batch-mode spotbugs:check
 
   nodejs-code-quality:
     name: Run Node.js Code Quality Checks

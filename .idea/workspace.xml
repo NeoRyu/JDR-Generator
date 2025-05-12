@@ -7,53 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <change afterPath="$PROJECT_DIR$/api/dependency-check-suppress.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/google_checks.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/InvalidContextException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/IGeminiGenerationConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/api/sun_checks.xml" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change afterPath="$PROJECT_DIR$/web/eslint.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/code-quality.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/code-quality.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/FlywayDatabaseConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/FlywayDatabaseConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/RestPreconditions.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/RestPreconditions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharacterFullModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharacterFullModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/OpenaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/OpenaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/CharacterContextServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/DefaultContextJson.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/context/DefaultContextJson.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsNotFoundException.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsNotFoundException.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CharacterDetailsServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomBooleanDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/details/CustomIntegerDeserializer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/illustration/CharacterIllustrationServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/stats/CharacterJsonDataServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/CorsConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/IGeminiGenerationConfig.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/ModelMapperConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/ModelMapperConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/RestTemplateConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/config/RestTemplateConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package.json" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -128,85 +87,86 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Application.Car.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CarTest.executor&quot;: &quot;Run&quot;,
-    &quot;Application.CitroenC6.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Honda.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
-    &quot;Application.PythonScriptGeneratorExecutor.executor&quot;: &quot;Run&quot;,
-    &quot;Application.ScalaTests.executor&quot;: &quot;Run&quot;,
-    &quot;Application.Voiture.executor&quot;: &quot;Run&quot;,
-    &quot;Application.jdr.generator.api.scala.tests.ScalaTests.executor&quot;: &quot;Run&quot;,
-    &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
-    &quot;Application.start (API).executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-compose.executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-debug.executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-push (1).executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-push.executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-push.local.executor&quot;: &quot;Run&quot;,
-    &quot;Batch.docker-restart.executor&quot;: &quot;Run&quot;,
-    &quot;Docker.workflows: Compose Deployment.executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.api [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.build (API) (docker).executor&quot;: &quot;Run&quot;,
-    &quot;Maven.build (API).executor&quot;: &quot;Run&quot;,
-    &quot;Python.m0v.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Shell Script.Docker - COMPLETE RESTART.executor&quot;: &quot;Run&quot;,
-    &quot;Shell Script.Docker Build API.executor&quot;: &quot;Run&quot;,
-    &quot;Shell Script.Docker Build Network.executor&quot;: &quot;Run&quot;,
-    &quot;Shell Script.Docker Run All.executor&quot;: &quot;Run&quot;,
-    &quot;Shell Script.Docker Stop All.executor&quot;: &quot;Run&quot;,
-    &quot;Shell Script.docker-build.executor&quot;: &quot;Run&quot;,
-    &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;githubactions&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows/aws&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;npm.build (1).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build (OPENAI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.build.executor&quot;: &quot;Run&quot;,
-    &quot;npm.build2.executor&quot;: &quot;Run&quot;,
-    &quot;npm.clean (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.clean (OPENAI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.clean.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start (GEMINI).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
-    &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
-    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.LLMConfigurable&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Application.Car.executor": "Run",
+    "Application.CarTest.executor": "Run",
+    "Application.CitroenC6.executor": "Run",
+    "Application.Honda.executor": "Run",
+    "Application.PythonScriptExecutor.executor": "Run",
+    "Application.PythonScriptExecutorWithEngine.executor": "Run",
+    "Application.PythonScriptGeneratorExecutor.executor": "Run",
+    "Application.ScalaTests.executor": "Run",
+    "Application.Voiture.executor": "Run",
+    "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
+    "Application.run (API).executor": "Run",
+    "Application.start (API).executor": "Run",
+    "Batch.docker-compose.executor": "Run",
+    "Batch.docker-debug.executor": "Run",
+    "Batch.docker-push (1).executor": "Run",
+    "Batch.docker-push.executor": "Run",
+    "Batch.docker-push.local.executor": "Run",
+    "Batch.docker-restart.executor": "Run",
+    "Docker.workflows: Compose Deployment.executor": "Run",
+    "Maven.api [clean,install].executor": "Run",
+    "Maven.api [clean,package,install].executor": "Run",
+    "Maven.api [clean].executor": "Run",
+    "Maven.build (API) (docker).executor": "Run",
+    "Maven.build (API).executor": "Run",
+    "Python.m0v.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
+    "Shell Script.Docker Build API.executor": "Run",
+    "Shell Script.Docker Build Network.executor": "Run",
+    "Shell Script.Docker Run All.executor": "Run",
+    "Shell Script.Docker Stop All.executor": "Run",
+    "Shell Script.docker-build.executor": "Run",
+    "Spring Boot.ApiApplication.executor": "Run",
+    "git-widget-placeholder": "githubactions",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
+    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.github/workflows/aws",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "node",
+    "nodejs_package_manager_path": "npm",
+    "npm.build (1).executor": "Run",
+    "npm.build (GEMINI).executor": "Run",
+    "npm.build (OPENAI).executor": "Run",
+    "npm.build (WEB).executor": "Run",
+    "npm.build.executor": "Run",
+    "npm.build2.executor": "Run",
+    "npm.clean (GEMINI).executor": "Run",
+    "npm.clean (OPENAI).executor": "Run",
+    "npm.clean.executor": "Run",
+    "npm.start (GEMINI).executor": "Run",
+    "npm.start (OPENAI).executor": "Run",
+    "npm.start (WEB).executor": "Run",
+    "npm.start.executor": "Run",
+    "npm.start: dev (WEB).executor": "Run",
+    "npm.start: dev.executor": "Run",
+    "npm.start:dev.executor": "Run",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "ml.llm.LLMConfigurable",
+    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="QodanaCIConfigService">
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
@@ -600,15 +560,7 @@
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
       <workItem from="1746685738417" duration="21380000" />
-      <workItem from="1747031240346" duration="21966000" />
-    </task>
-    <task id="LOCAL-00092" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1746698027308</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1746698027308</updated>
+      <workItem from="1747031240346" duration="23108000" />
     </task>
     <task id="LOCAL-00093" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -994,7 +946,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747043229222</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747060113194</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1747060113194</updated>
+    </task>
+    <option name="localTasksCounter" value="142" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1014,7 +974,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[OK] JDR-Generator : &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -1039,7 +998,8 @@
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
-    <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
