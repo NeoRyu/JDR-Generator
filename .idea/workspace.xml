@@ -4,7 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/code-quality.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/localhost/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-compose.local.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/localhost/docker-compose.local.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/docker-push.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/localhost/docker-push.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package.json" afterDir="false" />
+    </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
@@ -61,7 +74,7 @@
 }</component>
   <component name="ProblemsViewState">
     <option name="proportion" value="0.33432615" />
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="DEPENDENCY_CHECKER_PROBLEMS_TAB" />
     <option name="showPreview" value="true" />
   </component>
   <component name="ProjectCodeStyleSettingsMigration">
@@ -188,11 +201,11 @@
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.docker" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\localhost" />
+      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\local" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\aws" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows" />
       <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\docker" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala\tests" />
-      <recent name="C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api\src\main\scala\jdr\generator\api\scala" />
     </key>
     <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
       <recent name="jdr.generator.api.kotlin" />
@@ -549,15 +562,7 @@
       <workItem from="1746512399891" duration="16605000" />
       <workItem from="1746601280218" duration="20604000" />
       <workItem from="1746685738417" duration="21380000" />
-      <workItem from="1747031240346" duration="4691000" />
-    </task>
-    <task id="LOCAL-00090" summary="[WIP] JDR-Generator : AWS - Modification des configs et repush d'images rebuilder sur dockerhub&#10;&#10;ec2-user&#10;&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
-      <option name="closed" value="true" />
-      <created>1746623515006</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1746623515006</updated>
+      <workItem from="1747031240346" duration="9872000" />
     </task>
     <task id="LOCAL-00091" summary="[STAND-BY] JDR-Generator : AWS - ec2-user&#10;&gt; Echec de mise en place d'un déploiement avec le fichier aws.zip via l'environnement multi container docker depuis une application Elastic Beanstalk sur une instance EC2 avec base de données RDS et VPC et stockage S3... &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk">
       <option name="closed" value="true" />
@@ -943,7 +948,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747035714414</updated>
     </task>
-    <option name="localTasksCounter" value="139" />
+    <task id="LOCAL-00139" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747036183115</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1747036183115</updated>
+    </task>
+    <option name="localTasksCounter" value="140" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

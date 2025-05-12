@@ -5,17 +5,22 @@
   "scripts": {
     "clean": "rd /s /q dist",
     "build": "tsc",
-    "start": "node dist/app.js"
+    "start": "node dist/app.js",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "keywords": [],
-  "author": "VotreNom",
+  "author": "NeoRyu",
   "license": "ISC",
   "description": "NodeJS REST-API to interact with OpenAI for image generation",
   "devDependencies": {
     "@types/body-parser": "^1.19.2",
     "@types/express": "^4.17.13",
     "@types/node": "^20.10.5",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "eslint": "8.57.1",
+    "prettier": "3.5.3"
   },
   "dependencies": {
     "body-parser": "^1.20.1",

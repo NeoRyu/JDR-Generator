@@ -1,0 +1,72 @@
+name: Code Quality Checks
+
+on:
+  push: # Déclenche le workflow lors de chaque push de code
+  pull_request: # Déclenche le workflow lors de chaque création ou mise à jour d'une pull request
+
+jobs:
+  code-quality:
+    name: Run Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      # Récupère le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Vérifications pour le module API (Java/Scala)
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      # Exécute l'analyse de style de code Java avec Maven Checkstyle
+      - name: Maven Checkstyle
+        run: cd api && mvn --batch-mode checkstyle:check
+      # Exécute l'analyse statique de code Java pour détecter les bugs potentiels avec Maven SpotBugs
+      - name: Maven SpotBugs
+        run: cd api && mvn --batch-mode spotbugs:check
+
+      # Configuration de Node.js pour l'ensemble des autres modules l'utilisant
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+
+      # Installe les dépendances du module Web
+      - name: Install Web dependencies
+        run: cd web && npm install
+      # Exécute l'analyse de linting pour le module Web avec ESLint
+      - name: Web ESLint
+        run: cd web && npm run lint
+      # Vérifie le formatage du code du module Web avec Prettier
+      - name: Web Prettier Check
+        run: cd web && npm run format:check
+      # Vérifie les erreurs de type TypeScript dans le module Web
+      - name: TypeScript Check (Web)
+        run: cd web && npx tsc --noEmit
+
+      # Installe les dépendances du module Gemini
+      - name: Gemini Install dependencies
+        run: cd gemini && npm install
+      # Exécute l'analyse de linting pour le module Gemini avec ESLint
+      - name: Gemini ESLint
+        run: cd gemini && npm run lint
+      # Vérifie le formatage du code du module Gemini avec Prettier
+      - name: Gemini Prettier Check
+        run: cd gemini && npm run format:check
+      # Vérifie les erreurs de type TypeScript dans le module Gemini
+      - name: TypeScript Check (Gemini)
+        run: cd gemini && npx tsc --noEmit
+
+      # Installe les dépendances du module OpenAI
+      - name: OpenAI Install dependencies
+        run: cd openai && npm install
+      # Exécute l'analyse de linting pour le module OpenAI avec ESLint
+      - name: OpenAI ESLint
+        run: cd openai && npm run lint
+      # Vérifie le formatage du code du module OpenAI avec Prettier
+      - name: OpenAI Prettier Check
+        run: cd openai && npm run format:check
+      # Vérifie les erreurs de type TypeScript dans le module OpenAI
+      - name: TypeScript Check (OpenAI)
+        run: cd openai && npx tsc --noEmit

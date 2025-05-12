@@ -4,8 +4,8 @@ services:
   api-container:
     image: eli256/jdr-generator-api:latest
     build:
-      context: ../../api
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'api'
+      context: ../../../api
+      dockerfile: ../../../api/Dockerfile # Nom du Dockerfile dans le dossier 'api'
     ports:
       - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
@@ -34,8 +34,8 @@ services:
   web-container:
     image: eli256/jdr-generator-web:latest
     build:
-      context: ../../web
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'web'
+      context: ../../../web
+      dockerfile: ../../../web/Dockerfile # Nom du Dockerfile dans le dossier 'web'
       args: # Ajout des arguments de build pour passer VITE_API_URL
         - 'VITE_API_URL=${VITE_API_URL}'
     ports:
@@ -51,8 +51,8 @@ services:
   gemini-container:
     image: eli256/jdr-generator-gemini:latest
     build:
-      context: ../../gemini
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'gemini'
+      context: ../../../gemini
+      dockerfile: ../../../gemini/Dockerfile # Nom du Dockerfile dans le dossier 'gemini'
     ports:
       - "8082:3001" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
@@ -63,8 +63,8 @@ services:
   openai-container:
     image: eli256/jdr-generator-openai:latest
     build:
-      context: ../../openai
-      dockerfile: Dockerfile # Nom du Dockerfile dans le dossier 'openai'
+      context: ../../../openai
+      dockerfile: ../../../openai/Dockerfile # Nom du Dockerfile dans le dossier 'openai'
     ports:
       - "8083:3002" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
     environment:
