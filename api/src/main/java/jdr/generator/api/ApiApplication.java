@@ -25,7 +25,7 @@ public class ApiApplication {
 
     private static void logAppReady() {
         LOGGER.log(Level.OFF, "LOGGER LEVEL '{}' WILL BE USED...", LOGGER.getLevel());
-        final String message = "\n---------\n\nJDR-GENERATOR : APP IS READY TO USE !\n\n---------";
+        final String message = "\n---------\n\nJDR-GENERATOR :: APP IS READY TO USE !\n\n---------";
         LOGGER.log(Level.OFF, message);
         System.out.println(message);
     }
