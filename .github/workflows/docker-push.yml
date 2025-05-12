@@ -35,15 +35,17 @@ jobs:
           base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
           # Si base_ref est vide (premier commit), utiliser un hash nul
           if [[ -z "$base_ref" ]]; then
-            base_ref=$(git hash-object -t tree /dev/null)
+          base_ref=$(git hash-object -t tree /dev/null)
           fi
           changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^api/'; then
-            echo "::set-output name=modified::true"
+          echo "::set-output name=modified::true"
           else
-            echo "::set-output name=modified::false"
+          echo "::set-output name=modified::false"
           fi
+      - name: Output API modified status
+        run: echo "API modified ${{ steps.api_changes.outputs.modified }}"
       - name: Login to Docker Hub
         if: steps.api_changes.outputs.api == 'true' || github.event.inputs.force_rebuild == 'true'
         uses: docker/login-action@v2
@@ -89,6 +91,8 @@ jobs:
           else
             echo "::set-output name=modified::false"
           fi
+      - name: Output GEMINI modified status
+        run: echo "GEMINI modified ${{ steps.gemini_changes.outputs.modified }}"
       - name: Login to Docker Hub
         if: steps.gemini_changes.outputs.gemini == 'true' || github.event.inputs.force_rebuild == 'true'
         uses: docker/login-action@v2
