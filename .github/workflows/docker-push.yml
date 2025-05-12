@@ -32,18 +32,18 @@ jobs:
         id: api_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
-          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
-          # Si base_ref est vide (premier commit), utiliser un hash nul
-          if [[ -z "$base_ref" ]]; then
-           base_ref=$(git hash-object -t tree /dev/null)
+          # Récupérer l'hash du commit parent direct
+          parent_sha=$(git rev-parse HEAD^)
+          # Si le parent n'existe pas (premier commit), utiliser un hash nul
+          if [[ -z "$parent_sha" ]]; then
+           parent_sha=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$parent_sha"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^api/'; then
              echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-             echo "modified=true" >> "$GITHUB_OUTPUT"
+             echo "modified=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.api_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -77,18 +77,18 @@ jobs:
         id: gemini_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
-          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
-          # Si base_ref est vide (premier commit), utiliser un hash nul
-          if [[ -z "$base_ref" ]]; then
-            base_ref=$(git hash-object -t tree /dev/null)
+          # Récupérer l'hash du commit parent direct
+          parent_sha=$(git rev-parse HEAD^)
+          # Si le parent n'existe pas (premier commit), utiliser un hash nul
+          if [[ -z "$parent_sha" ]]; then
+            parent_sha=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$parent_sha"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^gemini/'; then
              echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-             echo "modified=true" >> "$GITHUB_OUTPUT"
+             echo "modified=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.gemini_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -122,18 +122,18 @@ jobs:
         id: openai_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
-          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
-          # Si base_ref est vide (premier commit), utiliser un hash nul
-          if [[ -z "$base_ref" ]]; then
-            base_ref=$(git hash-object -t tree /dev/null)
+          # Récupérer l'hash du commit parent direct
+          parent_sha=$(git rev-parse HEAD^)
+          # Si le parent n'existe pas (premier commit), utiliser un hash nul
+          if [[ -z "$parent_sha" ]]; then
+            parent_sha=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$parent_sha"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^openai/'; then
              echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-             echo "modified=true" >> "$GITHUB_OUTPUT"
+             echo "modified=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.openai_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
@@ -167,18 +167,18 @@ jobs:
         id: web_changes
         run: |
           git fetch --depth=2 origin ${{ github.sha }}
-          # Tenter d'utiliser GITHUB_BASE_REF si disponible, sinon récupérer le commit précédent via git log
-          base_ref="${GITHUB_BASE_REF:-$(git log -1 --skip=1 --pretty=%H ${{ github.sha }})}"
-          # Si base_ref est vide (premier commit), utiliser un hash nul
-          if [[ -z "$base_ref" ]]; then
-            base_ref=$(git hash-object -t tree /dev/null)
+          # Récupérer l'hash du commit parent direct
+          parent_sha=$(git rev-parse HEAD^)
+          # Si le parent n'existe pas (premier commit), utiliser un hash nul
+          if [[ -z "$parent_sha" ]]; then
+            parent_sha=$(git hash-object -t tree /dev/null)
           fi
-          changed_files=$(git diff --name-only "$base_ref"...${{ github.sha }})
+          changed_files=$(git diff --name-only "$parent_sha"...${{ github.sha }})
           echo "Fichiers modifiés détectés : $changed_files" # Ajout pour le diagnostic
           if echo "$changed_files" | grep -E '^web/'; then
              echo "modified=true" >> "$GITHUB_OUTPUT"
           else
-             echo "modified=true" >> "$GITHUB_OUTPUT"
+             echo "modified=false" >> "$GITHUB_OUTPUT"
           fi
       - name: Login to Docker Hub
         if: ${{ steps.web_changes.outputs.modified == 'true' || github.event.inputs.force_rebuild == 'true' }}
