@@ -31,6 +31,9 @@ jobs:
       - name: Check for API changes
         id: api_changes
         uses: dorny/paths-filter@v2
+        env:
+          GITHUB_BASE: ${{ github.event.before }}
+          GITHUB_HEAD: ${{ github.sha }}
         with:
           filters: |
             api: 'api/**'
@@ -67,6 +70,9 @@ jobs:
       - name: Check for GEMINI changes
         id: gemini_changes
         uses: dorny/paths-filter@v2
+        env:
+          GITHUB_BASE: ${{ github.event.before }}
+          GITHUB_HEAD: ${{ github.sha }}
         with:
           filters: |
             gemini: 'gemini/**'
@@ -103,6 +109,9 @@ jobs:
       - name: Check for OPENAI changes
         id: openai_changes
         uses: dorny/paths-filter@v2
+        env:
+          GITHUB_BASE: ${{ github.event.before }}
+          GITHUB_HEAD: ${{ github.sha }}
         with:
           filters: |
             openai: 'openai/**'
@@ -139,6 +148,9 @@ jobs:
       - name: Check for WEB changes
         id: web_changes
         uses: dorny/paths-filter@v2
+        env:
+          GITHUB_BASE: ${{ github.event.before }}
+          GITHUB_HEAD: ${{ github.sha }}
         with:
           filters: |
             web: 'web/**'
