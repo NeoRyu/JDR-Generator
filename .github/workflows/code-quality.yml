@@ -45,10 +45,10 @@ jobs:
       - name: Install dependencies
         run: cd web && npm install
       # Formater le code avec Prettier
-      - name: Format code
+      - name: Format code # npm run format
         run: cd web && npm run format
       # Vérifier le formatage avec Prettier
-      - name: Check formatting
+      - name: Check formatting # cmd 'lint' dans package.json
         run: cd web && npm run format:check
       # ESLint
       - name: ESLint
@@ -74,10 +74,10 @@ jobs:
       - name: Install dependencies
         run: cd gemini && npm install
       # Formater le code avec Prettier
-      - name: Format code
+      - name: Format code # npm run format
         run: cd gemini && npm run format
       # Vérifier le formatage avec Prettier
-      - name: Check formatting
+      - name: Check formatting # cmd 'lint' dans package.json
         run: cd gemini && npm run format:check
       # ESLint
       - name: ESLint
@@ -103,10 +103,10 @@ jobs:
       - name: Install dependencies
         run: cd openai && npm install
       # Formater le code avec Prettier
-      - name: Format code
+      - name: Format code # npm run format
         run: cd openai && npm run format
       # Vérifier le formatage avec Prettier
-      - name: Check formatting
+      - name: Check formatting # cmd 'lint' dans package.json
         run: cd openai && npm run format:check
       # ESLint
       - name: OpenAI ESLint
