@@ -44,7 +44,7 @@ export default defineConfig([
   {
     files: ["**/*.{jsx,tsx}"],
     plugins: { react: pluginReact },
-    extends: ["react/recommended", "react/jsx-runtime"],
+    extends: [pluginReact.configs.recommended, pluginReact.configs["jsx-runtime"]],
     settings: { react: { version: "detect" } },
     rules: {
       "react/prop-types": "off",
