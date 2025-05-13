@@ -1,3 +1,3 @@
 interface CharacterFormRef {
-    handleSubmit: (e: React.FormEvent) => void;
+  handleSubmit: (e: React.FormEvent) => void;
 }

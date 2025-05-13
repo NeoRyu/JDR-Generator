@@ -5,7 +5,6 @@ import {generateResponse} from "./src/controllers/background";
 import {generateImage} from "./src/controllers/illustration";
 import {generateStats} from "./src/controllers/statistiques";
 
-
 dotenv.config();
 
 const app = express();
@@ -15,10 +14,12 @@ app.use(bodyParser.json());
 app.post("/gemini/generate", generateResponse);
 app.post("/gemini/illustrate", generateImage);
 app.post("/gemini/stats", generateStats);
-app.get('/gemini/healthcheck', (req, res) => {
-    res.status(200).json({ status: 'OK', port: parseInt(process.env.PORT || '3001', 10) });
+app.get("/gemini/healthcheck", (req, res) => {
+  res
+    .status(200)
+    .json({ status: "OK", port: parseInt(process.env.PORT || "3001", 10) });
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });

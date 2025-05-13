@@ -1,21 +1,23 @@
 import {Request, Response} from "express";
 import dotenv from "dotenv";
 import fs from "fs";
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 dotenv.config();
 
 // --- Global Configuration ---
 const apiKey = process.env.API_KEY;
-const openAITextModel = process.env.AI_TEXT_MODEL || 'gpt-3.5-turbo';
+const openAITextModel = process.env.AI_TEXT_MODEL || "gpt-3.5-turbo";
 const maxOutputTokens: number = +(process.env.MAX_TOKENS || 2048);
 const temperature: number = +(process.env.TEMPERATURE || 0.7);
 const topP: number = +(process.env.TOP_P || 0.8);
-const downloadFolder = process.env.DOWNLOAD_FOLDER || 'default';
+const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
 
 // --- OpenAI Configuration ---
 if (!apiKey) {
-    console.error("API_KEY environment variable is not set. OpenAI API calls will fail.");
+  console.error(
+    "API_KEY environment variable is not set. OpenAI API calls will fail.",
+  );
 }
 const openai = new OpenAI({ apiKey });
 
@@ -72,97 +74,125 @@ const systemPrompt = `You are an expert in RPGs, with extensive knowledge of var
         '''
 `;
 const formatUserPrompt = (data: any): string => {
-    const context = `
+  const context = `
     game system: ${data.promptSystem}
     race: ${data.promptRace}
     gender: ${data.promptGender}
     class: ${data.promptClass}
     description: ${data.promptDescription}
     `;
-    return systemPrompt + ` Please use the context provided below to generate the character: Context: '''` + context + `'''`;
-}
+  return (
+    systemPrompt +
+    ` Please use the context provided below to generate the character: Context: '''` +
+    context +
+    `'''`
+  );
+};
 
 // Function to check if we are in a local environment
-const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== 'production';
+const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
 // Controller function to generate the background (JSON text)
 export const generateResponse = async (req: Request, res: Response) => {
-    const pathSrc: string = `/app/downloads/${downloadFolder}/`;
-    const txtName: string = `${downloadFolder}-openai-background_${Math.floor(Date.now() / 1000)}.txt`;
+  const pathSrc: string = `/app/downloads/${downloadFolder}/`;
+  const txtName: string = `${downloadFolder}-openai-background_${Math.floor(Date.now() / 1000)}.txt`;
 
-    // Create local download directory if needed
-    if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
-        try {
-            fs.mkdirSync(pathSrc, { recursive: true, mode: 0o755 });
-            console.log(`Local download directory created: ${pathSrc}`);
-        } catch (e) {
-            console.error(`Error creating local download directory ${pathSrc}:`, e);
-        }
+  // Create local download directory if needed
+  if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
+    try {
+      fs.mkdirSync(pathSrc, { recursive: true, mode: 0o755 });
+      console.log(`Local download directory created: ${pathSrc}`);
+    } catch (e) {
+      console.error(`Error creating local download directory ${pathSrc}:`, e);
+    }
+  }
+
+  try {
+    const { prompt } = req.body; // Main prompt (not directly used in the structured prompt)
+    const contextData = req.body; // Context data (system, race, gender, class, description)
+
+    console.log("OpenAI Background :: Received Context:", contextData);
+
+    // --- Call OpenAI API (Chat Completions) ---
+    console.log(`Calling OpenAI API with model: ${openAITextModel}`);
+    const completion = await openai.chat.completions.create({
+      model: openAITextModel,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: formatUserPrompt(contextData) },
+      ],
+      response_format: { type: "json_object" },
+      temperature: temperature,
+      max_tokens: maxOutputTokens,
+      top_p: topP,
+    });
+    console.log("OpenAI API response received.");
+
+    let responseText: string | null = null;
+    if (
+      completion.choices &&
+      completion.choices.length > 0 &&
+      completion.choices[0].message &&
+      completion.choices[0].message.content
+    ) {
+      responseText = completion.choices[0].message.content;
+      console.log("Response text content received.");
+    } else {
+      console.error(
+        "OpenAI API response structure unexpected or missing content:",
+        JSON.stringify(completion),
+      );
+      res
+        .status(500)
+        .json({
+          message:
+            "Error during generating background: unexpected OpenAI response.",
+        });
+      return;
     }
 
     try {
-        const { prompt } = req.body; // Main prompt (not directly used in the structured prompt)
-        const contextData = req.body; // Context data (system, race, gender, class, description)
+      const parsedJson = JSON.parse(responseText);
+      const finalResponseText = JSON.stringify(parsedJson);
 
-        console.log('OpenAI Background :: Received Context:', contextData);
-
-        // --- Call OpenAI API (Chat Completions) ---
-        console.log(`Calling OpenAI API with model: ${openAITextModel}`);
-        const completion = await openai.chat.completions.create({
-            model: openAITextModel,
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: formatUserPrompt(contextData) }
-            ],
-            response_format: { type: "json_object" },
-            temperature: temperature,
-            max_tokens: maxOutputTokens,
-            top_p: topP
-        });
-        console.log('OpenAI API response received.');
-
-        let responseText: string | null = null;
-        if (completion.choices && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content) {
-            responseText = completion.choices[0].message.content;
-            console.log('Response text content received.');
-        } else {
-            console.error("OpenAI API response structure unexpected or missing content:", JSON.stringify(completion));
-            res.status(500).json({ message: "Error during generating background: unexpected OpenAI response." });
-            return;
-        }
-
+      if (isLocalEnvironment()) {
         try {
-            const parsedJson = JSON.parse(responseText);
-            const finalResponseText = JSON.stringify(parsedJson);
-
-            if (isLocalEnvironment()) {
-                try {
-                    fs.writeFileSync(pathSrc + txtName, finalResponseText);
-                    console.log(`> Background text saved locally to: ${pathSrc}${txtName}`);
-                } catch (writeError) {
-                    console.error(`Error writing local background text file ${pathSrc}${txtName}:`, writeError);
-                }
-            }
-
-            res.status(200).send({ response: finalResponseText });
-
-        } catch (jsonError) {
-            console.error("Error parsing JSON response from OpenAI:", jsonError);
-            console.error("Invalid JSON text received:", responseText);
-            res.status(500).json({ message: "Error parsing generated JSON background.", error: jsonError.message });
+          fs.writeFileSync(pathSrc + txtName, finalResponseText);
+          console.log(
+            `> Background text saved locally to: ${pathSrc}${txtName}`,
+          );
+        } catch (writeError) {
+          console.error(
+            `Error writing local background text file ${pathSrc}${txtName}:`,
+            writeError,
+          );
         }
+      }
 
-    } catch (err: any) {
-        console.error("Error during OpenAI Background API call:", err);
-        if (err.response && err.response.data && err.response.data.error) {
-            console.error("OpenAI Error Details:", err.response.data.error);
-            res.status(err.response.status || 500).json({
-                message: "Error during generating background with OpenAI",
-                error: err.response.data.error.message || "Unknown OpenAI API error"
-            });
-        } else {
-            console.error("Non-OpenAI Error:", err);
-            res.status(500).json({ message: "An unexpected error occurred", error: err.message });
-        }
+      res.status(200).send({ response: finalResponseText });
+    } catch (jsonError) {
+      console.error("Error parsing JSON response from OpenAI:", jsonError);
+      console.error("Invalid JSON text received:", responseText);
+      res
+        .status(500)
+        .json({
+          message: "Error parsing generated JSON background.",
+          error: jsonError.message,
+        });
     }
+  } catch (err: any) {
+    console.error("Error during OpenAI Background API call:", err);
+    if (err.response && err.response.data && err.response.data.error) {
+      console.error("OpenAI Error Details:", err.response.data.error);
+      res.status(err.response.status || 500).json({
+        message: "Error during generating background with OpenAI",
+        error: err.response.data.error.message || "Unknown OpenAI API error",
+      });
+    } else {
+      console.error("Non-OpenAI Error:", err);
+      res
+        .status(500)
+        .json({ message: "An unexpected error occurred", error: err.message });
+    }
+  }
 };
