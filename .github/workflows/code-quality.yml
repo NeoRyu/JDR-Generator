@@ -6,87 +6,111 @@ on:
 
 jobs:
   java-code-quality:
-    name: Run Java Code Quality Checks
+    name: API Run Java Code Quality Checks
     runs-on: ubuntu-latest
     steps:
       # Récupère le code source du dépôt
-      - name: Checkout code
+      - name: API Checkout code
         uses: actions/checkout@v3
-
       # Configuration de l'environnement Java
-      - name: Set up JDK
+      - name: API Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
 
       # Exécution de l'analyse de style de code Java avec Maven Checkstyle
-      # - name: Maven Checkstyle
+      # - name: API Maven Checkstyle
       #   run: cd api && mvn --batch-mode checkstyle:check
       #   run: cd api && mvn --batch-mode -Ddependency-check.skip=true checkstyle:check
 
       # Exécution de l'analyse statique de code Java pour détecter les bugs potentiels avec Maven SpotBugs
-      # - name: Maven SpotBugs
+      # - name: API Maven SpotBugs
       #  run: cd api && mvn --batch-mode spotbugs:check
 
-  nodejs-code-quality:
-    name: Run Node.js Code Quality Checks
+  nodejs-code-quality-web:
+    name: Node.js Code Quality - Web
     runs-on: ubuntu-latest
+    needs: java-code-quality
     steps:
-      # Récupère le code source du dépôt
+      # Récupérer le code source du dépôt
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # Configuration de Node.js pour l'ensemble des autres modules l'utilisant
+      # Configurer Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
-
-      # Installation des dépendances du module Web
-      - name: Install Web dependencies
-        run: cd web && npm install
-
-      # Exécution de l'analyse de linting pour le module Web avec ESLint
-      - name: Web ESLint
-        run: cd web && npm run lint
-
-      # Vérification du formatage du code du module Web avec Prettier
-      - name: Web Prettier Check
+      # Formater le code avec Prettier
+      - name: Format code
+        run: cd web && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting
         run: cd web && npm run format:check
-
-      # Vérification des erreurs de type TypeScript dans le module Web
-      - name: TypeScript Check (Web)
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd web && npm install
+      # ESLint
+      - name: ESLint
+        run: cd web && npm run lint
+      # Vérifier TypeScript
+      - name: TypeScript Check
         run: cd web && npx tsc --noEmit
 
-      # Installation des dépendances du module Gemini
-      - name: Gemini Install dependencies
-        run: cd gemini && npm install
-
-      # Exécution de l'analyse de linting pour le module Gemini avec ESLint
-      - name: Gemini ESLint
-        run: cd gemini && npm run lint
-
-      # Vérification du formatage du code du module Gemini avec Prettier
-      - name: Gemini Prettier Check
+  nodejs-code-quality-gemini:
+    name: Node.js Code Quality - Gemini
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+      # Formater le code avec Prettier
+      - name: Format code
+        run: cd gemini && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting
         run: cd gemini && npm run format:check
-
-      # Vérification des erreurs de type TypeScript dans le module Gemini
-      - name: TypeScript Check (Gemini)
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd gemini && npm install
+      # ESLint
+      - name: ESLint
+        run: cd gemini && npm run lint
+      # Vérifier TypeScript
+      - name: TypeScript Check
         run: cd gemini && npx tsc --noEmit
 
-      # Installation des dépendances du module OpenAI
-      - name: OpenAI Install dependencies
+  nodejs-code-quality-openai:
+    name: Node.js Code Quality - OpenAI
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+      # Formater le code avec Prettier
+      - name: Format code
+        run: cd openai && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting
+        run: cd openai && npm run format:check
+      # Installer les dépendances
+      - name: Install dependencies
         run: cd openai && npm install
-
-      # Exécution de l'analyse de linting pour le module OpenAI avec ESLint
+      # ESLint
       - name: OpenAI ESLint
         run: cd openai && npm run lint
-
-      # Vérification du formatage du code du module OpenAI avec Prettier
-      - name: OpenAI Prettier Check
-        run: cd openai && npm run format:check
-
-      # Vérification des erreurs de type TypeScript dans le module OpenAI
-      - name: TypeScript Check (OpenAI)
+      # Vérifier TypeScript
+      - name: TypeScript Check
         run: cd openai && npx tsc --noEmit
