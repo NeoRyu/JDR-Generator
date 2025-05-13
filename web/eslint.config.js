@@ -52,11 +52,4 @@ export default defineConfig([
       "react/react-in-jsx-scope": "off",
     },
   },
-
-  // Intégration de Prettier
-  {
-    files: ["**/*.{js,ts,jsx,tsx}"],
-    extends: ["eslint-config-prettier"],
-    rules: {},
-  },
 ]);
