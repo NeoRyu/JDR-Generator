@@ -32,7 +32,10 @@ export default defineConfig([
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: path.resolve(__dirname, "tsconfig.json"),
+        project: [
+          path.resolve(__dirname, "tsconfig.json"),
+          path.resolve(__dirname, "tsconfig.node.json"),
+        ],
         tsconfigRootDir: __dirname,
         sourceType: "module",
         ecmaVersion: "latest",
