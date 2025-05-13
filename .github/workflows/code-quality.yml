@@ -41,15 +41,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd web && npm install
       # Formater le code avec Prettier
       - name: Format code
         run: cd web && npm run format
       # Vérifier le formatage avec Prettier
       - name: Check formatting
         run: cd web && npm run format:check
-      # Installer les dépendances
-      - name: Install dependencies
-        run: cd web && npm install
       # ESLint
       - name: ESLint
         run: cd web && npm run lint
@@ -70,15 +70,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd gemini && npm install
       # Formater le code avec Prettier
       - name: Format code
         run: cd gemini && npm run format
       # Vérifier le formatage avec Prettier
       - name: Check formatting
         run: cd gemini && npm run format:check
-      # Installer les dépendances
-      - name: Install dependencies
-        run: cd gemini && npm install
       # ESLint
       - name: ESLint
         run: cd gemini && npm run lint
@@ -99,15 +99,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd openai && npm install
       # Formater le code avec Prettier
       - name: Format code
         run: cd openai && npm run format
       # Vérifier le formatage avec Prettier
       - name: Check formatting
         run: cd openai && npm run format:check
-      # Installer les dépendances
-      - name: Install dependencies
-        run: cd openai && npm install
       # ESLint
       - name: OpenAI ESLint
         run: cd openai && npm run lint
