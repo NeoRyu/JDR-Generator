@@ -65,7 +65,7 @@ jobs:
           echo "eslint-plugin-react version:"
           npm list --depth 0 eslint-plugin-react
       # ESLint
-      - name: ESLint
+      - name: ESLint # npm init @eslint/config@latest
         run: cd web && npm run lint
       # Vérifier TypeScript
       - name: TypeScript Check
