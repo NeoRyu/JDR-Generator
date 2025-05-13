@@ -26,8 +26,8 @@ export default defineConfig([
     files: ["**/*.{ts,tsx}"],
     plugins: { "@typescript-eslint": tseslint.plugin },
     extends: [
-      "plugin:@typescript-eslint/recommended-type-checked",
-      "plugin:@typescript-eslint/stylistic-type-checked",
+      "@typescript-eslint/recommended-type-checked",
+      "@typescript-eslint/stylistic-type-checked",
     ],
     languageOptions: {
       parser: tseslint.parser,
@@ -44,7 +44,7 @@ export default defineConfig([
   {
     files: ["**/*.{jsx,tsx}"],
     plugins: { react: pluginReact },
-    extends: ["plugin:react/recommended", "plugin:react/jsx-runtime"],
+    extends: ["react/recommended", "react/jsx-runtime"],
     settings: { react: { version: "detect" } },
     rules: {
       "react/prop-types": "off",
