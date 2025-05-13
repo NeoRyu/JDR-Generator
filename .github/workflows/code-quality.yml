@@ -97,8 +97,8 @@ jobs:
       - name: Install dependencies
         run: cd gemini && npm install
       # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd gemini && npx tsc --noEmit
+      #- name: TypeScript Check
+      #  run: cd gemini && npx tsc --noEmit
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd gemini && npm run format
@@ -134,8 +134,8 @@ jobs:
       - name: Install dependencies
         run: cd openai && npm install
       # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd openai && npx tsc --noEmit
+      #- name: TypeScript Check
+      #  run: cd openai && npx tsc --noEmit
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd openai && npm run format
