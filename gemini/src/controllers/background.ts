@@ -1,15 +1,15 @@
 import {Request, Response} from "express";
-import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI,} from "@google/generative-ai";
 import dotenv from "dotenv";
 import fs from "fs";
+import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI,} from "@google/generative-ai";
 
 dotenv.config();
 
 // Configuration requise
-const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(process.env.API_KEY);
-const configMaxOutputTokens: number = +process.env.MAX_TOKENS;
+const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
+const configMaxOutputTokens: number = +(process.env.MAX_TOKENS ?? '2048');
 const model: GenerativeModel = genAI.getGenerativeModel({
-  model: process.env.AI_TEXT_MODEL,
+  model: ''+process.env.AI_TEXT_MODEL,
   generationConfig: {
     maxOutputTokens: configMaxOutputTokens,
     temperature: 0.7,
@@ -74,7 +74,13 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
         '''
 `;
 
-function contextPrompt(data): string {
+function contextPrompt(data: {
+  promptSystem: any;
+  promptRace: any;
+  promptGender: any;
+  promptClass: any;
+  promptDescription: any;
+}): string {
   const context = `
     game system: ${data.promptSystem}
     race: ${data.promptRace}

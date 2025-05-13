@@ -108,7 +108,6 @@ export const generateResponse = async (req: Request, res: Response) => {
   }
 
   try {
-    const { prompt } = req.body; // Main prompt (not directly used in the structured prompt)
     const contextData = req.body; // Context data (system, race, gender, class, description)
 
     console.log("OpenAI Background :: Received Context:", contextData);
@@ -170,7 +169,7 @@ export const generateResponse = async (req: Request, res: Response) => {
       }
 
       res.status(200).send({ response: finalResponseText });
-    } catch (jsonError) {
+    } catch (jsonError: any) {
       console.error("Error parsing JSON response from OpenAI:", jsonError);
       console.error("Invalid JSON text received:", responseText);
       res

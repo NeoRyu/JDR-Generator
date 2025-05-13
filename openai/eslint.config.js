@@ -11,18 +11,18 @@ const __dirname = path.dirname(__filename);
 export default defineConfig([
   // Règles JavaScript et TypeScript de base
   {
-    files: ["**/*.{js,ts}"], // Changement : Pas de JSX/TSX pour une API
+    files: ["**/*.{js,ts}"],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: { ...globals.node },  // Changement : globals.node pour Node.js
+      globals: { ...globals.node },
     },
   },
 
   // Règles TypeScript
   {
-    files: ["**/*.{ts}"],  // Changement : Pas de TSX pour une API
+    files: ["**/*.{ts}"],
     plugins: { "@typescript-eslint": tseslint.plugin },
     extends: [
       "@typescript-eslint/recommended-type-checked",

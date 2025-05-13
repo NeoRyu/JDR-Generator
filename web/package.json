@@ -1,10 +1,9 @@
 {
   "name": "web",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "proxy": "http://localhost:8080",
-  "author": "NeoRyu",
   "scripts": {
     "start: dev": "vite",
     "build": "npx tsc && vite build",
@@ -13,6 +12,10 @@
     "format:check": "prettier --check .",
     "preview": "vite preview"
   },
+  "author": "NeoRyu",
+  "keywords": ["jdr-generator","ia","gemini","chatgpt","dall-e","imagen","Neo_Ryu"],
+  "license": "Apache License",
+  "description": "NodeJS Frontend React/Typescript UI to interact with module 'api'",
   "dependencies": {
     "@radix-ui/react-dialog": "^1.0.5",
     "@radix-ui/react-scroll-area": "^1.0.5",
