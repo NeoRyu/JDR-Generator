@@ -13,6 +13,7 @@ export default defineConfig([
   // Règles JavaScript de base
   {
     files: ["**/*.{js,ts,jsx,tsx}"],
+    plugins: { js: js },
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: "latest",
