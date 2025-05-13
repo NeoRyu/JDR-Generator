@@ -555,23 +555,7 @@
       <workItem from="1746601280218" duration="20604000" />
       <workItem from="1746685738417" duration="21380000" />
       <workItem from="1747031240346" duration="23108000" />
-      <workItem from="1747117426530" duration="6386000" />
-    </task>
-    <task id="LOCAL-00107" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1746709388395</created>
-      <option name="number" value="00107" />
-      <option name="presentableId" value="LOCAL-00107" />
-      <option name="project" value="LOCAL" />
-      <updated>1746709388395</updated>
-    </task>
-    <task id="LOCAL-00108" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1746709601012</created>
-      <option name="number" value="00108" />
-      <option name="presentableId" value="LOCAL-00108" />
-      <option name="project" value="LOCAL" />
-      <updated>1746709601012</updated>
+      <workItem from="1747117426530" duration="7086000" />
     </task>
     <task id="LOCAL-00109" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -949,7 +933,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747123718445</updated>
     </task>
-    <option name="localTasksCounter" value="156" />
+    <task id="LOCAL-00156" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747123842995</created>
+      <option name="number" value="00156" />
+      <option name="presentableId" value="LOCAL-00156" />
+      <option name="project" value="LOCAL" />
+      <updated>1747123842995</updated>
+    </task>
+    <task id="LOCAL-00157" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747124003375</created>
+      <option name="number" value="00157" />
+      <option name="presentableId" value="LOCAL-00157" />
+      <option name="project" value="LOCAL" />
+      <updated>1747124003375</updated>
+    </task>
+    <option name="localTasksCounter" value="158" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
