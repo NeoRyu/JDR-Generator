@@ -85,9 +85,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      # Nettoyer le cache npm avant l'installation
+      - name: Clean npm cache and install dependencies
+        run: |
+          cd gemini
+          npm cache clean --force
+          rm -rf node_modules
+          rm package-lock.json
+          npm install --legacy-peer-deps
       # Installer les dépendances
       - name: Install dependencies
         run: cd gemini && npm install
+      # Vérifier TypeScript
+      - name: TypeScript Check
+        run: cd gemini && npx tsc --noEmit
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd gemini && npm run format
@@ -97,9 +108,6 @@ jobs:
       # ESLint
       - name: ESLint
         run: cd gemini && npm run lint
-      # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd gemini && npx tsc --noEmit
 
   nodejs-code-quality-openai:
     name: Node.js Code Quality - OpenAI
@@ -114,9 +122,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
+      # Nettoyer le cache npm avant l'installation
+      - name: Clean npm cache and install dependencies
+        run: |
+          cd openai
+          npm cache clean --force
+          rm -rf node_modules
+          rm package-lock.json
+          npm install --legacy-peer-deps
       # Installer les dépendances
       - name: Install dependencies
         run: cd openai && npm install
+      # Vérifier TypeScript
+      - name: TypeScript Check
+        run: cd openai && npx tsc --noEmit
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd openai && npm run format
@@ -126,6 +145,3 @@ jobs:
       # ESLint
       - name: OpenAI ESLint
         run: cd openai && npm run lint
-      # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd openai && npx tsc --noEmit
