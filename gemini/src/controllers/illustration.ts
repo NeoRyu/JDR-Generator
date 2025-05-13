@@ -1,17 +1,17 @@
 import {Request, Response} from "express";
 import {
-    GenerateContentResult,
-    GenerativeModel,
-    GoogleGenerativeAI,
-    GoogleGenerativeAIFetchError,
-    Part,
+  GenerateContentResult,
+  GenerativeModel,
+  GoogleGenerativeAI,
+  GoogleGenerativeAIFetchError,
+  Part,
 } from "@google/generative-ai";
 import * as fs from "fs";
 
 // Configuration requise
-const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(process.env.API_KEY);
+const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
 const model: GenerativeModel = genAI.getGenerativeModel({
-  model: process.env.AI_IMAGE_MODEL,
+  model: ''+process.env.AI_IMAGE_MODEL,
   generationConfig: {
     // @ts-expect-error - Gemini API JS is missing this type
     responseModalities: ["Text", "Image"],
@@ -111,7 +111,7 @@ export const generateImage = async (
           .json({ message: "Image generation failed: no candidates." });
         return;
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       if (err instanceof GoogleGenerativeAIFetchError && err.status === 503) {
         console.log(

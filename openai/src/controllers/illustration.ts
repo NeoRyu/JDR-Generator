@@ -42,8 +42,8 @@ export const generateImage = async (
   const pathSrc: string = `/app/downloads/${downloadFolder}/`;
   const imgName: string = `${downloadFolder}-openai-image_${Math.floor(Date.now() / 1000)}.png`;
   let retryCount = 0;
-  const openaiApiKey = process.env.API_KEY;
-  const openaiOrgId = process.env.ORG_ID;
+  const openaiApiKey = ''+process.env.API_KEY;
+  const openaiOrgId = ''+process.env.ORG_ID;
 
   // Create local download directory if needed
   if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
@@ -74,7 +74,7 @@ export const generateImage = async (
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${openaiApiKey}`,
-        "OpenAI-Organization": openaiOrgId,
+        "OpenAI-Organization": `${openaiOrgId}`,
       };
 
       const response = await fetch(

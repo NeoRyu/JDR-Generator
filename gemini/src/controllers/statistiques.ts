@@ -6,10 +6,10 @@ import fs from "fs";
 dotenv.config();
 
 // Configuration requise
-const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(process.env.API_KEY);
-const configMaxOutputTokens: number = +process.env.MAX_TOKENS;
+const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
+const configMaxOutputTokens: number = +(process.env.MAX_TOKENS ?? '2048');
 const model: GenerativeModel = genAI.getGenerativeModel({
-  model: process.env.AI_TEXT_MODEL,
+  model: ''+process.env.AI_TEXT_MODEL,
   generationConfig: {
     maxOutputTokens: configMaxOutputTokens,
     temperature: 0.7,
