@@ -49,6 +49,9 @@ jobs:
           rm -rf node_modules
           rm package-lock.json
           npm install --legacy-peer-deps
+      # Vérifier TypeScript
+      - name: TypeScript Check
+        run: cd web && npx tsc --noEmit
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd web && npm run format
@@ -67,9 +70,7 @@ jobs:
       # ESLint
       - name: ESLint # npm init @eslint/config@latest
         run: cd web && npm run lint
-      # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd web && npx tsc --noEmit
+
 
   nodejs-code-quality-gemini:
     name: Node.js Code Quality - Gemini
