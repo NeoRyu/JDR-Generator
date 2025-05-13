@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 export default defineConfig([
   // Règles JavaScript et TypeScript de base
   {
-    files: ["**/*.{js,ts,jsx}"],
+    files: ["**/*.{js,ts,jsx,tsx}"],
     extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: "latest",
@@ -19,6 +19,7 @@ export default defineConfig([
       globals: { ...globals.browser },
     },
   },
+
 
   // Règles TypeScript
   {

@@ -188,6 +188,51 @@ services:
     #   - ...
 ```
 
+##  Intégration de GitHub Actions
+
+Ce projet utilise GitHub Actions pour automatiser à la fois les vérifications de la qualité du code et le déploiement des images Docker.
+Cette approche permet d'assurer un code de haute qualité et de simplifier le processus de déploiement.
+
+###  Workflow de Qualité du Code
+
+La qualité du code est vérifiée automatiquement à chaque *push* et *pull request* grâce à un workflow GitHub Actions défini dans le fichier `.github/workflows/code-quality.yml`.
+Ce workflow contient une section dédiée à la partie du projet `nodejs-code-quality-openai` et s'exécute depuis toutes les branches.
+
+**Fonctionnement :**
+
+* Le workflow vérifie la qualité du code à chaque *push* et *pull request* sur toutes les branches.
+* Des vérifications spécifiques sont exécutées pour ce module Node.js.
+* Les résultats des vérifications sont disponibles dans l'interface GitHub Actions.
+
+**Étapes du workflow de qualité du code :**
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Configuration de Node.js :** Configure l'environnement Node.js avec la version spécifiée.
+3.  **Installation des dépendances :** Installe les dépendances du projet.
+4.  **Vérifications :**
+  * **Linting :** ESLint est utilisé pour vérifier le style et la qualité du code.
+  * **Formatage :** Prettier est utilisé pour formater le code de manière cohérente.
+  * **Compilation :** Le code TypeScript est compilé pour détecter les erreurs de typage.
+
+###  Workflow de Déploiement Continu avec Docker
+
+Le déploiement des images Docker est également automatisé via GitHub Actions avec le workflow défini dans `.github/workflows/docker-push.yml`.
+Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *push* est effectué sur les branches spécifiées (actuellement `githubactions` et `main`).
+
+**Fonctionnement :**
+
+* Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici openai/).
+* Il est possible de déclencher manuellement le workflow pour forcer la reconstruction de toutes les images.
+* Cette approche optimise le temps d'exécution et l'utilisation des ressources.
+
+**Étapes du workflow de déploiement :**
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
+3.  **Build et push des images :** Pour ce module 'openai', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : [https://hub.docker.com/repositories/eli256](https://hub.docker.com/repositories/eli256)
+
+En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
+
 ## Sécurité
 
 - **Clé API :** Sécurisez votre clé API OpenAI. Ne l'incluez jamais directement dans votre code. Utilisez toujours des variables d'environnement.

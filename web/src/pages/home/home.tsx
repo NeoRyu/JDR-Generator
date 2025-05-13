@@ -1,15 +1,14 @@
-// home.tsx
 import {useEffect, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogTitle,
-    DialogTrigger,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
-import {Table, TableBody, TableHead, TableHeader, TableRow,} from "@/components/ui/table";
+import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Textarea} from "@/components/ui/textarea";
 import {CharacterFull} from "@/components/model/character-full.model.tsx";
 import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
@@ -32,19 +31,19 @@ export function Home() {
     isLoading: isListLoading,
   } = getListCharactersFull();
   const [localCharactersData, setLocalCharactersData] = useState<
-    CharacterFull[] | undefined
+      CharacterFull[] | undefined
   >(undefined);
   useEffect(() => {
-    if (charactersData && Array.isArray(charactersData.data)) {
+    if (charactersData?.data && Array.isArray(charactersData.data)) {
       setLocalCharactersData(charactersData.data);
     }
-  }, [charactersData, localCharactersData]);
+  }, [charactersData?.data]);
 
   const updateCharacterService = updateCharacter();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
   const [deletingCharacters, setDeletingCharacters] = useState<number[]>([]);
   const [selectedCharacter, setSelectedCharacter] =
-    useState<CharacterFull | null>(null);
+      useState<CharacterFull | null>(null);
   const [modalType, setModalType] = useState<ModalTypes>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [promptSystem, setPromptSystem] = useState("");
@@ -58,31 +57,31 @@ export function Home() {
       return alert("Remplissez les champs");
     }
     mutate(
-      {
-        promptSystem,
-        promptClass,
-        promptGender,
-        promptRace,
-        promptDescription,
-      },
-      {
-        onSuccess: () => {
-          refetch();
-          setPromptSystem("");
-          setPromptRace("");
-          setPromptGender("");
-          setPromptClass("");
-          setPromptDescription("");
-          setIsOpen(false);
-          setModalType(null);
-          setSelectedCharacter(null);
+        {
+          promptSystem,
+          promptClass,
+          promptGender,
+          promptRace,
+          promptDescription,
         },
-      },
+        {
+          onSuccess: () => {
+            void refetch(); // Ajout de void pour ignorer la promesse
+            setPromptSystem("");
+            setPromptRace("");
+            setPromptGender("");
+            setPromptClass("");
+            setPromptDescription("");
+            setIsOpen(false);
+            setModalType(null);
+            setSelectedCharacter(null);
+          },
+        },
     );
   };
 
   const handleUpdateCharacter = async (
-    updatedCharacterDetails: CharacterDetailsModel,
+      updatedCharacterDetails: CharacterDetailsModel,
   ) => {
     try {
       if (!selectedCharacter) return;
@@ -94,7 +93,7 @@ export function Home() {
         jsonData: selectedCharacter.jsonData,
       };
       await updateCharacterService.updateCharacter(fullModel);
-      await refetch();
+      void refetch(); // Ajout de void pour ignorer la promesse
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
@@ -106,131 +105,131 @@ export function Home() {
     setDeletingCharacters([...deletingCharacters, characterId]);
     if (localCharactersData) {
       const updatedCharacters = localCharactersData.filter(
-        (char: CharacterFull) => char.details.id !== characterId,
+          (char: CharacterFull) => char.details.id !== characterId,
       );
       setLocalCharactersData([...updatedCharacters]);
-      refetch();
+      void refetch(); // Ajout de void pour ignorer la promesse
     }
   };
 
   return (
-    <div className="h-screen flex flex-col px-4">
-      {/* HEADER : JDR.Generator */}
-      <header className="h-16 flex items-center sliced-wrapper">
-        <div className="sliced-top text-muted-foreground">JDR.Generator</div>
-        <div className="sliced-bottom text-muted-foreground" aria-hidden="true">
-          JDR.Generator
-        </div>
-      </header>
-
-      <main className="flex flex-col">
-        {/* CREATION DE NOUVEAUX PERSONNAGES */}
-        <div className="flex justify-end">
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            {/* BOUTON DE CREATION DE PERSONNAGE */}
-            <DialogTrigger asChild>
-              <Button className="button-aura" onClick={() => setIsOpen(true)}>
-                Nouveau personnage
-              </Button>
-            </DialogTrigger>
-            {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
-            <DialogContent>
-              <DialogTitle>Création d'un nouveau personnage</DialogTitle>
-              <DialogDescription>
-                Remplissez les champs pour générer un nouveau personnage.
-              </DialogDescription>
-              {/* UNIVERS DE JEU */}
-              <CustomSelect
-                options={gameUniverses}
-                value={promptSystem}
-                onChange={setPromptSystem}
-                placeholder="Sélectionnez l'univers du jeu ou saisissez une valeur"
-              />
-              {/* ESPECE DU PERSONNAGE */}
-              <CustomSelect
-                options={characterRaces}
-                value={promptRace}
-                onChange={setPromptRace}
-                placeholder="Sélectionnez la race du personnage ou saisissez une valeur"
-              />
-              {/* GENRE DU PERSONNAGE */}
-              <CustomSelect
-                options={characterGenders}
-                value={promptGender}
-                onChange={setPromptGender}
-                placeholder="Sélectionnez le sexe du personnage ou saisissez une valeur"
-              />
-              {/* ARCHETYPE DU PERSONNAGE */}
-              <CustomSelect
-                options={characterClasses}
-                value={promptClass}
-                onChange={setPromptClass}
-                placeholder="Sélectionnez la classe du personnage ou saisissez une valeur"
-              />
-              {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GENERATION */}
-              <Textarea
-                placeholder="Description"
-                value={promptDescription}
-                onChange={(event) => setPromptDescription(event.target.value)}
-              />
-              {/* BOUTON GENERER */}
-              <DialogFooter>
-                <Button
-                  type="button"
-                  disabled={isCreateLoading}
-                  onClick={handleGenerate}
-                >
-                  {isCreateLoading ? "Génération..." : "Générer !"}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        {isListLoading ? (
-          <div className="loading-spiraleclispe-container">
-            <div className="loading-spiraleclispe">
-              <span>{/* ANIMATION LOADING */}</span>
-            </div>
+      <div className="h-screen flex flex-col px-4">
+        {/* HEADER : JDR.Generator */}
+        <header className="h-16 flex items-center sliced-wrapper">
+          <div className="sliced-top text-muted-foreground">JDR.Generator</div>
+          <div className="sliced-bottom text-muted-foreground" aria-hidden="true">
+            JDR.Generator
           </div>
-        ) : (
-          <Table>
-            {/* LISTE HEADER DES PERSONNAGES DEJA CREES */}
-            <TableHeader>
-              <TableRow>
-                <TableHead className="table-head">Date de création</TableHead>
-                <TableHead className="table-head">Genre</TableHead>
-                <TableHead className="table-head">Nom du personnage</TableHead>
-                <TableHead className="table-head">Age</TableHead>
-                <TableHead className="table-head">Espèce</TableHead>
-                <TableHead className="table-head">Profession</TableHead>
-                <TableHead className="table-head">Archétype</TableHead>
-                <TableHead className="table-head">Objectifs</TableHead>
-                <TableHead className="table-head">Univers</TableHead>
-                <TableHead className="table-head" />
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
-              {localCharactersData?.map((character: CharacterFull) => (
-                <CharacterRow
-                  key={character.details?.id}
-                  character={character}
-                  modalType={modalType}
-                  setModalType={setModalType}
-                  selectedCharacter={selectedCharacter}
-                  setSelectedCharacter={setSelectedCharacter}
-                  updateCharacter={handleUpdateCharacter}
-                  refetch={refetch}
-                  onCharacterDeleted={handleCharacterDeleted}
-                  deletingCharacters={deletingCharacters}
-                  setDeletingCharacters={setDeletingCharacters}
+        </header>
+
+        <main className="flex flex-col">
+          {/* CREATION DE NOUVEAUX PERSONNAGES */}
+          <div className="flex justify-end">
+            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+              {/* BOUTON DE CREATION DE PERSONNAGE */}
+              <DialogTrigger asChild>
+                <Button className="button-aura" onClick={() => setIsOpen(true)}>
+                  Nouveau personnage
+                </Button>
+              </DialogTrigger>
+              {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
+              <DialogContent>
+                <DialogTitle>Création d'un nouveau personnage</DialogTitle>
+                <DialogDescription>
+                  Remplissez les champs pour générer un nouveau personnage.
+                </DialogDescription>
+                {/* UNIVERS DE JEU */}
+                <CustomSelect
+                    options={gameUniverses}
+                    value={promptSystem}
+                    onChange={setPromptSystem}
+                    placeholder="Sélectionnez l'univers du jeu ou saisissez une valeur"
                 />
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </main>
-    </div>
+                {/* ESPECE DU PERSONNAGE */}
+                <CustomSelect
+                    options={characterRaces}
+                    value={promptRace}
+                    onChange={setPromptRace}
+                    placeholder="Sélectionnez la race du personnage ou saisissez une valeur"
+                />
+                {/* GENRE DU PERSONNAGE */}
+                <CustomSelect
+                    options={characterGenders}
+                    value={promptGender}
+                    onChange={setPromptGender}
+                    placeholder="Sélectionnez le sexe du personnage ou saisissez une valeur"
+                />
+                {/* ARCHETYPE DU PERSONNAGE */}
+                <CustomSelect
+                    options={characterClasses}
+                    value={promptClass}
+                    onChange={setPromptClass}
+                    placeholder="Sélectionnez la classe du personnage ou saisissez une valeur"
+                />
+                {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GENERATION */}
+                <Textarea
+                    placeholder="Description"
+                    value={promptDescription}
+                    onChange={(event) => setPromptDescription(event.target.value)}
+                />
+                {/* BOUTON GENERER */}
+                <DialogFooter>
+                  <Button
+                      type="button"
+                      disabled={isCreateLoading}
+                      onClick={handleGenerate}
+                  >
+                    {isCreateLoading ? "Génération..." : "Générer !"}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          {isListLoading ? (
+              <div className="loading-spiraleclispe-container">
+                <div className="loading-spiraleclispe">
+                  <span>{/* ANIMATION LOADING */}</span>
+                </div>
+              </div>
+          ) : (
+              <Table>
+                {/* LISTE HEADER DES PERSONNAGES DEJA CREES */}
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="table-head">Date de création</TableHead>
+                    <TableHead className="table-head">Genre</TableHead>
+                    <TableHead className="table-head">Nom du personnage</TableHead>
+                    <TableHead className="table-head">Age</TableHead>
+                    <TableHead className="table-head">Espèce</TableHead>
+                    <TableHead className="table-head">Profession</TableHead>
+                    <TableHead className="table-head">Archétype</TableHead>
+                    <TableHead className="table-head">Objectifs</TableHead>
+                    <TableHead className="table-head">Univers</TableHead>
+                    <TableHead className="table-head" />
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {/* LISTE APERCUS DES PERSONNAGES DEJA CREES + BOUTONS */}
+                  {localCharactersData?.map((character: CharacterFull) => (
+                      <CharacterRow
+                          key={character.details?.id}
+                          character={character}
+                          modalType={modalType}
+                          setModalType={setModalType}
+                          selectedCharacter={selectedCharacter}
+                          setSelectedCharacter={setSelectedCharacter}
+                          updateCharacter={handleUpdateCharacter}
+                          refetch={refetch}
+                          onCharacterDeleted={handleCharacterDeleted}
+                          deletingCharacters={deletingCharacters}
+                          setDeletingCharacters={setDeletingCharacters}
+                      />
+                  ))}
+                </TableBody>
+              </Table>
+          )}
+        </main>
+      </div>
   );
 }

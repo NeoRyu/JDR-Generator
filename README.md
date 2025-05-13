@@ -371,21 +371,48 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 ## Intégration de GitHub Actions
 
-Ce projet utilise GitHub Actions pour automatiser la construction et la publication des images Docker vers Docker Hub lors de chaque push sur les branches spécifiées (actuellement `githubactions` et `main`). 
-Le workflow est défini dans le fichier `.github/workflows/docker-push.yml`, ce fichier est automatiquement détecté par Github.
-Les dernières images dockerisée sont disponible ici : https://hub.docker.com/repositories/eli256
+Ce projet utilise GitHub Actions pour automatiser à la fois les vérifications de la qualité du code et le déploiement des images Docker. 
+Cette approche permet d'assurer un code de haute qualité et de simplifier le processus de déploiement.
 
-**Fonctionnement actuel :**
+### Vérification de la Qualité du Code
 
-Le workflow actuel est configuré pour s'exécuter lors de chaque push sur les branches `githubactions` et `main`, mais **ne construira et ne poussera une image Docker que si des modifications ont été détectées dans le dossier source correspondant** (api/, web/, gemini/, openai/).
-Il est également possible de déclencher manuellement le workflow via l'interface GitHub Actions avec une option pour forcer la reconstruction de toutes les images.
-Grâce à cette configuration, seuls les modules ayant subi des modifications verront leur image Docker reconstruite et poussée, optimisant ainsi le temps d'exécution du workflow et l'utilisation des ressources.
+La qualité du code est vérifiée automatiquement à chaque *push* et *pull request* grâce à un workflow GitHub Actions défini dans le fichier `.github/workflows/code-quality.yml`. 
+Ce workflow contient des sections dédiées à la partie du projet `nodejs-code-quality-web` et s'execute depuis toutes les branches.
 
-Lors d'un push, le workflow effectue les étapes suivantes :
+**Fonctionnement :**
+
+-   Le workflow vérifie la qualité du code à chaque *push* et *pull request* sur toutes les branches.
+-   Des vérifications spécifiques sont exécutées en fonction du type de module (Node.js ou Java).
+-   Les résultats des vérifications sont disponibles dans l'interface GitHub Actions.
+
+**Étapes du workflow de qualité du code :**
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Configuration de Node.js :** Configure l'environnement Node.js avec la version spécifiée.
+3.  **Installation des dépendances :** Installe les dépendances du projet.
+4.  **Vérifications :**
+    * **Linting :** ESLint est utilisé pour vérifier le style et la qualité du code (pour les modules Node.js).
+    * **Compilation :** Le code TypeScript est compilé pour détecter les erreurs de typage (pour les modules NestJS et Web).
+    * **Formatage :** Prettier est utilisé pour formater le code de manière cohérente (pour les modules Node.js).
+    
+### Déploiement Continu avec Docker
+
+Le déploiement des images Docker est également automatisé via GitHub Actions avec le workflow défini dans `.github/workflows/docker-push.yml`. 
+Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *push* est effectué sur les branches spécifiées (actuellement `githubactions` et `main`).
+
+**Fonctionnement :**
+
+- Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici web/).
+- Il est possible de déclencher manuellement le workflow pour forcer la reconstruction de toutes les images.
+- Cette approche optimise le temps d'exécution et l'utilisation des ressources.
+
+**Étapes du workflow de déploiement :**
+
 1.  **Checkout du code :** Récupère la dernière version du code source.
 2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
-3.  **Build et push des images :** Pour chaque module (`web`, `api`, `gemini`, `openai`), l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub.
+3.  **Build et push des images :** Pour ce module 'web', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : https://hub.docker.com/repositories/eli256
 
+En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
 
 ## Licence
 

@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.post("/openai/generate", generateResponse);
 app.post("/openai/illustrate", generateImage);
 app.post("/openai/stats", generateStats);
-app.get("/openai/healthcheck", (req, res) => {
+app.get("/openai/healthcheck", (_req, res) => {
   res
     .status(200)
     .json({ status: "OK", port: parseInt(process.env.PORT || "3002", 10) });

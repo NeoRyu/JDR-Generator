@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import * as fs from "fs";
-import fetch, {Response as FetchResponse} from "node-fetch"; // Importez également le type Response de node-fetch
 
 // --- Global Configuration ---
 const dallEModel = process.env.AI_IMAGE_MODEL || "dall-e-3";
@@ -78,7 +77,7 @@ export const generateImage = async (
         "OpenAI-Organization": openaiOrgId,
       };
 
-      const response: FetchResponse = await fetch(
+      const response = await fetch(
         "https://api.openai.com/v1/images/generations",
         {
           method: "POST",
