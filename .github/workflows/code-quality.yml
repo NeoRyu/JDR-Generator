@@ -40,16 +40,30 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22.x'
-      # Installer les dépendances
-      - name: Install dependencies
-        run: cd web && npm install
+          node-version: '22.13.10'
+      # Nettoyer le cache npm avant l'installation
+      - name: Clean npm cache and install dependencies
+        run: |
+          cd web
+          npm cache clean --force
+          rm -rf node_modules
+          rm package-lock.json
+          npm install --legacy-peer-deps
       # Formater le code avec Prettier
       - name: Format code # npm run format
         run: cd web && npm run format
       # Vérifier le formatage avec Prettier
       - name: Check formatting # cmd 'lint' dans package.json
         run: cd web && npm run format:check
+      - name: Show package versions (debug)
+        run: |
+          cd web
+          echo "ESLint version:"
+          npx eslint --version
+          echo "@typescript-eslint/eslint-plugin version:"
+          npm list --depth 0 @typescript-eslint/eslint-plugin
+          echo "eslint-plugin-react version:"
+          npm list --depth 0 eslint-plugin-react
       # ESLint
       - name: ESLint
         run: cd web && npm run lint
