@@ -3,18 +3,17 @@ import tseslint from "typescript-eslint";
 import pluginReact from "eslint-plugin-react";
 import {defineConfig} from "eslint/config";
 import path from "node:path";
-import js from "@eslint/js";
 import {fileURLToPath} from "node:url";
+import js from "@eslint/js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export default defineConfig([
-  // Règles JavaScript et TypeScript de base
+  // Règles JavaScript de base
   {
     files: ["**/*.{js,ts,jsx,tsx}"],
-    plugins: { js },
-    extends: ["eslint:recommended"],
+    extends: [js.configs.recommended],
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
