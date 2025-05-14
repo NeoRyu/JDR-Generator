@@ -21,7 +21,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Implementation of the {@link CharacterDetailsService} interface. */
+/** Implementation of the
+ * {@link CharacterDetailsService} interface. */
 @Service
 public class CharacterDetailsServiceImpl implements CharacterDetailsService {
   private static final Logger logger = LoggerFactory.getLogger(CharacterDetailsServiceImpl.class);
@@ -163,57 +164,48 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     logger.info("Fetching all characters full details.");
     try {
       final List<CharacterDetailsEntity> detailsEntities = characterDetailsRepository.findAll();
-      List<CharacterFullModel> fullModels =
-              detailsEntities.stream()
-                      .map(
-                              detailsEntity -> {
-                                try {
-                                  // Récupération des contextes et illustrations (potentiellement en une seule
-                                  // requête)
-                                  CharacterContextEntity contextEntity =
-                                          characterContextRepository
-                                                  .findById(detailsEntity.getContextId())
-                                                  .orElseThrow(
-                                                          () ->
-                                                                  new RuntimeException(
-                                                                          "Context not found for character: "
-                                                                                  + detailsEntity.getId()));
-                                  CharacterIllustrationEntity illustrationEntity =
-                                          characterIllustrationRepository
-                                                  .findByImageDetails(detailsEntity)
-                                                  .orElse(null); // Illustration peut être null
-                                  CharacterJsonDataEntity jsonDataEntity =
-                                          characterJsonDataService
-                                                  .findByCharacterDetailsId(detailsEntity.getId())
-                                                  .orElse(null); // JsonData peut être null
+      List<CharacterFullModel> fullModels = detailsEntities.stream()
+              .map(detailsEntity -> {
+                try {
+                  // Récupération des contextes et illustrations
+                  CharacterContextEntity contextEntity = characterContextRepository
+                          .findById(detailsEntity.getContextId())
+                          .orElseThrow(() -> new RuntimeException(
+                                  "Context not found for character: " + detailsEntity.getId()
+                          ));
+                  CharacterIllustrationEntity illustrationEntity = characterIllustrationRepository
+                          .findByImageDetails(detailsEntity)
+                          .orElse(null); // Illustration peut être null
+                  CharacterJsonDataEntity jsonDataEntity = characterJsonDataService
+                          .findByCharacterDetailsId(detailsEntity.getId())
+                          .orElse(null); // JsonData peut être null
 
-                                  final CharacterDetailsModel detailsModel =
-                                          modelMapper.map(detailsEntity, CharacterDetailsModel.class);
-                                  final CharacterContextModel contextModel =
-                                          modelMapper.map(contextEntity, CharacterContextModel.class);
-                                  final CharacterIllustrationModel illustrationModel =
-                                          illustrationEntity != null
-                                                  ? modelMapper.map(
-                                                  illustrationEntity, CharacterIllustrationModel.class)
-                                                  : null;
-                                  final CharacterJsonDataModel jsonDataModel =
-                                          jsonDataEntity != null
-                                                  ? modelMapper.map(jsonDataEntity, CharacterJsonDataModel.class)
-                                                  : null;
-
-                                  return new CharacterFullModel(
-                                          detailsModel, contextModel, illustrationModel, jsonDataModel);
-                                } catch (Exception e) {
-                                  logger.error(
-                                          "Error processing character details: {}, model: {}",
-                                          detailsEntity.getId(),
-                                          modelMapper.map(detailsEntity, CharacterDetailsModel.class),
-                                          e);
-                                  return null; // ou une valeur par défaut, ou lancez une exception
-                                }
-                              })
-                      .filter(java.util.Objects::nonNull)
-                      .collect(Collectors.toList());
+                  final CharacterDetailsModel detailsModel =
+                          modelMapper.map(detailsEntity, CharacterDetailsModel.class);
+                  final CharacterContextModel contextModel =
+                          modelMapper.map(contextEntity, CharacterContextModel.class);
+                  final CharacterIllustrationModel illustrationModel =
+                          illustrationEntity != null ? modelMapper.map(
+                                  illustrationEntity, CharacterIllustrationModel.class
+                          ) : null;
+                  final CharacterJsonDataModel jsonDataModel =
+                          jsonDataEntity != null ? modelMapper.map(
+                                  jsonDataEntity, CharacterJsonDataModel.class
+                          ) : null;
+                  return new CharacterFullModel(
+                          detailsModel, contextModel, illustrationModel, jsonDataModel
+                  );
+                } catch (Exception e) {
+                  logger.error(
+                          "Error processing character details: {}, model: {}",
+                          detailsEntity.getId(),
+                          modelMapper.map(detailsEntity, CharacterDetailsModel.class),
+                          e);
+                  return null; // ou une valeur par défaut, ou lancez une exception
+                }
+              })
+              .filter(java.util.Objects::nonNull)
+              .collect(Collectors.toList());
       logger.debug("Fetched {} characters full details.", fullModels.size());
       return fullModels;
     } catch (Exception e) {

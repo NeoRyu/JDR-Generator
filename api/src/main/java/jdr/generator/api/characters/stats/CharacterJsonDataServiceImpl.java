@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/** Implementation of the
+ * {@link CharacterJsonDataService} interface. */
 @Service
 @RequiredArgsConstructor
 public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
@@ -16,6 +18,12 @@ public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
 
   private final CharacterJsonDataRepository characterJsonDataRepository;
 
+  /**
+   * Saves a new character json data.
+   *
+   * @param characterJsonDataEntity The CharacterJsonDataEntity to save.
+   * @return The saved CharacterJsonDataEntity
+   */
   @Override
   @Transactional
   public CharacterJsonDataEntity save(CharacterJsonDataEntity characterJsonDataEntity) {
@@ -28,6 +36,13 @@ public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
     }
   }
 
+  /**
+   * Finds a character json data by its ID.
+   *
+   * @param id The ID of the character JSON data to find.
+   * @return The found CharacterJsonDataEntity.
+   * @throws RuntimeException if the json data is not found.
+   */
   @Override
   public CharacterJsonDataEntity findById(long id) {
     LOGGER.info("Character JSON data findById: {}", id);
@@ -36,6 +51,12 @@ public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
             .orElseThrow(() -> new RuntimeException("Character JSON data not found with id: " + id));
   }
 
+  /**
+   * Finds a character json data by its CharacterDetails ID.
+   *
+   * @param characterDetailsId The ID of the CharacterDetailsEntity.
+   * @return The Optional CharacterJsonDataEntity
+   */
   @Override
   public Optional<CharacterJsonDataEntity> findByCharacterDetailsId(Long characterDetailsId) {
     LOGGER.info("Character JSON data findByCharacterDetailsId: {}", characterDetailsId);

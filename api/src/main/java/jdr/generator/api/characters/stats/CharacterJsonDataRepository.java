@@ -5,7 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/** Repository interface for accessing and managing {@link CharacterJsonDataEntity} objects. */
+/** Repository interface for accessing and managing
+ * {@link CharacterJsonDataEntity} objects. */
 @Repository
 public interface CharacterJsonDataRepository extends JpaRepository<CharacterJsonDataEntity, Long> {
 
@@ -13,8 +14,8 @@ public interface CharacterJsonDataRepository extends JpaRepository<CharacterJson
    * Finds character JSON data by its associated character details ID.
    *
    * @param characterDetailsId The ID of the CharacterDetailsEntity.
-   * @return An Optional containing the found CharacterJsonDataEntity, or an empty Optional if not
-   * found.
+   * @return An Optional containing the found CharacterJsonDataEntity,
+   * or an empty Optional if not found.
    */
   Optional<CharacterJsonDataEntity> findByCharacterDetailsId(Long characterDetailsId);
 }

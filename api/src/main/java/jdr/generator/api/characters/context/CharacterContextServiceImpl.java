@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** Implementation of the {@link CharacterContextService} interface. */
+/** Implementation of the
+ * {@link CharacterContextService} interface. */
 @Service
 public class CharacterContextServiceImpl implements CharacterContextService {
   private static final Logger LOGGER = LogManager.getLogger();

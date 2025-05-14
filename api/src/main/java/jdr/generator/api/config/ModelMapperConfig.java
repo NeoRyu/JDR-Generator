@@ -39,21 +39,22 @@ public class ModelMapperConfig {
         // Mappage pour CharacterContext
         modelMapper
                 .typeMap(CharacterContextModel.class, CharacterContextEntity.class)
-                .addMappings(
-                        mapper -> {
-                            mapper.map(CharacterContextModel::getCreatedAt, CharacterContextEntity::setCreatedAt);
-                        });
+                .addMappings(mapper -> {
+                    mapper.map(
+                            CharacterContextModel::getCreatedAt, CharacterContextEntity::setCreatedAt
+                    );
+                });
 
         // Mappage pour CharacterJsonData
         modelMapper
                 .typeMap(CharacterJsonDataModel.class, CharacterJsonDataEntity.class)
-                .addMappings(
-                        mapper -> {
-                            mapper.map(
-                                    CharacterJsonDataModel::getCreatedAt, CharacterJsonDataEntity::setCreatedAt);
-                            mapper.map(
-                                    CharacterJsonDataModel::getUpdatedAt, CharacterJsonDataEntity::setUpdatedAt);
-                        });
+                .addMappings(mapper -> {
+                    mapper.map(
+                            CharacterJsonDataModel::getCreatedAt, CharacterJsonDataEntity::setCreatedAt
+                    );
+                    mapper.map(
+                            CharacterJsonDataModel::getUpdatedAt, CharacterJsonDataEntity::setUpdatedAt);
+                });
 
         return modelMapper;
     }

@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/characters")
 public class CharactersController {
-  private final String geminiHost = "http://localhost:5173";
+  private static final String geminiHost = "http://localhost:5173";
   private final GeminiService geminiService;
   private final CharacterDetailsService characterDetailsService;
   private final OpenaiService openaiService;
