@@ -42,8 +42,8 @@ export const generateImage = async (
   const pathSrc: string = `/app/downloads/${downloadFolder}/`;
   const imgName: string = `${downloadFolder}-openai-image_${Math.floor(Date.now() / 1000)}.png`;
   let retryCount = 0;
-  const openaiApiKey = ''+process.env.API_KEY;
-  const openaiOrgId = ''+process.env.ORG_ID;
+  const openaiApiKey = "" + process.env.API_KEY;
+  const openaiOrgId = "" + process.env.ORG_ID;
 
   // Create local download directory if needed
   if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
@@ -123,12 +123,10 @@ export const generateImage = async (
           );
         }
 
-        res
-          .status(200)
-          .json({
-            image: imageBase64,
-            message: "Image generation processed by DALL-E",
-          });
+        res.status(200).json({
+          image: imageBase64,
+          message: "Image generation processed by DALL-E",
+        });
         return;
       } else {
         console.error("OpenAI API error:", data);
@@ -142,12 +140,10 @@ export const generateImage = async (
           retryCount++;
           continue;
         } else {
-          res
-            .status(response.status || 500)
-            .json({
-              message: "Image generation failed",
-              error: data.error ? data.error.message : "Unknown error",
-            });
+          res.status(response.status || 500).json({
+            message: "Image generation failed",
+            error: data.error ? data.error.message : "Unknown error",
+          });
           return;
         }
       }
@@ -161,11 +157,9 @@ export const generateImage = async (
   }
 
   console.error(`Image generation failed after ${maxRetries} retries.`);
-  res
-    .status(500)
-    .json({
-      message: "Image generation service unavailable after multiple retries.",
-    });
+  res.status(500).json({
+    message: "Image generation service unavailable after multiple retries.",
+  });
 };
 
 /*

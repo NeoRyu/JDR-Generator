@@ -7,7 +7,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/openai/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/openai/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/background.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/background.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/tsconfig.json" afterDir="false" />
+    </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
@@ -145,6 +157,9 @@
     "npm.clean-xtrem (WEB).executor": "Run",
     "npm.clean-xtrem.executor": "Run",
     "npm.clean.executor": "Run",
+    "npm.format.executor": "Run",
+    "npm.lint (1).executor": "Run",
+    "npm.lint.executor": "Run",
     "npm.start (GEMINI).executor": "Run",
     "npm.start (OPENAI).executor": "Run",
     "npm.start (WEB).executor": "Run",
@@ -230,7 +245,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="npm.clean (OPENAI)">
+  <component name="RunManager" selected="npm.lint (GEMINI)">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
@@ -445,10 +460,12 @@
       <item itemvalue="npm.clean-xtrem (GEMINI)" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
+      <item itemvalue="npm.lint (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
       <item itemvalue="npm.clean-xtrem (OPENAI)" />
       <item itemvalue="npm.clean (OPENAI)" />
       <item itemvalue="npm.build (OPENAI)" />
+      <item itemvalue="npm.lint" />
       <item itemvalue="npm.start (OPENAI)" />
       <item itemvalue="npm.clean-xtrem (WEB)" />
       <item itemvalue="npm.build (WEB)" />
@@ -458,10 +475,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="npm.lint (GEMINI)" />
+        <item itemvalue="npm.lint" />
         <item itemvalue="npm.clean-xtrem (GEMINI)" />
         <item itemvalue="npm.clean-xtrem (OPENAI)" />
         <item itemvalue="Batch.docker-push (1)" />
-        <item itemvalue="Docker.workflows: Compose Deployment" />
       </list>
     </recent_temporary>
   </component>
@@ -538,15 +556,7 @@
       <workItem from="1746685738417" duration="21380000" />
       <workItem from="1747031240346" duration="23108000" />
       <workItem from="1747117426530" duration="23647000" />
-      <workItem from="1747205708403" duration="3454000" />
-    </task>
-    <task id="LOCAL-00123" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747032017515</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1747032017517</updated>
+      <workItem from="1747205708403" duration="4332000" />
     </task>
     <task id="LOCAL-00124" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -932,7 +942,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747209329384</updated>
     </task>
-    <option name="localTasksCounter" value="172" />
+    <task id="LOCAL-00172" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747209793765</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1747209793765</updated>
+    </task>
+    <option name="localTasksCounter" value="173" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

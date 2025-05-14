@@ -141,12 +141,10 @@ export const generateResponse = async (req: Request, res: Response) => {
         "OpenAI API response structure unexpected or missing content:",
         JSON.stringify(completion),
       );
-      res
-        .status(500)
-        .json({
-          message:
-            "Error during generating background: unexpected OpenAI response.",
-        });
+      res.status(500).json({
+        message:
+          "Error during generating background: unexpected OpenAI response.",
+      });
       return;
     }
 
@@ -172,12 +170,10 @@ export const generateResponse = async (req: Request, res: Response) => {
     } catch (jsonError: any) {
       console.error("Error parsing JSON response from OpenAI:", jsonError);
       console.error("Invalid JSON text received:", responseText);
-      res
-        .status(500)
-        .json({
-          message: "Error parsing generated JSON background.",
-          error: jsonError.message,
-        });
+      res.status(500).json({
+        message: "Error parsing generated JSON background.",
+        error: jsonError.message,
+      });
     }
   } catch (err: any) {
     console.error("Error during OpenAI Background API call:", err);

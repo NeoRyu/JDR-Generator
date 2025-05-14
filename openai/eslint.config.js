@@ -1,6 +1,6 @@
+import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import js from "@eslint/js";
 
 /** @type {import("eslint").Linter.FlatConfig[]} */
 export default [
@@ -18,16 +18,20 @@ export default [
 
   // Règles TypeScript
   {
-    files: ["**/*.{ts}"],
-    plugins: { "@typescript-eslint": tseslint.plugin },
-    extends: [
-      "@typescript-eslint/recommended-type-checked",
-      "@typescript-eslint/stylistic-type-checked",
-    ],
+    files: ["**/*.ts"],
     languageOptions: {
-      parser: '@typescript-eslint/parser',
+      parser: tseslint.parser,
+      parserOptions: {
+        project: ['./tsconfig.json'],
+        tsconfigRootDir: process.cwd(),
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
+      ...tseslint.configs.recommendedTypeChecked.rules,
+      ...tseslint.configs.stylisticTypeChecked.rules,
     },
   },
 ];

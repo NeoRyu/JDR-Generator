@@ -10,7 +10,6 @@ const apiKey = process.env.API_KEY;
 const openAITextModel = process.env.AI_TEXT_MODEL || "gpt-3.5-turbo";
 const configMaxOutputTokens: number = +(process.env.MAX_TOKENS || 2048);
 const temperature: number = +(process.env.TEMPERATURE || 0.7);
-const topP: number = +(process.env.TOP_P || 0.8);
 const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
 
 // --- OpenAI Configuration ---
@@ -136,11 +135,9 @@ export const generateStats = async (req: Request, res: Response) => {
         "OpenAI API response structure unexpected or missing content:",
         JSON.stringify(completion),
       );
-      res
-        .status(500)
-        .json({
-          message: "Error during generating stats: unexpected OpenAI response.",
-        });
+      res.status(500).json({
+        message: "Error during generating stats: unexpected OpenAI response.",
+      });
       return;
     }
 
@@ -167,13 +164,11 @@ export const generateStats = async (req: Request, res: Response) => {
         jsonError,
       );
       console.error("Invalid JSON text received:", responseText);
-      res
-        .status(500)
-        .json({
-          message: "Error parsing generated JSON stats.",
-          error: jsonError.message,
-          rawResponse: responseText,
-        });
+      res.status(500).json({
+        message: "Error parsing generated JSON stats.",
+        error: jsonError.message,
+        rawResponse: responseText,
+      });
     }
   } catch (err: any) {
     console.error("Error during OpenAI Stats API call:", err);
