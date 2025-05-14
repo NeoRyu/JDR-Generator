@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
 import jdr.generator.api.characters.context.CharacterContextService;
@@ -17,7 +19,7 @@ import jdr.generator.api.characters.illustration.CharacterIllustrationService;
 import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
 import jdr.generator.api.characters.stats.CharacterJsonDataModel;
 import jdr.generator.api.characters.stats.CharacterJsonDataService;
-import jdr.generator.api.config.IGeminiGenerationConfiguration;
+import jdr.generator.api.config.GeminiGenerationConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,20 +27,22 @@ import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Base64;
-import java.util.concurrent.CompletableFuture;
-
 /** Service for interacting with the Gemini API for character generation and statistics. */
 @Service("geminiService")
 @RequiredArgsConstructor
-public class GeminiService implements IGeminiGenerationConfiguration {
+public class GeminiService implements GeminiGenerationConfiguration {
 
   private static final Logger LOGGER = LogManager.getLogger();
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -53,6 +57,7 @@ public class GeminiService implements IGeminiGenerationConfiguration {
   private final CharacterJsonDataService characterJsonDataService;
   private final ModelMapper modelMapper;
 
+  @SuppressWarnings("SpringQualifierCopyableLombok")
   @Qualifier("openaiService")
   private final OpenaiService openaiService;
 
@@ -97,18 +102,18 @@ public class GeminiService implements IGeminiGenerationConfiguration {
   }
 
   /**
-   * Asynchronously generates an illustration for a character using the Imagen API (via GeminiService).
+   * Asynchronously generates illustration for a character using the Imagen API (via GeminiService).
    *
-   * @param characterDetailsEntity The details of the character for whom to generate the
-   * illustration.
+   * @param characterDetailsEntity The details of the character for generate the illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
-          CharacterDetailsEntity characterDetailsEntity) {
-    LOGGER.info("Démarrage asynchrone de la génération d'illustration via "
-                    + "Imagen (GeminiService) pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+      CharacterDetailsEntity characterDetailsEntity) {
+    LOGGER.info(
+        "Démarrage asynchrone de la génération d'illustration via "
+            + "Imagen (GeminiService) pour le personnage {{id={}}}",
+        characterDetailsEntity.getId());
     try {
       final String imgBlob = this.illustrate(characterDetailsEntity.getImage());
       if (imgBlob != null) {
@@ -118,48 +123,50 @@ public class GeminiService implements IGeminiGenerationConfiguration {
             byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
 
             final CharacterIllustrationModel characterIllustrationModel =
-                    CharacterIllustrationModel.builder()
-                            .imageLabel(characterDetailsEntity.getImage())
-                            .imageBlob(imageBytes)
-                            .imageDetails(characterDetailsEntity)
-                            .build();
+                CharacterIllustrationModel.builder()
+                    .imageLabel(characterDetailsEntity.getImage())
+                    .imageBlob(imageBytes)
+                    .imageDetails(characterDetailsEntity)
+                    .build();
             CharacterIllustrationEntity characterIllustrationEntity =
-                    this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+                this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
             this.characterIllustrationService.save(characterIllustrationEntity);
-            LOGGER.info("Illustration générée et enregistrée pour le personnage {{id={}}}",
-                    characterDetailsEntity.getId());
+            LOGGER.info(
+                "Illustration générée et enregistrée pour le personnage {{id={}}}",
+                characterDetailsEntity.getId());
           }
         } catch (JsonProcessingException e) {
           LOGGER.error(
-                  "Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}",
-                  characterDetailsEntity.getId(),
-                  e.getMessage());
+              "Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}",
+              characterDetailsEntity.getId(),
+              e.getMessage());
         }
       } else {
-        LOGGER.warn("La génération d'illustration via Imagen (GeminiService) a retourné "
-                        + "un blob null pour le personnage {{id={}}}",
-                characterDetailsEntity.getId());
+        LOGGER.warn(
+            "La génération d'illustration via Imagen (GeminiService) a retourné "
+                + "un blob null pour le personnage {{id={}}}",
+            characterDetailsEntity.getId());
       }
     } catch (HttpClientErrorException e) {
-      LOGGER.error("Erreur lors de l'appel à l'API d'illustration (client) via "
-                      + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-              characterDetailsEntity.getId(),
-              e.getStatusCode(),
-              e.getResponseBodyAsString()
-      );
+      LOGGER.error(
+          "Erreur lors de l'appel à l'API d'illustration (client) via "
+              + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
+          characterDetailsEntity.getId(),
+          e.getStatusCode(),
+          e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
-      LOGGER.error("Erreur lors de l'appel à l'API d'illustration (serveur) via "
-                      + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-              characterDetailsEntity.getId(),
-              e.getStatusCode(),
-              e.getResponseBodyAsString()
-      );
+      LOGGER.error(
+          "Erreur lors de l'appel à l'API d'illustration (serveur) via "
+              + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
+          characterDetailsEntity.getId(),
+          e.getStatusCode(),
+          e.getResponseBodyAsString());
     } catch (Exception e) {
-      LOGGER.error("Erreur inattendue lors de la génération d'illustration via "
-                      + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
-              characterDetailsEntity.getId(),
-              e.getMessage()
-      );
+      LOGGER.error(
+          "Erreur inattendue lors de la génération d'illustration via "
+              + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
+          characterDetailsEntity.getId(),
+          e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
   }
@@ -169,8 +176,7 @@ public class GeminiService implements IGeminiGenerationConfiguration {
    *
    * @param data The context data for character generation.
    * @return The generated CharacterDetailsModel.
-   * @throws RuntimeException if the Gemini API request fails or if there is an error parsing the
-   * response.
+   * @throws RuntimeException if the Gemini API request fails or if an error parsing the response.
    */
   @Override
   @Transactional
@@ -180,11 +186,11 @@ public class GeminiService implements IGeminiGenerationConfiguration {
     headers.setContentType(MediaType.APPLICATION_JSON);
     HttpEntity<DefaultContextJson> request = new HttpEntity<>(data, headers);
     ResponseEntity<String> response =
-            restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+        restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
     if (response.getStatusCode() != HttpStatus.OK) {
-      LOGGER.error("API Gemini /generate request failed with status code: {}",
-              response.getStatusCode());
+      LOGGER.error(
+          "API Gemini /generate request failed with status code: {}", response.getStatusCode());
       throw new RuntimeException("API Gemini /generate request failed");
     }
 
@@ -196,38 +202,38 @@ public class GeminiService implements IGeminiGenerationConfiguration {
       ObjectMapper objectMapper = new ObjectMapper();
       JsonNode jsonNode = objectMapper.readTree(response.getBody());
       String innerJsonString =
-              jsonNode
-                      .get("response")
-                      .asText()
-                      .replace("```json", "")
-                      .replace("\\n", "")
-                      .replace("\\t", "")
-                      .replace("\\", "");
+          jsonNode
+              .get("response")
+              .asText()
+              .replace("```json", "")
+              .replace("\\n", "")
+              .replace("\\t", "")
+              .replace("\\", "");
       innerJsonString = innerJsonString.substring(1, innerJsonString.length() - 1);
 
       CharacterContextModel characterContextModel =
-              this.characterContextService.createCharacterContextModel(data);
+          this.characterContextService.createCharacterContextModel(data);
       final CharacterContextEntity characterContextEntity =
-              characterContextService.save(
-                      modelMapper.map(characterContextModel, CharacterContextEntity.class));
+          characterContextService.save(
+              modelMapper.map(characterContextModel, CharacterContextEntity.class));
 
       characterDetailsModel = OBJECT_MAPPER.readValue(innerJsonString, CharacterDetailsModel.class);
       characterDetailsModel =
-              characterDetailsModel.toBuilder()
-                      .createdAt(java.util.Date.from(java.time.Instant.now()))
-                      .updatedAt(java.util.Date.from(java.time.Instant.now()))
-                      .contextId(characterContextEntity.getId())
-                      .build();
+          characterDetailsModel.toBuilder()
+              .createdAt(java.util.Date.from(java.time.Instant.now()))
+              .updatedAt(java.util.Date.from(java.time.Instant.now()))
+              .contextId(characterContextEntity.getId())
+              .build();
       characterDetailsEntity =
-              characterDetailsService.save(
-                      modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class));
+          characterDetailsService.save(
+              modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class));
 
       LOGGER.info(
-              "Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
-              characterDetailsEntity.getId(),
-              characterDetailsModel.name,
-              characterContextModel.promptGender,
-              characterContextEntity.getId());
+          "Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
+          characterDetailsEntity.getId(),
+          characterDetailsModel.name,
+          characterContextModel.promptGender,
+          characterContextEntity.getId());
 
       // Lancement asynchrone de la génération de l'illustration via OpenaiService
       this.openaiService.generateIllustrationAsync(characterDetailsEntity);
@@ -240,10 +246,10 @@ public class GeminiService implements IGeminiGenerationConfiguration {
         this.saveCharacterJsonData(characterDetailsEntity.getId(), cleanedJson);
         LOGGER.info("Character JSON stats data saved successfully");
       } catch (JsonProcessingException e) {
-        LOGGER.error("Erreur lors de l'analyse du JSON stats généré par GeminiService : {}",
-                e.getMessage());
-        this.saveCharacterJsonData(characterDetailsEntity.getId(),
-                statsJson.isEmpty() ? "{}" : statsJson);
+        LOGGER.error(
+            "Erreur lors de l'analyse du JSON stats généré par GeminiService : {}", e.getMessage());
+        this.saveCharacterJsonData(
+            characterDetailsEntity.getId(), statsJson.isEmpty() ? "{}" : statsJson);
         LOGGER.warn("Character JSON stats data saved with raw JSON due to parsing error.");
       }
 
@@ -273,11 +279,10 @@ public class GeminiService implements IGeminiGenerationConfiguration {
     requestBody.put("prompt", data);
     HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
     ResponseEntity<String> response =
-            restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+        restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
     if (response.getStatusCode() != HttpStatus.OK) {
-      LOGGER.error("API illustrate request failed with status code: {}",
-              response.getStatusCode());
+      LOGGER.error("API illustrate request failed with status code: {}", response.getStatusCode());
       throw new RuntimeException("API illustrate request failed");
     }
 
@@ -296,53 +301,53 @@ public class GeminiService implements IGeminiGenerationConfiguration {
   public String stats(Long characterId) {
     CharacterDetailsEntity character = this.characterDetailsService.findById(characterId);
     CharacterContextEntity context =
-            this.characterContextService.findById(character.getContextId());
+        this.characterContextService.findById(character.getContextId());
     String data =
-            "promptSystem: '"
-                    + context.getPromptSystem()
-                    + "'\n"
-                    + "promptRace: '"
-                    + context.getPromptRace()
-                    + "'\n"
-                    + "promptGender: '"
-                    + context.getPromptGender()
-                    + "'\n"
-                    + "promptClass: '"
-                    + context.getPromptClass()
-                    + "'\n"
-                    + "promptDescription: '"
-                    + context.getPromptDescription()
-                    + "'\n"
-                    + "name: '"
-                    + character.getName()
-                    + "'\n"
-                    + "age: '"
-                    + character.getAge()
-                    + "'\n"
-                    + "education: '"
-                    + character.getEducation()
-                    + "'\n"
-                    + "profession: '"
-                    + character.getProfession()
-                    + "'\n"
-                    + "reasonForProfession: '"
-                    + character.getReasonForProfession()
-                    + "'\n"
-                    + "workPreferences: '"
-                    + character.getWorkPreferences()
-                    + "'\n"
-                    + "changeInSelf: '"
-                    + character.getChangeInSelf()
-                    + "'\n"
-                    + "changeInWorld: '"
-                    + character.getChangeInWorld()
-                    + "'\n"
-                    + "goal: '"
-                    + character.getGoal()
-                    + "'\n"
-                    + "reasonForGoal: '"
-                    + character.getReasonForGoal()
-                    + "'\n";
+        "promptSystem: '"
+            + context.getPromptSystem()
+            + "'\n"
+            + "promptRace: '"
+            + context.getPromptRace()
+            + "'\n"
+            + "promptGender: '"
+            + context.getPromptGender()
+            + "'\n"
+            + "promptClass: '"
+            + context.getPromptClass()
+            + "'\n"
+            + "promptDescription: '"
+            + context.getPromptDescription()
+            + "'\n"
+            + "name: '"
+            + character.getName()
+            + "'\n"
+            + "age: '"
+            + character.getAge()
+            + "'\n"
+            + "education: '"
+            + character.getEducation()
+            + "'\n"
+            + "profession: '"
+            + character.getProfession()
+            + "'\n"
+            + "reasonForProfession: '"
+            + character.getReasonForProfession()
+            + "'\n"
+            + "workPreferences: '"
+            + character.getWorkPreferences()
+            + "'\n"
+            + "changeInSelf: '"
+            + character.getChangeInSelf()
+            + "'\n"
+            + "changeInWorld: '"
+            + character.getChangeInWorld()
+            + "'\n"
+            + "goal: '"
+            + character.getGoal()
+            + "'\n"
+            + "reasonForGoal: '"
+            + character.getReasonForGoal()
+            + "'\n";
 
     final String apiUrl = hostApiAi + "/stats";
     HttpHeaders headers = new HttpHeaders();
@@ -352,11 +357,11 @@ public class GeminiService implements IGeminiGenerationConfiguration {
     requestBody.put("data", data);
     HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
     ResponseEntity<String> response =
-            restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
+        restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
     if (response.getStatusCode() != HttpStatus.OK) {
-      LOGGER.error("API Gemini /stats request failed with status code: {}",
-              response.getStatusCode());
+      LOGGER.error(
+          "API Gemini /stats request failed with status code: {}", response.getStatusCode());
       throw new RuntimeException("API Gemini /stats request failed");
     }
 
@@ -372,16 +377,16 @@ public class GeminiService implements IGeminiGenerationConfiguration {
    * @throws JsonProcessingException if there is an error processing the JSON data.
    */
   private void saveCharacterJsonData(Long characterDetailsId, String jsonData)
-          throws JsonProcessingException {
+      throws JsonProcessingException {
     final CharacterJsonDataModel jsonDataModel =
-            CharacterJsonDataModel.builder()
-                    .characterDetailsId(characterDetailsId)
-                    .jsonData(jsonData)
-                    .createdAt(java.util.Date.from(java.time.Instant.now()))
-                    .updatedAt(java.util.Date.from(java.time.Instant.now()))
-                    .build();
+        CharacterJsonDataModel.builder()
+            .characterDetailsId(characterDetailsId)
+            .jsonData(jsonData)
+            .createdAt(java.util.Date.from(java.time.Instant.now()))
+            .updatedAt(java.util.Date.from(java.time.Instant.now()))
+            .build();
     CharacterJsonDataEntity jsonDataEntity =
-            modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
+        modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
     characterJsonDataService.save(jsonDataEntity);
   }
 }

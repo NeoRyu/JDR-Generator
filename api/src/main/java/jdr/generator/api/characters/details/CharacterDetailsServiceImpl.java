@@ -1,5 +1,8 @@
 package jdr.generator.api.characters.details;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import jdr.generator.api.characters.CharacterFullModel;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
@@ -16,10 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /** Implementation of the
  * {@link CharacterDetailsService} interface. */
@@ -39,16 +38,16 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
    * @param modelMapper The ModelMapper for mapping entities to models.
    * @param characterContextRepository The repository for accessing character context data.
    * @param characterDetailsRepository The repository for accessing character details data.
-   * @param characterIllustrationRepository The repository for accessing character illustration data.
+   * @param characterIllustrationRepository The repository for accessing character illustration.
    * @param characterJsonDataService The service for accessing character JSON data.
    */
   @Autowired
   public CharacterDetailsServiceImpl(
-          final ModelMapper modelMapper,
-          final CharacterContextRepository characterContextRepository,
-          final CharacterDetailsRepository characterDetailsRepository,
-          final CharacterIllustrationRepository characterIllustrationRepository,
-          final CharacterJsonDataService characterJsonDataService) {
+      final ModelMapper modelMapper,
+      final CharacterContextRepository characterContextRepository,
+      final CharacterDetailsRepository characterDetailsRepository,
+      final CharacterIllustrationRepository characterIllustrationRepository,
+      final CharacterJsonDataService characterJsonDataService) {
     this.characterDetailsRepository = characterDetailsRepository;
     this.modelMapper = modelMapper;
     this.characterContextRepository = characterContextRepository;
@@ -96,7 +95,7 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
    */
   @Override
   public CharacterDetailsEntity updateCharacterDetails(
-          final Long id, final CharacterFullModel model) {
+      final Long id, final CharacterFullModel model) {
     CharacterDetailsEntity entity = this.findById(id);
     if (entity != null) {
       logger.debug("Character details found for update: {}", entity);
@@ -131,16 +130,16 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
    * Retrieves a list of all character details.
    *
    * @return A list of CharacterDetailsModel. Returns an empty list if no characters are found or an
-   * error occurs.
+   *     error occurs.
    */
   @Override
   public List<CharacterDetailsModel> getAllCharacters() {
     logger.info("Fetching all characters details.");
     try {
       List<CharacterDetailsModel> characters =
-              characterDetailsRepository.findAll().parallelStream()
-                      .map(entity -> modelMapper.map(entity, CharacterDetailsModel.class))
-                      .collect(Collectors.toList());
+          characterDetailsRepository.findAll().parallelStream()
+              .map(entity -> modelMapper.map(entity, CharacterDetailsModel.class))
+              .collect(Collectors.toList());
 
       logger.debug("Fetched {} characters details.", characters.size());
       return characters;
@@ -156,7 +155,7 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
    * and JSON data.
    *
    * @return A list of CharacterFullModel. Returns an empty list if no characters are found or an
-   * error occurs during processing.
+   *     error occurs during processing.
    */
   @Override
   @Transactional(readOnly = true)
@@ -164,46 +163,53 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
     logger.info("Fetching all characters full details.");
     try {
       final List<CharacterDetailsEntity> detailsEntities = characterDetailsRepository.findAll();
-      List<CharacterFullModel> fullModels = detailsEntities.stream()
-              .map(detailsEntity -> {
-                try {
-                  // Récupération des contextes et illustrations
-                  CharacterContextEntity contextEntity = characterContextRepository
-                          .findById(detailsEntity.getContextId())
-                          .orElseThrow(() -> new RuntimeException(
-                                  "Context not found for character: " + detailsEntity.getId()
-                          ));
-                  CharacterIllustrationEntity illustrationEntity = characterIllustrationRepository
-                          .findByImageDetails(detailsEntity)
-                          .orElse(null); // Illustration peut être null
-                  CharacterJsonDataEntity jsonDataEntity = characterJsonDataService
-                          .findByCharacterDetailsId(detailsEntity.getId())
-                          .orElse(null); // JsonData peut être null
+      List<CharacterFullModel> fullModels =
+          detailsEntities.stream()
+              .map(
+                  detailsEntity -> {
+                    try {
+                      // Récupération des contextes et illustrations
+                      CharacterContextEntity contextEntity =
+                          characterContextRepository
+                              .findById(detailsEntity.getContextId())
+                              .orElseThrow(
+                                  () ->
+                                      new RuntimeException(
+                                          "Context not found for character: "
+                                              + detailsEntity.getId()));
+                      CharacterIllustrationEntity illustrationEntity =
+                          characterIllustrationRepository
+                              .findByImageDetails(detailsEntity)
+                              .orElse(null); // Illustration peut être null
+                      CharacterJsonDataEntity jsonDataEntity =
+                          characterJsonDataService
+                              .findByCharacterDetailsId(detailsEntity.getId())
+                              .orElse(null); // JsonData peut être null
 
-                  final CharacterDetailsModel detailsModel =
+                      final CharacterDetailsModel detailsModel =
                           modelMapper.map(detailsEntity, CharacterDetailsModel.class);
-                  final CharacterContextModel contextModel =
+                      final CharacterContextModel contextModel =
                           modelMapper.map(contextEntity, CharacterContextModel.class);
-                  final CharacterIllustrationModel illustrationModel =
-                          illustrationEntity != null ? modelMapper.map(
-                                  illustrationEntity, CharacterIllustrationModel.class
-                          ) : null;
-                  final CharacterJsonDataModel jsonDataModel =
-                          jsonDataEntity != null ? modelMapper.map(
-                                  jsonDataEntity, CharacterJsonDataModel.class
-                          ) : null;
-                  return new CharacterFullModel(
-                          detailsModel, contextModel, illustrationModel, jsonDataModel
-                  );
-                } catch (Exception e) {
-                  logger.error(
+                      final CharacterIllustrationModel illustrationModel =
+                          illustrationEntity != null
+                              ? modelMapper.map(
+                                  illustrationEntity, CharacterIllustrationModel.class)
+                              : null;
+                      final CharacterJsonDataModel jsonDataModel =
+                          jsonDataEntity != null
+                              ? modelMapper.map(jsonDataEntity, CharacterJsonDataModel.class)
+                              : null;
+                      return new CharacterFullModel(
+                          detailsModel, contextModel, illustrationModel, jsonDataModel);
+                    } catch (Exception e) {
+                      logger.error(
                           "Error processing character details: {}, model: {}",
                           detailsEntity.getId(),
                           modelMapper.map(detailsEntity, CharacterDetailsModel.class),
                           e);
-                  return null; // ou une valeur par défaut, ou lancez une exception
-                }
-              })
+                      return null; // ou une valeur par défaut, ou lancez une exception
+                    }
+                  })
               .filter(java.util.Objects::nonNull)
               .collect(Collectors.toList());
       logger.debug("Fetched {} characters full details.", fullModels.size());

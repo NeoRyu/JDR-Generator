@@ -1,12 +1,11 @@
 package jdr.generator.api.characters.stats;
 
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /** Implementation of the
  * {@link CharacterJsonDataService} interface. */
@@ -47,8 +46,8 @@ public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
   public CharacterJsonDataEntity findById(long id) {
     LOGGER.info("Character JSON data findById: {}", id);
     return characterJsonDataRepository
-            .findById(id)
-            .orElseThrow(() -> new RuntimeException("Character JSON data not found with id: " + id));
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Character JSON data not found with id: " + id));
   }
 
   /**

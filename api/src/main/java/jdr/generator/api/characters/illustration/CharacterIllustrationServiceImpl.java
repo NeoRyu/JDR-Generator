@@ -26,7 +26,7 @@ public class CharacterIllustrationServiceImpl implements CharacterIllustrationSe
   @Transactional
   public CharacterIllustrationEntity save(CharacterIllustrationEntity characterIllustrationEntity) {
     LOGGER.info(
-            "Saving illustration with prompt : {}", characterIllustrationEntity.getImageLabel());
+        "Saving illustration with prompt : {}", characterIllustrationEntity.getImageLabel());
     try {
       return characterIllustrationRepository.save(characterIllustrationEntity);
     } catch (Exception e) {
@@ -46,7 +46,7 @@ public class CharacterIllustrationServiceImpl implements CharacterIllustrationSe
   public CharacterIllustrationEntity findById(long id) {
     LOGGER.info("Illustration findById: {}", id);
     return characterIllustrationRepository
-            .findById(id)
-            .orElseThrow(() -> new RuntimeException("Illustration not found with id: " + id));
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Illustration not found with id: " + id));
   }
 }

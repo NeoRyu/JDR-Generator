@@ -8,9 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Represents the complete model of a character,
- * including its details, context, illustration, and JSON data.
- * */
+/**
+ * Represents the complete model of a character, including its details, context, illustration, and
+ * JSON data.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,5 +21,4 @@ public class CharacterFullModel {
   private CharacterContextModel context;
   private CharacterIllustrationModel illustration;
   private CharacterJsonDataModel jsonData;
-
 }

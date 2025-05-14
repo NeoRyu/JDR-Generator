@@ -4,6 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
+import java.time.Instant;
+import java.util.Base64;
+import java.util.Date;
+import java.util.concurrent.CompletableFuture;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextModel;
 import jdr.generator.api.characters.context.CharacterContextService;
@@ -17,29 +21,28 @@ import jdr.generator.api.characters.illustration.CharacterIllustrationService;
 import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
 import jdr.generator.api.characters.stats.CharacterJsonDataModel;
 import jdr.generator.api.characters.stats.CharacterJsonDataService;
-import jdr.generator.api.config.IGeminiGenerationConfiguration;
+import jdr.generator.api.config.GeminiGenerationConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.Instant;
-import java.util.Base64;
-import java.util.Date;
-import java.util.concurrent.CompletableFuture;
-
 /** Service for interacting with the OpenAI API for character generation and statistics. */
 @Service("openaiService")
 @RequiredArgsConstructor
-public class OpenaiService implements IGeminiGenerationConfiguration {
+public class OpenaiService implements GeminiGenerationConfiguration {
 
   private static final Logger LOGGER = LogManager.getLogger();
   private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
@@ -77,57 +80,57 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
    * Asynchronously generates an illustration for a character using the OpenAI API.
    *
    * @param characterDetailsEntity The details of the character for whom to generate the
-   * illustration.
+   *     illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
-          CharacterDetailsEntity characterDetailsEntity) {
+      CharacterDetailsEntity characterDetailsEntity) {
     LOGGER.info(
-            "Démarrage asynchrone de la génération d'illustration via "
-                    + "OpenaiService pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+        "Démarrage asynchrone de la génération d'illustration via "
+            + "OpenaiService pour le personnage {{id={}}}",
+        characterDetailsEntity.getId());
     try {
       final byte[] imageBytes = this.illustrate(characterDetailsEntity.getImage());
       if (imageBytes != null && imageBytes.length > 0) {
         final CharacterIllustrationModel characterIllustrationModel =
-                CharacterIllustrationModel.builder()
-                        .imageLabel(characterDetailsEntity.getImage())
-                        .imageBlob(imageBytes)
-                        .imageDetails(characterDetailsEntity)
-                        .build();
+            CharacterIllustrationModel.builder()
+                .imageLabel(characterDetailsEntity.getImage())
+                .imageBlob(imageBytes)
+                .imageDetails(characterDetailsEntity)
+                .build();
         CharacterIllustrationEntity characterIllustrationEntity =
-                this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+            this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
         this.characterIllustrationService.save(characterIllustrationEntity);
         LOGGER.info(
-                "Illustration générée et enregistrée pour le personnage {{id={}}}",
-                characterDetailsEntity.getId());
+            "Illustration générée et enregistrée pour le personnage {{id={}}}",
+            characterDetailsEntity.getId());
       } else {
         LOGGER.warn(
-                "La génération d'illustration via OpenaiService a retourné un "
-                        + "blob null ou vide pour le personnage {{id={}}}",
-                characterDetailsEntity.getId());
+            "La génération d'illustration via OpenaiService a retourné un "
+                + "blob null ou vide pour le personnage {{id={}}}",
+            characterDetailsEntity.getId());
       }
     } catch (HttpClientErrorException e) {
       LOGGER.error(
-              "Erreur lors de l'appel à l'API d'illustration (client) via "
-                      + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
-              characterDetailsEntity.getId(),
-              e.getStatusCode(),
-              e.getResponseBodyAsString());
+          "Erreur lors de l'appel à l'API d'illustration (client) via "
+              + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
+          characterDetailsEntity.getId(),
+          e.getStatusCode(),
+          e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
       LOGGER.error(
-              "Erreur lors de l'appel à l'API d'illustration (serveur) via "
-                      + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
-              characterDetailsEntity.getId(),
-              e.getStatusCode(),
-              e.getResponseBodyAsString());
+          "Erreur lors de l'appel à l'API d'illustration (serveur) via "
+              + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
+          characterDetailsEntity.getId(),
+          e.getStatusCode(),
+          e.getResponseBodyAsString());
     } catch (Exception e) {
       LOGGER.error(
-              "Erreur inattendue lors de la génération d'illustration via "
-                      + "OpenaiService pour le personnage {{id={}}} : {}",
-              characterDetailsEntity.getId(),
-              e.getMessage());
+          "Erreur inattendue lors de la génération d'illustration via "
+              + "OpenaiService pour le personnage {{id={}}} : {}",
+          characterDetailsEntity.getId(),
+          e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
   }
@@ -138,7 +141,7 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
    * @param data The context data for character generation.
    * @return The generated CharacterDetailsModel.
    * @throws RuntimeException if there is an error communicating with the OpenAI API or processing
-   * the response.
+   *     the response.
    */
   @Override
   @Transactional
@@ -161,10 +164,11 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
     if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
       String errorBody = response.getBody() != null ? response.getBody() : "No response body";
       LOGGER.error(
-              "OpenAI /generate API request failed with status code: {} and body: {}",
-              response.getStatusCode(),
-              errorBody);
-      throw new RuntimeException("OpenAI /generate API request failed with status code: " + response.getStatusCode());
+          "OpenAI /generate API request failed with status code: {} and body: {}",
+          response.getStatusCode(),
+          errorBody);
+      throw new RuntimeException(
+          "OpenAI /generate API request failed with status code: " + response.getStatusCode());
     }
 
     CharacterDetailsModel characterDetailsModel;
@@ -172,45 +176,46 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
     try {
       String innerJsonString = cleanJsonString(response.getBody());
       if (innerJsonString.trim().isEmpty() || "{}".equals(innerJsonString.trim())) {
-        LOGGER.error("OpenAI /generate API returned empty or invalid background data after cleaning.");
-        throw new RuntimeException("OpenAI /generate API returned empty or invalid background data.");
+        LOGGER.error("OpenAI /generate API returned empty or invalid data after cleaning.");
+        throw new RuntimeException("OpenAI /generate API returned empty or invalid data.");
       }
       LOGGER.debug("Generated Background JSON (cleaned): {}", innerJsonString);
 
       CharacterContextModel characterContextModel =
-              this.characterContextService.createCharacterContextModel(data);
+          this.characterContextService.createCharacterContextModel(data);
       final CharacterContextEntity characterContextEntity =
-              characterContextService.save(
-                      modelMapper.map(characterContextModel, CharacterContextEntity.class));
+          characterContextService.save(
+              modelMapper.map(characterContextModel, CharacterContextEntity.class));
       LOGGER.info("Character context saved with ID: {}", characterContextEntity.getId());
 
       characterDetailsModel = OBJECT_MAPPER.readValue(innerJsonString, CharacterDetailsModel.class);
       characterDetailsModel =
-              characterDetailsModel.toBuilder()
-                      .createdAt(Date.from(Instant.now()))
-                      .updatedAt(Date.from(Instant.now()))
-                      .contextId(characterContextEntity.getId())
-                      .build();
+          characterDetailsModel.toBuilder()
+              .createdAt(Date.from(Instant.now()))
+              .updatedAt(Date.from(Instant.now()))
+              .contextId(characterContextEntity.getId())
+              .build();
       final CharacterDetailsEntity characterDetailsEntity =
-              characterDetailsService.save(
-                      modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class));
+          characterDetailsService.save(
+              modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class));
       LOGGER.info(
-              "Character details saved with ID: {} and name: {}",
-              characterDetailsEntity.getId(),
-              characterDetailsModel.name);
+          "Character details saved with ID: {} and name: {}",
+          characterDetailsEntity.getId(),
+          characterDetailsModel.name);
 
       LOGGER.info(
-              "Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
-              characterDetailsEntity.getId(),
-              characterDetailsModel.name,
-              characterContextModel.promptGender,
-              characterContextEntity.getId());
+          "Created CharacterModel {{id={}}} :: {} [{} {{idContext={}}}]",
+          characterDetailsEntity.getId(),
+          characterDetailsModel.name,
+          characterContextModel.promptGender,
+          characterContextEntity.getId());
 
       // Lancement asynchrone de la génération de l'illustration via ce service
       generateIllustrationAsync(characterDetailsEntity);
 
-      LOGGER.info("Calling OpenAI module /stats via OpenaiService.stats for character ID: {}",
-              characterDetailsEntity.getId());
+      LOGGER.info(
+          "Calling OpenAI module /stats via OpenaiService.stats for char ID: {}",
+          characterDetailsEntity.getId());
       try {
         statsJson = this.stats(characterDetailsEntity.getId());
         LOGGER.debug("Generated Stats JSON: {}", statsJson);
@@ -219,36 +224,39 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
           try {
             OBJECT_MAPPER.readTree(statsJson);
             this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJson);
-            LOGGER.info("Character JSON stats data saved successfully for ID: {}",
-                    characterDetailsEntity.getId());
+            LOGGER.info(
+                "Character JSON stats data saved successfully for ID: {}",
+                characterDetailsEntity.getId());
           } catch (JsonProcessingException e) {
-            LOGGER.error("Erreur lors de l'analyse du JSON stats généré par OpenAI : {}", e.getMessage());
+            LOGGER.error(
+                "Erreur lors de l'analyse du JSON stats généré par OpenAI : {}", e.getMessage());
             LOGGER.warn("Saving raw stats JSON due to parsing error: {}", statsJson);
             try {
               this.saveCharacterJsonData(
-                      characterDetailsEntity.getId(), !statsJson.isEmpty() ? statsJson : "{}");
+                  characterDetailsEntity.getId(), !statsJson.isEmpty() ? statsJson : "{}");
             } catch (Exception saveRawError) {
-              LOGGER.error("Error saving raw stats JSON for ID {}",
-                      characterDetailsEntity.getId(),
-                      saveRawError);
+              LOGGER.error(
+                  "Error saving raw stats JSON for ID {}",
+                  characterDetailsEntity.getId(),
+                  saveRawError);
             }
             throw new RuntimeException("Error parsing generated stats JSON from OpenAI", e);
 
           } catch (Exception e) {
-            LOGGER.error("Error saving character JSON data for ID {}",
-                    characterDetailsEntity.getId(), e);
+            LOGGER.error(
+                "Error saving character JSON data for ID {}", characterDetailsEntity.getId(), e);
             throw new RuntimeException("Error saving character JSON data", e);
           }
         } else {
-          LOGGER.warn("No stats JSON received from OpenAI module /stats, " +
-                          "skipping save for ID {}.",
-                  characterDetailsEntity.getId()
-          );
+          LOGGER.warn(
+              "No stats JSON received from OpenAI module /stats, " + "skipping save for ID {}.",
+              characterDetailsEntity.getId());
         }
       } catch (Exception e) {
-        LOGGER.error("Error during OpenAI module /stats call for character ID {}",
-                characterDetailsEntity.getId(),
-                e);
+        LOGGER.error(
+            "Error during OpenAI module /stats call for character ID {}",
+            characterDetailsEntity.getId(),
+            e);
         throw new RuntimeException("Error during stats generation process", e);
       }
 
@@ -291,12 +299,11 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
       if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
         String errorBody = response.getBody() != null ? response.getBody() : "No response body";
         LOGGER.error(
-                "OpenAI /illustrate API request failed with status code: {} and body: {}",
-                response.getStatusCode(),
-                errorBody);
-        throw new RuntimeException("OpenAI /illustrate API request failed with status code: "
-                + response.getStatusCode()
-        );
+            "OpenAI /illustrate API request failed with status code: {} and body: {}",
+            response.getStatusCode(),
+            errorBody);
+        throw new RuntimeException(
+            "OpenAI /illustrate API request failed with status code: " + response.getStatusCode());
       }
 
       try {
@@ -306,18 +313,18 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
           LOGGER.info("Illustration API response received and parsed successfully.");
           return Base64.getDecoder().decode(imageNode.asText());
         } else {
-          LOGGER.error("OpenAI module /illustrate returned JSON without "
-                          + "valid 'image' field for prompt: {}",
-                  imagePrompt);
+          LOGGER.error(
+              "OpenAI module /illustrate returned JSON without "
+                  + "valid 'image' field for prompt: {}",
+              imagePrompt);
           return null;
         }
       } catch (JsonProcessingException e) {
-        LOGGER.error("Error parsing JSON response from OpenAI /illustrate: {}",
-                e.getMessage());
+        LOGGER.error("Error parsing JSON response from OpenAI /illustrate: {}", e.getMessage());
         return null;
       } catch (IllegalArgumentException e) {
-        LOGGER.error("Error decoding Base64 image data received from OpenAI module: {}",
-                e.getMessage());
+        LOGGER.error(
+            "Error decoding Base64 image data received from OpenAI module: {}", e.getMessage());
         return null;
       }
 
@@ -333,17 +340,17 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
    * @param characterDetailsId The ID of the character details.
    * @return A JSON string containing the character's statistics.
    * @throws RuntimeException if there is an error communicating with the OpenAI API or if character
-   * details or context are not found.
+   *     details or context are not found.
    */
   @Override
   public String stats(Long characterDetailsId) {
     LOGGER.info("Preparing data for OpenAI module /stats for character ID: {}", characterDetailsId);
 
     CharacterDetailsEntity characterDetailsEntity =
-            characterDetailsService.findById(characterDetailsId);
+        characterDetailsService.findById(characterDetailsId);
     if (characterDetailsEntity == null) {
       LOGGER.error(
-              "Character details entity not found for stats call for ID: {}", characterDetailsId);
+          "Character details entity not found for stats call for ID: {}", characterDetailsId);
       throw new RuntimeException("Character details not found for ID: " + characterDetailsId);
     }
 
@@ -355,54 +362,54 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
     }
 
     String dataToSend =
-            "promptSystem: '"
-                    + characterContextEntity.getPromptSystem()
-                    + "'\n"
-                    + "promptRace: '"
-                    + characterContextEntity.getPromptRace()
-                    + "'\n"
-                    + "promptGender: '"
-                    + characterContextEntity.getPromptGender()
-                    + "'\n"
-                    + "promptClass: '"
-                    + characterContextEntity.getPromptClass()
-                    + "'\n"
-                    + "promptDescription: '"
-                    + characterContextEntity.getPromptDescription()
-                    + "'\n"
-                    + "name: '"
-                    + characterDetailsEntity.getName()
-                    + "'\n"
-                    + "age: '"
-                    + characterDetailsEntity.getAge()
-                    + "'\n"
-                    + "education: '"
-                    + characterDetailsEntity.getEducation()
-                    + "'\n"
-                    + "profession: '"
-                    + characterDetailsEntity.getProfession()
-                    + "'\n"
-                    + "reasonForProfession: '"
-                    + characterDetailsEntity.getReasonForProfession()
-                    + "'\n"
-                    + "workPreferences: '"
-                    + characterDetailsEntity.getWorkPreferences()
-                    + "'\n"
-                    + "changeInSelf: '"
-                    + characterDetailsEntity.getChangeInSelf()
-                    + "'\n"
-                    + "changeInInSelf: '"
-                    + characterDetailsEntity.getChangeInSelf()
-                    + "'\n"
-                    + "changeInWorld: '"
-                    + characterDetailsEntity.getChangeInWorld()
-                    + "'\n"
-                    + "goal: '"
-                    + characterDetailsEntity.getGoal()
-                    + "'\n"
-                    + "reasonForGoal: '"
-                    + characterDetailsEntity.getReasonForGoal()
-                    + "'\n";
+        "promptSystem: '"
+            + characterContextEntity.getPromptSystem()
+            + "'\n"
+            + "promptRace: '"
+            + characterContextEntity.getPromptRace()
+            + "'\n"
+            + "promptGender: '"
+            + characterContextEntity.getPromptGender()
+            + "'\n"
+            + "promptClass: '"
+            + characterContextEntity.getPromptClass()
+            + "'\n"
+            + "promptDescription: '"
+            + characterContextEntity.getPromptDescription()
+            + "'\n"
+            + "name: '"
+            + characterDetailsEntity.getName()
+            + "'\n"
+            + "age: '"
+            + characterDetailsEntity.getAge()
+            + "'\n"
+            + "education: '"
+            + characterDetailsEntity.getEducation()
+            + "'\n"
+            + "profession: '"
+            + characterDetailsEntity.getProfession()
+            + "'\n"
+            + "reasonForProfession: '"
+            + characterDetailsEntity.getReasonForProfession()
+            + "'\n"
+            + "workPreferences: '"
+            + characterDetailsEntity.getWorkPreferences()
+            + "'\n"
+            + "changeInSelf: '"
+            + characterDetailsEntity.getChangeInSelf()
+            + "'\n"
+            + "changeInInSelf: '"
+            + characterDetailsEntity.getChangeInSelf()
+            + "'\n"
+            + "changeInWorld: '"
+            + characterDetailsEntity.getChangeInWorld()
+            + "'\n"
+            + "goal: '"
+            + characterDetailsEntity.getGoal()
+            + "'\n"
+            + "reasonForGoal: '"
+            + characterDetailsEntity.getReasonForGoal()
+            + "'\n";
 
     final String apiUrl = hostApiAi + (hostApiAi.endsWith("/") ? "stats" : "/stats");
     HttpHeaders headers = new HttpHeaders();
@@ -420,11 +427,11 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
       if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
         String errorBody = response.getBody() != null ? response.getBody() : "No response body";
         LOGGER.error(
-                "OpenAI /stats API request failed with status code: {} and body: {}",
-                response.getStatusCode(),
-                errorBody);
+            "OpenAI /stats API request failed with status code: {} and body: {}",
+            response.getStatusCode(),
+            errorBody);
         throw new RuntimeException(
-                "OpenAI /stats API request failed with status code: " + response.getStatusCode());
+            "OpenAI /stats API request failed with status code: " + response.getStatusCode());
       }
 
       LOGGER.info("Statistiques API response received from OpenAI module: {}", response.getBody());
@@ -445,14 +452,14 @@ public class OpenaiService implements IGeminiGenerationConfiguration {
   private void saveCharacterJsonData(Long characterDetailsId, String jsonData) {
     try {
       final CharacterJsonDataModel jsonDataModel =
-              CharacterJsonDataModel.builder()
-                      .characterDetailsId(characterDetailsId)
-                      .jsonData(jsonData)
-                      .createdAt(Date.from(Instant.now()))
-                      .updatedAt(Date.from(Instant.now()))
-                      .build();
+          CharacterJsonDataModel.builder()
+              .characterDetailsId(characterDetailsId)
+              .jsonData(jsonData)
+              .createdAt(Date.from(Instant.now()))
+              .updatedAt(Date.from(Instant.now()))
+              .build();
       CharacterJsonDataEntity jsonDataEntity =
-              modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
+          modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
       characterJsonDataService.save(jsonDataEntity);
       LOGGER.info("Character JSON data saved successfully for ID: {}", characterDetailsId);
     } catch (Exception e) {

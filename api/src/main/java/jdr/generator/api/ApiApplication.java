@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  * JDR-GENERATOR Main Application Class.
  *
  * <p>This class serves as the entry point for the JDR-GENERATOR application. It is a Spring Boot
- * application that enables asynchronous task execution and scheduled tasks.  It also configures
+ * application that enables asynchronous task execution and scheduled tasks. It also configures
  * Cross-Origin Resource Sharing (CORS) to allow requests from any origin.
  */
 @EnableScheduling

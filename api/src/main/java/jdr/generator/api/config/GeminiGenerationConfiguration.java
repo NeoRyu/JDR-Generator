@@ -5,12 +5,12 @@ import jdr.generator.api.characters.context.DefaultContextJson;
 /**
  * Configuration de l'API Gemini pour la génération de contenu.
  *
- * <p>Cette interface définit les constantes de configuration et les méthodes pour interagir avec l'API
- * Gemini afin de générer du contenu textuel et des illustrations. Elle s'appuie sur la documentation
- * officielle de Google : <a
+ * <p>Cette interface définit les constantes de configuration et les méthodes pour interagir avec
+ * l'API Gemini afin de générer du contenu textuel et des illustrations. Elle s'appuie sur la
+ * documentation officielle de Google : <a
  * href="https://ai.google.dev/api/generate-content?hl=fr#generationconfig">https://ai.google.dev/api/generate-content?hl=fr#generationconfig</a>
  */
-public interface IGeminiGenerationConfiguration {
+public interface GeminiGenerationConfiguration {
 
   /**
    * Nombre maximal de jetons à inclure dans une réponse candidate.
@@ -23,7 +23,8 @@ public interface IGeminiGenerationConfiguration {
    * Contrôle le caractère aléatoire de la sortie.
    *
    * <p>Corresponds to the `temperature` parameter in the Gemini API.
-   * <p>Valeurs : 0 = Déterministe, 1 = Complètement aléatoire.
+   *
+   * <p>Valeurs : 0 = Déterministe, 1 = Complètement aléatoire.
    */
   double temperature = 0.7;
 

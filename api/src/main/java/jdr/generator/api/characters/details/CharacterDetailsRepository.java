@@ -6,6 +6,4 @@ import org.springframework.stereotype.Repository;
 /** Repository interface for accessing and managing
  * {@link CharacterDetailsEntity} objects. */
 @Repository
-public interface CharacterDetailsRepository extends JpaRepository<CharacterDetailsEntity, Long> {
-
-}
+public interface CharacterDetailsRepository extends JpaRepository<CharacterDetailsEntity, Long> {}

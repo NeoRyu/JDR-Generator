@@ -25,8 +25,8 @@ public interface CharacterJsonDataService {
    * Finds character JSON data by its associated character details ID.
    *
    * @param id The ID of the CharacterDetailsEntity.
-   * @return An Optional containing the found CharacterJsonDataEntity,
-   * or an empty Optional if not found.
+   * @return An Optional containing the found CharacterJsonDataEntity, or an empty Optional if not
+   *     found.
    */
   Optional<CharacterJsonDataEntity> findByCharacterDetailsId(Long id);
 }

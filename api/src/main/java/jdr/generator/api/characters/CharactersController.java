@@ -1,14 +1,22 @@
 package jdr.generator.api.characters;
 
+import java.util.List;
 import jdr.generator.api.characters.context.DefaultContextJson;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /** Controller for managing character-related operations. */
 @RestController
@@ -27,9 +35,9 @@ public class CharactersController {
    * @param openaiService Service for interacting with the OpenAI API.
    */
   CharactersController(
-          GeminiService geminiService,
-          CharacterDetailsService characterDetailsService,
-          OpenaiService openaiService) {
+      GeminiService geminiService,
+      CharacterDetailsService characterDetailsService,
+      OpenaiService openaiService) {
     this.geminiService = geminiService;
     this.characterDetailsService = characterDetailsService;
     this.openaiService = openaiService;
@@ -45,7 +53,7 @@ public class CharactersController {
   @PutMapping("/details/{id}")
   @Transactional
   public CharacterDetailsEntity updateCharacter(
-          @PathVariable Long id, @RequestBody CharacterFullModel updatedCharacter) {
+      @PathVariable Long id, @RequestBody CharacterFullModel updatedCharacter) {
     return characterDetailsService.updateCharacterDetails(id, updatedCharacter);
   }
 
@@ -87,8 +95,8 @@ public class CharactersController {
    * @return The generated CharacterDetailsModel.
    */
   @RequestMapping(
-          value = {"/generate"},
-          method = RequestMethod.POST)
+      value = {"/generate"},
+      method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = geminiHost)
   public CharacterDetailsModel generate(@RequestBody DefaultContextJson data) {
@@ -102,8 +110,8 @@ public class CharactersController {
    * @return An array of bytes representing the generated image.
    */
   @RequestMapping(
-          value = {"/illustrate"},
-          method = RequestMethod.POST)
+      value = {"/illustrate"},
+      method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = geminiHost)
   public byte[] illustrate(@RequestBody String imagePrompt) {
@@ -117,8 +125,8 @@ public class CharactersController {
    * @return A string containing the character's statistics.
    */
   @RequestMapping(
-          value = {"/stats/{id}"},
-          method = RequestMethod.POST)
+      value = {"/stats/{id}"},
+      method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = geminiHost)
   public String stats(@PathVariable Long id) {

@@ -19,6 +19,9 @@
       </list>
     </option>
   </component>
+  <component name="ProjectResources">
+    <resource url="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd" location="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

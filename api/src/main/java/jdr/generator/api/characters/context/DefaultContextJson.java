@@ -1,7 +1,11 @@
 package jdr.generator.api.characters.context;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** Represents the default JSON structure for character context information. */
 @Getter

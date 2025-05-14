@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.4</version>
+        <version>3.4.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -96,7 +96,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20250107</version>
+            <version>20250107</version><!--CVE-2022-45688, CVE-2023-5072-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -185,39 +185,46 @@
                 <executions>
                     <execution>
                         <goals>
-                            <goal>check</goal>
+                            <goal>check</goal><!-- mvn checkstyle:check -->
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <plugin><!-- mvn com.github.spotbugs:spotbugs-maven-plugin:spotbugs -->
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.3.0</version>
                 <configuration>
-                    <skip>true</skip>
+                    <skip>true</skip><!-- mvn spotbugs:gui -->
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
+                            <!-- mvn com.github.spotbugs:spotbugs-maven-plugin:check -->
                         </goals>
                     </execution>
                 </executions>
             </plugin>
 
-            <plugin>
+            <plugin><!-- mvn org.owasp:dependency-check-maven:aggregate -->
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>8.3.1</version>
                 <configuration>
                     <failBuildOnCVSS>10</failBuildOnCVSS>
-                    <suppressionFile>dependency-check-suppress.xml</suppressionFile>
+                    <suppressionFile>${project.basedir}/dependency-check-suppress.xml</suppressionFile>
+                    <formats>
+                        <format>HTML</format>
+                        <format>JSON</format>
+                    </formats>
+                    <outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>check</goal>
+                            <!-- mvn org.owasp:dependency-check-maven:check -->
                         </goals>
                     </execution>
                 </executions>
@@ -239,7 +246,9 @@
                     <execution>
                         <goals>
                             <goal>apply</goal>
+                            <!-- mvn spotless:apply -->
                             <goal>check</goal>
+                            <!-- mvn spotless:check -->
                         </goals>
                     </execution>
                 </executions>

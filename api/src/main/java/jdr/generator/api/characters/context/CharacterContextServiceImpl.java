@@ -1,14 +1,13 @@
 package jdr.generator.api.characters.context;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /** Implementation of the
  * {@link CharacterContextService} interface. */
@@ -27,7 +26,7 @@ public class CharacterContextServiceImpl implements CharacterContextService {
    */
   @Autowired
   public CharacterContextServiceImpl(
-          final CharacterContextRepository characterContextRepository, ModelMapper modelMapper) {
+      final CharacterContextRepository characterContextRepository, ModelMapper modelMapper) {
     this.characterContextRepository = characterContextRepository;
     this.modelMapper = modelMapper;
   }
@@ -61,8 +60,8 @@ public class CharacterContextServiceImpl implements CharacterContextService {
   public CharacterContextEntity findById(long id) {
     LOGGER.info("Context findById: {}", id);
     return this.characterContextRepository
-            .findById(id)
-            .orElseThrow(() -> new RuntimeException("Context not found with id: " + id));
+        .findById(id)
+        .orElseThrow(() -> new RuntimeException("Context not found with id: " + id));
   }
 
   /**
@@ -74,8 +73,8 @@ public class CharacterContextServiceImpl implements CharacterContextService {
   public List<CharacterContextModel> getAllContexts() {
     LOGGER.info("Fetching all contexts.");
     return this.characterContextRepository.findAll().stream()
-            .map(entity -> modelMapper.map(entity, CharacterContextModel.class))
-            .collect(Collectors.toList());
+        .map(entity -> modelMapper.map(entity, CharacterContextModel.class))
+        .collect(Collectors.toList());
   }
 
   /**

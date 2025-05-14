@@ -18,15 +18,32 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-
-      # Exécution de l'analyse de style de code Java avec Maven Checkstyle
+      # Mise en cache des dépendances Maven
+      - name: API Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('api/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      # Exécution de Checkstyle
       - name: API Maven Checkstyle
         run: cd api && mvn --batch-mode checkstyle:check
-      #  run: cd api && mvn --batch-mode -Ddependency-check.skip=true checkstyle:check
-
-      # Exécution de l'analyse statique de code Java pour détecter les bugs potentiels avec Maven SpotBugs
-      - name: API Maven SpotBugs
-        run: cd api && mvn --batch-mode spotbugs:check
+      # Exécution de SpotBugs : analyse statique de code java
+      #- name: API Maven SpotBugs
+      #  run: cd api && mvn --batch-mode spotbugs:check
+      # Exécution de PMD
+      - name: API Maven PMD
+        run: cd api && mvn --batch-mode pmd:check
+      # Exécution de Dependency Check
+      - name: API Maven Dependency Check
+        run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
+      # Exécution de Spotless (vérification du formatage)
+      - name: API Maven Spotless Check
+        run: cd api && mvn --batch-mode spotless:check
+      # Exécution des tests unitaires
+      - name: API Maven Test
+        run: cd api && mvn --batch-mode surefire:test
 
   nodejs-code-quality-web:
     name: Node.js Code Quality - Web

@@ -1,8 +1,11 @@
 package jdr.generator.api.characters.context;
 
-import lombok.*;
-
 import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** Represents the data transfer object for character context information. */
 @Getter

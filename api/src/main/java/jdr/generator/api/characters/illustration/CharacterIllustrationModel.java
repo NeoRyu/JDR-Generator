@@ -1,7 +1,11 @@
 package jdr.generator.api.characters.illustration;
 
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /** Represents the data transfer object for character illustration information. */
 @Getter
