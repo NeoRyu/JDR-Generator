@@ -7,18 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/eslint.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/openai/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/openai/eslint.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/src/controllers/background.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/background.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/statistiques.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/tsconfig.json" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX eslint pour les modules Gemini et Openai ?&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/clean_xtrem__GEMINI_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/clean_xtrem__OPENAI_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/clean_xtrem__WEB_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/lint.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/lint__GEMINI_.xml" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -127,6 +121,7 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
     "Shell Script.Docker Build API.executor": "Run",
     "Shell Script.Docker Build Network.executor": "Run",
@@ -159,6 +154,7 @@
     "npm.clean.executor": "Run",
     "npm.format.executor": "Run",
     "npm.lint (1).executor": "Run",
+    "npm.lint (GEMINI).executor": "Run",
     "npm.lint.executor": "Run",
     "npm.start (GEMINI).executor": "Run",
     "npm.start (OPENAI).executor": "Run",
@@ -465,7 +461,7 @@
       <item itemvalue="npm.clean-xtrem (OPENAI)" />
       <item itemvalue="npm.clean (OPENAI)" />
       <item itemvalue="npm.build (OPENAI)" />
-      <item itemvalue="npm.lint" />
+      <item itemvalue="npm.lint (OPENAI)" />
       <item itemvalue="npm.start (OPENAI)" />
       <item itemvalue="npm.clean-xtrem (WEB)" />
       <item itemvalue="npm.build (WEB)" />
@@ -476,7 +472,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="npm.lint (GEMINI)" />
-        <item itemvalue="npm.lint" />
+        <item itemvalue="npm.lint (OPENAI)" />
         <item itemvalue="npm.clean-xtrem (GEMINI)" />
         <item itemvalue="npm.clean-xtrem (OPENAI)" />
         <item itemvalue="Batch.docker-push (1)" />
@@ -556,15 +552,7 @@
       <workItem from="1746685738417" duration="21380000" />
       <workItem from="1747031240346" duration="23108000" />
       <workItem from="1747117426530" duration="23647000" />
-      <workItem from="1747205708403" duration="4332000" />
-    </task>
-    <task id="LOCAL-00124" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747032367537</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1747032367537</updated>
+      <workItem from="1747205708403" duration="4391000" />
     </task>
     <task id="LOCAL-00125" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -950,7 +938,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747209793765</updated>
     </task>
-    <option name="localTasksCounter" value="173" />
+    <task id="LOCAL-00173" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX eslint pour les modules Gemini et Openai ?&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747210428758</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1747210428758</updated>
+    </task>
+    <option name="localTasksCounter" value="174" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -976,7 +972,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Tests de découverte (non utile pour le projet pour le moment)&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperator permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator : SCALA :: Création de l'objet TypescriptOperators permettant d'utiliser des opérateurs Typescript (ternaire et ??) depuis Scala !&#10;- Différents tests pour m'excercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[OK] JDR-Generator&#10;- SCALA : Différents tests pour m'exercer sur le langage SCALA, non utile au projet pour le moment.&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -1001,7 +996,8 @@
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
-    <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX clean/build/start all modules OK &#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <MESSAGE value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX eslint pour les modules Gemini et Openai ?&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- FIX eslint pour les modules Gemini et Openai ?&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
