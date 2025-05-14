@@ -1,20 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "dist",
-    "sourceMap": true,
+    "module": "NodeNext",
+    "outDir": "./dist",
     "baseUrl": "./src",
-    "paths": {
-      "*": ["*"]
-    },
-    "lib": ["ES2020", "ESNext.AsyncIterable"]
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
   "include": ["app.ts","src/*/**.ts"],
-  "exclude": ["node_modules"]
 }

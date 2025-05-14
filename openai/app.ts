@@ -1,9 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import {generateResponse} from "./src/controllers/background";
-import {generateImage} from "./src/controllers/illustration";
-import {generateStats} from "./src/controllers/statistiques";
+import {generateResponse} from "./src/controllers/background.js";
+import {generateImage} from "./src/controllers/illustration.js";
+import {generateStats} from "./src/controllers/statistiques.js";
 
 dotenv.config();
 

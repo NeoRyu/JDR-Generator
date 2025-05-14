@@ -6,6 +6,7 @@
   "proxy": "http://localhost:8080",
   "scripts": {
     "start: dev": "vite",
+    "clean-xtrem": "rd /s /q dist && rm -rf node_modules && npm cache clean --force && rm -rf package-lock.json && npm install",
     "build": "npx tsc && vite build",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",

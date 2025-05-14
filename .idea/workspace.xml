@@ -9,11 +9,16 @@
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/illustration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gemini/src/controllers/statistiques.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/src/controllers/statistiques.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application-docker.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gemini/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/tsconfig.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/openai/rename-cjs.cjs" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/openai/tsconfig.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web/package.json" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -148,6 +153,8 @@
     "npm.clean (GEMINI).executor": "Run",
     "npm.clean (OPENAI).executor": "Run",
     "npm.clean-xtrem (1).executor": "Run",
+    "npm.clean-xtrem (GEMINI).executor": "Run",
+    "npm.clean-xtrem (WEB).executor": "Run",
     "npm.clean-xtrem.executor": "Run",
     "npm.clean.executor": "Run",
     "npm.start (GEMINI).executor": "Run",
@@ -235,7 +242,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="npm.clean-xtrem (1)">
+  <component name="RunManager" selected="npm.clean (OPENAI)">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
@@ -437,26 +444,6 @@
       </deployment>
       <method v="2" />
     </configuration>
-    <configuration name="clean-xtrem (1)" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/gemini/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="clean-xtrem" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
-    <configuration name="clean-xtrem" type="js.build_tools.npm" folderName="OPENAI" temporary="true" nameIsGenerated="true">
-      <package-json value="$PROJECT_DIR$/openai/package.json" />
-      <command value="run" />
-      <scripts>
-        <script value="clean-xtrem" />
-      </scripts>
-      <node-interpreter value="project" />
-      <envs />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.run (API)" />
@@ -467,26 +454,26 @@
       <item itemvalue="Maven.build (API) (docker)" />
       <item itemvalue="Maven.build (API)" />
       <item itemvalue="Node.js.bin\www" />
+      <item itemvalue="npm.clean-xtrem (GEMINI)" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
+      <item itemvalue="npm.clean-xtrem (OPENAI)" />
       <item itemvalue="npm.clean (OPENAI)" />
       <item itemvalue="npm.build (OPENAI)" />
       <item itemvalue="npm.start (OPENAI)" />
-      <item itemvalue="npm.clean-xtrem" />
+      <item itemvalue="npm.clean-xtrem (WEB)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start (WEB)" />
-      <item itemvalue="npm.clean-xtrem (1)" />
       <item itemvalue="Shell Script.docker-build" />
       <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.clean-xtrem (1)" />
-        <item itemvalue="npm.clean-xtrem" />
+        <item itemvalue="npm.clean-xtrem (GEMINI)" />
+        <item itemvalue="npm.clean-xtrem (OPENAI)" />
         <item itemvalue="Batch.docker-push (1)" />
         <item itemvalue="Docker.workflows: Compose Deployment" />
-        <item itemvalue="Batch.docker-push.local" />
       </list>
     </recent_temporary>
   </component>
@@ -562,15 +549,8 @@
       <workItem from="1746601280218" duration="20604000" />
       <workItem from="1746685738417" duration="21380000" />
       <workItem from="1747031240346" duration="23108000" />
-      <workItem from="1747117426530" duration="22353000" />
-    </task>
-    <task id="LOCAL-00121" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1746715722068</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1746715722068</updated>
+      <workItem from="1747117426530" duration="23647000" />
+      <workItem from="1747205708403" duration="3073000" />
     </task>
     <task id="LOCAL-00122" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -956,11 +936,25 @@
       <option name="project" value="LOCAL" />
       <updated>1747142171339</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747143089671</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1747143089671</updated>
+    </task>
+    <option name="localTasksCounter" value="171" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+    <option name="exactExcludedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/openai/app.js" />
+        <option value="$PROJECT_DIR$/openai/app.js.map" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

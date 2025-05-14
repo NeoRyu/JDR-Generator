@@ -19,7 +19,7 @@ spring:
     url: jdbc:mysql://${spring.datasource.hostname}:${spring.datasource.port}/${spring.datasource.schema-name}${spring.datasource.args}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: root1234
+    password: root
     hikari:
       maximum-pool-size: 10
       minimum-idle: 5

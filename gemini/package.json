@@ -2,7 +2,7 @@
   "name": "gemini",
   "version": "1.0.0",
   "type": "module",
-  "main": "app.ts",
+  "main": "dist/app.js",
   "scripts": {
     "clean": "rd /s /q dist",
     "build": "tsc",
