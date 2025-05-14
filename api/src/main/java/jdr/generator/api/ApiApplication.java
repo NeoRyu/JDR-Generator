@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = {"*"})
 public class ApiApplication {
 
-  private static final Logger LOGGER = LogManager.getLogger();
+  private static final Logger log = LogManager.getLogger();
 
   /**
    * Main method to start the JDR-GENERATOR application.
@@ -39,9 +39,11 @@ public class ApiApplication {
 
   /** Logs a message indicating that the application is ready. */
   private static void logAppReady() {
-    LOGGER.log(Level.OFF, "LOGGER LEVEL '{}' WILL BE USED...", LOGGER.getLevel());
+    log.log(Level.OFF, "LOGGER LEVEL '{}' WILL BE USED...", log.getLevel());
     final String message = "\n---------\n\nJDR-GENERATOR : APP IS READY TO USE !\n\n---------";
-    LOGGER.log(Level.OFF, message);
-    System.out.println(message);
+    log.log(Level.OFF, message);
+    if (log.isInfoEnabled()) {
+      log.info(message);
+    }
   }
 }
