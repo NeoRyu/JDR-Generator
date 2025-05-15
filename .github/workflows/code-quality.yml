@@ -44,20 +44,22 @@ jobs:
 
           # Boucle de réessai pour attendre la création du fichier
           attempts=5
-          delay=2 # secondes
+          delay=2
           for i in $(seq 1 $attempts); do
-            if [ -f api/target/pmd.xml ]; then
-              echo "api/target/pmd.xml found after $((i-1)) attempts."
-              break
-            else
-              echo "Attempt $i: api/target/pmd.xml not found. Waiting $delay seconds..."
-              sleep $delay
-            fi
-            if [ $i -eq $attempts ]; then
-              echo "Error: api/target/pmd.xml not found after $attempts attempts. Failing."
-              exit 1
-            fi
+          if [ -f target/pmd.xml ]; then # Chemin relatif
+            echo "api/target/pmd.xml found after $((i-1)) attempts."
+            break
+          else
+            echo "Attempt $i: target/pmd.xml not found. Waiting $delay seconds..."
+            sleep $delay
+          fi
+          if [ $i -eq $attempts ]; then
+            echo "Error: target/pmd.xml not found after $attempts attempts. Failing."
+            exit 1
+          fi
           done
+          
+          ls -la target/
           
           PMD_OUTPUT=$(cat api/target/pmd.xml || { echo "Error reading api/target/pmd.xml"; exit 1; })
           PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
