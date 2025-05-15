@@ -1,5 +1,9 @@
 import xml.etree.ElementTree as ET
 import sys
+import logging
+
+# Configuration du logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def analyze_pmd_xml(xml_file_path):
     try:
@@ -14,18 +18,21 @@ def analyze_pmd_xml(xml_file_path):
         namespace = {'pmd': 'http://pmd.sourceforge.net/report/2.0.0'}
 
         for file_element in root.findall('pmd:file', namespace):
+            logging.debug(f"Processing file: {file_element.get('name')}")
             for violation in file_element.findall('pmd:violation', namespace):
                 priority = violation.get('priority')
                 message = violation.get('message')
 
-                if priority == '1':
+                logging.debug(f"  Found violation - priority: {priority}, message: {message}")
+
+                if priority == '1' and message:  # Vérifier que le message n'est pas None
                     priority_1_errors.append(f"  - {message}")
-                elif priority == '2':
+                elif priority == '2' and message:
                     priority_2_errors.append(f"  - {message}")
-                elif priority == '3':
+                elif priority == '3' and message:
                     priority_3_errors.append(f"  - {message}")
 
-        print("Priority 1 PMD Errors:")
+        print("\nPriority 1 PMD Errors:")
         for error in priority_1_errors:
             print(error)
 
@@ -43,6 +50,7 @@ def analyze_pmd_xml(xml_file_path):
         print(f"Error parsing XML: {e}")
         sys.exit(1)
     except Exception as e:
+        print(f"An unexpected error occurred: {e}")
         print(f"An unexpected error occurred: {e}")
         sys.exit(1)
 
