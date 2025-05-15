@@ -45,7 +45,7 @@ jobs:
 
             # Analyser et afficher les erreurs de priorité 1 avec xmllint
             echo "Priority 1 PMD Errors:"
-            xmllint --xpath '//violation[@priority="1"]/@message' target/pmd.xml | sed 's/message="//g;s/"//g;s/^/  - /'
+            grep '<violation .*priority="1".*message="[^"]*"' target/pmd.xml | sed -E 's/.*message="([^"]*)".*/  - \1/'
 
             # Calculer le nombre d'erreurs par priorité
             PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
