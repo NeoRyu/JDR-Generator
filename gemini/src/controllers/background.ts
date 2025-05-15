@@ -1,22 +1,21 @@
 import {Request, Response} from "express";
-import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI} from '@google/generative-ai';
 import dotenv from "dotenv";
 import fs from "fs";
-
+import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI,} from "@google/generative-ai";
 
 dotenv.config();
 
 // Configuration requise
-const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(process.env.API_KEY);
-const configMaxOutputTokens: number = +process.env.MAX_TOKENS;
+const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
+const configMaxOutputTokens: number = +(process.env.MAX_TOKENS ?? '2048');
 const model: GenerativeModel = genAI.getGenerativeModel({
-    model: process.env.AI_TEXT_MODEL,
-    generationConfig: {
-        maxOutputTokens: configMaxOutputTokens,
-        temperature: 0.7,
-        topP: 0.8,
-        topK: 40,
-    },
+  model: ''+process.env.AI_TEXT_MODEL,
+  generationConfig: {
+    maxOutputTokens: configMaxOutputTokens,
+    temperature: 0.7,
+    topP: 0.8,
+    topK: 40,
+  },
 });
 
 // Ce tableau permet de conserver l'historique des conversations
@@ -75,44 +74,65 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
         '''
 `;
 
-function contextPrompt(data): string {
-    const context = `
+function contextPrompt(data: {
+  promptSystem: any;
+  promptRace: any;
+  promptGender: any;
+  promptClass: any;
+  promptDescription: any;
+}): string {
+  const context = `
     game system: ${data.promptSystem}
     race: ${data.promptRace}
     gender: ${data.promptGender}
     class: ${data.promptClass}
     description: ${data.promptDescription}
     `;
-    return basePrompt + `Please use the context provided below to generate the character: Context: '''` + context + `'''`;
+  return (
+    basePrompt +
+    `Please use the context provided below to generate the character: Context: '''` +
+    context +
+    `'''`
+  );
 }
 
 // Fonction contrôleur pour gérer les conversations
 export const generateResponse = async (req: Request, res: Response) => {
-    const pathSrc: string = 'C:\\Users\\'+process.env.USER_WINDOW+'\\Downloads\\'+process.env.DOWNLOAD_FOLDER+'\\'
-    const txtName: string = process.env.DOWNLOAD_FOLDER+'-gemini_'+Math.floor(Date.now()/1000)+'.txt';
-    try {
-        const { prompt } = req.body;
-        const contextPrompts = {
-            promptSystem: req.body.promptSystem,
-            promptRace: req.body.promptRace,
-            promptGender: req.body.promptGender,
-            promptClass: req.body.promptClass,
-            promptDescription: req.body.promptDescription,
-        };
-        console.log('Contexte ::', contextPrompts);
+  const pathSrc: string =
+    "C:\\Users\\" +
+    process.env.USER_WINDOW +
+    "\\Downloads\\" +
+    process.env.DOWNLOAD_FOLDER +
+    "\\";
+  const txtName: string =
+    process.env.DOWNLOAD_FOLDER +
+    "-gemini_" +
+    Math.floor(Date.now() / 1000) +
+    ".txt";
+  try {
+    const { prompt } = req.body;
+    const contextPrompts = {
+      promptSystem: req.body.promptSystem,
+      promptRace: req.body.promptRace,
+      promptGender: req.body.promptGender,
+      promptClass: req.body.promptClass,
+      promptDescription: req.body.promptDescription,
+    };
+    console.log("Contexte ::", contextPrompts);
 
-        const result: GenerateContentResult = await model.generateContent(contextPrompt(contextPrompts));
-        const responseText: string = result.response.text();
-        console.log(responseText);
+    const result: GenerateContentResult = await model.generateContent(
+      contextPrompt(contextPrompts),
+    );
+    const responseText: string = result.response.text();
+    console.log(responseText);
 
-        // Stocke la conversation
-        conversationContext.push([prompt, responseText]);
-        res.send({ response: responseText });
+    // Stocke la conversation
+    conversationContext.push([prompt, responseText]);
+    res.send({ response: responseText });
 
-        fs.writeFileSync(pathSrc + txtName, responseText);
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Internal server error" });
-    }
+    fs.writeFileSync(pathSrc + txtName, responseText);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };

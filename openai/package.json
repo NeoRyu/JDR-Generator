@@ -1,25 +1,35 @@
 {
   "name": "openai",
   "version": "1.0.0",
-  "main": "app.ts",
+  "type": "module",
+  "main": "dist/app.js",
   "scripts": {
     "clean": "rd /s /q dist",
     "build": "tsc",
     "start": "node dist/app.js",
-    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
+    "clean-xtrem": "rd /s /q dist && rm -rf node_modules && npm cache clean --force && rm -rf package-lock.json && npm install",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
-  "keywords": [],
   "author": "NeoRyu",
-  "license": "ISC",
-  "description": "NodeJS REST-API to interact with OpenAI for image generation",
+  "keywords": [
+    "jdr-generator",
+    "openai",
+    "chatgpt",
+    "dall-e",
+    "api",
+    "Neo_Ryu"
+  ],
+  "license": "Apache License",
+  "description": "NodeJS REST-API to interact with OpenAI IA : ChatGPT and Dall-E",
   "devDependencies": {
     "@types/body-parser": "^1.19.2",
     "@types/express": "^4.17.13",
     "@types/node": "^20.10.5",
-    "typescript": "^5.2.2",
-    "eslint": "8.57.1",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "eslint": "^8.57.1",
     "prettier": "3.5.3"
   },
   "dependencies": {
@@ -27,6 +37,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "node-fetch": "^3.3.2",
-    "openai": "^4.0.0"
+    "openai": "^4.0.0",
+    "typescript": "^5.2.2",
+    "typescript-eslint": "^8.32.0"
   }
 }

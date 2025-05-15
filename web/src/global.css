@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -9,63 +9,63 @@
 
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
- 
+
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
- 
+
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
- 
+
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
- 
+
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
- 
+
     --radius: 0.5rem;
   }
- 
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
- 
+
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
- 
+
     --popover: 240 10% 3.9%;
     --popover-foreground: 0 0% 98%;
- 
+
     --primary: 0 0% 98%;
     --primary-foreground: 240 5.9% 10%;
- 
+
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
- 
+
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
- 
+
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
- 
+
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -117,7 +117,6 @@ textarea:focus {
   box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2); /* Ombre de focus personnalisée */
 }
 
-
 .loading-spiraleclispe-container {
   position: relative;
   width: 150px;
@@ -145,7 +144,7 @@ textarea:focus {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 .loading-spiraleclispe:before {
-  content: '';
+  content: "";
   position: absolute;
   top: -3px;
   left: -3px;
@@ -169,7 +168,7 @@ textarea:focus {
   animation: animate 2s linear infinite;
 }
 .loading-spiraleclispe span:before {
-  content: '';
+  content: "";
   position: absolute;
   width: 16px;
   height: 16px;
@@ -180,12 +179,20 @@ textarea:focus {
   box-shadow: 0 0 20px #fff000;
 }
 @keyframes animateC {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @keyframes animate {
-  0% { transform: rotate(45deg); }
-  100% { transform: rotate(405deg); }
+  0% {
+    transform: rotate(45deg);
+  }
+  100% {
+    transform: rotate(405deg);
+  }
 }
 
 .sliced-wrapper {
@@ -217,9 +224,8 @@ textarea:focus {
   transform: translateX(-0.02em);
 }
 
-
 @font-face {
-  font-family: 'Rocher';
+  font-family: "Rocher";
   src: url(https://assets.codepen.io/9632/RocherColorGX.woff2);
 }
 @font-palette-values --Grays {
@@ -235,40 +241,43 @@ textarea:focus {
   base-palette: 7;
 }
 .grays {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-palette: --Grays;
 }
 .purples {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-palette: --Purples;
 }
 .mint {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-palette: --Mint;
 }
 
 .table-head {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-size: 1.2em;
   margin: -0.6em 0 0;
   color: white;
-  text-shadow: 0 0 0.05em #fff, 0 0 0.2em #05e1fe, 0 0 0.3em #05d9fe;
+  text-shadow:
+    0 0 0.05em #fff,
+    0 0 0.2em #05e1fe,
+    0 0 0.3em #05d9fe;
 }
 .character-name {
   padding: 10px;
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   text-align: left;
   font-size: 40px;
   align-items: center;
   justify-content: center;
 }
 .character-context {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-size: 22px;
   padding: 10px;
 }
 .character-description {
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
   font-size: 14px;
   font-style: italic;
   position: relative;
@@ -295,16 +304,16 @@ textarea:focus {
 .button-aura:before {
   content: "";
   background: linear-gradient(
-          45deg,
-          #ff0000,
-          #ff7300,
-          #fffb00,
-          #48ff00,
-          #00ffd5,
-          #002bff,
-          #7a00ff,
-          #ff00c8,
-          #ff0000
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
   );
   position: absolute;
   top: -2px;
@@ -351,25 +360,27 @@ textarea:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: .5em;
+  column-gap: 0.5em;
   position: relative;
   border-radius: 50px;
   padding: 16px 16px;
   background-color: #faf0f0;
-  box-shadow: inset 0 -4px 8px #d88787, 0 4px 6px rgba(0, 0, 0, .2);
+  box-shadow:
+    inset 0 -4px 8px #d88787,
+    0 4px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   color: #e30404;
-  transition: transform .4s cubic-bezier(.55, 1, .15, 1);
+  transition: transform 0.4s cubic-bezier(0.55, 1, 0.15, 1);
   will-change: transform;
   &:active {
-    transform: scale(.92);
+    transform: scale(0.92);
 
     &::after {
       opacity: 1;
     }
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     border-image-slice: 50%;
@@ -378,8 +389,8 @@ textarea:focus {
     transform: scale(1.04, 1.08);
     opacity: 0;
     transition-property: opacity;
-    transition-duration: .4s;
-    transition-timing-function: cubic-bezier(.55, 1, .15, 1);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.55, 1, 0.15, 1);
     will-change: transform;
   }
   &:focus-visible::after {
@@ -393,36 +404,38 @@ textarea:focus {
   display: flex;
   justify-content: center;
   align-items: center;
-  column-gap: .5em;
+  column-gap: 0.5em;
   position: relative;
   border-radius: 50px;
   padding: 16px 16px;
   background-color: #f0f7fa;
-  box-shadow: inset 0 -4px 8px #87bfd8, 0 4px 6px rgba(0, 0, 0, .2);
+  box-shadow:
+    inset 0 -4px 8px #87bfd8,
+    0 4px 6px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   color: #0470e3;
-  transition: transform .4s cubic-bezier(.55, 1, .15, 1);
+  transition: transform 0.4s cubic-bezier(0.55, 1, 0.15, 1);
   will-change: transform;
   &:active {
-    transform: scale(.92);
+    transform: scale(0.92);
 
     &::after {
       opacity: 1;
     }
   }
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
-    border-image-source: url('https://assets.codepen.io/4175254/mario-button-borders.png');
+    border-image-source: url("https://assets.codepen.io/4175254/mario-button-borders.png");
     border-image-slice: 50%;
     border-image-width: 40px;
     border-style: solid;
     transform: scale(1.04, 1.08);
     opacity: 0;
     transition-property: opacity;
-    transition-duration: .4s;
-    transition-timing-function: cubic-bezier(.55, 1, .15, 1);
+    transition-duration: 0.4s;
+    transition-timing-function: cubic-bezier(0.55, 1, 0.15, 1);
     will-change: transform;
   }
   &:focus-visible::after {
@@ -449,7 +462,7 @@ textarea:focus {
 }
 
 .no-img {
-  border: #ACACAC dashed 2px;
+  border: #acacac dashed 2px;
   margin-right: 10px;
   padding: 12px;
   text-align: justify;
@@ -459,7 +472,7 @@ textarea:focus {
   flex: 1;
   padding: 0.5rem;
   margin-top: 15px;
-  font-family: 'Rocher', serif;
+  font-family: "Rocher", serif;
 }
 .tab-trigger-style.active {
   background-color: rgb(50 50 50);

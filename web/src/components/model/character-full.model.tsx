@@ -4,8 +4,8 @@ import {CharacterIllustration} from "@/components/model/character-illustration.m
 import {CharacterJsonData} from "@/components/model/character-stats.model.tsx";
 
 export interface CharacterFull extends CharacterDetailsModel {
-    details: CharacterDetailsModel;
-    context: CharacterContext;
-    illustration: CharacterIllustration;
-    jsonData: CharacterJsonData;
+  details: CharacterDetailsModel;
+  context: CharacterContext;
+  illustration: CharacterIllustration;
+  jsonData: CharacterJsonData;
 }
