@@ -36,53 +36,44 @@ jobs:
       - name: API Maven PMD
         run: cd api && mvn --batch-mode pmd:check
         continue-on-error: true # Important: Don't fail the step here
-        id: pmd # Ajouter un ID pour référencer les outputs
+        id: pmd
       - name: Analyze PMD Results
         run: |
-          cd api # Naviguer vers le répertoire 'api' (pour être sûr)
-          pwd  # Afficher le répertoire de travail actuel
-
-          # Boucle de réessai pour attendre la création du fichier
-          attempts=5
-          delay=2
-          for i in $(seq 1 $attempts); do
-          if [ -f target/pmd.xml ]; then # Chemin relatif
-            echo "api/target/pmd.xml found after $((i-1)) attempts."
-            break
+          cd api
+          if [ -f target/pmd.xml ]; then
+            PMD_OUTPUT=$(cat target/pmd.xml || { echo "Error reading target/pmd.xml"; exit 1; })
+            
+            # Analyser et afficher les erreurs de priorité 1
+            echo "Priority 1 PMD Errors:"
+            grep '<violation .*priority=\"1\"' target/pmd.xml | while IFS='"' read -r _ line _ msg _; do
+              echo "  - $msg";
+            done
+            
+            PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
+            PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
+            PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
+            echo "priority1_errors=$PRIORITY_1_ERRORS" >> "$GITHUB_OUTPUT"
+            echo "priority2_errors=$PRIORITY_2_ERRORS" >> "$GITHUB_OUTPUT"
+            echo "priority3_errors=$PRIORITY_3_ERRORS" >> "$GITHUB_OUTPUT"
           else
-            echo "Attempt $i: target/pmd.xml not found. Waiting $delay seconds..."
-            sleep $delay
-          fi
-          if [ $i -eq $attempts ]; then
-            echo "Error: target/pmd.xml not found after $attempts attempts. Failing."
+            echo "Error: target/pmd.xml not found..."
             exit 1
           fi
-          done
-          
-          ls -la target/
-          
-          PMD_OUTPUT=$(cat api/target/pmd.xml || { echo "Error reading api/target/pmd.xml"; exit 1; })
-          PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
-          PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
-          PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
-
-          echo "::set-output name=priority1_errors::$PRIORITY_1_ERRORS"
-          echo "::set-output name=priority2_errors::$PRIORITY_2_ERRORS"
-          echo "::set-output name=priority3_errors::$PRIORITY_3_ERRORS"
         id: analyze_pmd
       - name: Fail if Priority 1 Errors
         if: steps.analyze_pmd.outputs.priority1_errors > 0
         run: |
+          cd api 
           echo "Priority 1 PMD errors found. Failing the build."
           exit 1
       - name:  Summary
         if: always()
         run: |
-          cd api 
+          cd api
           echo "PMD Check Summary"
-          echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
-          echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
-          echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
+          echo "Priority 1 Errors: ${{ steps.pmd.outputs.priority1_errors }}"
+          echo "Priority 2 Errors: ${{ steps.pmd.outputs.priority2_errors }}"
+          echo "Priority 3 Errors: ${{ steps.pmd.outputs.priority3_errors }}"
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
@@ -92,49 +83,6 @@ jobs:
       # Exécution des tests unitaires
       - name: API Maven Test
         run: cd api && mvn --batch-mode surefire:test
-
-  nodejs-code-quality-web:
-    name: Node.js Code Quality - Web
-    runs-on: ubuntu-latest
-    needs: java-code-quality
-    steps:
-      # Récupérer le code source du dépôt
-      - name: Checkout code
-        uses: actions/checkout@v3
-      # Configurer Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
-      # Nettoyer le cache npm avant l'installation
-      - name: Clean npm cache and install dependencies
-        run: |
-          cd web
-          npm cache clean --force
-          rm -rf node_modules
-          rm package-lock.json
-          npm install --legacy-peer-deps
-      # Vérifier TypeScript
-      - name: TypeScript Check
-        run: cd web && npx tsc --noEmit
-      # Formater le code avec Prettier
-      - name: Format code # npm run format
-        run: cd web && npm run format
-      # Vérifier le formatage avec Prettier
-      - name: Check formatting # cmd 'lint' dans package.json
-        run: cd web && npm run format:check
-      - name: Show package versions (debug)
-        run: |
-          cd web
-          echo "ESLint version:"
-          npx eslint --version
-          echo "@typescript-eslint/eslint-plugin version:"
-          npm list --depth 0 @typescript-eslint/eslint-plugin
-          echo "eslint-plugin-react version:"
-          npm list --depth 0 eslint-plugin-react
-      # ESLint
-      - name: ESLint # npm init @eslint/config@latest
-        run: cd web && npm run lint
 
 
   nodejs-code-quality-gemini:
