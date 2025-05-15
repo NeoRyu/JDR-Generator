@@ -38,7 +38,8 @@ jobs:
         continue-on-error: true # Important: Don't fail the step here
       - name: Analyze PMD Results
         run: |
-          PMD_OUTPUT=$(cat target/pmd.xml) # Or wherever your output is
+          cd api # Naviguer vers le répertoire 'api'
+          PMD_OUTPUT=$(cat target/pmd.xml) # Le chemin devrait maintenant être correct
           PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
           PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
           PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
@@ -46,19 +47,21 @@ jobs:
           echo "::set-output name=priority1_errors::$PRIORITY_1_ERRORS"
           echo "::set-output name=priority2_errors::$PRIORITY_2_ERRORS"
           echo "::set-output name=priority3_errors::$PRIORITY_3_ERRORS"
-      - name: Fail if Priority 1 Errors
-        if: steps.pmd.outputs.priority1_errors > 0
-        run: |
-          echo "Priority 1 PMD errors found. Failing the build."
-          exit 1
-      - name:  Summary
-        if: always()
-        run: |
-          echo "PMD Check Summary"
-          echo "Priority 1 Errors: ${{ steps.pmd.outputs.priority1_errors }}"
-          echo "Priority 2 Errors: ${{ steps.pmd.outputs.priority2_errors }}"
-          echo "Priority 3 Errors: ${{ steps.pmd.outputs.priority3_errors }}"
-      # Exécution de Dependency Check
+        id: analyze_pmd # Ajouter un ID pour référencer les outputs
+          - name: Fail if Priority 1 Errors
+            if: steps.analyze_pmd.outputs.priority1_errors > 0
+            run: |
+              echo "Priority 1 PMD errors found. Failing the build."
+              exit 1
+          - name: Summary
+            if: always()
+            run: |
+              cd api # Naviguer vers le répertoire 'api' pour s'assurer du bon contexte
+              echo "PMD Check Summary"
+              echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
+              echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
+              echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
+        # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
       # Exécution de Spotless (vérification du formatage)
