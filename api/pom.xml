@@ -201,21 +201,13 @@
                         <removeUnusedImports/>
                         <trimTrailingWhitespace/>
                         <endWithNewline/>
-                        <custom>
-                            <!-- Empêche Spotless de reformater les javadocs -->
-                            <name>IgnoreJavadoc</name>
-                            <regex>
-                                <!-- Ne touche pas aux blocs de commentaires Javadoc -->
-                                <pattern>(?s)/\*\*.*?\*/</pattern>
-                            </regex>
-                        </custom>
                     </java>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
-                            <goal>apply</goal>
-                            <goal>check</goal>
+                            <goal>apply</goal><!-- mvn spotless:apply -->
+                            <goal>check</goal><!-- mvn spotless:check -->
                         </goals>
                     </execution>
                 </executions>
