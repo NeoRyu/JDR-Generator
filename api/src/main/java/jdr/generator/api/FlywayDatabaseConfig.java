@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Configuration class for Flyway database migrations.
- */
+ * */
 @Configuration
 @EnableConfigurationProperties(FlywayProperties.class)
 public class FlywayDatabaseConfig {
