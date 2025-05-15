@@ -48,20 +48,20 @@ jobs:
           echo "::set-output name=priority2_errors::$PRIORITY_2_ERRORS"
           echo "::set-output name=priority3_errors::$PRIORITY_3_ERRORS"
         id: analyze_pmd # Ajouter un ID pour référencer les outputs
-          - name: Fail if Priority 1 Errors
-            if: steps.analyze_pmd.outputs.priority1_errors > 0
-            run: |
-              echo "Priority 1 PMD errors found. Failing the build."
-              exit 1
-          - name: Summary
-            if: always()
-            run: |
-              cd api # Naviguer vers le répertoire 'api' pour s'assurer du bon contexte
-              echo "PMD Check Summary"
-              echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
-              echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
-              echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
-        # Exécution de Dependency Check
+      - name: Fail if Priority 1 Errors
+        if: steps.analyze_pmd.outputs.priority1_errors > 0
+        run: |
+          echo "Priority 1 PMD errors found. Failing the build."
+          exit 1
+      - name: Summary
+        if: always()
+        run: |
+          cd api # Naviguer vers le répertoire 'api' pour s'assurer du bon contexte
+          echo "PMD Check Summary"
+          echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
+          echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
+          echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
+      # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
       # Exécution de Spotless (vérification du formatage)
