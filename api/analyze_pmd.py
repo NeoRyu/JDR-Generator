@@ -28,9 +28,9 @@ def analyze_pmd_xml(xml_file_path):
                     logging.debug(f"|  Found violation ["
                                   f"{violation.get('beginline')}:{violation.get('begincolumn')}"
                                   f" to {violation.get('endline')}:{violation.get('endcolumn')}"
-                                  f"] into {violation.get('class')}.{violation.get('method')}"
-                                  f"\n|  > priority: {priority} / rule: {violation.get('rule')} :: {violation.get('externalInfoUrl')}"
-                                  f"\n|  > message: {message}")
+                                  f"] into {violation.get('class')}.{violation.get('method')}")
+                    logging.debug(f"   > priority: {priority} / rule: {violation.get('rule')} :: {violation.get('externalInfoUrl')}")
+                    logging.debug(f"   > message: {message}"))
                     priority_1_errors.append(f"  Found violation - priority: {priority}, message: {message}, file : {file_element.get('name')}")
 
         return len(priority_1_errors)
