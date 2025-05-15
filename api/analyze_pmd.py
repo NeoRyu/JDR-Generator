@@ -30,20 +30,20 @@ def analyze_pmd_xml(xml_file_path):
                     else:
                         priority_1_errors.append(f"  - No message provided (File: {file_element.get('name')}, Line: {violation.get('beginline')})")
 
-        print("\nPriority 1 PMD Errors:")
+        logging.debug("\nPriority 1 PMD Errors:")
         if priority_1_errors: #check if the list is empty
             for error in priority_1_errors:
-                print(error)
+                logging.debug(error)
         else:
-            print("  No Priority 1 PMD errors found")
+            logging.debug("  No Priority 1 PMD errors found")
         return len(priority_1_errors)
 
     except ET.ParseError as e:
-        print(f"Error parsing XML: {e}")
+        logging.error(f"Error parsing XML: {e}")
         sys.exit(1)
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        print(f"An unexpected error occurred: {e}")
+        logging.error(f"An unexpected error occurred: {e}")
+        logging.error(f"An unexpected error occurred: {e}")
         sys.exit(1)
 
 
