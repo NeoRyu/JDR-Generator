@@ -40,7 +40,8 @@ jobs:
       - name: Analyze PMD Results
         run: |
           cd api # Naviguer vers le répertoire 'api' (pour être sûr)
-          
+          pwd  # Afficher le répertoire de travail actuel
+
           # Boucle de réessai pour attendre la création du fichier
           attempts=5
           delay=2 # secondes
