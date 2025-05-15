@@ -22,27 +22,16 @@ def analyze_pmd_xml(xml_file_path):
                 priority = violation.get('priority')
                 message = violation.text  # Correction : Utiliser .text pour obtenir le texte de l'élément
 
-                logging.debug(f"  Found violation - priority: {priority}, message: {message}")
+                if priority == '1':
+                    logging.debug(f"  Found violation - priority: {priority}, message: {message}")
+                    priority_1_errors.append(f"  Found violation - priority: {priority}, message: {message}, file : {file_element.get('name')}")
 
-                if priority == '1':  # Traiter uniquement les erreurs de priorité 1
-                    if message:
-                        priority_1_errors.append(f"  - {message} (File: {file_element.get('name')}, Line: {violation.get('beginline')})")
-                    else:
-                        priority_1_errors.append(f"  - No message provided (File: {file_element.get('name')}, Line: {violation.get('beginline')})")
-
-        logging.debug("\nPriority 1 PMD Errors:")
-        if priority_1_errors: #check if the list is empty
-            for error in priority_1_errors:
-                logging.debug(error)
-        else:
-            logging.debug("  No Priority 1 PMD errors found")
         return len(priority_1_errors)
 
     except ET.ParseError as e:
         logging.error(f"Error parsing XML: {e}")
         sys.exit(1)
     except Exception as e:
-        logging.error(f"An unexpected error occurred: {e}")
         logging.error(f"An unexpected error occurred: {e}")
         sys.exit(1)
 
