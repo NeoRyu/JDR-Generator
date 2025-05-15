@@ -18,6 +18,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      - name: Install xq
+        run: sudo apt-get update && sudo apt-get install -y xq
       # Mise en cache des dépendances Maven
       - name: API Cache Maven dependencies
         uses: actions/cache@v3
@@ -45,10 +47,7 @@ jobs:
 
             # Analyser et afficher les erreurs de priorité 1 avec xmllint
             echo "Priority 1 PMD Errors:"
-            awk -F'message="' '$0 ~ /<violation .*priority="1"/ {
-              split($2, a, "\"");
-              print "  - " a[1];
-            }' target/pmd.xml
+            xq -r '.pmd.file[] | .violation[] | select(.priority == "1") | "  - " + .message' target/pmd.xml
 
             # Calculer le nombre d'erreurs par priorité
             PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
