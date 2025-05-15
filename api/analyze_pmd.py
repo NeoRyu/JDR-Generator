@@ -48,7 +48,7 @@ def analyze_pmd_xml(xml_file_path):
 
 
 if __name__ == "__main__":
-    xml_file = "api/target/pmd.xml"  # Chemin relatif au fichier XML
+    xml_file = "target/pmd.xml"  # Chemin relatif au fichier XML (depuis api/)
     p1_count, p2_count, p3_count = analyze_pmd_xml(xml_file)
 
     # Set GitHub Actions output variables
