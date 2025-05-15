@@ -39,8 +39,13 @@ jobs:
         id: pmd # Ajouter un ID pour référencer les outputs
       - name: Analyze PMD Results
         run: |
-          cd api # Naviguer vers le répertoire 'api' (bien que ce soit peut-être inutile)
-          PMD_OUTPUT=$(cat api/target/pmd.xml) # Chemin explicite vers pmd.xml
+          cd api
+          if [ ! -f api/target/pmd.xml ]; then
+            echo "Error: api/target/pmd.xml not found!"
+            exit 1
+          fi
+          
+          PMD_OUTPUT=$(cat api/target/pmd.xml)
           PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
           PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
           PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
@@ -57,7 +62,7 @@ jobs:
       - name:  Summary
         if: always()
         run: |
-          cd api # Naviguer vers le répertoire 'api' (pour être sûr)
+          cd api 
           echo "PMD Check Summary"
           echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
           echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
