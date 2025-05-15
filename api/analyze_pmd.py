@@ -79,4 +79,4 @@ if __name__ == "__main__":
         print(f"::set-output name=priority1_errors_count::{p1_count}")
 
         # Optionnel:  Si tu veux aussi les messages complets en sortie (peut être très long)
-        print(f"::set-output name=priority1_errors_messages::{'\\n'.join(priority_1_errors)}")
+        print(f"::set-output name=priority1_errors_messages::{'\n'.join(priority_1_errors)}")
