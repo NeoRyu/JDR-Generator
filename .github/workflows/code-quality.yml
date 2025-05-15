@@ -36,27 +36,28 @@ jobs:
       - name: API Maven PMD
         run: cd api && mvn --batch-mode pmd:check
         continue-on-error: true # Important: Don't fail the step here
+        id: pmd # Ajouter un ID pour référencer les outputs
       - name: Analyze PMD Results
         run: |
-          cd api # Naviguer vers le répertoire 'api'
-          PMD_OUTPUT=$(cat target/pmd.xml) # Le chemin devrait maintenant être correct
+          cd api # Naviguer vers le répertoire 'api' (bien que ce soit peut-être inutile)
+          PMD_OUTPUT=$(cat api/target/pmd.xml) # Chemin explicite vers pmd.xml
           PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
           PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
           PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
-          
+
           echo "::set-output name=priority1_errors::$PRIORITY_1_ERRORS"
           echo "::set-output name=priority2_errors::$PRIORITY_2_ERRORS"
           echo "::set-output name=priority3_errors::$PRIORITY_3_ERRORS"
-        id: analyze_pmd # Ajouter un ID pour référencer les outputs
+        id: analyze_pmd
       - name: Fail if Priority 1 Errors
         if: steps.analyze_pmd.outputs.priority1_errors > 0
         run: |
           echo "Priority 1 PMD errors found. Failing the build."
           exit 1
-      - name: Summary
+      - name:  Summary
         if: always()
         run: |
-          cd api # Naviguer vers le répertoire 'api' pour s'assurer du bon contexte
+          cd api # Naviguer vers le répertoire 'api' (pour être sûr)
           echo "PMD Check Summary"
           echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
           echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
