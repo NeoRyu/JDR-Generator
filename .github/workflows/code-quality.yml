@@ -18,8 +18,11 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Install xq
-        run: sudo apt-get update && sudo apt-get install -y xq
+      # Configuration d'un environnement Python
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
       # Mise en cache des dépendances Maven
       - name: API Cache Maven dependencies
         uses: actions/cache@v3
@@ -43,22 +46,7 @@ jobs:
         run: |
           cd api
           if [ -f target/pmd.xml ]; then
-            PMD_OUTPUT=$(cat target/pmd.xml || { echo "Error reading target/pmd.xml"; exit 1; })
-
-            # Analyser et afficher les erreurs de priorité 1 avec xmllint
-            echo "Priority 1 PMD Errors:"
-            xq -r '.pmd.file[] | .violation[] | select(.priority == "1") | "  - " + .message' target/pmd.xml
-
-            # Calculer le nombre d'erreurs par priorité
-            PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
-            PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
-            PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
-
-            # Utilisation des fichiers d'environnement (méthode recommandée)
-            echo "priority1_errors=$PRIORITY_1_ERRORS" >> "$GITHUB_OUTPUT"
-            echo "priority2_errors=$PRIORITY_2_ERRORS" >> "$GITHUB_OUTPUT"
-            echo "priority3_errors=$PRIORITY_3_ERRORS" >> "$GITHUB_OUTPUT"
-
+            python analyze_pmd.py
           else
             echo "Error: target/pmd.xml not found..."
             exit 1
