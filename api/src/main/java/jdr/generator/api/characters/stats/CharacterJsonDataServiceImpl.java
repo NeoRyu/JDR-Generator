@@ -7,9 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Implementation of the {@link CharacterJsonDataService} interface.
- * */
+/** Implementation of the {@link CharacterJsonDataService} interface. */
 @Service
 @RequiredArgsConstructor
 public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {

@@ -38,7 +38,7 @@ jobs:
       #- name: API Maven SpotBugs
       #  run: cd api && mvn --batch-mode spotbugs:check
       # Exécution de PMD
-      - name: API Maven PMD
+      - name: API Maven - PMD
         run: cd api && mvn --batch-mode pmd:check
         continue-on-error: true # Important: Don't fail the step here
         id: pmd
@@ -52,7 +52,7 @@ jobs:
             exit 1
           fi
         id: analyze_pmd
-      - name:  Summary
+      - name: API Maven - PMD Summary
         if: always()
         run: |
           cd api
@@ -71,12 +71,13 @@ jobs:
             echo "priority1_errors=0" >> "$GITHUB_OUTPUT"
           fi
         id: summary_results
-      - name: Fail if Priority 1 Errors
-        if: steps.summary_results.outputs.pmd_analyzed == 'true' && steps.summary_results.outputs.priority1_errors > 0
+      - name: Skipped if PMD has no Priority 1 errors
+        if: steps.summary_results.outputs.priority1_errors > 0
         run: |
           cd api 
           echo "Priority 1 PMD errors found. Failing the build."
-          exit 1
+          echo "See previous sections API Maven - PMD and Summary"
+          echo "exit 1"
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check

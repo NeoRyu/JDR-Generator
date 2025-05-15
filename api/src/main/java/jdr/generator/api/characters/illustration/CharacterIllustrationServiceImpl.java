@@ -6,9 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Implementation of the {@link CharacterIllustrationService} interface.
- * */
+/** Implementation of the {@link CharacterIllustrationService} interface. */
 @Service
 @RequiredArgsConstructor
 public class CharacterIllustrationServiceImpl implements CharacterIllustrationService {

@@ -4,9 +4,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/**
- * Repository interface for accessing and managing {@link CharacterJsonDataEntity} objects.
- * */
+/** Repository interface for accessing and managing {@link CharacterJsonDataEntity} objects. */
 @Repository
 public interface CharacterJsonDataRepository extends JpaRepository<CharacterJsonDataEntity, Long> {
 
