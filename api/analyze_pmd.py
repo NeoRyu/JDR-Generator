@@ -20,7 +20,9 @@ def analyze_pmd_xml(xml_file_path):
             logging.debug(f"Processing file: {file_element.get('name')}")
             for violation in file_element.findall('pmd:violation', namespace):
                 priority = violation.get('priority')
-                message = violation.text  # Correction : Utiliser .text pour obtenir le texte de l'élément
+                message = violation.text
+                if message:
+                    message = message.replace('\n', ' ').replace('\r', '').strip()
 
                 if priority == '1':
                     logging.debug(f"  Found violation - priority: {priority}, message: {message}")
