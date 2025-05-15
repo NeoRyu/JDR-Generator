@@ -1,6 +1,5 @@
-// home.tsx
-import {useEffect, useState} from 'react';
-import {Button} from '@/components/ui/button';
+import {useEffect, useState} from "react";
+import {Button} from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,59 +7,71 @@ import {
   DialogFooter,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import {Table, TableBody, TableHead, TableHeader, TableRow} from '@/components/ui/table';
-import {Textarea} from '@/components/ui/textarea';
-import {CharacterFull} from '@/components/model/character-full.model.tsx';
-import {CharacterDetailsModel} from '@/components/model/character-details.model.tsx';
-import {CharacterRow} from '@/pages/home/characterRow';
-import {getListCharactersFull} from '@/services/getListCharactersFull.service.ts';
-import {useCreateCharacter} from '@/services/createCharacter.service.ts';
-import {updateCharacter} from '@/services/updateCharacter.service.ts';
-import {gameUniverses} from '@/pages/home/listes/gameUniverses.tsx';
-import {characterRaces} from '@/pages/home/listes/characterRaces.tsx';
-import {characterGenders} from '@/pages/home/listes/characterGenders.tsx';
-import {characterClasses} from '@/pages/home/listes/characterClasses.tsx';
-import CustomSelect from '@/components/ui/customSelect.tsx';
+} from "@/components/ui/dialog";
+import {Table, TableBody, TableHead, TableHeader, TableRow} from "@/components/ui/table";
+import {Textarea} from "@/components/ui/textarea";
+import {CharacterFull} from "@/components/model/character-full.model.tsx";
+import {CharacterDetailsModel} from "@/components/model/character-details.model.tsx";
+import {CharacterRow} from "@/pages/home/characterRow";
+import {getListCharactersFull} from "@/services/getListCharactersFull.service.ts";
+import {useCreateCharacter} from "@/services/createCharacter.service.ts";
+import {updateCharacter} from "@/services/updateCharacter.service.ts";
+import {gameUniverses} from "@/pages/home/listes/gameUniverses.tsx";
+import {characterRaces} from "@/pages/home/listes/characterRaces.tsx";
+import {characterGenders} from "@/pages/home/listes/characterGenders.tsx";
+import {characterClasses} from "@/pages/home/listes/characterClasses.tsx";
+import CustomSelect from "@/components/ui/customSelect.tsx";
 
-
-export type ModalTypes = 'read' | 'update' | 'delete' | null;
+export type ModalTypes = "read" | "update" | "delete" | null;
 
 export function Home() {
-  const { data: charactersData, refetch, isLoading: isListLoading } = getListCharactersFull();
-  const [localCharactersData, setLocalCharactersData] = useState<CharacterFull[] | undefined>(undefined);
+  const {
+    data: charactersData,
+    refetch,
+    isLoading: isListLoading,
+  } = getListCharactersFull();
+  const [localCharactersData, setLocalCharactersData] = useState<
+      CharacterFull[] | undefined
+  >(undefined);
   useEffect(() => {
-    if (charactersData && Array.isArray(charactersData.data)) {
+    if (charactersData?.data && Array.isArray(charactersData.data)) {
       setLocalCharactersData(charactersData.data);
     }
-  }, [charactersData, localCharactersData]);
+  }, [charactersData?.data]);
 
   const updateCharacterService = updateCharacter();
   const { mutate, isLoading: isCreateLoading } = useCreateCharacter();
   const [deletingCharacters, setDeletingCharacters] = useState<number[]>([]);
-  const [selectedCharacter, setSelectedCharacter] = useState<CharacterFull | null>(null);
+  const [selectedCharacter, setSelectedCharacter] =
+      useState<CharacterFull | null>(null);
   const [modalType, setModalType] = useState<ModalTypes>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [promptSystem, setPromptSystem] = useState('');
-  const [promptRace, setPromptRace] = useState('');
-  const [promptGender, setPromptGender] = useState('');
-  const [promptClass, setPromptClass] = useState('');
-  const [promptDescription, setPromptDescription] = useState('');
+  const [promptSystem, setPromptSystem] = useState("");
+  const [promptRace, setPromptRace] = useState("");
+  const [promptGender, setPromptGender] = useState("");
+  const [promptClass, setPromptClass] = useState("");
+  const [promptDescription, setPromptDescription] = useState("");
 
   const handleGenerate = () => {
     if (!promptSystem || !promptGender) {
-      return alert('Remplissez les champs');
+      return alert("Remplissez les champs");
     }
     mutate(
-        { promptSystem, promptClass, promptGender, promptRace, promptDescription },
+        {
+          promptSystem,
+          promptClass,
+          promptGender,
+          promptRace,
+          promptDescription,
+        },
         {
           onSuccess: () => {
-            refetch();
-            setPromptSystem('');
-            setPromptRace('');
-            setPromptGender('');
-            setPromptClass('');
-            setPromptDescription('');
+            void refetch(); // Ajout de void pour ignorer la promesse
+            setPromptSystem("");
+            setPromptRace("");
+            setPromptGender("");
+            setPromptClass("");
+            setPromptDescription("");
             setIsOpen(false);
             setModalType(null);
             setSelectedCharacter(null);
@@ -69,7 +80,9 @@ export function Home() {
     );
   };
 
-  const handleUpdateCharacter = async (updatedCharacterDetails: CharacterDetailsModel) => {
+  const handleUpdateCharacter = async (
+      updatedCharacterDetails: CharacterDetailsModel,
+  ) => {
     try {
       if (!selectedCharacter) return;
       const fullModel: CharacterFull = {
@@ -80,20 +93,22 @@ export function Home() {
         jsonData: selectedCharacter.jsonData,
       };
       await updateCharacterService.updateCharacter(fullModel);
-      await refetch();
+      void refetch(); // Ajout de void pour ignorer la promesse
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
-      console.error('Erreur lors de la mise à jour du personnage :', error);
+      console.error("Erreur lors de la mise à jour du personnage :", error);
     }
   };
 
   const handleCharacterDeleted = (characterId: number) => {
     setDeletingCharacters([...deletingCharacters, characterId]);
     if (localCharactersData) {
-      const updatedCharacters = localCharactersData.filter((char: CharacterFull) => char.details.id !== characterId);
+      const updatedCharacters = localCharactersData.filter(
+          (char: CharacterFull) => char.details.id !== characterId,
+      );
       setLocalCharactersData([...updatedCharacters]);
-      refetch();
+      void refetch(); // Ajout de void pour ignorer la promesse
     }
   };
 
@@ -102,7 +117,9 @@ export function Home() {
         {/* HEADER : JDR.Generator */}
         <header className="h-16 flex items-center sliced-wrapper">
           <div className="sliced-top text-muted-foreground">JDR.Generator</div>
-          <div className="sliced-bottom text-muted-foreground" aria-hidden="true">JDR.Generator</div>
+          <div className="sliced-bottom text-muted-foreground" aria-hidden="true">
+            JDR.Generator
+          </div>
         </header>
 
         <main className="flex flex-col">
@@ -157,8 +174,12 @@ export function Home() {
                 />
                 {/* BOUTON GENERER */}
                 <DialogFooter>
-                  <Button type="button" disabled={isCreateLoading} onClick={handleGenerate}>
-                    {isCreateLoading ? 'Génération...' : 'Générer !'}
+                  <Button
+                      type="button"
+                      disabled={isCreateLoading}
+                      onClick={handleGenerate}
+                  >
+                    {isCreateLoading ? "Génération..." : "Générer !"}
                   </Button>
                 </DialogFooter>
               </DialogContent>

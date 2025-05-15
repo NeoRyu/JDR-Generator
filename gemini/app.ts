@@ -1,21 +1,25 @@
 import express from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
-import {generateResponse} from "./src/controllers/background";
-import {generateImage} from "./src/controllers/illustration";
-import {generateStats} from "./src/controllers/statistiques";
-
+import {generateResponse} from "./src/controllers/background.js";
+import {generateImage} from "./src/controllers/illustration.js";
+import {generateStats} from "./src/controllers/statistiques.js";
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.use(bodyParser.json());
 
-app.post("/generate", generateResponse);
-app.post("/illustrate", generateImage);
-app.post("/stats", generateStats);
+app.post("/gemini/generate", generateResponse);
+app.post("/gemini/illustrate", generateImage);
+app.post("/gemini/stats", generateStats);
+app.get("/gemini/healthcheck", (_req, res) => {
+  res
+    .status(200)
+    .json({ status: "OK", port: parseInt(process.env.PORT || "3001", 10) });
+});
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });

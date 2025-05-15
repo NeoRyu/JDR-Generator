@@ -10,6 +10,9 @@ COPY package*.json ./
 # Installe les dépendances
 RUN npm install
 
+# Supprime le répertoire dist avant la construction
+RUN rm -rf dist
+
 # Copie tout le code source de l'API OpenAI
 COPY . .
 
@@ -19,5 +22,5 @@ RUN npm run build
 # Définit la commande pour démarrer l'application
 CMD ["node", "dist/app.js"]
 
-# Expose le port sur lequel l'API OpenAI s'exécute (port 3000 à l'int\u00E9rieur du conteneur)
-EXPOSE 3000
+# Expose le port sur lequel l'API OpenAI s'exécute
+EXPOSE 3002

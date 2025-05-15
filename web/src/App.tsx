@@ -1,9 +1,8 @@
-import { ThemeProvider } from '@/components/theme-provider'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { Home } from './pages/home/home'
+import {ThemeProvider} from "@/components/theme-provider";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {Home} from "./pages/home/home";
 
-
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
 
 export function App() {
   return (
@@ -12,5 +11,5 @@ export function App() {
         <Home />
       </ThemeProvider>
     </QueryClientProvider>
-  )
+  );
 }

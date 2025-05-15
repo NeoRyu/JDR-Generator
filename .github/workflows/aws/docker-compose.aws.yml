@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  mysql-container:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root1234
+      MYSQL_DATABASE: jdr_generator_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 45s
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
+  api-container:
+    image: eli256/jdr-generator-api@sha256:4cf1c1e5c848552caf3b9614843a1e40c8943fad84d8d889531eec079065dcaf
+    ports:
+      - "8080:8080"
+    environment:
+      IS_DOCKER: "true"
+      SPRING_PROFILES_ACTIVE: docker
+      GEMINI_API_URL: http://gemini-container:3001/gemini
+      OPENAI_API_URL: http://openai-container:3002/openai
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=10000&socketTimeout=10000
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root1234
+      SPRING_JPA_HIBERNATE_DDL_AUTO: none # Flyway gère le schéma
+      # SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0 # Attente infinie pour la connexion
+      SPRING_HIKARI_CONNECTION_TIMEOUT: 30000
+      SPRING_HIKARI_MAXIMUM_POOL_SIZE: 10
+      SPRING_HIKARI_MAX_LIFETIME: 1800000
+    depends_on:
+      mysql-container:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 10s
+      timeout: 30s
+      retries: 5
+      start_period: 120s
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 2g
+
+  web-container:
+    image: eli256/jdr-generator-web@sha256:0598c5f80d65e71cd048516f960dafd6f07477a8ee625983acd9b870ed254015
+    ports:
+      - "80:80"
+    environment:
+      VITE_API_URL: http://api-container:8080
+    depends_on:
+      api-container:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
+  gemini-container:
+    image: eli256/jdr-generator-gemini@sha256:14be8ea42a7cb741a09e77f3e1dfb7677af39a200313a024899fb7d6f73fe2ba
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3001/gemini/healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
+  openai-container:
+    image: eli256/jdr-generator-openai@sha256:7f9783b6f6d3f503b55ae625eba621710f0188df50b6c4db7fcdebf402fa5c45
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3002/openai/healthcheck || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          memory: 1g
+
+volumes:
+  mysql-data:

@@ -1,21 +1,22 @@
 import {Request, Response} from "express";
 import dotenv from "dotenv";
 import fs from "fs";
-import OpenAI from 'openai';
+import OpenAI from "openai";
 
 dotenv.config();
 
 // --- Global Configuration ---
 const apiKey = process.env.API_KEY;
-const openAITextModel = process.env.AI_TEXT_MODEL || 'gpt-3.5-turbo';
+const openAITextModel = process.env.AI_TEXT_MODEL || "gpt-3.5-turbo";
 const configMaxOutputTokens: number = +(process.env.MAX_TOKENS || 2048);
 const temperature: number = +(process.env.TEMPERATURE || 0.7);
-const topP: number = +(process.env.TOP_P || 0.8);
-const downloadFolder = process.env.DOWNLOAD_FOLDER || 'default';
+const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
 
 // --- OpenAI Configuration ---
 if (!apiKey) {
-    console.error("API_KEY environment variable is not set. OpenAI API calls will fail.");
+  console.error(
+    "API_KEY environment variable is not set. OpenAI API calls will fail.",
+  );
 }
 const openai = new OpenAI({ apiKey });
 
@@ -70,94 +71,118 @@ const systemPrompt = `You are an RPG expert with extensive knowledge of various 
 
 // Specific prompt for statistics
 const statsUserPrompt = (characterData: any): string => {
-    const data = characterData.data;
-    return `Based on the following character information, generate their statistics, skills, disciplines, and equipment in JSON format. If the game system (like Das Schwarze Auge) implies specific stat blocks, use those or invent a plausible structure if the system is not fully known. Character Data: '''` + JSON.stringify(data) + `'''`;
-}
+  const data = characterData.data;
+  return (
+    `Based on the following character information, generate their statistics, skills, disciplines, and equipment in JSON format. If the game system (like Das Schwarze Auge) implies specific stat blocks, use those or invent a plausible structure if the system is not fully known. Character Data: '''` +
+    JSON.stringify(data) +
+    `'''`
+  );
+};
 
 // Function to check if we are in a local environment
-const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== 'production';
+const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
 // Controller function to generate the statistics (JSON text)
 export const generateStats = async (req: Request, res: Response) => {
-    const pathSrc: string = `/app/downloads/${downloadFolder}/`;
-    const txtName: string = `${downloadFolder}-openai-stats_${Math.floor(Date.now() / 1000)}.txt`;
+  const pathSrc: string = `/app/downloads/${downloadFolder}/`;
+  const txtName: string = `${downloadFolder}-openai-stats_${Math.floor(Date.now() / 1000)}.txt`;
 
-    // Create local download directory if needed
-    if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
-        try {
-            fs.mkdirSync(pathSrc, { recursive: true, mode: 0o755 });
-            console.log(`Local download directory created: ${pathSrc}`);
-        } catch (e) {
-            console.error(`Error creating local download directory ${pathSrc}:`, e);
-        }
+  // Create local download directory if needed
+  if (isLocalEnvironment() && !fs.existsSync(pathSrc)) {
+    try {
+      fs.mkdirSync(pathSrc, { recursive: true, mode: 0o755 });
+      console.log(`Local download directory created: ${pathSrc}`);
+    } catch (e) {
+      console.error(`Error creating local download directory ${pathSrc}:`, e);
+    }
+  }
+
+  try {
+    const characterData = req.body;
+    console.log("OpenAI Stats :: Received Data for Stats:", characterData);
+
+    if (!characterData || !characterData.data) {
+      console.error("Invalid or missing character data for stats generation.");
+      res.status(400).json({ message: "Invalid or missing character data." });
+      return;
+    }
+
+    // --- Call OpenAI API (Chat Completions) ---
+    console.log(`Calling OpenAI API with model: ${openAITextModel} for stats`);
+    const completion = await openai.chat.completions.create({
+      model: openAITextModel,
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: statsUserPrompt(characterData) },
+      ],
+      response_format: { type: "json_object" },
+      temperature: temperature,
+      max_tokens: configMaxOutputTokens,
+    });
+    console.log("OpenAI API response received.");
+
+    let responseText: string | null = null;
+    if (
+      completion.choices &&
+      completion.choices.length > 0 &&
+      completion.choices[0].message &&
+      completion.choices[0].message.content
+    ) {
+      responseText = completion.choices[0].message.content;
+      console.log("Response text content received.");
+    } else {
+      console.error(
+        "OpenAI API response structure unexpected or missing content:",
+        JSON.stringify(completion),
+      );
+      res.status(500).json({
+        message: "Error during generating stats: unexpected OpenAI response.",
+      });
+      return;
     }
 
     try {
-        const characterData = req.body;
-        console.log('OpenAI Stats :: Received Data for Stats:', characterData);
+      const parsedJson = JSON.parse(responseText);
+      const finalResponseText = JSON.stringify(parsedJson);
 
-        if (!characterData || !characterData.data) {
-            console.error('Invalid or missing character data for stats generation.');
-            res.status(400).json({ message: 'Invalid or missing character data.' });
-            return;
-        }
-
-        // --- Call OpenAI API (Chat Completions) ---
-        console.log(`Calling OpenAI API with model: ${openAITextModel} for stats`);
-        const completion = await openai.chat.completions.create({
-            model: openAITextModel,
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: statsUserPrompt(characterData) }
-            ],
-            response_format: { type: "json_object" },
-            temperature: temperature,
-            max_tokens: configMaxOutputTokens,
-        });
-        console.log('OpenAI API response received.');
-
-        let responseText: string | null = null;
-        if (completion.choices && completion.choices.length > 0 && completion.choices[0].message && completion.choices[0].message.content) {
-            responseText = completion.choices[0].message.content;
-            console.log('Response text content received.');
-        } else {
-            console.error("OpenAI API response structure unexpected or missing content:", JSON.stringify(completion));
-            res.status(500).json({ message: "Error during generating stats: unexpected OpenAI response." });
-            return;
-        }
-
+      if (isLocalEnvironment()) {
         try {
-            const parsedJson = JSON.parse(responseText);
-            const finalResponseText = JSON.stringify(parsedJson);
-
-            if (isLocalEnvironment()) {
-                try {
-                    fs.writeFileSync(pathSrc + txtName, finalResponseText);
-                    console.log(`> Stats text saved locally to: ${pathSrc}${txtName}`);
-                } catch (writeError) {
-                    console.error(`Error writing local stats text file ${pathSrc}${txtName}:`, writeError);
-                }
-            }
-
-            res.status(200).send({ response: finalResponseText });
-
-        } catch (jsonError: any) {
-            console.error("Error parsing JSON response from OpenAI Stats:", jsonError);
-            console.error("Invalid JSON text received:", responseText);
-            res.status(500).json({ message: "Error parsing generated JSON stats.", error: jsonError.message, rawResponse: responseText });
+          fs.writeFileSync(pathSrc + txtName, finalResponseText);
+          console.log(`> Stats text saved locally to: ${pathSrc}${txtName}`);
+        } catch (writeError) {
+          console.error(
+            `Error writing local stats text file ${pathSrc}${txtName}:`,
+            writeError,
+          );
         }
+      }
 
-    } catch (err: any) {
-        console.error("Error during OpenAI Stats API call:", err);
-        if (err.response && err.response.data && err.response.data.error) {
-            console.error("OpenAI Error Details:", err.response.data.error);
-            res.status(err.response.status || 500).json({
-                message: "Error during generating stats with OpenAI",
-                error: err.response.data.error.message || "Unknown OpenAI API error"
-            });
-        } else {
-            console.error("Non-OpenAI Error:", err);
-            res.status(500).json({ message: "An unexpected error occurred", error: err.message });
-        }
+      res.status(200).send({ response: finalResponseText });
+    } catch (jsonError: any) {
+      console.error(
+        "Error parsing JSON response from OpenAI Stats:",
+        jsonError,
+      );
+      console.error("Invalid JSON text received:", responseText);
+      res.status(500).json({
+        message: "Error parsing generated JSON stats.",
+        error: jsonError.message,
+        rawResponse: responseText,
+      });
     }
+  } catch (err: any) {
+    console.error("Error during OpenAI Stats API call:", err);
+    if (err.response && err.response.data && err.response.data.error) {
+      console.error("OpenAI Error Details:", err.response.data.error);
+      res.status(err.response.status || 500).json({
+        message: "Error during generating stats with OpenAI",
+        error: err.response.data.error.message || "Unknown OpenAI API error",
+      });
+    } else {
+      console.error("Non-OpenAI Error:", err);
+      res
+        .status(500)
+        .json({ message: "An unexpected error occurred", error: err.message });
+    }
+  }
 };

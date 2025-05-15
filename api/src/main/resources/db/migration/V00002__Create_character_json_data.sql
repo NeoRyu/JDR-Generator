@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS `jdr_generator_db`.`character_json_data`;
 CREATE TABLE `jdr_generator_db`.`character_json_data` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `character_details_id` INT NOT NULL,

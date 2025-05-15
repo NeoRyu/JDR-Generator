@@ -1,16 +1,21 @@
 logging:
   level:
-    ROOT: INFO
-    org.springboot.security: INFO
+    ROOT: WARN
+    org.springboot.security: ERROR
+    jdr.generator.api: DEBUG
+
+# Configuration de l'URL de l'API des IA
+GEMINI_API_URL: http://gemini-container:3001/gemini
+OPENAI_API_URL: http://openai-container:3002/openai
 
 spring:
   application:
     name: api
   datasource:
-    hostname: mysql-container # Utiliser le nom du service Docker
+    hostname: jdr-generator-db.cbce0mokaknz.eu-west-3.rds.amazonaws.com
     port: 3306
     schema-name: jdr_generator_db
-    args: "?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&port=3307"
+    args: "?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam"
     url: jdbc:mysql://${spring.datasource.hostname}:${spring.datasource.port}/${spring.datasource.schema-name}${spring.datasource.args}
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
@@ -22,8 +27,6 @@ spring:
       maxLifetime: 1800000 # 30 minutes
       connectionTimeout: 30000 # 30 secondes
       leakDetectionThreshold: 20000 # 20 secondes
-      # username: root # Redondant
-      # password: root # Redondant
     tomcat:
       test-while-idle: true
       validation-query: SELECT 1
@@ -32,16 +35,16 @@ spring:
       validation-query: SELECT 1
   flyway:
     enabled: true
+    baseline-on-migrate: true
+    fail-on-missing-locations: true
+    locations: [ "classpath:db/migration" ]
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
-    baseline-on-migrate: true
-    locations: [ "classpath:db/migration" ]
-    schemas: jdr_generator_db # Utiliser le nom du schéma correct
-    fail-on-missing-locations: true
+    schemas: ${spring.datasource.schema-name}
   jpa:
     #  SHOW VARIABLES LIKE "%version%"; ## check InnoDB version ::
-    database-platform: org.hibernate.dialect.MySQLDialect # Corrigé
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     properties:
       org.hibernate.flushMode: COMMIT
     show-sql: false
@@ -68,3 +71,6 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+# Indique si l'application s'exécute dans un environnement Docker
+is-running-in-docker: ${IS_DOCKER:false}

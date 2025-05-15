@@ -1,0 +1,178 @@
+{
+  "AWSEBDockerrunVersion": "2",
+  "containerDefinitions": [
+    {
+      "name": "mysql-container",
+      "hostname": "mysql-container",
+      "image": "mysql:8.0",
+      "essential": true,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "hostPort": 3306,
+          "containerPort": 3306
+        }
+      ],
+      "environment": [
+        {
+          "name": "MYSQL_ROOT_PASSWORD",
+          "value": "root1234"
+        },
+        {
+          "name": "MYSQL_DATABASE",
+          "value": "jdr_generator_db"
+        }
+      ],
+      "mountPoints": [
+        {
+          "sourceVolume": "mysql-data",
+          "containerPath": "/var/lib/mysql"
+        }
+      ],
+      "healthCheck": {
+        "test": ["CMD-SHELL", "mysqladmin ping -h localhost -uroot -proot || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3
+      }
+    },
+    {
+      "name": "api-container",
+      "hostname": "api-container",
+      "image": "eli256/jdr-generator-api@sha256:4cf1c1e5c848552caf3b9614843a1e40c8943fad84d8d889531eec079065dcaf",
+      "imagePullPolicy": "Always",
+      "essential": true,
+      "memory": 2048,
+      "portMappings": [
+        {
+          "hostPort": 8080,
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "value": "root1234"
+        },
+        {
+          "name": "SPRING_JPA_HIBERNATE_DDL_AUTO",
+          "value": "none"
+        },
+        {
+          "name": "GEMINI_API_URL",
+          "value": "http://gemini-container:3001/gemini"
+        },
+        {
+          "name": "OPENAI_API_URL",
+          "value": "http://openai-container:3002/openai"
+        }
+      ],
+      "links": [
+        "mysql-container"
+      ],
+      "healthCheck": {
+        "test": ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"],
+        "interval": 30,
+        "timeout": 10,
+        "retries": 5
+      }
+    },
+    {
+      "name": "web-container",
+      "hostname": "web-container",
+      "image": "eli256/jdr-generator-web@sha256:0598c5f80d65e71cd048516f960dafd6f07477a8ee625983acd9b870ed254015",
+      "imagePullPolicy": "Always",
+      "essential": true,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "environment": [
+        {
+          "name": "VITE_API_URL",
+          "value": "http://api-container:8080"
+        }
+      ],
+      "links": [
+        "api-container"
+      ],
+      "healthCheck": {
+        "test": ["CMD-SHELL", "curl -f http://localhost:80 || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 5
+      }
+    },
+    {
+      "name": "gemini-container",
+      "hostname": "gemini-container",
+      "image": "eli256/jdr-generator-gemini@sha256:14be8ea42a7cb741a09e77f3e1dfb7677af39a200313a024899fb7d6f73fe2ba",
+      "imagePullPolicy": "Always",
+      "essential": true,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "hostPort": 3001,
+          "containerPort": 3001
+        }
+      ],
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "3001"
+        }
+      ],
+      "healthCheck": {
+        "test": ["CMD-SHELL", "curl -f http://localhost:3001/gemini/healthcheck || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 5
+      }
+    },
+    {
+      "name": "openai-container",
+      "hostname": "openai-container",
+      "image": "eli256/jdr-generator-openai@sha256:7f9783b6f6d3f503b55ae625eba621710f0188df50b6c4db7fcdebf402fa5c45",
+      "imagePullPolicy": "Always",
+      "essential": true,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "hostPort": 3002,
+          "containerPort": 3002
+        }
+      ],
+      "environment": [
+        {
+          "name": "PORT",
+          "value": "3002"
+        }
+      ],
+      "healthCheck": {
+        "test": ["CMD-SHELL", "curl -f http://localhost:3002/openai/healthcheck || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 5
+      }
+    }
+  ],
+  "volumes": [
+    {
+      "name": "mysql-data",
+      "host": {
+        "sourcePath": "/var/app/current/mysql-data"
+      }
+    }
+  ]
+}

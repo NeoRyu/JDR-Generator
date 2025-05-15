@@ -48,6 +48,9 @@ JDR-Generator est une application complète pour la création de personnages de 
 * **Conflits de ports :** Les différentes parties du projet (API Java, API NestJS, Web) peuvent utiliser des ports différents. Si vous rencontrez des conflits, vous devrez peut-être modifier les configurations de port.
 * **Documentation Supplémentaire :** Chaque module (api, gemini, web) devrait avoir son propre README avec des instructions plus détaillées.
 * **Scripts NestJS :** Les commandes `clean`, `build` et `start` pour l'API NestJS font référence aux scripts définis dans le fichier `package.json` du répertoire `gemini`.
+* **Fichiers Docker Compose :** Ce projet utilise deux fichiers `docker-compose` distincts :
+    * `docker-compose.yml` : Configuration pour le déploiement sur AWS Elastic Beanstalk.
+    * `docker-compose.local.yml` : Configuration optimisée pour l'exécution locale.
 
 ## Captures d'écran
 
@@ -177,6 +180,14 @@ JDR-Generator/
 
 Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compose. Cela simplifie la configuration de l'environnement et assure une cohérence entre les différents déploiements.
 
+**Analyse des Images Docker :**
+
+* Le module **web** utilise un processus de build en deux étapes :
+    * Une première image Node.js est utilisée pour builder l'application React avec Vite.
+    * Les fichiers statiques buildés sont ensuite copiés dans une image Nginx, qui sert l'application web.
+* Les modules **gemini** et **openai** utilisent des images Node.js pour exécuter leurs applications NestJS (TypeScript) après la compilation.
+* Le module **api** utilise une image Maven pour builder l'application Java (qui inclut également du code Scala). L'image finale pour l'exécution sera une image JRE (Java Runtime Environment).
+
 **Pré-requis :**
 
 * Docker
@@ -188,165 +199,165 @@ Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compos
 
 **Commandes Docker Utiles :**
 
-**Note importante :** Adaptez les chemins d'accès aux répertoires si nécessaire. Les exemples ci-dessous sont basés sur des chemins Windows.
+**Note importante :** Adaptez les chemins d'accès aux répertoires si nécessaire. Les exemples ci-dessous concernent l'exécution locale et utilisent le fichier `docker-compose.local.yml`. Pour le déploiement sur AWS, référez-vous à la documentation Elastic Beanstalk concernant l'upload du fichier `docker-compose.yml`.
 
 ### 1. Construction et Démarrage des Images Docker
 
-Cette commande construit toutes les images Docker définies dans le fichier `docker-compose.yml` et les démarre en mode détaché (-d). Elle supprime également les conteneurs et les volumes existants pour repartir d'une base propre.
+Cette commande construit toutes les images Docker définies dans le fichier `docker-compose.local.yml` et les démarre en mode détaché (-d). Elle supprime également les conteneurs et les volumes existants pour repartir d'une base propre.
 
 ```bash
 cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
 clear
-docker-compose down # Arrête et supprime les conteneurs
-docker volume rm workflows_mysql-data # Supprime le volume MySQL (attention : perd les données !)
-docker-compose up --build -d # Construit les images et démarre les conteneurs
+docker-compose -f docker-compose.local.yml down # Arrête et supprime les conteneurs locaux
+docker volume rm workflows_mysql-data # Supprime le volume MySQL local (attention : perd les données !)
+docker-compose -f docker-compose.local.yml up --build -d # Construit les images et démarre les conteneurs locaux
 ```
 
-Attention : La suppression du volume workflows_mysql-data entraîne la perte de toutes les données de la base de données. Utilisez cette commande avec précaution.
+Attention : La suppression du volume workflows_mysql-data entraîne la perte de toutes les données de la base de données locale. Utilisez cette commande avec précaution.
 
 ### 2. API Backend Java
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    cd C:\<projects_repositories_path>\JDR-Generator\api
-    mvn clean install package # Compile et package l'application Java
-    cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
-    docker-compose build --no-cache api-container # Construit l'image Docker pour l'API Java
-    ```
+```bash
+cd C:\<projects_repositories_path>\JDR-Generator\api
+mvn clean install package # Compile et package l'application Java
+cd C:\<projects_repositories_path>\JDR-Generator\.github\workflows
+docker-compose -f docker-compose.local.yml build --no-cache api-container # Construit l'image Docker locale pour l'API Java
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d api-container # Démarre le conteneur de l'API Java
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d api-container # Démarre le conteneur local de l'API Java
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs api-container # Affiche les logs du conteneur de l'API Java
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs api-container # Affiche les logs du conteneur local de l'API Java
+```
 
 * **Accès au shell du conteneur :**
 
-    ```bash
-    docker-compose exec api-container sh # Ouvre un shell dans le conteneur
-    env # Affiche les variables d'environnement
-    exit # Quitte le shell
-    ```
+```bash
+docker-compose -f docker-compose.local.yml exec api-container sh # Ouvre un shell dans le conteneur local
+env # Affiche les variables d'environnement
+exit # Quitte le shell
+```
 
 ### 3. Gemini API
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build --no-cache gemini-container # Construit l'image Docker pour l'API Gemini
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build --no-cache gemini-container # Construit l'image Docker locale pour l'API Gemini
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d gemini-container # Démarre le conteneur de l'API Gemini
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d gemini-container # Démarre le conteneur local de l'API Gemini
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs gemini-container # Affiche les logs du conteneur de l'API Gemini
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs gemini-container # Affiche les logs du conteneur local de l'API Gemini
+```
 
 ### 4. Open AI API
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build --no-cache openai-container # Construit l'image Docker pour l'API OpenAI
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build --no-cache openai-container # Construit l'image Docker locale pour l'API OpenAI
+```
 
 * **Démarrage du conteneur :**
 
-    ```bash
-    docker-compose up -d openai-container # Démarre le conteneur de l'API OpenAI
-    ```
+```bash
+docker-compose -f docker-compose.local.yml up -d openai-container # Démarre le conteneur local de l'API OpenAI
+```
 
 * **Affichage des logs :**
 
-    ```bash
-    clear
-    docker-compose logs openai-container # Affiche les logs du conteneur de l'API OpenAI
-    ```
+```bash
+clear
+docker-compose -f docker-compose.local.yml logs openai-container # Affiche les logs du conteneur local de l'API OpenAI
+```
 
 * **Exécution de commandes dans le conteneur et appel à l'API OpenAI :**
 
-    ```bash
-    cd C:\<projects_repositories_path>\JDR-Generator\openai
-    docker exec -it workflows-openai-container-1 sh # Ouvre un shell interactif dans le conteneur
-    apk update # Met à jour la liste des paquets (peut être nécessaire)
-    apk add curl --no-cache # Installe curl (outil de ligne de commande pour faire des requêtes HTTP)
+```bash
+cd C:\<projects_repositories_path>\JDR-Generator\openai
+docker exec -it workflows-openai-container-1 sh # Ouvre un shell interactif dans le conteneur local
+apk update # Met à jour la liste des paquets (peut être nécessaire)
+apk add curl --no-cache # Installe curl (outil de ligne de commande pour faire des requêtes HTTP)
 
-    # Exemple d'appel à l'API OpenAI pour générer une image (DALL-E)
-    curl -X POST \
-      -H "Content-Type: application/json" \
-      -H "Authorization: Bearer YOUR_API_KEY" # Remplacez YOUR_API_KEY par votre clé API OpenAI
-      -H "OpenAI-Version: 2020-10-01" \
-      -H "OpenAI-Organization: YOUR_ORG_ID" # Remplacez YOUR_ORG_ID par votre ID d'organisation OpenAI (si applicable)
-      -d '{
-        "model": "dall-e-2",
-        "prompt": "A simple red cube.",
-        "n": 1,
-        "response_format": "b64_json"
-      }' \
-      [https://api.openai.com/v1/images/generations](https://api.openai.com/v1/images/generations)
-    ```
+# Exemple d'appel à l'API OpenAI pour générer une image (DALL-E)
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" # Remplacez YOUR_API_KEY par votre clé API OpenAI
+  -H "OpenAI-Version: 2020-10-01" \
+  -H "OpenAI-Organization: YOUR_ORG_ID" # Remplacez YOUR_ORG_ID par votre ID d'organisation OpenAI (si applicable)
+  -d '{
+	"model": "dall-e-2",
+	"prompt": "A simple red cube.",
+	"n": 1,
+	"response_format": "b64_json"
+  }' \
+  [https://api.openai.com/v1/images/generations](https://api.openai.com/v1/images/generations)
+```
 
-  **Important :** Remplacez `YOUR_API_KEY` et `YOUR_ORG_ID` par vos propres informations d'identification OpenAI.
+**Important :** Remplacez `YOUR_API_KEY` et `YOUR_ORG_ID` par vos propres informations d'identification OpenAI.
 
-    **Mini-Tutoriel : Configuration OpenAI**
+**Mini-Tutoriel : Configuration OpenAI**
 
-    Pour utiliser correctement l'API OpenAI, suivez ces étapes :
+Pour utiliser correctement l'API OpenAI, suivez ces étapes :
 
-    1.  **Créez un compte OpenAI :** Rendez-vous sur [https://platform.openai.com/signup](https://platform.openai.com/signup) et créez un compte.
-    2.  **Accédez aux paramètres de l'organisation :** Une fois connecté, allez dans les paramètres de votre compte et sélectionnez "Organization" (voir l'image {EC98F7BA-3A74-42F6-8D7C-FDB32F1696F0}.png).
-    3.  **Récupérez votre Organization ID :** Copiez votre "Organization ID" (par exemple, `org-2EMhFJ8w5cK51s0L9dQgxMk`). Vous en aurez besoin si votre code l'exige.
-    4.  **Générez une clé API :** Dans les paramètres de votre compte, allez dans la section "API keys" et créez une nouvelle clé API. Copiez cette clé précieusement, car vous ne pourrez pas la revoir après sa création.
-    5.  **Vérifiez vos limites d'utilisation :** Consultez la section "Usage" pour comprendre vos limites d'utilisation et mettre en place des alertes ou des limites de dépenses si nécessaire (voir l'image {6E7B2422-3B57-4E67-BB4C-DBDE3D9BD638}.png).
-    6.  **Configurez les variables d'environnement :** Dans votre projet, assurez-vous d'avoir un fichier `.env` ou une méthode similaire pour stocker vos informations sensibles. Ajoutez-y votre clé API OpenAI et votre Organization ID (si nécessaire). Exemple :
-        ```
-        API_KEY=sk-your-openai-api-key
-        ORG_ID=org-your-organization-id
-        ```
-    7.  **Sécurisez votre clé API :** Ne partagez jamais votre clé API publiquement (par exemple, dans votre code source). Utilisez toujours des variables d'environnement pour la stocker en toute sécurité.
-  
+1.  **Créez un compte OpenAI :** Rendez-vous sur [https://platform.openai.com/signup](https://platform.openai.com/signup) et créez un compte.
+2.  **Accédez aux paramètres de l'organisation :** Une fois connecté, allez dans les paramètres de votre compte et sélectionnez "Organization" (voir l'image {EC98F7BA-3A74-42F6-8D7C-FDB32F1696F0}.png).
+3.  **Récupérez votre Organization ID :** Copiez votre "Organization ID" (par exemple, `org-2EMhFJ8w5cK51s0L9dQgxMk`). Vous en aurez besoin si votre code l'exige.
+4.  **Générez une clé API :** Dans les paramètres de votre compte, allez dans la section "API keys" et créez une nouvelle clé API. Copiez cette clé précieusement, car vous ne pourrez pas la revoir après sa création.
+5.  **Vérifiez vos limites d'utilisation :** Consultez la section "Usage" pour comprendre vos limites d'utilisation et mettre en place des alertes ou des limites de dépenses si nécessaire (voir l'image {6E7B2422-3B57-4E67-BB4C-DBDE3D9BD638}.png).
+6.  **Configurez les variables d'environnement :** Dans votre projet, assurez-vous d'avoir un fichier `.env` ou une méthode similaire pour stocker vos informations sensibles. Ajoutez-y votre clé API OpenAI et votre Organization ID (si nécessaire). Exemple :
+```
+API_KEY=sk-your-openai-api-key
+ORG_ID=org-your-organization-id
+```
+7.  **Sécurisez votre clé API :** Ne partagez jamais votre clé API publiquement (par exemple, dans votre code source). Utilisez toujours des variables d'environnement pour la stocker en toute sécurité.
+
 
 ### 5. Web Frontend UX
 
 * **Construction de l'image Docker :**
 
-    ```bash
-    docker-compose build web-container # Construit l'image Docker pour l'interface web
-    ```
+```bash
+docker-compose -f docker-compose.local.yml build web-container # Construit l'image Docker locale pour l'interface web
+```
 
 ### 6. Commandes Docker Diverses
 
 * **Liste des conteneurs en cours d'exécution :**
 
-    ```bash
-    docker-compose ps
-    ```
+```bash
+docker-compose -f docker-compose.local.yml ps # Liste les conteneurs locaux
+```
 
 * **Redémarrage des conteneurs :**
 
-    ```bash
-    docker-compose restart
-    ```
+```bash
+docker-compose -f docker-compose.local.yml restart # Redémarre les conteneurs locaux
+```
 
 * **Construction et taggage d'une image Docker (exemple pour l'API Java) :**
 
-    ```bash
-    docker build -t <votre_nom_utilisateur_docker>/jdr-generator-api:latest . # Construit l'image et la taggue
-    ```
+```bash
+docker build -t <votre_nom_utilisateur_docker>/jdr-generator-api:latest -f api/Dockerfile . # Construit et taggue l'image locale de l'API Java
+```
 
 ### 7. PowerShell Policy (si nécessaire)
 
@@ -356,6 +367,52 @@ Si vous rencontrez des problèmes d'exécution de scripts PowerShell, vous devre
 Get-ExecutionPolicy -List # Affiche les stratégies d'exécution actuelles
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
+
+
+## Intégration de GitHub Actions
+
+Ce projet utilise GitHub Actions pour automatiser à la fois les vérifications de la qualité du code et le déploiement des images Docker. 
+Cette approche permet d'assurer un code de haute qualité et de simplifier le processus de déploiement.
+
+### Vérification de la Qualité du Code
+
+La qualité du code est vérifiée automatiquement à chaque *push* et *pull request* grâce à un workflow GitHub Actions défini dans le fichier `.github/workflows/code-quality.yml`. 
+Ce workflow contient des sections dédiées à la partie du projet `nodejs-code-quality-web` et s'execute depuis toutes les branches.
+
+**Fonctionnement :**
+
+-   Le workflow vérifie la qualité du code à chaque *push* et *pull request* sur toutes les branches.
+-   Des vérifications spécifiques sont exécutées en fonction du type de module (Node.js ou Java).
+-   Les résultats des vérifications sont disponibles dans l'interface GitHub Actions.
+
+**Étapes du workflow de qualité du code :**
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Configuration de Node.js :** Configure l'environnement Node.js avec la version spécifiée.
+3.  **Installation des dépendances :** Installe les dépendances du projet.
+4.  **Vérifications :**
+    * **Linting :** ESLint est utilisé pour vérifier le style et la qualité du code (pour les modules Node.js).
+    * **Compilation :** Le code TypeScript est compilé pour détecter les erreurs de typage (pour les modules NestJS et Web).
+    * **Formatage :** Prettier est utilisé pour formater le code de manière cohérente (pour les modules Node.js).
+    
+### Déploiement Continu avec Docker
+
+Le déploiement des images Docker est également automatisé via GitHub Actions avec le workflow défini dans `.github/workflows/docker-push.yml`. 
+Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *push* est effectué sur les branches spécifiées (actuellement `githubactions` et `main`).
+
+**Fonctionnement :**
+
+- Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici web/).
+- Il est possible de déclencher manuellement le workflow pour forcer la reconstruction de toutes les images.
+- Cette approche optimise le temps d'exécution et l'utilisation des ressources.
+
+**Étapes du workflow de déploiement :**
+
+1.  **Checkout du code :** Récupère la dernière version du code source.
+2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
+3.  **Build et push des images :** Pour ce module 'web', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : https://hub.docker.com/repositories/eli256
+
+En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
 
 ## Licence
 

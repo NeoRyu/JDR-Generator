@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.2.xsd">
+    <suppress>
+        <gav>org.json:json</gav>
+        <cvssBelow>7.0</cvssBelow>
+    </suppress>
+    <suppress>
+        <notes>
+            Ignorer temporairement les vulnérabilités liées a org.json v. 20250107
+            : Aucune nouvelle mise à jour n'est possible pour le moment
+            - https://mvnrepository.com/artifact/org.json/json
+        </notes>
+        <cve>CVE-2022-45688</cve>
+        <cve>CVE-2023-5072</cve>
+    </suppress>
+</suppressions>

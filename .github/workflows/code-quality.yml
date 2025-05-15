@@ -1,0 +1,187 @@
+name: Code Quality Checks
+
+on:
+  push: # Déclenche le workflow lors de chaque push de code
+  pull_request: # Déclenche le workflow lors de chaque création ou mise à jour d'une pull request
+
+jobs:
+  java-code-quality:
+    name: API Run Java Code Quality Checks
+    runs-on: ubuntu-latest
+    steps:
+      # Récupère le code source du dépôt
+      - name: API Checkout code
+        uses: actions/checkout@v3
+      # Configuration de l'environnement Java
+      - name: API Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      # Configuration d'un environnement Python
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      # Mise en cache des dépendances Maven
+      - name: API Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('api/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      # Vérification du style avec Checkstyle & de formatage avec Spotless
+      - name: API Maven Checkstyle
+        run: cd api && mvn --batch-mode checkstyle:check spotless:check
+      # Exécution de SpotBugs : analyse statique de code java
+      #- name: API Maven SpotBugs
+      #  run: cd api && mvn --batch-mode spotbugs:check
+      # Exécution de PMD
+      - name: API Maven - PMD
+        run: cd api && mvn --batch-mode pmd:check
+        continue-on-error: true # Important: Don't fail the step here
+        id: pmd
+      - name: Analyze PMD Results
+        run: |
+          cd api
+          if [ -f target/pmd.xml ]; then
+            python analyze_pmd.py
+          else
+            echo "Error: target/pmd.xml not found..."
+            exit 1
+          fi
+        id: analyze_pmd
+      - name: API Maven - PMD Summary
+        if: always()
+        run: |
+          cd api
+          if [ -f target/pmd.xml ]; then
+            priority1_count=$(grep '<violation priority="1"' target/pmd.xml | wc -l)
+            priority2_count=$(grep '<violation priority="2"' target/pmd.xml | wc -l)
+            priority3_count=$(grep '<violation priority="3"' target/pmd.xml | wc -l)
+          
+            echo "PMD Check Summary"
+            echo "Priority 1 Errors: $priority1_count"
+            echo "Priority 2 Errors: $priority2_count"
+            echo "Priority 3 Errors: $priority3_count"
+            echo "priority1_errors=$priority1_count" >> "$GITHUB_OUTPUT"
+          else
+            echo "Error: target/pmd.xml not found for Summary..."
+            echo "priority1_errors=0" >> "$GITHUB_OUTPUT"
+          fi
+        id: summary_results
+      - name: Skipped if PMD has no Priority 1 errors
+        if: steps.summary_results.outputs.priority1_errors > 0
+        run: |
+          cd api 
+          echo "Priority 1 PMD errors found. Failing the build."
+          echo "See previous sections API Maven - PMD and Summary"
+          echo "exit 1"
+      # Exécution de Dependency Check
+      - name: API Maven Dependency Check
+        run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
+      # Exécution des tests unitaires
+      - name: API Maven Test
+        run: cd api && mvn --batch-mode surefire:test
+
+  nodejs-code-quality-web:
+    name: Node.js Code Quality - Web
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+      # Nettoyer le cache npm avant l'installation
+      - name: Clean npm cache and install dependencies
+        run: |
+          cd web
+          npm cache clean --force
+          rm -rf node_modules
+          rm package-lock.json
+          npm install --legacy-peer-deps
+      # Vérifier TypeScript
+      - name: TypeScript Check
+        run: cd web && npx tsc --noEmit
+      # Formater le code avec Prettier
+      - name: Format code # npm run format
+        run: cd web && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting # cmd 'lint' dans package.json
+        run: cd web && npm run format:check
+      - name: Show package versions (debug)
+        run: |
+          cd web
+          echo "ESLint version:"
+          npx eslint --version
+          echo "@typescript-eslint/eslint-plugin version:"
+          npm list --depth 0 @typescript-eslint/eslint-plugin
+          echo "eslint-plugin-react version:"
+          npm list --depth 0 eslint-plugin-react
+      # ESLint
+      - name: ESLint # npm init @eslint/config@latest
+        run: cd web && npm run lint
+
+  nodejs-code-quality-gemini:
+    name: Node.js Code Quality - Gemini
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd gemini && npm install
+      # Formater le code avec Prettier
+      - name: Format code # npm run format
+        run: cd gemini && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting # cmd 'lint' dans package.json
+        run: cd gemini && npm run format:check
+      # ESLint
+      - name: ESLint
+        run: cd gemini && npm run lint
+      # Vérifier TypeScript
+      #- name: TypeScript Check
+      #  run: cd gemini && npx tsc --noEmit
+
+  nodejs-code-quality-openai:
+    name: Node.js Code Quality - OpenAI
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd openai && npm install
+      # Formater le code avec Prettier
+      - name: Format code # npm run format
+        run: cd openai && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting # cmd 'lint' dans package.json
+        run: cd openai && npm run format:check
+      # ESLint
+      - name: OpenAI ESLint
+        run: cd openai && npm run lint
+      # Vérifier TypeScript
+      #- name: TypeScript Check
+      #  run: cd openai && npx tsc --noEmit

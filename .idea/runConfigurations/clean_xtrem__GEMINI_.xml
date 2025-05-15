@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="clean-xtrem (GEMINI)" type="js.build_tools.npm" folderName="GEMINI">
+    <package-json value="$PROJECT_DIR$/gemini/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="clean-xtrem" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

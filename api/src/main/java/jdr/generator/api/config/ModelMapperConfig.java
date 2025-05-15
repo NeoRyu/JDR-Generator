@@ -9,29 +9,51 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Configuration class for ModelMapper.
+ *
+ * <p>This class configures the ModelMapper bean, defining mapping strategies and specific mappings
+ * for certain entities.
+ */
 @Configuration
 public class ModelMapperConfig {
 
-    @Bean
-    public ModelMapper modelMapper() {
-        ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT) // or STANDARD, LOOSE
-                .setSkipNullEnabled(true);
+  /**
+   * Configures and provides a ModelMapper instance.
+   *
+   * <p>The ModelMapper is configured with a strict matching strategy and skips null values during
+   * mapping. It also defines specific mappings for {@link CharacterContextModel} to {@link
+   * CharacterContextEntity} and {@link CharacterJsonDataModel} to {@link CharacterJsonDataEntity}.
+   *
+   * @return A configured ModelMapper instance.
+   */
+  @Bean
+  public ModelMapper modelMapper() {
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper
+        .getConfiguration()
+        .setMatchingStrategy(MatchingStrategies.STRICT) // or STANDARD, LOOSE
+        .setSkipNullEnabled(true);
 
-        // Mappage pour CharacterContext
-        modelMapper.typeMap(CharacterContextModel.class, CharacterContextEntity.class)
-                .addMappings(mapper -> {
-                    mapper.map(CharacterContextModel::getCreatedAt, CharacterContextEntity::setCreatedAt);
-                });
+    // Mappage pour CharacterContext
+    modelMapper
+        .typeMap(CharacterContextModel.class, CharacterContextEntity.class)
+        .addMappings(
+            mapper -> {
+              mapper.map(CharacterContextModel::getCreatedAt, CharacterContextEntity::setCreatedAt);
+            });
 
-        // Mappage pour CharacterJsonData
-        modelMapper.typeMap(CharacterJsonDataModel.class, CharacterJsonDataEntity.class)
-                .addMappings(mapper -> {
-                    mapper.map(CharacterJsonDataModel::getCreatedAt, CharacterJsonDataEntity::setCreatedAt);
-                    mapper.map(CharacterJsonDataModel::getUpdatedAt, CharacterJsonDataEntity::setUpdatedAt);
-                });
+    // Mappage pour CharacterJsonData
+    modelMapper
+        .typeMap(CharacterJsonDataModel.class, CharacterJsonDataEntity.class)
+        .addMappings(
+            mapper -> {
+              mapper.map(
+                  CharacterJsonDataModel::getCreatedAt, CharacterJsonDataEntity::setCreatedAt);
+              mapper.map(
+                  CharacterJsonDataModel::getUpdatedAt, CharacterJsonDataEntity::setUpdatedAt);
+            });
 
-        return modelMapper;
-    }
+    return modelMapper;
+  }
 }
