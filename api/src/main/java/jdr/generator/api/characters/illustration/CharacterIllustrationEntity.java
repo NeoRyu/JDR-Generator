@@ -15,7 +15,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Represents the illustration data associated with a character. */
+/**
+ * Represents the illustration data associated with a character.
+ * */
 @Entity
 @Builder
 @NoArgsConstructor

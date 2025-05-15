@@ -19,7 +19,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-/** Represents the JSON data associated with a character. */
+/**
+ * Represents the JSON data associated with a character.
+ * */
 @Entity
 @Builder
 @NoArgsConstructor

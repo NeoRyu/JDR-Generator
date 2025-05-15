@@ -2,7 +2,9 @@ package jdr.generator.api.characters.stats;
 
 import java.util.Optional;
 
-/** Service interface for managing character JSON data operations. */
+/**
+ * Service interface for managing character JSON data operations.
+ * */
 public interface CharacterJsonDataService {
 
   /**

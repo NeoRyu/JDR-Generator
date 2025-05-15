@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Represents the default JSON structure for character context information. */
+/**
+ * Represents the default JSON structure for character context information.
+ * */
 @Getter
 @Setter
 @NoArgsConstructor

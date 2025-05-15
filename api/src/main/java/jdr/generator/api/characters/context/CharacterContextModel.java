@@ -7,7 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/** Represents the data transfer object for character context information. */
+/**
+ * Represents the data transfer object for character context information.
+ * */
 @Getter
 @Setter
 @Builder

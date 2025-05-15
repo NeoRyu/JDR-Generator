@@ -14,7 +14,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** Represents the detailed information about a character. */
+/**
+ * Represents the detailed information about a character.
+ * */
 @Entity
 @Builder
 @NoArgsConstructor

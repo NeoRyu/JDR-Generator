@@ -2,7 +2,9 @@ package jdr.generator.api.characters.context;
 
 import java.util.List;
 
-/** Service interface for managing character context operations. */
+/**
+ * Service interface for managing character context operations.
+ * */
 public interface CharacterContextService {
 
   /**

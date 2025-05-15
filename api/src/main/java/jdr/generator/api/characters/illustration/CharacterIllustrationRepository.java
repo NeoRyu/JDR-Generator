@@ -5,7 +5,9 @@ import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-/** Repository interface for accessing and managing {@link CharacterIllustrationEntity} objects. */
+/**
+ * Repository interface for accessing and managing {@link CharacterIllustrationEntity} objects.
+ * */
 @Repository
 public interface CharacterIllustrationRepository
     extends JpaRepository<CharacterIllustrationEntity, Long> {

@@ -190,6 +190,36 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>2.44.0</version>
+                <configuration>
+                    <formats>
+                    </formats>
+                    <java>
+                        <removeUnusedImports/>
+                        <trimTrailingWhitespace/>
+                        <endWithNewline/>
+                        <custom>
+                            <!-- Empêche Spotless de reformater les javadocs -->
+                            <name>IgnoreJavadoc</name>
+                            <regex>
+                                <!-- Ne touche pas aux blocs de commentaires Javadoc -->
+                                <pattern>(?s)/\*\*.*?\*/</pattern>
+                            </regex>
+                        </custom>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -250,30 +280,6 @@
                         <goals>
                             <goal>check</goal>
                             <!-- mvn org.owasp:dependency-check-maven:check -->
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.diffplug.spotless</groupId>
-                <artifactId>spotless-maven-plugin</artifactId>
-                <version>2.44.0</version>
-                <configuration>
-                    <formats>
-                    </formats>
-                    <java>
-                        <googleJavaFormat>
-                            <version>1.27.0</version>
-                        </googleJavaFormat>
-                    </java>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>apply</goal>
-                            <!-- mvn spotless:apply -->
-                            <goal>check</goal>
-                            <!-- mvn spotless:check -->
                         </goals>
                     </execution>
                 </executions>

@@ -31,9 +31,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('api/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      # Exécution de Checkstyle
+      # Vérification du style avec Checkstyle & de formatage avec Spotless
       - name: API Maven Checkstyle
-        run: cd api && mvn --batch-mode checkstyle:check
+        run: cd api && mvn --batch-mode checkstyle:check spotless:check
       # Exécution de SpotBugs : analyse statique de code java
       #- name: API Maven SpotBugs
       #  run: cd api && mvn --batch-mode spotbugs:check
@@ -81,9 +81,6 @@ jobs:
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
-      # Exécution de Spotless (vérification du formatage)
-      - name: API Maven Spotless Check
-        run: cd api && mvn --batch-mode spotless:check
       # Exécution des tests unitaires
       - name: API Maven Test
         run: cd api && mvn --batch-mode surefire:test

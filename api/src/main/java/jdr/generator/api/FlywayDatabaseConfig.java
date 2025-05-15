@@ -6,7 +6,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** Configuration class for Flyway database migrations. */
+/**
+ * Configuration class for Flyway database migrations.
+ * */
 @Configuration
 @EnableConfigurationProperties(FlywayProperties.class)
 public class FlywayDatabaseConfig {

@@ -3,7 +3,9 @@ package jdr.generator.api.characters.details;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-/** Exception thrown when character details are not found. */
+/**
+ * Exception thrown when character details are not found.
+ * */
 public class CharacterDetailsNotFoundException extends ResponseStatusException {
 
   /**

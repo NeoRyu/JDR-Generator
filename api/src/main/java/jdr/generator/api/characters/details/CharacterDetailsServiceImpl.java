@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Implementation of the {@link CharacterDetailsService} interface. */
+/**
+ * Implementation of the {@link CharacterDetailsService} interface.
+ * */
 @Service
 public class CharacterDetailsServiceImpl implements CharacterDetailsService {
   private static final Logger logger = LoggerFactory.getLogger(CharacterDetailsServiceImpl.class);

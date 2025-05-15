@@ -1,6 +1,8 @@
 package jdr.generator.api.characters.illustration;
 
-/** Service interface for managing character illustration operations. */
+/**
+ * Service interface for managing character illustration operations.
+ * */
 public interface CharacterIllustrationService {
 
   /**

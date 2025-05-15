@@ -3,7 +3,9 @@ package jdr.generator.api.characters.details;
 import java.util.List;
 import jdr.generator.api.characters.CharacterFullModel;
 
-/** Service interface for managing character details operations. */
+/**
+ * Service interface for managing character details operations.
+ * */
 public interface CharacterDetailsService {
 
   /**

@@ -39,7 +39,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
-/** Service for interacting with the OpenAI API for character generation and statistics. */
+/**
+ * Service for interacting with the OpenAI API for character generation and statistics.
+ * */
 @Service("openaiService")
 @RequiredArgsConstructor
 public class OpenaiService implements GeminiGenerationConfiguration {

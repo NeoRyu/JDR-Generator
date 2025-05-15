@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
 
-/** Custom deserializer for handling integer values from JSON. */
+/**
+ * Custom deserializer for handling integer values from JSON.
+ * */
 public class CustomIntegerDeserializer extends JsonDeserializer<Integer> {
 
   /**
