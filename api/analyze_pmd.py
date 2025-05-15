@@ -1,82 +1,65 @@
 import xml.etree.ElementTree as ET
 import sys
 import logging
-import os  # Import du module os
 
 # Configuration du logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def analyze_pmd_xml(xml_file_path):
-    """
-    Analyse un rapport PMD XML et extrait les erreurs de priorité 1 avec leurs messages.
-
-    Args:
-        xml_file_path (str): Le chemin du fichier XML du rapport PMD.
-
-    Returns:
-        int: Le nombre d'erreurs de priorité 1.
-    """
     try:
         tree = ET.parse(xml_file_path)
         root = tree.getroot()
 
         priority_1_errors = []
+        priority_2_errors = []
+        priority_3_errors = []
 
-        # Namespace handling (PMD XML utilise un namespace)
+        # Namespace handling (PMD XML uses a namespace)
         namespace = {'pmd': 'http://pmd.sourceforge.net/report/2.0.0'}
 
         for file_element in root.findall('pmd:file', namespace):
             logging.debug(f"Processing file: {file_element.get('name')}")
             for violation in file_element.findall('pmd:violation', namespace):
                 priority = violation.get('priority')
+                message = violation.get('message')
 
-                if priority == '1':
-                    message = violation.text
-                    if message:
-                        message = message.strip()  # Supprime les espaces
-                        if message:  # Vérifie après le strip()
-                            priority_1_errors.append(
-                                f"  - {message} (File: {file_element.get('name')}, Line: {violation.get('beginline')})"
-                            )
-                        else:
-                            logging.warning(
-                                f"  Violation with empty message (File: {file_element.get('name')}, Line: {violation.get('beginline')})"
-                            )
-                            priority_1_errors.append(
-                                f"  - No message provided (File: {file_element.get('name')}, Line: {violation.get('beginline')})"
-                            )
-                    else:
-                        logging.warning(
-                            f"  Violation with no message (File: {file_element.get('name')}, Line: {violation.get('beginline')})"
-                        )
-                        priority_1_errors.append(
-                            f"  - No message provided (File: {file_element.get('name')}, Line: {violation.get('beginline')})"
-                        )
+                logging.debug(f"  Found violation - priority: {priority}, message: {message}")
+
+                if priority == '1' and message:  # Vérifier que le message n'est pas None
+                    priority_1_errors.append(f"  - {message}")
+                elif priority == '2' and message:
+                    priority_2_errors.append(f"  - {message}")
+                elif priority == '3' and message:
+                    priority_3_errors.append(f"  - {message}")
 
         print("\nPriority 1 PMD Errors:")
-        if priority_1_errors:
-            for error in priority_1_errors:
-                print(error)
-        else:
-            print("  Aucune erreur de priorité 1 trouvée.")
+        for error in priority_1_errors:
+            print(error)
 
-        return len(priority_1_errors)
+        print("\nPriority 2 PMD Errors:")
+        for error in priority_2_errors:
+            print(error)
+
+        print("\nPriority 3 PMD Errors:")
+        for error in priority_3_errors:
+            print(error)
+
+        return len(priority_1_errors), len(priority_2_errors), len(priority_3_errors)
 
     except ET.ParseError as e:
         print(f"Error parsing XML: {e}")
         sys.exit(1)
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+        print(f"An unexpected error occurred: {e}")
         sys.exit(1)
 
 
 if __name__ == "__main__":
     xml_file = "target/pmd.xml"  # Chemin relatif au fichier XML (depuis api/)
-    p1_count = analyze_pmd_xml(xml_file)
+    p1_count, p2_count, p3_count = analyze_pmd_xml(xml_file)
 
     # Set GitHub Actions output variables
-    if 'GITHUB_ACTIONS' in os.environ:
-        print(f"::set-output name=priority1_errors_count::{p1_count}")
-
-        # Optionnel:  Si tu veux aussi les messages complets en sortie (peut être très long)
-        print(f"::set-output name=priority1_errors_messages::{'\n'.join(priority_1_errors)}")
+    print(f"::set-output name=priority1_errors::{p1_count}")
+    print(f"::set-output name=priority2_errors::{p2_count}")
+    print(f"::set-output name=priority3_errors::{p3_count}")
