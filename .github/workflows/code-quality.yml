@@ -42,17 +42,21 @@ jobs:
           cd api
           if [ -f target/pmd.xml ]; then
             PMD_OUTPUT=$(cat target/pmd.xml || { echo "Error reading target/pmd.xml"; exit 1; })
-            
-            # Analyser et afficher les erreurs de priorité 1
+
+            # Analyser et afficher les erreurs de priorité 1 avec xmllint
             echo "Priority 1 PMD Errors:"
             xmllint --xpath '//violation[@priority="1"]/@message' target/pmd.xml | sed 's/message="//g;s/"//g;s/^/  - /'
-          
+
+            # Calculer le nombre d'erreurs par priorité
             PRIORITY_1_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="1"')
             PRIORITY_2_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="2"')
             PRIORITY_3_ERRORS=$(echo "$PMD_OUTPUT" | grep -c 'priority="3"')
+
+            # Utilisation des fichiers d'environnement (méthode recommandée)
             echo "priority1_errors=$PRIORITY_1_ERRORS" >> "$GITHUB_OUTPUT"
             echo "priority2_errors=$PRIORITY_2_ERRORS" >> "$GITHUB_OUTPUT"
             echo "priority3_errors=$PRIORITY_3_ERRORS" >> "$GITHUB_OUTPUT"
+
           else
             echo "Error: target/pmd.xml not found..."
             exit 1
@@ -69,9 +73,9 @@ jobs:
         run: |
           cd api
           echo "PMD Check Summary"
-          echo "Priority 1 Errors: ${{ steps.pmd.outputs.priority1_errors }}"
-          echo "Priority 2 Errors: ${{ steps.pmd.outputs.priority2_errors }}"
-          echo "Priority 3 Errors: ${{ steps.pmd.outputs.priority3_errors }}"
+          echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
+          echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
+          echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
