@@ -62,10 +62,18 @@ jobs:
         if: always()
         run: |
           cd api
-          echo "PMD Check Summary"
-          echo "Priority 1 Errors: ${{ steps.analyze_pmd.outputs.priority1_errors }}"
-          echo "Priority 2 Errors: ${{ steps.analyze_pmd.outputs.priority2_errors }}"
-          echo "Priority 3 Errors: ${{ steps.analyze_pmd.outputs.priority3_errors }}"
+          if [ -f target/pmd.xml ]; then
+            priority1_count=$(grep '<violation priority="1"' target/pmd.xml | wc -l)
+            priority2_count=$(grep '<violation priority="2"' target/pmd.xml | wc -l)
+            priority3_count=$(grep '<violation priority="3"' target/pmd.xml | wc -l)
+          
+            echo "PMD Check Summary"
+            echo "Priority 1 Errors: $priority1_count"
+            echo "Priority 2 Errors: $priority2_count"
+            echo "Priority 3 Errors: $priority3_count"
+          else
+            echo "Error: target/pmd.xml not found for Summary..."
+          fi
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
         run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
