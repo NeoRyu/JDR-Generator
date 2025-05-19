@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'maven:3.9.5-jdk-17'
+        NODE_IMAGE = 'node:18-alpine'
         CONTAINER_NAME = 'code-quality-check-container'
     }
 
@@ -11,21 +12,6 @@ pipeline {
     }
 
     stages {
-        stage('Debug - PATH and Docker') {
-            steps {
-                sh "echo '--- PATH ---'"  // Guillemets doubles pour l'interpolation
-                sh "echo $PATH"
-                sh "echo '--- which docker ---'"
-                sh "which docker"
-                sh "echo '--- which docker (full path) ---'"
-                sh "which /usr/bin/docker || which /usr/local/bin/docker || which /usr/sbin/docker"
-                sh "echo '--- whoami ---'"
-                sh "whoami"
-                sh "echo '--- id ---'"
-                sh "id"
-            }
-        }
-
         stage('Checkout Code') {
             steps {
                 git branch: "${BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
@@ -36,24 +22,30 @@ pipeline {
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
-                // Exécuter les vérifications dans un conteneur Docker
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/web && npm install'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/web && npm run format:check'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/web && npm run lint'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/gemini && npm install'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/gemini && npm run format:check'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/gemini && npm run lint'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/openai && npm install'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/openai && npm run format:check'"
-                sh "docker run --rm --name \"${CONTAINER_NAME}\" -v \"${WORKSPACE}:/app\" \"${IMAGE_NAME}\" sh -c 'cd /app/openai && npm run lint'"
+                // Maven (Java)
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
+
+                // Node.js (Web)
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
+
+                // Node.js (Gemini)
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
+
+                // Node.js (OpenAI)
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
+                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
 
                 echo '--- Fin des vérifications de qualité du code ---'
             }
             post {
                 always {
                     echo "Nettoyage du conteneur Docker..."
-                    sh "docker rm -f ${CONTAINER_NAME}"
+                    // sh "docker rm -f ${CONTAINER_NAME}"
                 }
                 failure {
                     echo "Des vérifications de qualité du code ont échouées ..."
