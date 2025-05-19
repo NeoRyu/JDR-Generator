@@ -498,7 +498,8 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
     1.  Allez dans "Administrer Jenkins" -> "Gérer les plugins".
     2.  Cliquez sur l'onglet "Disponible".
-    3.  Recherchez le plugin souhaité (par exemple, "Docker Pipeline" - [https://plugins.jenkins.io/docker-workflow/](https://plugins.jenkins.io/docker-workflow/)) et installez-le.
+    3.  Recherchez le plugin souhaité et installez-le :
+        - "Docker Pipeline" :  
     4.  Redémarrez Jenkins.
 
 9.  **Redémarrage de Jenkins (si possible) :**
@@ -513,7 +514,8 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
 10. **Suppression et recréation du conteneur Jenkins :**
 
-    Si le redémarrage ne fonctionne pas, vous pouvez supprimer et recréer le conteneur :
+    Si le redémarrage ne fonctionne pas automatiquement, relancer manuellement le container depuis Docker Desktop.
+    Autrement, vous pouvez supprimer et recréer le conteneur :
 
     ```bash
     docker stop jenkins-container
@@ -521,40 +523,23 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
     docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home jenkins/jenkins:lts-jdk17
     ```
 
-    * Ceci supprimera le conteneur, mais vos données seront conservées dans le répertoire monté (`/c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins`).
+    * Ceci supprimera le conteneur, mais vos données seront normalement conservées dans le répertoire monté (ex : `C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins`).
 
-11. **Création d'un job de quality-code (Exemple) :**
+11. **Création d'un Pipeline Jenkins avec Jenkinsfile :**
 
-    Voici un exemple de script shell pour un job Jenkins qui effectue des vérifications de qualité du code en utilisant Docker :
+    * Pour ce projet, nous utilisons un `Jenkinsfile` pour définir le pipeline de build. Le `Jenkinsfile` se trouve à la racine du dépôt et décrit les étapes du workflow de qualité du code.
 
-    ```bash
-    #!/bin/bash
-    set -e
+    * **Créer une nouvelle Pipeline :**
 
-    echo "--- Début des vérifications de qualité du code ---"
-
-    # Définir les variables
-    IMAGE_NAME="maven:3.9.5-jdk-17"
-    CONTAINER_NAME="code-quality-check-container"
-    WORKSPACE_VOLUME="${WORKSPACE}:/app"
-
-    # Exécuter le conteneur Docker et effectuer les vérifications
-    docker run --rm --name "${CONTAINER_NAME}" -v "${WORKSPACE_VOLUME}" "${IMAGE_NAME}" /bin/bash -c "set -e; cd /app; echo '--- Vérifications Java (API) ---'; cd api; mvn --batch-mode checkstyle:check spotless:check; cd ..; echo '--- Vérifications Node.js (Web) ---'; cd web; npm install; npm run format:check; npm run lint; cd ..; echo '--- Vérifications Node.js (Gemini) ---'; cd gemini; npm install; npm run format:check; npm run lint; cd ..; echo '--- Vérifications Node.js (OpenAI) ---'; cd openai; npm install; npm run format:check; npm run lint; cd ..; echo '--- Fin des vérifications de qualité du code ---'"
-    ```
-
-    * **Explication :**
-        * Ce script exécute un conteneur Docker Maven pour effectuer les vérifications de qualité du code (Checkstyle, Spotless pour Java, et npm format:check, lint pour Node.js).
-        * `${WORKSPACE}` est une variable d'environnement Jenkins qui contient le chemin vers le workspace du job.
-        * Le répertoire de travail de Jenkins est monté dans le conteneur Docker.
-        * Assurez-vous que Docker est configuré correctement dans Jenkins (comme expliqué précédemment avec le montage du socket Docker).
-    * **Pour créer le job :**
         1.  Dans Jenkins, cliquez sur "Créer un nouveau Job".
-        2.  Choisissez "Freestyle project" ou "Pipeline" (si vous utilisez Jenkinsfile).
-        3.  Configurez les détails de votre job (nom, source code management, etc.).
-        4.  Dans la section "Build", ajoutez une étape "Execute shell" (ou équivalente si vous utilisez Pipeline).
-        5.  Collez le script ci-dessus dans la zone de texte de la commande shell.
-        6.  Configurez les autres options de votre job selon vos besoins.
-        7.  Sauvegardez le job.
+        2.  Choisissez "Pipeline" et donnez-lui un nom (par exemple, "JDR-Generator-Code-Quality").
+        3.  Dans la section "Définition", choisissez "Pipeline script from SCM".
+        4.  Sélectionnez "Git" comme gestionnaire de code source.
+        5.  Configurez l'URL du dépôt (par exemple, `https://github.com/NeoRyu/JDR-Generator`) et les informations d'identification (le PAT GitHub que vous avez configuré).
+        6.  Spécifiez la branche à builder (par exemple, `main` ou `jenkins`).
+        7.  Assurez-vous que le "Script Path" est correct (par défaut, il devrait être `Jenkinsfile`).
+        8.  Configurez les autres options selon vos besoins (par exemple, les déclencheurs de build).
+        9.  Sauvegardez le job.
 
 
 ## Licence

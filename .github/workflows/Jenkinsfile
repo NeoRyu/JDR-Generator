@@ -11,6 +11,21 @@ pipeline {
     }
 
     stages {
+        stage('Debug - PATH and Docker') {
+            steps {
+                sh "echo '--- PATH ---'"  // Guillemets doubles pour l'interpolation
+                sh "echo $PATH"
+                sh "echo '--- which docker ---'"
+                sh "which docker"
+                sh "echo '--- which docker (full path) ---'"
+                sh "which /usr/bin/docker || which /usr/local/bin/docker || which /usr/sbin/docker"
+                sh "echo '--- whoami ---'"
+                sh "whoami"
+                sh "echo '--- id ---'"
+                sh "id"
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 git branch: "${BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
