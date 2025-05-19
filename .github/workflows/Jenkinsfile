@@ -8,7 +8,7 @@ pipeline {
     }
 
     parameters {
-        ChoiceParam(choices: ['main', 'jenkins'], name: 'BRANCH_TO_BUILD', description: 'Choisissez la branche à construire')
+        choice(choices: ['main', 'jenkins'], name: 'BRANCH_TO_BUILD', description: 'Choisissez la branche à construire')
     }
 
     stages {
