@@ -7,11 +7,15 @@ pipeline {
         CONTAINER_NAME = 'code-quality-check-container'
     }
 
+    parameters {
+        ChoiceParam(choices: ['main', 'jenkins'], name: 'BRANCH_TO_BUILD', description: 'Choisissez la branche à construire')
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
                 // Récupérer le code source
-                git branch: 'jenkins', url: 'https://github.com/NeoRyu/JDR-Generator'
+                git branch: "${BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
             }
         }
 
@@ -20,42 +24,44 @@ pipeline {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Exécuter les vérifications dans un conteneur Docker
-                docker run --rm --name "${CONTAINER_NAME}" -v "${WORKSPACE}:/app" "${IMAGE_NAME}" /bin/bash -c '''
-                    set -e;
-                    cd /app;
+                **sh """**
+                    docker run --rm --name "${CONTAINER_NAME}" -v "${WORKSPACE}:/app" "${IMAGE_NAME}" /bin/bash -c '''
+                        set -e;
+                        cd /app;
 
-                    # Vérifications Java (API)
-                    echo '--- Vérifications Java (API) ---';
-                    cd api;
-                    mvn --batch-mode checkstyle:check spotless:check;
-                    cd ..;
+                        # Vérifications Java (API)
+                        echo '--- Vérifications Java (API) ---';
+                        cd api;
+                        mvn --batch-mode checkstyle:check spotless:check;
+                        cd ..;
 
-                    # Vérifications Node.js (Web)
-                    echo '--- Vérifications Node.js (Web) ---';
-                    cd web;
-                    npm install;
-                    npm run format:check;
-                    npm run lint;
-                    cd ..;
+                        # Vérifications Node.js (Web)
+                        echo '--- Vérifications Node.js (Web) ---';
+                        cd web;
+                        npm install;
+                        npm run format:check;
+                        npm run lint;
+                        cd ..;
 
-                    # Vérifications Node.js (Gemini)
-                    echo '--- Vérifications Node.js (Gemini) ---';
-                    cd gemini;
-                    npm install;
-                    npm run format:check;
-                    npm run lint;
-                    cd ..;
+                        # Vérifications Node.js (Gemini)
+                        echo '--- Vérifications Node.js (Gemini) ---';
+                        cd gemini;
+                        npm install;
+                        npm run format:check;
+                        npm run lint;
+                        cd ..;
 
-                    # Vérifications Node.js (OpenAI)
-                    echo '--- Vérifications Node.js (OpenAI) ---';
-                    cd openai;
-                    npm install;
-                    npm run format:check;
-                    npm run lint;
-                    cd ..;
+                        # Vérifications Node.js (OpenAI)
+                        echo '--- Vérifications Node.js (OpenAI) ---';
+                        cd openai;
+                        npm install;
+                        npm run format:check;
+                        npm run lint;
+                        cd ..;
 
-                    echo '--- Fin des vérifications de qualité du code ---';
-                '''
+                        echo '--- Fin des vérifications de qualité du code ---';
+                    '''
+                **"""**
             }
             post {
               always {
