@@ -414,6 +414,149 @@ Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *pus
 
 En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
 
+# Configuration et Utilisation de Jenkins avec Docker
+
+Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker Desktop pour ce projet.
+
+## Étapes d'Installation et Configuration
+
+1.  **Téléchargement de l'image Docker de Jenkins :**
+
+    ```bash
+    docker run -p 8081:8080 -p 50000:50000 jenkins/jenkins:lts-jdk17
+    ```
+
+    * Ceci téléchargera et exécutera l'image Jenkins LTS avec Java 17.
+    * Jenkins sera accessible sur le port 8081 de votre hôte.
+    * Le port 50000 est utilisé pour les agents Jenkins (communication maître/esclave).
+
+2.  **Création et accès au répertoire de stockage de Jenkins :**
+
+    ```bash
+    mkdir -p /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins
+    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.jenkins
+    ```
+
+    * Ceci crée le répertoire où les données de Jenkins seront persistées.
+    * **Important :** Assurez-vous que l'utilisateur qui exécute Docker a les droits de lecture et d'écriture dans ce répertoire.
+    * **Note :** Ce répertoire est ajouté à `.gitignore` pour éviter de versionner les données sensibles.
+
+3.  **Montage et exécution du conteneur Jenkins :**
+
+    ```bash
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home jenkins/jenkins:lts-jdk17
+    ```
+
+    * `--name jenkins-container`:  Nomme le conteneur Jenkins "jenkins-container".
+    * `-d`:  Exécute le conteneur en mode détaché (en arrière-plan).
+    * `-p 8080:8080 -p 50000:50000`:  Mappe les ports 8080 et 50000 du conteneur aux ports correspondants de l'hôte.
+    * `-v /var/run/docker.sock:/var/run/docker.sock`:  Monte le socket Docker de l'hôte pour permettre à Jenkins d'exécuter des commandes Docker (Docker-out-of-Docker).
+    * `-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`:  Monte le répertoire de stockage de Jenkins sur l'hôte dans le répertoire `/var/jenkins_home` du conteneur.
+
+4.  **Accès à l'application web Jenkins :**
+
+    Accédez à Jenkins dans votre navigateur web via :
+
+    ```
+    http://localhost:8080/
+    ```
+
+5.  **Déverrouillage de Jenkins (si nécessaire) :**
+
+    Si Jenkins est verrouillé, vous aurez besoin du mot de passe administrateur initial. Récupérez-le avec la commande :
+
+    ```bash
+    docker exec jenkins-container cat /var/jenkins_home/secrets/initialAdminPassword
+    ```
+
+    * Ceci affiche le mot de passe généré automatiquement. Collez-le dans le champ approprié sur la page web de Jenkins.
+
+6.  **Configuration initiale de Jenkins :**
+
+    * Jenkins vous guidera à travers l'installation des plugins recommandés et la création du premier utilisateur administrateur.
+
+7.  **Configuration d'un Personal Access Token (PAT) GitHub pour Jenkins :**
+
+    1.  **Générez un Personal Access Token (PAT) sur GitHub :**
+
+        * Allez dans les paramètres de votre compte GitHub ("Settings") : https://github.com/settings/profile.
+        * Cliquez sur "Developer settings" puis "Personal access tokens" et "Fine-grained personal access tokens" : https://github.com/settings/personal-access-tokens
+        * Cliquez sur "Generate new token".
+        * Donnez un nom descriptif à votre token.
+        * Choisissez les permissions minimales nécessaires : Pour cloner votre dépôt, la permission "Contents" avec l'accès "Read-only" suffit.
+        * Cliquez sur "Generate token" et copiez et mémorisez le token immédiatement. Il sera impossible de le retrouver par la suite ! Ne le partagez pas, cela permettrait à une tierce personne d'utiliser vos secrets sur GitHub pour effectuer des actions directement.
+
+    2.  **Ajoutez les identifiants à Jenkins :**
+
+        * Dans Jenkins, allez dans "Administrer Jenkins" -> "Identifiants" -> "System" -> "Identifiants globaux (illimité)" -> "Add credentials".
+        * Choisissez "Secret text" comme type d'identifiant.
+        * Dans le champ "Secret", collez le Personal Access Token que vous avez généré sur Github.
+        * Donnez un "ID" (par exemple, `github-pat-content-read`) et une "Description (par exemple, `Accès à GitHub avec Personal Access Token : Content en read-only`) à vos Credentials.
+        * Cliquez sur "Create".
+
+8.  **Installation manuelle de plugins :**
+
+    1.  Allez dans "Administrer Jenkins" -> "Gérer les plugins".
+    2.  Cliquez sur l'onglet "Disponible".
+    3.  Recherchez le plugin souhaité (par exemple, "Docker Pipeline" - [https://plugins.jenkins.io/docker-workflow/](https://plugins.jenkins.io/docker-workflow/)) et installez-le.
+    4.  Redémarrez Jenkins.
+
+9.  **Redémarrage de Jenkins (si possible) :**
+
+    Si Jenkins rencontre des problèmes, essayez de le redémarrer depuis le conteneur :
+
+    ```bash
+    docker exec jenkins-container /bin/jenkins.sh restart
+    ```
+
+    * Ceci tente un redémarrage en douceur de Jenkins.
+
+10. **Suppression et recréation du conteneur Jenkins :**
+
+    Si le redémarrage ne fonctionne pas, vous pouvez supprimer et recréer le conteneur :
+
+    ```bash
+    docker stop jenkins-container
+    docker rm jenkins-container
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home jenkins/jenkins:lts-jdk17
+    ```
+
+    * Ceci supprimera le conteneur, mais vos données seront conservées dans le répertoire monté (`/c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins`).
+
+11. **Création d'un job de quality-code (Exemple) :**
+
+    Voici un exemple de script shell pour un job Jenkins qui effectue des vérifications de qualité du code en utilisant Docker :
+
+    ```bash
+    #!/bin/bash
+    set -e
+
+    echo "--- Début des vérifications de qualité du code ---"
+
+    # Définir les variables
+    IMAGE_NAME="maven:3.9.5-jdk-17"
+    CONTAINER_NAME="code-quality-check-container"
+    WORKSPACE_VOLUME="${WORKSPACE}:/app"
+
+    # Exécuter le conteneur Docker et effectuer les vérifications
+    docker run --rm --name "${CONTAINER_NAME}" -v "${WORKSPACE_VOLUME}" "${IMAGE_NAME}" /bin/bash -c "set -e; cd /app; echo '--- Vérifications Java (API) ---'; cd api; mvn --batch-mode checkstyle:check spotless:check; cd ..; echo '--- Vérifications Node.js (Web) ---'; cd web; npm install; npm run format:check; npm run lint; cd ..; echo '--- Vérifications Node.js (Gemini) ---'; cd gemini; npm install; npm run format:check; npm run lint; cd ..; echo '--- Vérifications Node.js (OpenAI) ---'; cd openai; npm install; npm run format:check; npm run lint; cd ..; echo '--- Fin des vérifications de qualité du code ---'"
+    ```
+
+    * **Explication :**
+        * Ce script exécute un conteneur Docker Maven pour effectuer les vérifications de qualité du code (Checkstyle, Spotless pour Java, et npm format:check, lint pour Node.js).
+        * `${WORKSPACE}` est une variable d'environnement Jenkins qui contient le chemin vers le workspace du job.
+        * Le répertoire de travail de Jenkins est monté dans le conteneur Docker.
+        * Assurez-vous que Docker est configuré correctement dans Jenkins (comme expliqué précédemment avec le montage du socket Docker).
+    * **Pour créer le job :**
+        1.  Dans Jenkins, cliquez sur "Créer un nouveau Job".
+        2.  Choisissez "Freestyle project" ou "Pipeline" (si vous utilisez Jenkinsfile).
+        3.  Configurez les détails de votre job (nom, source code management, etc.).
+        4.  Dans la section "Build", ajoutez une étape "Execute shell" (ou équivalente si vous utilisez Pipeline).
+        5.  Collez le script ci-dessus dans la zone de texte de la commande shell.
+        6.  Configurez les autres options de votre job selon vos besoins.
+        7.  Sauvegardez le job.
+
+
 ## Licence
 
 ```markdow

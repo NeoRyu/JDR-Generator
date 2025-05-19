@@ -1,0 +1,75 @@
+pipeline {
+    agent any  // Exécute ce pipeline sur n'importe quel agent disponible
+
+    environment {
+        // Définir les variables d'environnement
+        IMAGE_NAME = 'maven:3.9.5-jdk-17'
+        CONTAINER_NAME = 'code-quality-check-container'
+    }
+
+    stages {
+        stage('Checkout Code') {
+            steps {
+                // Récupérer le code source
+                git branch: 'jenkins', url: 'https://github.com/NeoRyu/JDR-Generator'
+            }
+        }
+
+        stage('Code Quality Checks') {
+            steps {
+                echo '--- Début des vérifications de qualité du code ---'
+
+                // Exécuter les vérifications dans un conteneur Docker
+                docker run --rm --name "${CONTAINER_NAME}" -v "${WORKSPACE}:/app" "${IMAGE_NAME}" /bin/bash -c '''
+                    set -e;
+                    cd /app;
+
+                    # Vérifications Java (API)
+                    echo '--- Vérifications Java (API) ---';
+                    cd api;
+                    mvn --batch-mode checkstyle:check spotless:check;
+                    cd ..;
+
+                    # Vérifications Node.js (Web)
+                    echo '--- Vérifications Node.js (Web) ---';
+                    cd web;
+                    npm install;
+                    npm run format:check;
+                    npm run lint;
+                    cd ..;
+
+                    # Vérifications Node.js (Gemini)
+                    echo '--- Vérifications Node.js (Gemini) ---';
+                    cd gemini;
+                    npm install;
+                    npm run format:check;
+                    npm run lint;
+                    cd ..;
+
+                    # Vérifications Node.js (OpenAI)
+                    echo '--- Vérifications Node.js (OpenAI) ---';
+                    cd openai;
+                    npm install;
+                    npm run format:check;
+                    npm run lint;
+                    cd ..;
+
+                    echo '--- Fin des vérifications de qualité du code ---';
+                '''
+            }
+            post {
+              always {
+                echo "Nettoyage du conteneur Docker..."
+                sh "docker rm -f ${CONTAINER_NAME}"
+              }
+              failure {
+                echo "Des vérifications de qualité du code ont échouées ..."
+              }
+              success {
+                echo "Toutes les vérifications de qualité du code ont réussies !"
+              }
+            }
+        }
+
+    }
+}

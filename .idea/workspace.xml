@@ -8,10 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.github/workflows/Jenkinsfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/ApiApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -43,7 +44,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="aws" />
+        <entry key="$PROJECT_DIR$" value="githubactions" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,94 +87,94 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Application.Car.executor": "Run",
-    "Application.CarTest.executor": "Run",
-    "Application.CitroenC6.executor": "Run",
-    "Application.Honda.executor": "Run",
-    "Application.PythonScriptExecutor.executor": "Run",
-    "Application.PythonScriptExecutorWithEngine.executor": "Run",
-    "Application.PythonScriptGeneratorExecutor.executor": "Run",
-    "Application.ScalaTests.executor": "Run",
-    "Application.Voiture.executor": "Run",
-    "Application.jdr.generator.api.scala.tests.ScalaTests.executor": "Run",
-    "Application.run (API).executor": "Run",
-    "Application.start (API).executor": "Run",
-    "Batch.docker-compose.executor": "Run",
-    "Batch.docker-debug.executor": "Run",
-    "Batch.docker-push (1).executor": "Run",
-    "Batch.docker-push.executor": "Run",
-    "Batch.docker-push.local.executor": "Run",
-    "Batch.docker-restart.executor": "Run",
-    "Docker.workflows: Compose Deployment.executor": "Run",
-    "Maven.api [clean,install].executor": "Run",
-    "Maven.api [clean,package,install].executor": "Run",
-    "Maven.api [clean].executor": "Run",
-    "Maven.build (API) (docker).executor": "Run",
-    "Maven.build (API).executor": "Run",
-    "Python.m0v.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Shell Script.Docker - COMPLETE RESTART.executor": "Run",
-    "Shell Script.Docker Build API.executor": "Run",
-    "Shell Script.Docker Build Network.executor": "Run",
-    "Shell Script.Docker Run All.executor": "Run",
-    "Shell Script.Docker Stop All.executor": "Run",
-    "Shell Script.docker-build.executor": "Run",
-    "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "githubactions",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
-    "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/gemini",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "node",
-    "nodejs_package_manager_path": "npm",
-    "npm.build (1).executor": "Run",
-    "npm.build (GEMINI).executor": "Run",
-    "npm.build (OPENAI).executor": "Run",
-    "npm.build (WEB).executor": "Run",
-    "npm.build.executor": "Run",
-    "npm.build2.executor": "Run",
-    "npm.clean (GEMINI).executor": "Run",
-    "npm.clean (OPENAI).executor": "Run",
-    "npm.clean-xtrem (1).executor": "Run",
-    "npm.clean-xtrem (GEMINI).executor": "Run",
-    "npm.clean-xtrem (WEB).executor": "Run",
-    "npm.clean-xtrem.executor": "Run",
-    "npm.clean.executor": "Run",
-    "npm.format.executor": "Run",
-    "npm.lint (1).executor": "Run",
-    "npm.lint (GEMINI).executor": "Run",
-    "npm.lint.executor": "Run",
-    "npm.start (GEMINI).executor": "Run",
-    "npm.start (OPENAI).executor": "Run",
-    "npm.start (WEB).executor": "Run",
-    "npm.start.executor": "Run",
-    "npm.start: dev (WEB).executor": "Run",
-    "npm.start: dev.executor": "Run",
-    "npm.start:dev.executor": "Run",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.externalResources",
-    "ts.external.directory.path": "C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Application.Car.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CarTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.CitroenC6.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Honda.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptExecutorWithEngine.executor&quot;: &quot;Run&quot;,
+    &quot;Application.PythonScriptGeneratorExecutor.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Voiture.executor&quot;: &quot;Run&quot;,
+    &quot;Application.jdr.generator.api.scala.tests.ScalaTests.executor&quot;: &quot;Run&quot;,
+    &quot;Application.run (API).executor&quot;: &quot;Run&quot;,
+    &quot;Application.start (API).executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-compose.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-debug.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push (1).executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-push.local.executor&quot;: &quot;Run&quot;,
+    &quot;Batch.docker-restart.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.workflows: Compose Deployment.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean,package,install].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.api [clean].executor&quot;: &quot;Run&quot;,
+    &quot;Maven.build (API) (docker).executor&quot;: &quot;Run&quot;,
+    &quot;Maven.build (API).executor&quot;: &quot;Run&quot;,
+    &quot;Python.m0v.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Shell Script.Docker - COMPLETE RESTART.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build API.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Build Network.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Run All.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.Docker Stop All.executor&quot;: &quot;Run&quot;,
+    &quot;Shell Script.docker-build.executor&quot;: &quot;Run&quot;,
+    &quot;Spring Boot.ApiApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/target&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;node&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.build (1).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.build.executor&quot;: &quot;Run&quot;,
+    &quot;npm.build2.executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean-xtrem (1).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean-xtrem (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean-xtrem (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean-xtrem.executor&quot;: &quot;Run&quot;,
+    &quot;npm.clean.executor&quot;: &quot;Run&quot;,
+    &quot;npm.format.executor&quot;: &quot;Run&quot;,
+    &quot;npm.lint (1).executor&quot;: &quot;Run&quot;,
+    &quot;npm.lint (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.lint.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (GEMINI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (OPENAI).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev (WEB).executor&quot;: &quot;Run&quot;,
+    &quot;npm.start: dev.executor&quot;: &quot;Run&quot;,
+    &quot;npm.start:dev.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyIntegratedToolsModulesConfigurable&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\fredericcoupez\\IdeaProjects\\JDR-Generator\\gemini\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="QodanaCIConfigService">
     <option name="ciType" value="GITHUB" />
     <option name="path" value="$PROJECT_DIR$/.github/workflows/qodana_code_quality.yml" />
@@ -239,7 +240,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="npm.lint (GEMINI)">
+  <component name="RunManager" selected="Python.m0v">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
@@ -398,6 +399,29 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="m0v" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="api" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/m0v.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration default="true" type="Python.FlaskServer">
       <module name="FantasyGenerator" />
       <option name="ENV_FILES" value="" />
@@ -442,37 +466,35 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.run (API)" />
+      <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
-      <item itemvalue="Batch.docker-push.local" />
       <item itemvalue="Batch.docker-push (1)" />
+      <item itemvalue="Batch.docker-push.local" />
       <item itemvalue="Docker.workflows: Compose Deployment" />
       <item itemvalue="Maven.build (API) (docker)" />
       <item itemvalue="Maven.build (API)" />
       <item itemvalue="Node.js.bin\www" />
+      <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.clean-xtrem (GEMINI)" />
       <item itemvalue="npm.clean (GEMINI)" />
-      <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.lint (GEMINI)" />
       <item itemvalue="npm.start (GEMINI)" />
+      <item itemvalue="npm.build (OPENAI)" />
       <item itemvalue="npm.clean-xtrem (OPENAI)" />
       <item itemvalue="npm.clean (OPENAI)" />
-      <item itemvalue="npm.build (OPENAI)" />
       <item itemvalue="npm.lint (OPENAI)" />
       <item itemvalue="npm.start (OPENAI)" />
-      <item itemvalue="npm.clean-xtrem (WEB)" />
       <item itemvalue="npm.build (WEB)" />
+      <item itemvalue="npm.clean-xtrem (WEB)" />
       <item itemvalue="npm.start (WEB)" />
+      <item itemvalue="Python.m0v" />
       <item itemvalue="Shell Script.docker-build" />
       <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.lint (GEMINI)" />
-        <item itemvalue="npm.lint (OPENAI)" />
-        <item itemvalue="npm.clean-xtrem (GEMINI)" />
-        <item itemvalue="npm.clean-xtrem (OPENAI)" />
+        <item itemvalue="Python.m0v" />
         <item itemvalue="Batch.docker-push (1)" />
       </list>
     </recent_temporary>
@@ -551,286 +573,10 @@
       <workItem from="1747031240346" duration="23108000" />
       <workItem from="1747117426530" duration="23647000" />
       <workItem from="1747205708403" duration="21517000" />
-    </task>
-    <task id="LOCAL-00128" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747033331237</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1747033331237</updated>
-    </task>
-    <task id="LOCAL-00129" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747033570411</created>
-      <option name="number" value="00129" />
-      <option name="presentableId" value="LOCAL-00129" />
-      <option name="project" value="LOCAL" />
-      <updated>1747033570411</updated>
-    </task>
-    <task id="LOCAL-00130" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747033800564</created>
-      <option name="number" value="00130" />
-      <option name="presentableId" value="LOCAL-00130" />
-      <option name="project" value="LOCAL" />
-      <updated>1747033800564</updated>
-    </task>
-    <task id="LOCAL-00131" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034182225</created>
-      <option name="number" value="00131" />
-      <option name="presentableId" value="LOCAL-00131" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034182225</updated>
-    </task>
-    <task id="LOCAL-00132" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034314576</created>
-      <option name="number" value="00132" />
-      <option name="presentableId" value="LOCAL-00132" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034314576</updated>
-    </task>
-    <task id="LOCAL-00133" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034448873</created>
-      <option name="number" value="00133" />
-      <option name="presentableId" value="LOCAL-00133" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034448873</updated>
-    </task>
-    <task id="LOCAL-00134" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034627262</created>
-      <option name="number" value="00134" />
-      <option name="presentableId" value="LOCAL-00134" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034627263</updated>
-    </task>
-    <task id="LOCAL-00135" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034633428</created>
-      <option name="number" value="00135" />
-      <option name="presentableId" value="LOCAL-00135" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034633428</updated>
-    </task>
-    <task id="LOCAL-00136" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747034908028</created>
-      <option name="number" value="00136" />
-      <option name="presentableId" value="LOCAL-00136" />
-      <option name="project" value="LOCAL" />
-      <updated>1747034908028</updated>
-    </task>
-    <task id="LOCAL-00137" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747035521381</created>
-      <option name="number" value="00137" />
-      <option name="presentableId" value="LOCAL-00137" />
-      <option name="project" value="LOCAL" />
-      <updated>1747035521381</updated>
-    </task>
-    <task id="LOCAL-00138" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747035714414</created>
-      <option name="number" value="00138" />
-      <option name="presentableId" value="LOCAL-00138" />
-      <option name="project" value="LOCAL" />
-      <updated>1747035714414</updated>
-    </task>
-    <task id="LOCAL-00139" summary="[GITHUB ACTIONS] JDR-Generator : Mise en place d'un workflow de generation d'images docker pour push sur Docker Hub a chaque édition de la branche.&#10;&gt; Test d'update d'image docker hub pour le module API&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747036183115</created>
-      <option name="number" value="00139" />
-      <option name="presentableId" value="LOCAL-00139" />
-      <option name="project" value="LOCAL" />
-      <updated>1747036183115</updated>
-    </task>
-    <task id="LOCAL-00140" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747043229222</created>
-      <option name="number" value="00140" />
-      <option name="presentableId" value="LOCAL-00140" />
-      <option name="project" value="LOCAL" />
-      <updated>1747043229222</updated>
-    </task>
-    <task id="LOCAL-00141" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747060113194</created>
-      <option name="number" value="00141" />
-      <option name="presentableId" value="LOCAL-00141" />
-      <option name="project" value="LOCAL" />
-      <updated>1747060113194</updated>
-    </task>
-    <task id="LOCAL-00142" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747118480005</created>
-      <option name="number" value="00142" />
-      <option name="presentableId" value="LOCAL-00142" />
-      <option name="project" value="LOCAL" />
-      <updated>1747118480006</updated>
-    </task>
-    <task id="LOCAL-00143" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747118646951</created>
-      <option name="number" value="00143" />
-      <option name="presentableId" value="LOCAL-00143" />
-      <option name="project" value="LOCAL" />
-      <updated>1747118646951</updated>
-    </task>
-    <task id="LOCAL-00144" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747118888113</created>
-      <option name="number" value="00144" />
-      <option name="presentableId" value="LOCAL-00144" />
-      <option name="project" value="LOCAL" />
-      <updated>1747118888113</updated>
-    </task>
-    <task id="LOCAL-00145" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747119167119</created>
-      <option name="number" value="00145" />
-      <option name="presentableId" value="LOCAL-00145" />
-      <option name="project" value="LOCAL" />
-      <updated>1747119167119</updated>
-    </task>
-    <task id="LOCAL-00146" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747120255954</created>
-      <option name="number" value="00146" />
-      <option name="presentableId" value="LOCAL-00146" />
-      <option name="project" value="LOCAL" />
-      <updated>1747120255955</updated>
-    </task>
-    <task id="LOCAL-00147" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747120317845</created>
-      <option name="number" value="00147" />
-      <option name="presentableId" value="LOCAL-00147" />
-      <option name="project" value="LOCAL" />
-      <updated>1747120317845</updated>
-    </task>
-    <task id="LOCAL-00148" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747121018428</created>
-      <option name="number" value="00148" />
-      <option name="presentableId" value="LOCAL-00148" />
-      <option name="project" value="LOCAL" />
-      <updated>1747121018428</updated>
-    </task>
-    <task id="LOCAL-00149" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747121400263</created>
-      <option name="number" value="00149" />
-      <option name="presentableId" value="LOCAL-00149" />
-      <option name="project" value="LOCAL" />
-      <updated>1747121400263</updated>
-    </task>
-    <task id="LOCAL-00150" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747122858034</created>
-      <option name="number" value="00150" />
-      <option name="presentableId" value="LOCAL-00150" />
-      <option name="project" value="LOCAL" />
-      <updated>1747122858034</updated>
-    </task>
-    <task id="LOCAL-00151" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123028026</created>
-      <option name="number" value="00151" />
-      <option name="presentableId" value="LOCAL-00151" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123028026</updated>
-    </task>
-    <task id="LOCAL-00152" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123255703</created>
-      <option name="number" value="00152" />
-      <option name="presentableId" value="LOCAL-00152" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123255703</updated>
-    </task>
-    <task id="LOCAL-00153" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123379279</created>
-      <option name="number" value="00153" />
-      <option name="presentableId" value="LOCAL-00153" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123379279</updated>
-    </task>
-    <task id="LOCAL-00154" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123587658</created>
-      <option name="number" value="00154" />
-      <option name="presentableId" value="LOCAL-00154" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123587658</updated>
-    </task>
-    <task id="LOCAL-00155" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123718445</created>
-      <option name="number" value="00155" />
-      <option name="presentableId" value="LOCAL-00155" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123718445</updated>
-    </task>
-    <task id="LOCAL-00156" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747123842995</created>
-      <option name="number" value="00156" />
-      <option name="presentableId" value="LOCAL-00156" />
-      <option name="project" value="LOCAL" />
-      <updated>1747123842995</updated>
-    </task>
-    <task id="LOCAL-00157" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747124003375</created>
-      <option name="number" value="00157" />
-      <option name="presentableId" value="LOCAL-00157" />
-      <option name="project" value="LOCAL" />
-      <updated>1747124003375</updated>
-    </task>
-    <task id="LOCAL-00158" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747124698411</created>
-      <option name="number" value="00158" />
-      <option name="presentableId" value="LOCAL-00158" />
-      <option name="project" value="LOCAL" />
-      <updated>1747124698411</updated>
-    </task>
-    <task id="LOCAL-00159" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747124861136</created>
-      <option name="number" value="00159" />
-      <option name="presentableId" value="LOCAL-00159" />
-      <option name="project" value="LOCAL" />
-      <updated>1747124861136</updated>
-    </task>
-    <task id="LOCAL-00160" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747125068713</created>
-      <option name="number" value="00160" />
-      <option name="presentableId" value="LOCAL-00160" />
-      <option name="project" value="LOCAL" />
-      <updated>1747125068713</updated>
-    </task>
-    <task id="LOCAL-00161" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747125381394</created>
-      <option name="number" value="00161" />
-      <option name="presentableId" value="LOCAL-00161" />
-      <option name="project" value="LOCAL" />
-      <updated>1747125381394</updated>
-    </task>
-    <task id="LOCAL-00162" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747137996916</created>
-      <option name="number" value="00162" />
-      <option name="presentableId" value="LOCAL-00162" />
-      <option name="project" value="LOCAL" />
-      <updated>1747137996916</updated>
+      <workItem from="1747290258876" duration="18278000" />
+      <workItem from="1747374431388" duration="1126000" />
+      <workItem from="1747635561678" duration="1701000" />
+      <workItem from="1747638340494" duration="13696000" />
     </task>
     <task id="LOCAL-00163" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;-&gt; [WIP] Gros refactoring du code source pour s'appuyer sur le google_checks.xml pour corriger les erreurs SpotBugs (problèmes de code), ainsi que correction des erreurs OWASP (vulnérabilités des dépendances)&#10;--&gt; voir pom.xml (j'ai skip les tests pour repermettre un build, quelques milliers d'erreurs corrigé mais besoin d'investiguer un peu plus pour le reste)&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -944,7 +690,287 @@
       <option name="project" value="LOCAL" />
       <updated>1747232949696</updated>
     </task>
-    <option name="localTasksCounter" value="177" />
+    <task id="LOCAL-00177" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747307244017</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1747307244017</updated>
+    </task>
+    <task id="LOCAL-00178" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747307535634</created>
+      <option name="number" value="00178" />
+      <option name="presentableId" value="LOCAL-00178" />
+      <option name="project" value="LOCAL" />
+      <updated>1747307535634</updated>
+    </task>
+    <task id="LOCAL-00179" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747307587433</created>
+      <option name="number" value="00179" />
+      <option name="presentableId" value="LOCAL-00179" />
+      <option name="project" value="LOCAL" />
+      <updated>1747307587433</updated>
+    </task>
+    <task id="LOCAL-00180" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747307786022</created>
+      <option name="number" value="00180" />
+      <option name="presentableId" value="LOCAL-00180" />
+      <option name="project" value="LOCAL" />
+      <updated>1747307786022</updated>
+    </task>
+    <task id="LOCAL-00181" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747308031435</created>
+      <option name="number" value="00181" />
+      <option name="presentableId" value="LOCAL-00181" />
+      <option name="project" value="LOCAL" />
+      <updated>1747308031435</updated>
+    </task>
+    <task id="LOCAL-00182" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747308151680</created>
+      <option name="number" value="00182" />
+      <option name="presentableId" value="LOCAL-00182" />
+      <option name="project" value="LOCAL" />
+      <updated>1747308151680</updated>
+    </task>
+    <task id="LOCAL-00183" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747308431468</created>
+      <option name="number" value="00183" />
+      <option name="presentableId" value="LOCAL-00183" />
+      <option name="project" value="LOCAL" />
+      <updated>1747308431468</updated>
+    </task>
+    <task id="LOCAL-00184" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747308582947</created>
+      <option name="number" value="00184" />
+      <option name="presentableId" value="LOCAL-00184" />
+      <option name="project" value="LOCAL" />
+      <updated>1747308582947</updated>
+    </task>
+    <task id="LOCAL-00185" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747309507056</created>
+      <option name="number" value="00185" />
+      <option name="presentableId" value="LOCAL-00185" />
+      <option name="project" value="LOCAL" />
+      <updated>1747309507056</updated>
+    </task>
+    <task id="LOCAL-00186" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747309621302</created>
+      <option name="number" value="00186" />
+      <option name="presentableId" value="LOCAL-00186" />
+      <option name="project" value="LOCAL" />
+      <updated>1747309621302</updated>
+    </task>
+    <task id="LOCAL-00187" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747309831822</created>
+      <option name="number" value="00187" />
+      <option name="presentableId" value="LOCAL-00187" />
+      <option name="project" value="LOCAL" />
+      <updated>1747309831822</updated>
+    </task>
+    <task id="LOCAL-00188" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747309993582</created>
+      <option name="number" value="00188" />
+      <option name="presentableId" value="LOCAL-00188" />
+      <option name="project" value="LOCAL" />
+      <updated>1747309993582</updated>
+    </task>
+    <task id="LOCAL-00189" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747310197264</created>
+      <option name="number" value="00189" />
+      <option name="presentableId" value="LOCAL-00189" />
+      <option name="project" value="LOCAL" />
+      <updated>1747310197264</updated>
+    </task>
+    <task id="LOCAL-00190" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747310371681</created>
+      <option name="number" value="00190" />
+      <option name="presentableId" value="LOCAL-00190" />
+      <option name="project" value="LOCAL" />
+      <updated>1747310371681</updated>
+    </task>
+    <task id="LOCAL-00191" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747310713614</created>
+      <option name="number" value="00191" />
+      <option name="presentableId" value="LOCAL-00191" />
+      <option name="project" value="LOCAL" />
+      <updated>1747310713614</updated>
+    </task>
+    <task id="LOCAL-00192" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747310741884</created>
+      <option name="number" value="00192" />
+      <option name="presentableId" value="LOCAL-00192" />
+      <option name="project" value="LOCAL" />
+      <updated>1747310741884</updated>
+    </task>
+    <task id="LOCAL-00193" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747310889218</created>
+      <option name="number" value="00193" />
+      <option name="presentableId" value="LOCAL-00193" />
+      <option name="project" value="LOCAL" />
+      <updated>1747310889219</updated>
+    </task>
+    <task id="LOCAL-00194" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747311172262</created>
+      <option name="number" value="00194" />
+      <option name="presentableId" value="LOCAL-00194" />
+      <option name="project" value="LOCAL" />
+      <updated>1747311172262</updated>
+    </task>
+    <task id="LOCAL-00195" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747311295161</created>
+      <option name="number" value="00195" />
+      <option name="presentableId" value="LOCAL-00195" />
+      <option name="project" value="LOCAL" />
+      <updated>1747311295161</updated>
+    </task>
+    <task id="LOCAL-00196" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747311453529</created>
+      <option name="number" value="00196" />
+      <option name="presentableId" value="LOCAL-00196" />
+      <option name="project" value="LOCAL" />
+      <updated>1747311453529</updated>
+    </task>
+    <task id="LOCAL-00197" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747311537169</created>
+      <option name="number" value="00197" />
+      <option name="presentableId" value="LOCAL-00197" />
+      <option name="project" value="LOCAL" />
+      <updated>1747311537169</updated>
+    </task>
+    <task id="LOCAL-00198" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747312053976</created>
+      <option name="number" value="00198" />
+      <option name="presentableId" value="LOCAL-00198" />
+      <option name="project" value="LOCAL" />
+      <updated>1747312053976</updated>
+    </task>
+    <task id="LOCAL-00199" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747312205729</created>
+      <option name="number" value="00199" />
+      <option name="presentableId" value="LOCAL-00199" />
+      <option name="project" value="LOCAL" />
+      <updated>1747312205729</updated>
+    </task>
+    <task id="LOCAL-00200" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747312316382</created>
+      <option name="number" value="00200" />
+      <option name="presentableId" value="LOCAL-00200" />
+      <option name="project" value="LOCAL" />
+      <updated>1747312316382</updated>
+    </task>
+    <task id="LOCAL-00201" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747313199079</created>
+      <option name="number" value="00201" />
+      <option name="presentableId" value="LOCAL-00201" />
+      <option name="project" value="LOCAL" />
+      <updated>1747313199079</updated>
+    </task>
+    <task id="LOCAL-00202" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747313528030</created>
+      <option name="number" value="00202" />
+      <option name="presentableId" value="LOCAL-00202" />
+      <option name="project" value="LOCAL" />
+      <updated>1747313528030</updated>
+    </task>
+    <task id="LOCAL-00203" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747313877749</created>
+      <option name="number" value="00203" />
+      <option name="presentableId" value="LOCAL-00203" />
+      <option name="project" value="LOCAL" />
+      <updated>1747313877749</updated>
+    </task>
+    <task id="LOCAL-00204" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747314277757</created>
+      <option name="number" value="00204" />
+      <option name="presentableId" value="LOCAL-00204" />
+      <option name="project" value="LOCAL" />
+      <updated>1747314277757</updated>
+    </task>
+    <task id="LOCAL-00205" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747314519870</created>
+      <option name="number" value="00205" />
+      <option name="presentableId" value="LOCAL-00205" />
+      <option name="project" value="LOCAL" />
+      <updated>1747314519870</updated>
+    </task>
+    <task id="LOCAL-00206" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747315627520</created>
+      <option name="number" value="00206" />
+      <option name="presentableId" value="LOCAL-00206" />
+      <option name="project" value="LOCAL" />
+      <updated>1747315627520</updated>
+    </task>
+    <task id="LOCAL-00207" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747315771044</created>
+      <option name="number" value="00207" />
+      <option name="presentableId" value="LOCAL-00207" />
+      <option name="project" value="LOCAL" />
+      <updated>1747315771045</updated>
+    </task>
+    <task id="LOCAL-00208" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747315822570</created>
+      <option name="number" value="00208" />
+      <option name="presentableId" value="LOCAL-00208" />
+      <option name="project" value="LOCAL" />
+      <updated>1747315822570</updated>
+    </task>
+    <task id="LOCAL-00209" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747316444019</created>
+      <option name="number" value="00209" />
+      <option name="presentableId" value="LOCAL-00209" />
+      <option name="project" value="LOCAL" />
+      <updated>1747316444019</updated>
+    </task>
+    <task id="LOCAL-00210" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747318164034</created>
+      <option name="number" value="00210" />
+      <option name="presentableId" value="LOCAL-00210" />
+      <option name="project" value="LOCAL" />
+      <updated>1747318164034</updated>
+    </task>
+    <task id="LOCAL-00211" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747318395243</created>
+      <option name="number" value="00211" />
+      <option name="presentableId" value="LOCAL-00211" />
+      <option name="project" value="LOCAL" />
+      <updated>1747318395244</updated>
+    </task>
+    <option name="localTasksCounter" value="212" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -998,11 +1024,26 @@
     <option name="LAST_COMMIT_MESSAGE" value="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="java-exception">
+          <properties class="jdr.generator.api.characters.details.CharacterDetailsNotFoundException" package="jdr.generator.api.characters.details" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/m0v.py</url>
+          <line>14</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/JDR_Generator$m0v.coverage" NAME="m0v Coverage Results" MODIFIED="1744778247300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
+    <SUITE FILE_PATH="coverage/JDR_Generator$m0v.coverage" NAME="m0v Coverage Results" MODIFIED="1747375130954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
   </component>
 </project>
