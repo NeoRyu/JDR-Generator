@@ -13,14 +13,19 @@ RUN apt-get update \
     && apt-get install -y docker-ce-cli \
     && rm -rf /var/lib/apt/lists/*
 
+# Créer le répertoire des plugins s'il n'existe pas et s'assurer des permissions
+RUN mkdir -p /usr/share/jenkins/ref/plugins \
+    && chmod 777 /usr/share/jenkins/ref/plugins
+
 # Télécharger et installer le plugin Credentials Binding (pour la commande 'withUser' dans le Jenkinsfile)
-RUN curl -fsSL "https://updates.jenkins.io/download/plugins/credentials-binding/687.v619cb_15e923f/credentials-binding.hpi" -o /usr/share/jenkins/ref/plugins/credentials-binding.jpi \
-    && jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins/credentials-binding.jpi
+# Utilisez un répertoire temporaire pour le téléchargement
+RUN curl -fsSL "https://updates.jenkins.io/download/plugins/credentials-binding/687.v619cb_15e923f/credentials-binding.hpi" -o /tmp/credentials-binding.jpi
+
+# Installer le plugin depuis le fichier téléchargé
+RUN jenkins-plugin-cli --plugin-file /tmp/credentials-binding.jpi
+
+# Nettoyer le fichier temporaire
+RUN rm /tmp/credentials-binding.jpi
 
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
-
-# docker stop jenkins-container
-# docker rm jenkins-container
-# docker build -t eli256/jenkins-docker-image .
-# docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
