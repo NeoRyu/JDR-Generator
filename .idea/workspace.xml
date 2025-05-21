@@ -10,7 +10,6 @@
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <change beforePath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -576,15 +575,7 @@
       <workItem from="1747635561678" duration="1701000" />
       <workItem from="1747638340494" duration="19583000" />
       <workItem from="1747722927679" duration="734000" />
-      <workItem from="1747810064676" duration="21035000" />
-    </task>
-    <task id="LOCAL-00194" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747311172262</created>
-      <option name="number" value="00194" />
-      <option name="presentableId" value="LOCAL-00194" />
-      <option name="project" value="LOCAL" />
-      <updated>1747311172262</updated>
+      <workItem from="1747810064676" duration="21636000" />
     </task>
     <task id="LOCAL-00195" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -970,7 +961,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747834251872</updated>
     </task>
-    <option name="localTasksCounter" value="243" />
+    <task id="LOCAL-00243" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747835112981</created>
+      <option name="number" value="00243" />
+      <option name="presentableId" value="LOCAL-00243" />
+      <option name="project" value="LOCAL" />
+      <updated>1747835112981</updated>
+    </task>
+    <option name="localTasksCounter" value="244" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
