@@ -15,7 +15,12 @@ RUN apt-get update \
 
 # Télécharger et installer le plugin Credentials Binding (pour la commande 'withUser' dans le Jenkinsfile)
 RUN curl -fsSL "https://updates.jenkins.io/download/plugins/credentials-binding/687.v619cb_15e923f/credentials-binding.hpi" -o /usr/share/jenkins/ref/plugins/credentials-binding.jpi \
-    && jenkins-
+    && jenkins-plugin-cli --plugin-file /usr/share/jenkins/ref/plugins/credentials-binding.jpi
 
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
+
+# docker stop jenkins-container
+# docker rm jenkins-container
+# docker build -t eli256/jenkins-docker-image .
+# docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
