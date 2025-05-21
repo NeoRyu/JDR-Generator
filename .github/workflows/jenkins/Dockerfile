@@ -17,6 +17,7 @@ RUN apt-get update \
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 # Exécuter jenkins-plugin-cli pour installer les plugins listés dans plugins.txt
 # L'outil jenkins-plugin-cli est inclus dans l'image jenkins/jenkins:lts-jdk17
+# > https://github.com/jenkinsci/docker/blob/master/jenkins-plugin-cli.sh
 RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt \
     && echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
 
