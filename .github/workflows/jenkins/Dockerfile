@@ -13,5 +13,8 @@ RUN apt-get update \
     && apt-get install -y docker-ce-cli \
     && rm -rf /var/lib/apt/lists/*
 
+# Ajouter l'utilisateur 'jenkins' au groupe 'docker' pour les permissions
+RUN usermod -aG docker jenkins
+
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
