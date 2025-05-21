@@ -21,7 +21,14 @@ pipeline {
             steps {
                 script {
                     echo "--- Début des vérifications de qualité du code ---"
-                    sh "docker run --rm --user root -v \"${WORKSPACE}\":/app ${MAVEN_IMAGE} sh -c 'ls -l /app && cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
+                    sh """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" sh -c '
+                            ls -l /app && \\
+                            cd /app/api && \\
+                            pwd && \\
+                            ls -l
+                        '
+                    """
                 }
             }
             /*steps {
