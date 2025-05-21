@@ -21,10 +21,7 @@ pipeline {
             steps {
                 script {
                     echo "--- Début des vérifications de qualité du code ---"
-                    // Ajout de cette ligne pour débugger le chemin
                     sh "docker run --rm --user root -v \"${WORKSPACE}\":/app ${MAVEN_IMAGE} sh -c 'ls -l /app && cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
-                    echo "Nettoyage du conteneur Docker..."
-                    echo "Des vérifications de qualité du code ont échouées ..."
                 }
             }
             /*steps {

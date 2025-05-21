@@ -494,6 +494,16 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
     * Ceci affiche le mot de passe généré automatiquement. Collez-le dans le champ approprié sur la page web de Jenkins.
 
+    * **Lecture des logs du conteneur Jenkins :**
+
+        Le mot de passe initial peut également apparaître dans les logs de démarrage du conteneur Jenkins. Pour surveiller le démarrage ou diagnostiquer des problèmes avec le service Jenkins lui-même, utilisez la commande suivante :
+
+       ```bash
+       docker logs jenkins-container
+       ```
+
+       * Cette commande affiche les logs récents du conteneur Jenkins. Le mot de passe initial y est normallement imprimé lors du premier démarrage. Ces logs sont également essentiels pour le débogage général du service Jenkins.
+
 6.  **Configuration initiale de Jenkins :**
 
     * Jenkins vous guidera à travers l'installation des plugins recommandés et la création du premier utilisateur administrateur.
