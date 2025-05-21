@@ -8,7 +8,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: "${BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
+                // Utilisation correcte du paramètre BRANCH_TO_BUILD
+                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
             }
         }
 
@@ -16,44 +17,33 @@ pipeline {
             environment {
                 MAVEN_IMAGE = 'maven:3.9.5-jdk-17'
                 NODE_IMAGE = 'node:18-alpine'
-                CONTAINER_NAME = 'code-quality-check-container'
             }
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Maven (Java)
-                // Exécuter la commande docker en tant que root
-                withUser('root') {
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
-                }
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
 
                 // Node.js (Web)
-                withUser('root') {
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
-                }
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
 
                 // Node.js (Gemini)
-                withUser('root') {
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
-                }
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
 
                 // Node.js (OpenAI)
-                withUser('root') {
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
-                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
-                }
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
+                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
 
                 echo '--- Fin des vérifications de qualité du code ---'
             }
             post {
                 always {
                     echo "Nettoyage du conteneur Docker..."
-                    // sh "docker rm -f ${CONTAINER_NAME}"
                 }
                 failure {
                     echo "Des vérifications de qualité du code ont échouées ..."
