@@ -17,5 +17,9 @@ RUN apt-get update \
 RUN groupadd -r docker || true \
     && usermod -aG docker jenkins
 
+# Ajouter l'utilisateur 'jenkins' au groupe 'root'
+# Ceci donne à l'utilisateur jenkins les permissions d'accéder au socket docker sur l'hôte.
+RUN usermod -aG root jenkins
+
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
