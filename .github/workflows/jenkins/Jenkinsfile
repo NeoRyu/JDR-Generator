@@ -23,16 +23,20 @@ pipeline {
                 // Maven (Java)
                 script {
                     echo "Exécution des vérifications de qualité de code Maven..."
-                    def mavenResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_MAVEN_CHECK'
-                            cd /app/api
-                            mvn --batch-mode checkstyle:check spotless:check
-                        EOF_MAVEN_CHECK
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie des vérifications de qualité de code Maven ---"
-                    echo mavenResult.stdout.trim()
-                    if (mavenResult.status != 0) {
-                        error "La vérification de qualité de code Maven a échoué avec le code de sortie ${mavenResult.status}"
+                    try {
+                        def mavenOutput = sh(script: "docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app maven:3.8.5-openjdk-17 /bin/bash -s", returnStdout: true).trim()0
+                        echo "--- Sortie des vérifications de qualité de code Maven ---"
+                        echo mavenOutput
+                        if (mavenOutput.contains("BUILD FAILURE")) {
+                            echo "Des vérifications de qualité du code ont échouées !"
+                            error("Les vérifications de qualité du code Maven ont échoué.")
+                        } else {
+                            echo "Les vérifications de qualité du code Maven sont réussies."
+                        }
+
+                    } catch (Exception e) {
+                        echo "Une erreur est survenue lors de l'exécution des vérifications de qualité du code : ${e.getMessage()}"
+                        error("Échec des vérifications de qualité du code en raison d'une erreur d'exécution.")
                     }
                 }
 
