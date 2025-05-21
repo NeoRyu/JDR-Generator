@@ -17,10 +17,10 @@ pipeline {
                 MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
                 NODE_IMAGE = 'node:20-alpine'
             }
-            steps {
+            // Bloc EOF_SCRIPT utilisant un heredoc ayant permis de passer le script multiline au conteneur Docker
+            /*steps {
                 script {
                     echo "--- Début des vérifications de qualité du code ---"
-                    // Utilisation d'un heredoc pour passer le script au conteneur Docker
                     sh """
                         docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_SCRIPT'
                             ls -l /app
@@ -30,32 +30,81 @@ pipeline {
                         EOF_SCRIPT
                     """
                 }
-            }
-            /*
-            // Bloc de vérifications de qualité de code complètes (commenté pour le débogage actuel)
+            }*/
+            // Bloc de vérifications de qualité de code complètes
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Maven (Java)
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_MAVEN_CHECK'
+                        cd /app/api
+                        mvn --batch-mode checkstyle:check spotless:check
+                    EOF_MAVEN_CHECK
+                """
 
                 // Node.js (Web)
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_INSTALL'
+                        cd /app/web
+                        npm install
+                    EOF_NODE_WEB_INSTALL
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_FORMAT'
+                        cd /app/web
+                        npm run format:check
+                    EOF_NODE_WEB_FORMAT
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_LINT'
+                        cd /app/web
+                        npm run lint
+                    EOF_NODE_WEB_LINT
+                """
 
                 // Node.js (Gemini)
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_INSTALL'
+                        cd /app/gemini
+                        npm install
+                    EOF_NODE_GEMINI_INSTALL
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_FORMAT'
+                        cd /app/gemini
+                        npm run format:check
+                    EOF_NODE_GEMINI_FORMAT
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_LINT'
+                        cd /app/gemini
+                        npm run lint
+                    EOF_NODE_GEMINI_LINT
+                """
 
                 // Node.js (OpenAI)
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
-                sh "docker run --rm --user root -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_INSTALL'
+                        cd /app/openai
+                        npm install
+                    EOF_NODE_OPENAI_INSTALL
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_FORMAT'
+                        cd /app/openai
+                        npm run format:check
+                    EOF_NODE_OPENAI_FORMAT
+                """
+                sh """
+                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_LINT'
+                        cd /app/openai
+                        npm run lint
+                    EOF_NODE_OPENAI_LINT
+                """
 
                 echo '--- Fin des vérifications de qualité du code ---'
-            }*/
+            }
             post {
                 always {
                     echo "Nettoyage du conteneur Docker..."

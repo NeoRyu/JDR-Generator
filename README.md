@@ -573,7 +573,17 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
         8.  Configurez les autres options selon vos besoins (par exemple, les déclencheurs de build).
         9.  Sauvegardez le job.
 
-
+12. **NOTA BENE** (a effacer par la suite)
+    ```bash
+    cls
+    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins
+    docker build -t eli256/jenkins-docker-image .
+    docker stop jenkins-container
+    docker rm jenkins-container
+    docker run -d -p 8080:8080 -p 50000:50000 --name jenkins-container -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    docker logs -f jenkins-container
+    ```
+    
 ## Licence
 
 ```markdow
