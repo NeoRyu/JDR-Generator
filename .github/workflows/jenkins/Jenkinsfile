@@ -15,8 +15,8 @@ pipeline {
 
         stage('Code Quality Checks') {
             environment {
-                MAVEN_IMAGE = 'maven:3.9.5-jdk-17'
-                NODE_IMAGE = 'node:18-alpine'
+                MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
+                NODE_IMAGE = 'node:20-alpine'
             }
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
