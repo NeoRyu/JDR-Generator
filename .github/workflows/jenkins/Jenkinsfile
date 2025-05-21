@@ -17,31 +17,24 @@ pipeline {
                 MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
                 NODE_IMAGE = 'node:20-alpine'
             }
-            // Bloc EOF_SCRIPT utilisant un heredoc ayant permis de passer le script multiline au conteneur Docker
-            /*steps {
-                script {
-                    echo "--- Début des vérifications de qualité du code ---"
-                    sh """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_SCRIPT'
-                            ls -l /app
-                            cd /app/api
-                            pwd
-                            ls -l
-                        EOF_SCRIPT
-                    """
-                }
-            }*/
-            // Bloc de vérifications de qualité de code complètes
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Maven (Java)
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_MAVEN_CHECK'
-                        cd /app/api
-                        mvn --batch-mode checkstyle:check spotless:check
-                    EOF_MAVEN_CHECK
-                """
+                script {
+                    echo "Exécution des vérifications de qualité de code Maven..."
+                    def mavenResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_MAVEN_CHECK'
+                            cd /app/api
+                            mvn --batch-mode checkstyle:check spotless:check
+                        EOF_MAVEN_CHECK
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie des vérifications de qualité de code Maven ---"
+                    echo mavenResult.stdout.trim()
+                    if (mavenResult.status != 0) {
+                        error "La vérification de qualité de code Maven a échoué avec le code de sortie ${mavenResult.status}"
+                    }
+                }
 
                 // Node.js (Web)
                 sh """
@@ -50,18 +43,34 @@ pipeline {
                         npm install
                     EOF_NODE_WEB_INSTALL
                 """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_FORMAT'
-                        cd /app/web
-                        npm run format:check
-                    EOF_NODE_WEB_FORMAT
-                """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_LINT'
-                        cd /app/web
-                        npm run lint
-                    EOF_NODE_WEB_LINT
-                """
+                script {
+                    echo "Exécution de 'format:check' pour Node.js (Web)..."
+                    def webFormatResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_FORMAT'
+                            cd /app/web
+                            npm run format:check
+                        EOF_NODE_WEB_FORMAT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
+                    echo webFormatResult.stdout.trim()
+                    if (webFormatResult.status != 0) {
+                        error "'format:check' pour Node.js (Web) a échoué avec le code de sortie ${webFormatResult.status}"
+                    }
+                }
+                script {
+                    echo "Exécution de 'lint' pour Node.js (Web)..."
+                    def webLintResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_LINT'
+                            cd /app/web
+                            npm run lint
+                        EOF_NODE_WEB_LINT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'lint' pour Node.js (Web) ---"
+                    echo webLintResult.stdout.trim()
+                    if (webLintResult.status != 0) {
+                        error "'lint' pour Node.js (Web) a échoué avec le code de sortie ${webLintResult.status}"
+                    }
+                }
 
                 // Node.js (Gemini)
                 sh """
@@ -70,18 +79,34 @@ pipeline {
                         npm install
                     EOF_NODE_GEMINI_INSTALL
                 """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_FORMAT'
-                        cd /app/gemini
-                        npm run format:check
-                    EOF_NODE_GEMINI_FORMAT
-                """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_LINT'
-                        cd /app/gemini
-                        npm run lint
-                    EOF_NODE_GEMINI_LINT
-                """
+                script {
+                    echo "Exécution de 'format:check' pour Node.js (Gemini)..."
+                    def geminiFormatResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_FORMAT'
+                            cd /app/gemini
+                            npm run format:check
+                        EOF_NODE_GEMINI_FORMAT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
+                    echo geminiFormatResult.stdout.trim()
+                    if (geminiFormatResult.status != 0) {
+                        error "'format:check' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiFormatResult.status}"
+                    }
+                }
+                script {
+                    echo "Exécution de 'lint' pour Node.js (Gemini)..."
+                    def geminiLintResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_LINT'
+                            cd /app/gemini
+                            npm run lint
+                        EOF_NODE_GEMINI_LINT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
+                    echo geminiLintResult.stdout.trim()
+                    if (geminiLintResult.status != 0) {
+                        error "'lint' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiLintResult.status}"
+                    }
+                }
 
                 // Node.js (OpenAI)
                 sh """
@@ -90,18 +115,34 @@ pipeline {
                         npm install
                     EOF_NODE_OPENAI_INSTALL
                 """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_FORMAT'
-                        cd /app/openai
-                        npm run format:check
-                    EOF_NODE_OPENAI_FORMAT
-                """
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_LINT'
-                        cd /app/openai
-                        npm run lint
-                    EOF_NODE_OPENAI_LINT
-                """
+                script {
+                    echo "Exécution de 'format:check' pour Node.js (OpenAI)..."
+                    def openaiFormatResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_FORMAT'
+                            cd /app/openai
+                            npm run format:check
+                        EOF_NODE_OPENAI_FORMAT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
+                    echo openaiFormatResult.stdout.trim()
+                    if (openaiFormatResult.status != 0) {
+                        error "'format:check' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiFormatResult.status}"
+                    }
+                }
+                script {
+                    echo "Exécution de 'lint' pour Node.js (OpenAI)..."
+                    def openaiLintResult = sh(script: """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_LINT'
+                            cd /app/openai
+                            npm run lint
+                        EOF_NODE_OPENAI_LINT
+                    """, returnStdout: true, returnStatus: true)
+                    echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
+                    echo openaiLintResult.stdout.trim()
+                    if (openaiLintResult.status != 0) {
+                        error "'lint' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiLintResult.status}"
+                    }
+                }
 
                 echo '--- Fin des vérifications de qualité du code ---'
             }
@@ -110,7 +151,7 @@ pipeline {
                     echo "Nettoyage du conteneur Docker..."
                 }
                 failure {
-                    echo "Des vérifications de qualité du code ont échouées ..."
+                    echo "Des vérifications de qualité du code ont échouées !"
                 }
                 success {
                     echo "Toutes les vérifications de qualité du code ont réussies !"

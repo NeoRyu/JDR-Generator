@@ -1,0 +1,132 @@
+Started by user COUPEZ Frédéric
+Checking out git https://github.com/NeoRyu/JDR-Generator into /var/jenkins_home/workspace/JDR-Generator-Code-Quality@script/124363f0a1b25ade85ff4be870a1d258fd087358cffd84009f5ee8df54708837 to read .github/workflows/jenkins/Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality@script/124363f0a1b25ade85ff4be870a1d258fd087358cffd84009f5ee8df54708837/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/aws
+Seen branch in repository origin/jenkins
+Seen branch in repository origin/main
+Seen branch in repository origin/qodana-automation-1149567177
+Seen branch in repository origin/release_1.0
+Seen 5 remote branches
+ > git show-ref --tags -d # timeout=10
+Checking out Revision ded8501a5af38f0c1e4b428945d4bc86d4ade368 (origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ded8501a5af38f0c1e4b428945d4bc86d4ade368 # timeout=10
+Commit message: "[JENKINS] JDR-Generator : Configuration du workflow Jenkins"
+ > git rev-list --no-walk e43e6799665b956ee011323369b3ed014cf2a5d6 # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/JDR-Generator-Code-Quality
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/aws
+Seen branch in repository origin/jenkins
+Seen branch in repository origin/main
+Seen branch in repository origin/qodana-automation-1149567177
+Seen branch in repository origin/release_1.0
+Seen 5 remote branches
+ > git show-ref --tags -d # timeout=10
+Checking out Revision ded8501a5af38f0c1e4b428945d4bc86d4ade368 (origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ded8501a5af38f0c1e4b428945d4bc86d4ade368 # timeout=10
+Commit message: "[JENKINS] JDR-Generator : Configuration du workflow Jenkins"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Checkout Code)
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/jenkins^{commit} # timeout=10
+Checking out Revision ded8501a5af38f0c1e4b428945d4bc86d4ade368 (refs/remotes/origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f ded8501a5af38f0c1e4b428945d4bc86d4ade368 # timeout=10
+ > git branch -a -v --no-abbrev # timeout=10
+ > git branch -D jenkins # timeout=10
+ > git checkout -b jenkins ded8501a5af38f0c1e4b428945d4bc86d4ade368 # timeout=10
+Commit message: "[JENKINS] JDR-Generator : Configuration du workflow Jenkins"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Code Quality Checks)
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] echo
+--- Début des vérifications de qualité du code ---
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app maven:3.8.5-openjdk-17 /bin/bash -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+Unable to find image 'node:20-alpine' locally
+20-alpine: Pulling from library/node
+699b753813e6: Pulling fs layer
+05c1247b2bae: Pulling fs layer
+301aebe3d905: Pulling fs layer
+301aebe3d905: Download complete
+699b753813e6: Download complete
+05c1247b2bae: Download complete
+301aebe3d905: Pull complete
+05c1247b2bae: Pull complete
+699b753813e6: Pull complete
+Digest: sha256:be56e91681a8ec1bba91e3006039bd228dc797fd984794a3efedab325b36e679
+Status: Downloaded newer image for node:20-alpine
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] sh
++ docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app node:20-alpine /bin/sh -s
+[Pipeline] echo
+--- Fin des vérifications de qualité du code ---
+Post stage
+[Pipeline] echo
+Nettoyage du conteneur Docker...
+[Pipeline] echo
+Toutes les vérifications de qualité du code ont réussies !
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
