@@ -414,44 +414,50 @@ Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *pus
 
 En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
 
+
 # Configuration et Utilisation de Jenkins avec Docker
 
 Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker Desktop pour ce projet.
 
 ## Étapes d'Installation et Configuration
 
-1.  **Téléchargement de l'image Docker de Jenkins :**
+1.  **Création et accès au répertoire de stockage de Jenkins :**
 
     ```bash
-    docker run -p 8081:8080 -p 50000:50000 jenkins/jenkins:lts-jdk17
-    ```
-
-    * Ceci téléchargera et exécutera l'image Jenkins LTS avec Java 17.
-    * Jenkins sera accessible sur le port 8081 de votre hôte.
-    * Le port 50000 est utilisé pour les agents Jenkins (communication maître/esclave).
-
-2.  **Création et accès au répertoire de stockage de Jenkins :**
-
-    ```bash
-    mkdir -p /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins
-    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.jenkins
+    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\
+    mkdir -p .jenkins
     ```
 
     * Ceci crée le répertoire où les données de Jenkins seront persistées.
     * **Important :** Assurez-vous que l'utilisateur qui exécute Docker a les droits de lecture et d'écriture dans ce répertoire.
     * **Note :** Ce répertoire est ajouté à `.gitignore` pour éviter de versionner les données sensibles.
 
-3.  **Montage et exécution du conteneur Jenkins :**
+2.  **Téléchargement d'une image Docker de Jenkins contenant docker (construite à partir du Dockerfile dans le dossier) :**
 
     ```bash
-    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home jenkins/jenkins:lts-jdk17
+    cd .github/workflows/jenkins/
+    docker build -t eli256/jenkins-docker-image .
     ```
 
-    * `--name jenkins-container`:  Nomme le conteneur Jenkins "jenkins-container".
-    * `-d`:  Exécute le conteneur en mode détaché (en arrière-plan).
-    * `-p 8080:8080 -p 50000:50000`:  Mappe les ports 8080 et 50000 du conteneur aux ports correspondants de l'hôte.
-    * `-v /var/run/docker.sock:/var/run/docker.sock`:  Monte le socket Docker de l'hôte pour permettre à Jenkins d'exécuter des commandes Docker (Docker-out-of-Docker).
-    * `-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`:  Monte le répertoire de stockage de Jenkins sur l'hôte dans le répertoire `/var/jenkins_home` du conteneur.
+    * Ceci construira l'image Docker personnalisée eli256/jenkins-docker-image à partir du Dockerfile situé dans le dossier actuel. Cette image sera basée sur jenkins/jenkins:lts-jdk17 et inclura le client Docker.
+    * Jenkins sera accessible sur le port 8080 de votre hôte
+    * Le port 50000 est utilisé pour les agents Jenkins (communication maître/esclave).
+    * Cela va prendre quelques minutes la première fois, car Docker doit télécharger les couches de l'image de base et installer le client Docker.
+
+3.  **Montage et exécution du conteneur Jenkins :**
+
+    En exécutant la commande `docker images`, vous devriez voir l'image eli256/jenkins-docker-image dans la liste.
+
+    ```bash
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
+    ```
+
+    * `--name jenkins-container`: Nomme le conteneur Jenkins "jenkins-container".
+    * `-d`: Exécute le conteneur en mode détaché (en arrière-plan).
+    * `-p 8080:8080 -p 50000:50000`: Mappe les ports 8080 et 50000 du conteneur aux ports correspondants de l'hôte.
+    * `-v /var/run/docker.sock:/var/run/docker.sock`: Monte le socket Docker de l'hôte pour permettre à Jenkins d'exécuter des commandes Docker (Docker-out-of-Docker).
+    * `-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`: Path à éditer ; Monte le répertoire de stockage de Jenkins sur l'hôte dans le répertoire `/var/jenkins_home` du conteneur.
+    * `eli256/jenkins-docker-image`: En utilisant l'image custom buildée (via le Dockerfile)
 
 4.  **Accès à l'application web Jenkins :**
 
@@ -498,8 +504,7 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
     1.  Allez dans "Administrer Jenkins" -> "Gérer les plugins".
     2.  Cliquez sur l'onglet "Disponible".
-    3.  Recherchez le plugin souhaité et installez-le :
-        - "Docker Pipeline" :  
+    3.  Recherchez le plugin souhaité et installez-le. 
     4.  Redémarrez Jenkins.
 
 9.  **Redémarrage de Jenkins (si possible) :**
@@ -520,14 +525,14 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
     ```bash
     docker stop jenkins-container
     docker rm jenkins-container
-    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home jenkins/jenkins:lts-jdk17
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
     ```
 
     * Ceci supprimera le conteneur, mais vos données seront normalement conservées dans le répertoire monté (ex : `C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins`).
 
 11. **Création d'un Pipeline Jenkins avec Jenkinsfile :**
 
-    * Pour ce projet, nous utilisons un `Jenkinsfile` pour définir le pipeline de build. Le `Jenkinsfile` se trouve à la racine du dépôt et décrit les étapes du workflow de qualité du code.
+    * Pour ce projet, nous utilisons un `Jenkinsfile` pour définir le pipeline de build. Le `Jenkinsfile` se trouve dans le repertoire .github/workflows/jenkins du dépôt et décrit les étapes du workflow de qualité du code.
 
     * **Créer une nouvelle Pipeline :**
 
