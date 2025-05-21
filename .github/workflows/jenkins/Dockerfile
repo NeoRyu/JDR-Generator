@@ -13,16 +13,12 @@ RUN apt-get update \
     && apt-get install -y docker-ce-cli \
     && rm -rf /var/lib/apt/lists/*
 
-# Télécharger et rendre exécutable le script install-plugins.sh
-RUN curl -fsSL https://raw.githubusercontent.com/jenkinsci/docker/master/install-plugins.sh -o /usr/local/bin/install-plugins.sh \
-    && chmod +x /usr/local/bin/install-plugins.sh
-
-# Ajouter le plugin Credentials Binding via le fichier plugins.txt et le script install-plugins.sh
+#  Copier le fichier plugins.txt dans le conteneur
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-
-# Exécuter le script d'installation des plugins
-# Jenkins fournit un script par défaut pour installer les plugins listés dans plugins.txt
-RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
+# Exécuter jenkins-plugin-cli pour installer les plugins listés dans plugins.txt
+# L'outil jenkins-plugin-cli est inclus dans l'image jenkins/jenkins:lts-jdk17
+RUN jenkins-plugin-cli -f /usr/share/jenkins/ref/plugins.txt \
+    && echo 2.0 > /usr/share/jenkins/ref/jenkins.install.UpgradeWizard.state
 
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
