@@ -8,7 +8,6 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                // Utilisation correcte du paramètre BRANCH_TO_BUILD
                 git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
             }
         }
@@ -21,10 +20,20 @@ pipeline {
             steps {
                 script {
                     echo "--- Début des vérifications de qualité du code ---"
-                    sh "docker run --rm --user root -v \"${WORKSPACE}\":/app \"${MAVEN_IMAGE}\" /bin/bash -c \\\"ls -l /app && cd /app/api && pwd && ls -l\\\""
+                    // Utilisation d'un heredoc pour passer le script au conteneur Docker
+                    sh """
+                        docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_SCRIPT'
+                            ls -l /app
+                            cd /app/api
+                            pwd
+                            ls -l
+                        EOF_SCRIPT
+                    """
                 }
             }
-            /*steps {
+            /*
+            // Bloc de vérifications de qualité de code complètes (commenté pour le débogage actuel)
+            steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Maven (Java)
