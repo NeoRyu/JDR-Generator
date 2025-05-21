@@ -22,22 +22,31 @@ pipeline {
                 echo '--- Début des vérifications de qualité du code ---'
 
                 // Maven (Java)
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
+                // Exécuter la commande docker en tant que root
+                withUser('root') {
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${MAVEN_IMAGE}\" sh -c 'cd /app/api && mvn --batch-mode checkstyle:check spotless:check'"
+                }
 
                 // Node.js (Web)
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
+                withUser('root') {
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm install'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run format:check'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/web && npm run lint'"
+                }
 
                 // Node.js (Gemini)
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
+                withUser('root') {
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm install'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run format:check'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/gemini && npm run lint'"
+                }
 
                 // Node.js (OpenAI)
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
-                sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
+                withUser('root') {
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm install'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run format:check'"
+                    sh "docker run --rm -v \"${WORKSPACE}:/app\" \"${NODE_IMAGE}\" sh -c 'cd /app/openai && npm run lint'"
+                }
 
                 echo '--- Fin des vérifications de qualité du code ---'
             }
@@ -55,5 +64,4 @@ pipeline {
             }
         }
     }
-
 }

@@ -1,7 +1,7 @@
 # Utilise l'image Jenkins LTS officielle comme base
 FROM jenkins/jenkins:lts-jdk17
 
-# Passer en utilisateur root pour installer Docker CLI et ajouter l'utilisateur jenkins au groupe docker
+# Passer en utilisateur root pour installer Docker CLI
 USER root
 
 # Installer les dépendances nécessaires et le Docker CLI
@@ -12,9 +12,7 @@ RUN apt-get update \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list \
     && apt-get update \
     && apt-get install -y docker-ce-cli \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd -r docker || true \
-    && usermod -aG docker jenkins
+    && rm -rf /var/lib/apt/lists/*
 
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
