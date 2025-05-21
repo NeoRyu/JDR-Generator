@@ -7,7 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (workspace /app ?)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <change beforePath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
@@ -576,23 +576,7 @@
       <workItem from="1747635561678" duration="1701000" />
       <workItem from="1747638340494" duration="19583000" />
       <workItem from="1747722927679" duration="734000" />
-      <workItem from="1747810064676" duration="19925000" />
-    </task>
-    <task id="LOCAL-00192" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747310741884</created>
-      <option name="number" value="00192" />
-      <option name="presentableId" value="LOCAL-00192" />
-      <option name="project" value="LOCAL" />
-      <updated>1747310741884</updated>
-    </task>
-    <task id="LOCAL-00193" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747310889218</created>
-      <option name="number" value="00193" />
-      <option name="presentableId" value="LOCAL-00193" />
-      <option name="project" value="LOCAL" />
-      <updated>1747310889219</updated>
+      <workItem from="1747810064676" duration="21035000" />
     </task>
     <task id="LOCAL-00194" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -970,7 +954,23 @@
       <option name="project" value="LOCAL" />
       <updated>1747833266112</updated>
     </task>
-    <option name="localTasksCounter" value="241" />
+    <task id="LOCAL-00241" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (workspace /app ?)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747833931407</created>
+      <option name="number" value="00241" />
+      <option name="presentableId" value="LOCAL-00241" />
+      <option name="project" value="LOCAL" />
+      <updated>1747833931407</updated>
+    </task>
+    <task id="LOCAL-00242" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747834251872</created>
+      <option name="number" value="00242" />
+      <option name="presentableId" value="LOCAL-00242" />
+      <option name="project" value="LOCAL" />
+      <updated>1747834251872</updated>
+    </task>
+    <option name="localTasksCounter" value="243" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -999,7 +999,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[AWS] JDR-Generator : Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;docker-compose ps&#10;docker-compose logs api-container &#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on va passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;docker-compose build web-container&#10;docker-compose ps&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;docker-compose build gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;docker-compose build openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[DOCKER] JDR-Generator : Imagen3 n'est plus disponible en Europe, on tente de passer sur Dall-E d'OpenAI...&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
     <MESSAGE value="[DOCKER] JDR-Generator : WIP :: erreur 400 avec Dall-E d'OpenAI...&#10;&#10;[TODO AWS] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk&#10;&#10;- CMD TERMINAL BUILD AND START DOCKER IMAGES : &#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;clear&#10;docker-compose down&#10;docker volume rm workflows_mysql-data&#10;docker-compose up --build -d&#10;&#10;// API BACKEND JAVA&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\api&#10;mvn clean install package&#10;cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows&#10;docker-compose build --no-cache api-container&#10;docker-compose up -d api-container&#10;clear&#10;docker-compose logs api-container&#10;docker-compose exec api-container sh&#10;env&#10;exit&#10;&#10;// GEMINI API&#10;docker-compose build --no-cache gemini-container&#10;docker-compose up -d gemini-container&#10;clear&#10;docker-compose logs gemini-container&#10;&#10;// OPEN AI API&#10;docker-compose build --no-cache openai-container&#10;docker-compose up -d openai-container&#10;clear&#10;docker-compose logs openai-container&#10;&#10;// WEB FRONTEND UX&#10;docker-compose build web-container&#10;&#10;// Divers&#10;docker-compose ps&#10;docker-compose restart&#10;docker build -t eli256/jdr-generator-api:latest .&#10;&#10;// POWERSHELL POLICY&#10;Get-ExecutionPolicy -List&#10;Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned&#10;&#10;- UX WEB [port 5173]&#10;- API MIDDLEWARE [port 8080]&#10;- DB MYSQL [port 3306]&#10;- API GEMINI [port 3000]" />
@@ -1024,7 +1023,8 @@
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (user root)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (maven:3.8.5-openjdk-17)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (workspace /app ?)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
-    <option name="LAST_COMMIT_MESSAGE" value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (workspace /app ?)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <option name="LAST_COMMIT_MESSAGE" value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XDebuggerManager">
