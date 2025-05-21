@@ -423,6 +423,14 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
 1.  **Création et accès au répertoire de stockage de Jenkins :**
 
+    Ce setup Jenkins utilise un montage de volume (`-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`) pour persister les données de votre instance Jenkins (configurations, jobs, plugins, historique des builds, etc.) sur votre machine locale.
+    
+    **Pourquoi cette approche ?**
+    La persistance des données est **fortement recommandée** et **essentielle** pour un environnement de développement ou de production. Sans cela, chaque fois que le conteneur Jenkins est supprimé (par exemple, lors d'une mise à jour de l'image Docker ou d'un nettoyage), toutes vos configurations et votre travail seraient perdus, vous obligeant à reconfigurer Jenkins à chaque fois.
+    
+    **Impact sur les performances au démarrage :**
+    Le fait de persister de nombreuses données peut entraîner un temps de démarrage de Jenkins plus long, car l'instance doit lire et charger toutes ses configurations depuis le volume monté. Ce comportement est normal et est le prix de la rétention de vos données et de la simplicité de gestion.
+
     ```bash
     cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\
     mkdir -p .jenkins
@@ -458,6 +466,15 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
     * `-v /var/run/docker.sock:/var/run/docker.sock`: Monte le socket Docker de l'hôte pour permettre à Jenkins d'exécuter des commandes Docker (Docker-out-of-Docker).
     * `-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`: Path à éditer ; Monte le répertoire de stockage de Jenkins sur l'hôte dans le répertoire `/var/jenkins_home` du conteneur.
     * `eli256/jenkins-docker-image`: En utilisant l'image custom buildée (via le Dockerfile)
+
+    **Alternative :**
+
+    Si vous ne souhaitez pas persister les données de Jenkins et que vous préférez que chaque lancement du conteneur soit une instance "vierge" (par exemple, pour des tests très spécifiques et éphémères), vous pouvez **retirer le montage de volume** (`-v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home`) de la commande `docker run`.
+    **AVERTISSEMENT** : L'utilisation de Jenkins sans persistance entraînera la perte de toutes les données du /var/jenkins_home (jobs, plugins, utilisateurs, historique de builds) à chaque suppression du conteneur.
+
+    ```bash
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    ```
 
 4.  **Accès à l'application web Jenkins :**
 
