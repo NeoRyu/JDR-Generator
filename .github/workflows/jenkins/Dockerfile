@@ -5,7 +5,6 @@ FROM jenkins/jenkins:lts-jdk17
 USER root
 
 # Installer les dépendances nécessaires et le Docker CLI
-# Utilisation d'un seul RUN pour minimiser les couches d'image
 RUN apt-get update \
     && apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release \
     && curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
@@ -13,6 +12,10 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y docker-ce-cli \
     && rm -rf /var/lib/apt/lists/*
+
+# Télécharger et installer le plugin Credentials Binding (pour la commande 'withUser' dans le Jenkinsfile)
+RUN curl -fsSL "https://updates.jenkins.io/download/plugins/credentials-binding/687.v619cb_15e923f/credentials-binding.hpi" -o /usr/share/jenkins/ref/plugins/credentials-binding.jpi \
+    && jenkins-
 
 # Revenir à l'utilisateur jenkins par défaut
 USER jenkins
