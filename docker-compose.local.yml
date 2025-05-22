@@ -1,24 +1,42 @@
-version: '3.8' # Utilisation de la version 3 de Docker Compose
+# Arrêter les conteneurs Docker Compose :
+# docker-compose -p jdr-generator -f docker-compose.local.yml down
+
+# Supprimer le volume de données MySQL :
+# docker volume rm jdr-generator_mysql-data
+
+# Démarrer les conteneurs Docker Compose :
+# docker-compose -p jdr-generator -f docker-compose.local.yml up --build
+
+# Arrêt et suppression des containers et images Docker (y compris bdd) pour ce projet :
+# docker-compose -p jdr-generator -f docker-compose.local.yml down --volumes --rmi all
+
+# Restart complet :
+# docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all
+# docker-compose -p jdr-generator -f docker-compose.local.yml up --build
+
+# Interroger la base de données MySQL du container (puis saisir ensuite les requêtes) :
+# docker exec -it jdr-generator-mysql-container-1 mysql -u jdr_user -proot jdr_generator_db
+# "Exemple une fois le prompt present : mysql >" (exit pour quitter le prompt)
+# SELECT LENGTH(image_blob) AS taille_en_octets FROM character_illustration LIMIT 1;
 
 services:
   api-container:
     image: eli256/jdr-generator-api:latest
     build:
-      context: ../../../api
-      dockerfile: ../../../api/Dockerfile # Nom du Dockerfile dans le dossier 'api'
+      context: ./api
+      dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'api'
     ports:
-      - "8081:8080" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "8081:8080" # Mapping port-hôte : port-conteneur
     environment:
-      OPENAI_API_URL: http://openai-container:3001 # URL du service OpenAI dans le réseau Docker
-      GEMINI_API_URL: http://gemini-container:3002 # URL du service Gemini dans le réseau Docker
+      GEMINI_API_URL: http://gemini-container:3001/gemini # URL du service Gemini dans le réseau Docker
+      OPENAI_API_URL: http://openai-container:3002/openai # URL du service OpenAI dans le réseau Docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000 # Ajout délais
-      SPRING_DATASOURCE_USERNAME: root # ATTENTION: Sécurité !
+      SPRING_DATASOURCE_USERNAME: jdr_user
       SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
       SPRING_JPA_HIBERNATE_DDL_AUTO: none # Flyway gère le schéma
       # Ajout des propriétés HikariCP pour la reconnexion
       SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT: 30000 # 30 seconds
       SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: 10
-      # SUPPRIMÉ: SPRING_DATASOURCE_HIKARI_INITIALIZATION_FAIL_TIMEOUT: 0
       SPRING_DATASOURCE_HIKARI_MAX_LIFETIME: 1800000 # 30 minutes
     depends_on: # Indique que ce service dépend de mysql-container et attend sa santé
       mysql-container:
@@ -34,27 +52,29 @@ services:
   web-container:
     image: eli256/jdr-generator-web:latest
     build:
-      context: ../../../web
-      dockerfile: ../../../web/Dockerfile # Nom du Dockerfile dans le dossier 'web'
+      context: ./web
+      dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'web'
       args: # Ajout des arguments de build pour passer VITE_API_URL
         - 'VITE_API_URL=${VITE_API_URL}'
     ports:
-      - "80:80" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "80:80" # Mapping port hôte:port conteneur
     depends_on:
       api-container:
         condition: service_healthy # Dépend du conteneur API sain
     environment:
-      VITE_API_URL: http://api-container:8080 # URL de l'API pour le frontend
+      VITE_API_URL: ${VITE_API_URL}
+    volumes:
+      - ./web/nginx.conf:/etc/nginx/nginx.conf:ro # Monte nginx.conf depuis ./web/ pour proxifier
     networks:
       - jdr-network
 
   gemini-container:
     image: eli256/jdr-generator-gemini:latest
     build:
-      context: ../../../gemini
-      dockerfile: ../../../gemini/Dockerfile # Nom du Dockerfile dans le dossier 'gemini'
+      context: ./gemini
+      dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'gemini'
     ports:
-      - "8082:3001" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "3001:3001" # Mapping port hôte:port conteneur
     environment:
       PORT: 3001 # Variable d'environnement pour l'application Gemini
     networks:
@@ -63,10 +83,10 @@ services:
   openai-container:
     image: eli256/jdr-generator-openai:latest
     build:
-      context: ../../../openai
-      dockerfile: ../../../openai/Dockerfile # Nom du Dockerfile dans le dossier 'openai'
+      context: ./openai
+      dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'openai'
     ports:
-      - "8083:3002" # Mapping port hôte:port conteneur (comme dans Dockerrun v2)
+      - "3002:3002" # Mapping port hôte:port conteneur
     environment:
       PORT: 3002 # Variable d'environnement pour l'application OpenAI
     networks:
@@ -81,8 +101,9 @@ services:
       MYSQL_DATABASE: jdr_generator_db
     volumes: # Configuration des volumes pour la persistance
       - mysql-data:/var/lib/mysql # 'mysql-data' fait référence au volume défini ci-dessous
+      - ./.github/workflows/localhost/init.sql:/docker-entrypoint-initdb.d/init.sql # PSW root
     healthcheck: # Ajout d'un healthcheck pour MySQL
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "jdr_user", "-proot"] # Utilise jdr_user
       interval: 10s
       timeout: 5s
       retries: 5
@@ -92,7 +113,7 @@ services:
 # Définition des volumes nommés pour la persistance
 volumes:
   mysql-data: # Nom du volume
-    driver: local # Type de driver pour le volume (par défaut 'local' utilise le stockage de l'hôte EC2)
+    driver: local # Type de driver pour le volume
 networks:
   jdr-network: # Définition explicite du réseau
     driver: bridge

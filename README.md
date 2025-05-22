@@ -159,21 +159,89 @@ JDR-Generator est une application complète pour la création de personnages de 
 
 ## Structure du Projet
 
+```
 JDR-Generator/
-├── api/          # API Backend Java (avec Scala)
+├── .env
+├── .gitignore
+├── docker-compose.local.yml           <-- Fichier Docker Compose principal
+├── JDR-Generator.iml
+├── api/
+│   ├── README.md
+│   ├── Dockerfile                     <-- Dockerfile pour le service API
+│   ├── pom.xml
+│   └── src/
+│       ├── main/
+│       │   ├── scala/
+│       │   └── java/
+│       │       └── ApiApplication.java  (et autres sources Java)
+│       └── resources/
+│           ├── db/
+│           │   └── migration/             (fichiers SQL pour FlywayDB)
+│           ├── application-local.yml      (module 'api' - fonctionnel en localhost)
+│           └── application-docker.yml     (tentatives ratées sur AWS - pour info)
+├── gemini/
+│   ├── dist/
+│   ├── node_modules/
 │   ├── src/
-│   ├── pom.xml   # (ou build.gradle)
-│   └── ...
-├── gemini/       # API Backend NestJS (pour Gemini/OpenAI)
-│   ├── src/
+│   │   ├── .ebignore
+│   │   ├── .env
+│   │   ├── .gitignore
+│   │   └── app.ts
+│   ├── Dockerfile                     <-- Dockerfile pour le service Gemini
+│   ├── eslint.config.js
 │   ├── package.json
-│   └── ...
-├── web/          # Frontend React/TypeScript
+│   ├── package-lock.json
+│   ├── README.md
+│   └── tsconfig.json
+├── openai/
+│   ├── dist/
+│   ├── node_modules/
 │   ├── src/
+│   │   ├── .ebignore
+│   │   ├── .env
+│   │   ├── .gitignore
+│   │   └── app.ts
+│   ├── Dockerfile                     <-- Dockerfile pour le service OpenAI
+│   ├── eslint.config.js
 │   ├── package.json
-│   └── ...
-├── README.md     # Fichier README principal
-└── ...
+│   ├── package-lock.json
+│   ├── README.md
+│   └── tsconfig.json
+├── web/
+│   ├── vite.config.ts
+│   ├── tailwind.config.ts
+│   ├── postcss.config.ts
+│   ├── tsconfig.json
+│   ├── package.json
+│   ├── index.html
+│   ├── Dockerfile                     <-- Dockerfile pour le service Web
+│   ├── component.json
+│   └── src/
+│       ├── App.tsx
+│       ├── main.tsx
+│       ├── vite-env.d.ts
+│       ├── components/ (model, form, ui, theme)
+│       ├── lib/ (utils.ts)
+│       ├── services/ (createCharacter.service.ts, etc.)
+│       └── pages/ (home/)
+├── .github/
+│   └── workflows/
+│       ├── code-quality.yml
+│       ├── docker-push.yml
+│       ├── qodana_code_quality.yml
+│       ├── localhost/
+│       │   └── docker-push.bat          <-- Script de push Docker Hub (utilisant docker-compose.local.yml)
+│       ├── jenkins/                     (dossier pour workflow Jenkins dockerisé)
+│       │   ├── Dockerfile
+│       │   ├── Jenkinsfile
+│       │   └── plugins.txt
+│       └── aws/                         
+│           ├── docker-compose.yml
+│           ├── Dockerrun.aws.json
+│           ├── deploy-aws.yml
+│           └── aws.zip
+└── LICENSE
+```
 
 
 ## Utilisation de Docker

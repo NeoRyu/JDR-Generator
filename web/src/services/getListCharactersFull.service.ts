@@ -15,7 +15,7 @@ export const getListCharactersFull = () => {
     async () => {
       return await axios.get<CharactersResponse>(
         `${API_BASE_URL}/characters/full`,
-      ); // Correction ici
+      );
     },
   );
 };
