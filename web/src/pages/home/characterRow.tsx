@@ -112,12 +112,11 @@ export function CharacterRow({
         )}
       </TableCell>
       <TableCell>
-        <div className="text-2xl flex items-center justify-center">
-          {character.context?.promptGender == "Male"
-            ? "♂"
-            : character.context?.promptGender == "Female"
-              ? "♀"
-              : "⚥"}
+        <div className="text-2xl flex items-center justify-center font-bold">
+          {character.context?.promptGender == "Male" ? "♂"
+              : character.context?.promptGender == "Female" ? "♀"
+                  : "⚥"
+          }
         </div>
       </TableCell>
       <TableCell>{character.details.name}</TableCell>

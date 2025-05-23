@@ -118,7 +118,11 @@ export function ReadCharacterContent({
   try {
     parsedJson =
       character.jsonData &&
-      character.jsonData.jsonData;
+      character.jsonData.jsonData &&
+      typeof character.jsonData.jsonData === "string"
+        ? JSON.parse(character.jsonData.jsonData)
+        : null;
+    if (parsedJson) console.log("Parsed JSON:", parsedJson);
   } catch (error) {
     console.error("Erreur lors de l'analyse du JSON :", error);
   }
