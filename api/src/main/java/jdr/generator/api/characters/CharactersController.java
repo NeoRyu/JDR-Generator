@@ -106,18 +106,20 @@ public class CharactersController {
   }
 
   /**
-   * Generates an illustration based on the provided prompt.
+   * Regenerates an illustration for an existing character.
+   * This method replaces the old POST /illustrate to use PUT and an ID.
+   * It takes the character's ID and triggers the regeneration process
+   * using the character's existing context and details to build the prompt.
    *
-   * @param imagePrompt The prompt for the image generation.
-   * @return An array of bytes representing the generated image.
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
    */
-  @RequestMapping(
-      value = {"/illustrate"},
-      method = RequestMethod.POST)
+  @PutMapping("/illustrate/{id}")
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = geminiHost)
-  public byte[] illustrate(@RequestBody String imagePrompt) {
-    return openaiService.illustrate(imagePrompt);
+  public byte[] illustrate(@PathVariable Long id) {
+    return openaiService.regenerateIllustration(id);
+    // return geminiService.regenerateIllustration(id);
   }
 
   /**

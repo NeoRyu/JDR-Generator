@@ -337,6 +337,57 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   }
 
   /**
+   * Regenerates an illustration for an existing character based on its stored details.
+   *
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
+   */
+  @Transactional
+  public byte[] regenerateIllustration(Long id) {
+    LOGGER.info("Regenerating illustration for character ID: {}", id);
+    try {
+      CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
+      String imagePrompt = characterDetails.getImage();
+      /*
+      // TODO : Il faudrait mettre en place un service de traduction de prompt en FR -> EN
+      //  Afin d'avoir un prompt plus détaillé et permettant a l'utilisateur d'obtenir une
+      //  generation d'image plus précise. Langue EN requise pour beaucoup d'IA generative d'image
+
+      CharacterContextEntity characterContext =
+              characterContextService.findById(characterDetails.getContextId());
+      String imagePrompt = String.format(
+
+              "Highly detailed and artistic illustration in a heroic-fantasy style for a %s %s %s. "
+                      + "Focus on %s, %s, %s. Clothing: %s. Distinctive trait: %s. Physical description: %s. "
+                      + "Age: %d. Birth place: %s. Residence: %s. Background: %s. Current goal: %s.",
+              characterContext.getPromptGender(),
+              characterContext.getPromptRace(),
+              characterContext.getPromptClass(),
+              characterDetails.getName(),
+              characterDetails.getSelfDescription(),
+              characterDetails.getAttitudeTowardsWorld(),
+              characterDetails.getClothingPreferences(),
+              characterDetails.getDistinctiveTrait(),
+              characterDetails.getPhysicalDescription(),
+              characterDetails.getAge(),
+              characterDetails.getBirthPlace(),
+              characterDetails.getResidenceLocation(),
+              characterDetails.getChildhoodStory(),
+              characterDetails.getGoal()
+      );
+      */
+      byte[] newImageBlob = illustrate(imagePrompt);
+      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+
+      return newImageBlob;
+
+    } catch (Exception e) {
+      LOGGER.error("Error during illustration regeneration for character ID: {}", id, e);
+      throw new RuntimeException("Error during illustration regeneration", e);
+    }
+  }
+
+  /**
    * Retrieves character statistics from the OpenAI API for a given character ID.
    *
    * @param characterDetailsId The ID of the character details.

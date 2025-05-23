@@ -1,23 +1,25 @@
 // illustrateCharacter.service.tsx
-import {useMutation} from "react-query";
-import axios from "axios";
+import {useMutation, UseMutationResult} from "react-query";
+import axios, {AxiosResponse} from "axios";
 
 const API_BASE_URL = process.env.VITE_API_URL || "http://localhost:8080"; // Fallback
 
-// TODO : Permettre aux utilisateurs de générer une nouvelle illustration si l'actuelle ne leur convient pas
-export const useIllustrateCharacter = () => {
-  return useMutation("illustrate", async (imagePrompt: string) => {
-    return await axios.post(
-      `${API_BASE_URL}/characters/illustrate`,
-      imagePrompt,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          // Les headers CORS sont gérés par le serveur
-          // 'Access-Control-Allow-Origin': 'http://localhost:8080',
-          // 'Access-Control-Allow-Credentials': 'true',
-        },
-      },
+// Permettre aux utilisateurs de générer une nouvelle illustration si l'actuelle ne leur convient pas
+// Hook pour la régénération d'illustration (PUT)
+export const useRegenerateIllustration = (): UseMutationResult<AxiosResponse<ArrayBuffer>, unknown, number, unknown> => {
+    return useMutation(
+        "regenerateIllustration",
+        async (characterId: number) => {
+            return await axios.put(
+                `${API_BASE_URL}/characters/illustrate/${characterId}`,
+                null, // Le corps de la requête PUT est null car l'ID est dans le chemin
+                {
+                    responseType: 'arraybuffer',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+        }
     );
-  });
 };

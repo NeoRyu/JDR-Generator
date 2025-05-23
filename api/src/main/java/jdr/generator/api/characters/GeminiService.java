@@ -293,6 +293,68 @@ public class GeminiService implements GeminiGenerationConfiguration {
   }
 
   /**
+   * Regenerates an illustration for an existing character based on its stored details,
+   * similar to OpenaiService.
+   *
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
+   * @throws RuntimeException if the illustration regeneration fails.
+   */
+  @Transactional
+  public byte[] regenerateIllustration(Long id) {
+    LOGGER.info("Regenerating illustration via Gemini (Imagen) for character ID: {}", id);
+    try {
+      CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
+      String imagePrompt = characterDetails.getImage();
+
+      final String imgBlobResponse = illustrate(imagePrompt);
+      if (imgBlobResponse == null) {
+        LOGGER.warn("Image generation via Imagen (GeminiService) returned a null blob for character {{id={}}}", id);
+        throw new RuntimeException("Image generation returned null.");
+      }
+
+      JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlobResponse).get("image");
+      if (imageNode == null) {
+        LOGGER.error("Image node not found in response for character {{id={}}}", id);
+        throw new RuntimeException("Image data not found in API response.");
+      }
+      byte[] newImageBlob = Base64.getDecoder().decode(imageNode.asText());
+
+      // Update the existing illustration
+      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+      LOGGER.info("Illustration regenerated and updated for character {{id={}}}", id);
+
+      return newImageBlob;
+
+    } catch (HttpClientErrorException e) {
+      LOGGER.error(
+              "Erreur lors de l'appel à l'API d'illustration (client) via "
+                      + "Imagen (GeminiService) pour la régénération du personnage {{id={}}} : Status={}, Body={}",
+              id, e.getStatusCode(), e.getResponseBodyAsString());
+      throw new RuntimeException(
+              "Erreur client lors de la régénération de l'illustration: " + e.getResponseBodyAsString(), e);
+    } catch (HttpServerErrorException e) {
+      LOGGER.error(
+              "Erreur lors de l'appel à l'API d'illustration (serveur) via "
+                      + "Imagen (GeminiService) pour la régénération du personnage {{id={}}} : Status={}, Body={}",
+              id, e.getStatusCode(), e.getResponseBodyAsString());
+      throw new RuntimeException(
+              "Erreur serveur lors de la régénération de l'illustration: " + e.getResponseBodyAsString(), e);
+    } catch (JsonProcessingException e) {
+      LOGGER.error(
+              "Erreur lors de l'analyse du blob d'image pour la régénération du personnage {{id={}}} : {}",
+              id, e.getMessage());
+      throw new RuntimeException("Erreur lors de l'analyse de la réponse d'illustration.", e);
+    } catch (Exception e) {
+      LOGGER.error(
+              "Erreur inattendue lors de la régénération d'illustration via "
+                      + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
+              id, e.getMessage());
+      throw new RuntimeException("Erreur inattendue lors de la régénération de l'illustration.", e);
+    }
+  }
+
+  /**
    * Retrieves character statistics from the Gemini API for a given character ID.
    *
    * @param characterId The ID of the character.

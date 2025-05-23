@@ -44,13 +44,17 @@ export function CharacterRow({
   ) => {
     try {
       await updateCharacter(updatedCharacter);
-      await refetch();
+      void refetch();
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
       console.error("Erreur lors de la sauvegarde du personnage :", error);
     }
   };
+
+  const handleUpdateIllustration = () => {
+    void refetch();
+  }
 
   const isDeleting = deletingCharacters.includes(character.details.id);
 
@@ -87,6 +91,7 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             handleReadCharacter={handleReadCharacter}
+            handleUpdateIllustration={handleUpdateIllustration}
           />
           <UpdateCharacterDialog
             modalType={modalType === "update" ? "update" : null}
