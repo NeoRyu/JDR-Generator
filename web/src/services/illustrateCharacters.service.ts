@@ -23,3 +23,4 @@ export const useRegenerateIllustration = (): UseMutationResult<AxiosResponse<Arr
         }
     );
 };
+

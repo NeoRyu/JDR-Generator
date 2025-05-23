@@ -94,6 +94,24 @@ const renderJsonData = (jsonData: any, level = 0): JSX.Element[] => {
   });
 };
 
+const arrayBufferToBase64 = (buffer: ArrayBuffer): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const blob = new Blob([buffer], { type: 'image/png' }); // Assurez-vous du type MIME de l'image générée
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        // Supprime le préfixe "data:image/png;base64," que readAsDataURL ajoute
+        const base64String = reader.result.split(',')[1];
+        resolve(base64String);
+      } else {
+        reject(new Error("FileReader n'a pas retourné une chaîne de caractères."));
+      }
+    };
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(blob);
+  });
+};
+
 export function ReadCharacterContent({
   character,
   modalType,
@@ -141,7 +159,8 @@ export function ReadCharacterContent({
     try {
       const response = await regenerateIllustrationMutation.mutateAsync(selectedCharacter.details.id);
       // La réponse est un ArrayBuffer, il faut le convertir en base64 pour l'afficher
-      const newImageBlob = Buffer.from(response.data).toString('base64');
+      // const newImageBlob = Buffer.from(response.data).toString('base64');
+      const newImageBlob = await arrayBufferToBase64(response.data);
 
       // Mise à jour de l'état local du personnage sélectionné avec la nouvelle image
       setSelectedCharacter(prev => {
@@ -158,7 +177,6 @@ export function ReadCharacterContent({
       // Notifier le composant parent (Home) pour rafraîchir potentiellement la liste ou le cache
       handleUpdateIllustration();
       console.log("Illustration régénérée avec succès !");
-
     } catch (error) {
       console.error("Erreur lors de la régénération de l'illustration :", error);
       // Gérer l'affichage d'erreurs à l'utilisateur si nécessaire
@@ -210,10 +228,14 @@ export function ReadCharacterContent({
                 </div>
               ) : (
                 <div>
-                  {character.illustration && character.illustration.imageBlob ? (
+                  { ((selectedCharacter?.illustration && selectedCharacter?.illustration?.imageBlob)
+                      || (character.illustration && character.illustration.imageBlob))
+                    ? (
                     <img
                       className="rounded shadow w-64 h-64 object-contain"
-                      src={`data:image/png;base64,${character.illustration.imageBlob}`}
+                      src={`data:image/png;base64,${
+                        selectedCharacter?.illustration.imageBlob || character.illustration.imageBlob
+                      }`}
                       alt={character.details?.image || "Illustration du personnage"}
                     />
                   ) : (

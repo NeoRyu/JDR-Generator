@@ -7,8 +7,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas)&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) :: L'image est bien regenerée, mais ne s'affiche reelement bien qu'apres un reload manuel (F5)...&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/pages/home/readCharacterContent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/services/illustrateCharacters.service.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
@@ -540,15 +541,7 @@
       <workItem from="1747722927679" duration="734000" />
       <workItem from="1747810064676" duration="25761000" />
       <workItem from="1747895955733" duration="28595000" />
-      <workItem from="1747980648698" duration="10571000" />
-    </task>
-    <task id="LOCAL-00201" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747313199079</created>
-      <option name="number" value="00201" />
-      <option name="presentableId" value="LOCAL-00201" />
-      <option name="project" value="LOCAL" />
-      <updated>1747313199079</updated>
+      <workItem from="1747980648698" duration="13182000" />
     </task>
     <task id="LOCAL-00202" summary="[GITHUB ACTIONS] JDR-Generator : Configuration du workflow de linting, formatting et analyse statique&#10;- OK/DONE : pour les modules Gemini et Openai&#10;- OK/WIP : pour le module Web (mais bypass de rules dans eslint à fixer)&#10;- OK/WIP : Code quality module API : WIP Spotbugs buginstances skipped&#10;&#10;Rappel des ports de l'application :&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -934,7 +927,15 @@
       <option name="project" value="LOCAL" />
       <updated>1747990698287</updated>
     </task>
-    <option name="localTasksCounter" value="250" />
+    <task id="LOCAL-00250" summary="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) :: L'image est bien regenerée, mais ne s'affiche reelement bien qu'apres un reload manuel (F5)...&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
+      <option name="closed" value="true" />
+      <created>1747992619566</created>
+      <option name="number" value="00250" />
+      <option name="presentableId" value="LOCAL-00250" />
+      <option name="project" value="LOCAL" />
+      <updated>1747992619566</updated>
+    </task>
+    <option name="localTasksCounter" value="251" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -963,7 +964,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[...] JDR-Generator &#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <MESSAGE value="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <MESSAGE value="[WIP] JDR-Generator : AWS - Modification de ports&#10;&#10;ec2-user&#10;&#10;sudo docker logs current-api-container-1&#10;&#10;sudo docker exec -it b5321aa9e998 nslookup mysql-container&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
     <MESSAGE value="[WIP] JDR-Generator : AWS - Modification des configs et repush d'images rebuilder sur dockerhub&#10;&#10;ec2-user&#10;&#10;&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;&#10;[TODO] Test d'ajout de CI/CD via la configuration GitHub Actions et AWS Elastic Beanstalk" />
@@ -988,7 +988,8 @@
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : OK - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[DOCKER-COMPOSE] JDR-Generator : &#10;Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&#10;docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP :: Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas)&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas)&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <MESSAGE value="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) :: L'image est bien regenerée, mais ne s'affiche reelement bien qu'apres un reload manuel (F5)...&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) :: L'image est bien regenerée, mais ne s'affiche reelement bien qu'apres un reload manuel (F5)...&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XDebuggerManager">
