@@ -14,7 +14,7 @@ import {
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
-import {Eye} from "lucide-react";
+import {Eye, RefreshCw} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useRegenerateIllustration} from "@/services/illustrateCharacters.service.ts";
 import {Loader2} from "lucide-react";
@@ -260,18 +260,26 @@ export function ReadCharacterContent({
                   &nbsp;
                   {character.details?.name}
                 </DialogTitle>
-                <Button
-                    onClick={() => setShowConfirmationModal(true)}
-                    disabled={isRegenerating}
-                    variant="default"
-                    className="ml-4"
-                >
-                  {isRegenerating ? (
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin"/>
-                  ) : (
-                      "Régénérer Image" // Texte du bouton
-                  )}
-                </Button>
+                <div style={{ padding: "20px 0 0" }}>
+                  <Button
+                      onClick={() => setShowConfirmationModal(true)}
+                      disabled={isRegenerating}
+                      variant="default"
+                      className="button-aura"
+                  >
+                    {isRegenerating ? (
+                        <>
+                          &nbsp;<Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                          Génération en cours... &nbsp;
+                        </>
+                    ) : (
+                        <>
+                          &nbsp;<RefreshCw className="mr-2 h-4 w-4" />
+                          Générer un nouveau portrait &nbsp;
+                        </>
+                    )}
+                  </Button>
+                </div>
               </div>
               <DialogDescription className="character-context">
                 <div className="flex character-context">
