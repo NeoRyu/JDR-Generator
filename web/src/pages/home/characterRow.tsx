@@ -115,7 +115,7 @@ export function CharacterRow({
         <div className="text-2xl flex items-center justify-center font-bold">
           {character.context?.promptGender == "Male" ? "♂"
               : character.context?.promptGender == "Female" ? "♀"
-                  : "⚥"
+                  : "⚧"
           }
         </div>
       </TableCell>

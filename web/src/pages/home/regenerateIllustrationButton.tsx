@@ -85,17 +85,24 @@ export const RegenerateIllustrationButton: React.FC<
                 disabled={isRegenerating} // Désactive le bouton pendant la régénération
                 type="button"
                 variant="outline"
-                className="button"
+                className="button-red"
+                style={{ color: "#e36804!important"}}
             >
                 {isRegenerating ? <Loader2 className="animate-spin" /> : <Users />}
             </Button>
 
             <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
                 <DialogContent>
-                    <DialogTitle>Confirmer la régénération d'illustration</DialogTitle>
+                    <DialogTitle>ACTION : Régénération du portrait de {character.details?.name}</DialogTitle>
                     <DialogDescription>
-                        Voulez-vous vraiment régénérer l'illustration de{" "}
-                        {character.details?.name} ? Cela remplacera l'image actuelle.
+                        Voulez-vous vraiment générer une nouvelle illustration de portrait
+                        pour le personnage {character.details?.name} ? Cette action est irréversible...
+
+                        <img
+                            className="object-cover rounded shadow cursor-pointer"
+                            src={`data:image/png;base64,${character.illustration?.imageBlob}`}
+                            alt={character.details?.image || "Illustration"}
+                        />
                     </DialogDescription>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setShowConfirmationModal(false)}>

@@ -134,7 +134,7 @@ export function Home() {
               </DialogTrigger>
               {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
               <DialogContent>
-                <DialogTitle>Création d'un nouveau personnage</DialogTitle>
+                <DialogTitle>ACTION : Création d'un nouveau personnage</DialogTitle>
                 <DialogDescription>
                   Remplissez les champs pour générer un nouveau personnage.
                 </DialogDescription>

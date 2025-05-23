@@ -119,10 +119,9 @@ export function ReadCharacterContent({
     parsedJson =
       character.jsonData &&
       character.jsonData.jsonData &&
-      typeof character.jsonData.jsonData === "string"
-        ? JSON.parse(character.jsonData.jsonData)
+      typeof character.jsonData.jsonData === "string" // DOT NOT EDIT OR DELETE THIS !
+        ? JSON.parse(character.jsonData.jsonData)     // -> Requis pour l'affichage du TAB stats
         : null;
-    if (parsedJson) console.log("Parsed JSON:", parsedJson);
   } catch (error) {
     console.error("Erreur lors de l'analyse du JSON :", error);
   }
@@ -650,10 +649,16 @@ export function ReadCharacterContent({
 
         <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
           <DialogContent>
-            <DialogTitle>Confirmer la régénération d'illustration</DialogTitle>
+            <DialogTitle>ACTION : Régénération du portrait de {character.details?.name}</DialogTitle>
             <DialogDescription>
-              Voulez-vous vraiment régénérer l'illustration de {selectedCharacter?.details?.name} ?
-              Cela remplacera l'image actuelle.
+              Voulez-vous vraiment générer une nouvelle illustration de portrait
+              pour le personnage {character.details?.name} ? Cette action est irréversible...
+
+              <img
+                  className="object-cover rounded shadow cursor-pointer"
+                  src={`data:image/png;base64,${character.illustration?.imageBlob}`}
+                  alt={character.details?.image || "Illustration"}
+              />
             </DialogDescription>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowConfirmationModal(false)}>Annuler</Button>
