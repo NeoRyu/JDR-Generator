@@ -2,7 +2,7 @@
 import {useMutation, UseMutationResult} from "react-query";
 import axios, {AxiosResponse} from "axios";
 
-const API_BASE_URL = process.env.VITE_API_URL || "http://localhost:8080"; // Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback
 
 // Permettre aux utilisateurs de générer une nouvelle illustration si l'actuelle ne leur convient pas
 // Hook pour la régénération d'illustration (PUT)

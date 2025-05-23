@@ -201,14 +201,13 @@ export function ReadCharacterContent({
         <div className="flex flex-col items-stretch">
           <div className="flex items-start">
             {isRegenerating ? (
-                //  <div className="rounded shadow w-64 h-64 flex justify-center items-center">
-              <div className="loading-spiraleclispe-container"
-                   style={{ width: '100%', height: 'auto', minHeight: '200px' , display: 'flex',
-                     justifyContent: 'center', alignItems: 'center' }}>
+                <div className="rounded shadow w-64 h-64 object-contain">
+                  <div className="loading-spiraleclispe-container">
                     <div className="loading-spiraleclispe">
                       <span>{/* ANIMATION LOADING */}</span>
                     </div>
                   </div>
+                </div>
               ) : (
                 <div>
                   {character.illustration && character.illustration.imageBlob ? (
