@@ -9,6 +9,7 @@ import {DeleteCharacterContent} from "@/pages/home/deleteCharacterContent.tsx";
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {RegenerateIllustrationButton} from "@/pages/home/regenerateIllustrationButton.tsx";
+import {Loader2} from "lucide-react";
 
 interface CharacterRowProps {
   character: CharacterFull;
@@ -42,8 +43,21 @@ export function CharacterRow({
   };
 
   const [localImageBlob, setLocalImageBlob] = useState(character.illustration?.imageBlob || null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
   useEffect(() => {
-    setLocalImageBlob(character.illustration?.imageBlob || null);
+    if (character.illustration?.imageBlob !== localImageBlob) {
+      if (character.illustration?.imageBlob) {
+        setLocalImageBlob(character.illustration.imageBlob); // Met à jour le blob local
+        setIsImageLoading(false); // Stop le chargement (spinner)
+      } else {
+        // Si l'image a été retirée ou n'existe plus
+        setIsImageLoading(false);
+        setLocalImageBlob(null);
+      }
+    } else {
+      setIsImageLoading(false);
+    }
   }, [character.illustration?.imageBlob]);
 
   const handleUpdateCharacter = async (
@@ -59,10 +73,6 @@ export function CharacterRow({
     }
   };
 
-  const handleUpdateIllustration = () => {
-    void refetch();
-  }
-
   const isDeleting = deletingCharacters.includes(character.details.id);
 
   return (
@@ -71,16 +81,29 @@ export function CharacterRow({
       style={{
         backgroundColor: isDeleting ? "rgba(255, 0, 0, 0.1)" : "transparent",
       }}
+      className={
+        deletingCharacters.includes(character.details?.id || 0) ? "opacity-50" : ""
+      }
     >
       <TableCell>
         {dayjs(character.details.createdAt).format("DD/MM/YYYY")}
       </TableCell>
       <TableCell>
-        {localImageBlob ? (
+        {isImageLoading ? (
+            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded">
+              <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+            </div>
+        ) : localImageBlob ? (
             <img
-                className="w-16 h-16 object-cover rounded shadow"
+                className="w-16 h-16 object-cover rounded shadow cursor-pointer"
                 src={`data:image/png;base64,${localImageBlob}`}
                 alt={character.details?.image || "Illustration"}
+                onLoad={() => setIsImageLoading(false)}
+                onError={() => {
+                  console.error("Failed to load image for character:", character.details?.name);
+                  setIsImageLoading(false);
+                  setLocalImageBlob(null);
+                }}
             />
         ) : (
             <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded">
@@ -114,7 +137,7 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             handleReadCharacter={handleReadCharacter}
-            handleUpdateIllustration={handleUpdateIllustration}
+            handleUpdateIllustration={refetch}
           />
           <UpdateCharacterDialog
             modalType={modalType === "update" ? "update" : null}

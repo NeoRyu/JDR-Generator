@@ -93,7 +93,7 @@ export function Home() {
         jsonData: selectedCharacter.jsonData,
       };
       await updateCharacterService.updateCharacter(fullModel);
-      void refetch(); // Ajout de void pour ignorer la promesse
+      await refetch();
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
