@@ -7,7 +7,8 @@ import {ReadCharacterContent} from "@/pages/home/readCharacterContent.tsx";
 import {UpdateCharacterDialog} from "@/pages/home/updateCharacterContent.tsx";
 import {DeleteCharacterContent} from "@/pages/home/deleteCharacterContent.tsx";
 import {ModalTypes} from "@/pages/home/home.tsx";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {RegenerateIllustrationButton} from "@/pages/home/regenerateIllustrationButton.tsx";
 
 interface CharacterRowProps {
   character: CharacterFull;
@@ -34,10 +35,16 @@ export function CharacterRow({
   deletingCharacters,
   setDeletingCharacters,
 }: CharacterRowProps) {
+
   const handleReadCharacter = (character: CharacterFull) => {
     setSelectedCharacter(character);
     setModalType("read");
   };
+
+  const [localImageBlob, setLocalImageBlob] = useState(character.illustration?.imageBlob || null);
+  useEffect(() => {
+    setLocalImageBlob(character.illustration?.imageBlob || null);
+  }, [character.illustration?.imageBlob]);
 
   const handleUpdateCharacter = async (
     updatedCharacter: CharacterDetailsModel,
@@ -69,11 +76,26 @@ export function CharacterRow({
         {dayjs(character.details.createdAt).format("DD/MM/YYYY")}
       </TableCell>
       <TableCell>
-        {character.context?.promptGender == "Male"
-          ? "♂"
-          : character.context?.promptGender == "Female"
-            ? "♀"
-            : "⚥"}
+        {localImageBlob ? (
+            <img
+                className="w-16 h-16 object-cover rounded shadow"
+                src={`data:image/png;base64,${localImageBlob}`}
+                alt={character.details?.image || "Illustration"}
+            />
+        ) : (
+            <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded">
+              <span className="text-xs text-gray-500">Pas d'image</span>
+            </div>
+        )}
+      </TableCell>
+      <TableCell>
+        <div className="text-2xl flex items-center justify-center">
+          {character.context?.promptGender == "Male"
+            ? "♂"
+            : character.context?.promptGender == "Female"
+              ? "♀"
+              : "⚥"}
+        </div>
       </TableCell>
       <TableCell>{character.details.name}</TableCell>
       <TableCell>{character.details.age}</TableCell>
@@ -82,6 +104,7 @@ export function CharacterRow({
       <TableCell>{character.context?.promptClass}</TableCell>
       <TableCell>{character.details.goal}</TableCell>
       <TableCell>{character.context?.promptSystem}</TableCell>
+
       <TableCell>
         <div className="flex gap-2">
           <ReadCharacterContent
@@ -100,6 +123,12 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             updateCharacter={handleUpdateCharacter}
+          />
+          <RegenerateIllustrationButton
+              character={character}
+              refetch={refetch}
+              selectedCharacter={selectedCharacter}
+              setSelectedCharacter={setSelectedCharacter}
           />
           <DeleteCharacterContent
             modalType={modalType === "delete" ? "delete" : null}

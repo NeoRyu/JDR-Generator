@@ -198,6 +198,7 @@ export function Home() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="table-head">Date de création</TableHead>
+                    <TableHead className="table-head">Portrait</TableHead>
                     <TableHead className="table-head">Genre</TableHead>
                     <TableHead className="table-head">Nom du personnage</TableHead>
                     <TableHead className="table-head">Age</TableHead>

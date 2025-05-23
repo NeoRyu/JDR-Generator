@@ -14,10 +14,11 @@ import {
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
-import {Eye, RefreshCw} from "lucide-react";
+import {Eye, Users} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useRegenerateIllustration} from "@/services/illustrateCharacters.service.ts";
 import {Loader2} from "lucide-react";
+import {arrayBufferToBase64} from "@/lib/utils.ts";
 
 interface ReadCharacterContentProps {
   character: CharacterFull;
@@ -91,24 +92,6 @@ const renderJsonData = (jsonData: any, level = 0): JSX.Element[] => {
         </TableRow>
       );
     }
-  });
-};
-
-const arrayBufferToBase64 = (buffer: ArrayBuffer): Promise<string> => {
-  return new Promise((resolve, reject) => {
-    const blob = new Blob([buffer], { type: 'image/png' }); // Assurez-vous du type MIME de l'image générée
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        // Supprime le préfixe "data:image/png;base64," que readAsDataURL ajoute
-        const base64String = reader.result.split(',')[1];
-        resolve(base64String);
-      } else {
-        reject(new Error("FileReader n'a pas retourné une chaîne de caractères."));
-      }
-    };
-    reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(blob);
   });
 };
 
@@ -274,7 +257,7 @@ export function ReadCharacterContent({
                         </>
                     ) : (
                         <>
-                          &nbsp;<RefreshCw className="mr-2 h-4 w-4" />
+                          &nbsp;<Users className="mr-2 h-4 w-4" />
                           Générer un nouveau portrait &nbsp;
                         </>
                     )}
