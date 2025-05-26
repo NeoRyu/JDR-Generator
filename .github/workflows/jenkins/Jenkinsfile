@@ -55,32 +55,30 @@ pipeline {
                 """
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Web)..."
-                    def webFormatResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_FORMAT'
+                    try {
+                        def webFormatOutput = sh(script: """
                             set -eux
                             cd /app/web
                             npm run format:check
-                        EOF_NODE_WEB_FORMAT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
-                    echo webFormatResult.stdout.trim()
-                    if (webFormatResult.status != 0) {
-                        error "'format:check' pour Node.js (Web) a échoué avec le code de sortie ${webFormatResult.status}"
+                        """, returnStdout: true).trim() // sh lèvera une exception si la commande échoue
+                        echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
+                        echo webFormatOutput
+                    } catch (hudson.AbortException e) {
+                        error "'format:check' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
                 script {
                     echo "Exécution de 'lint' pour Node.js (Web)..."
-                    def webLintResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_LINT'
+                    try {
+                        def webLintOutput = sh(script: """
                             set -eux
                             cd /app/web
                             npm run lint
-                        EOF_NODE_WEB_LINT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'lint' pour Node.js (Web) ---"
-                    echo webLintResult.stdout.trim()
-                    if (webLintResult.status != 0) {
-                        error "'lint' pour Node.js (Web) a échoué avec le code de sortie ${webLintResult.status}"
+                        """, returnStdout: true).trim() // sh lèvera une exception si la commande échoue
+                        echo "--- Sortie de 'lint' pour Node.js (Web) ---"
+                        echo webLintOutput
+                    } catch (hudson.AbortException e) {
+                        error "'lint' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
 
@@ -94,32 +92,30 @@ pipeline {
                 """
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Gemini)..."
-                    def geminiFormatResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_FORMAT'
+                    try {
+                        def geminiFormatOutput = sh(script: """
                             set -eux
                             cd /app/gemini
                             npm run format:check
-                        EOF_NODE_GEMINI_FORMAT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
-                    echo geminiFormatResult.stdout.trim()
-                    if (geminiFormatResult.status != 0) {
-                        error "'format:check' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiFormatResult.status}"
+                        """, returnStdout: true).trim()
+                        echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
+                        echo geminiFormatOutput
+                    } catch (hudson.AbortException e) {
+                        error "'format:check' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
                 script {
                     echo "Exécution de 'lint' pour Node.js (Gemini)..."
-                    def geminiLintResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_LINT'
+                    try {
+                        def geminiLintOutput = sh(script: """
                             set -eux
                             cd /app/gemini
                             npm run lint
-                        EOF_NODE_GEMINI_LINT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
-                    echo geminiLintResult.stdout.trim()
-                    if (geminiLintResult.status != 0) {
-                        error "'lint' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiLintResult.status}"
+                        """, returnStdout: true).trim()
+                        echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
+                        echo geminiLintOutput
+                    } catch (hudson.AbortException e) {
+                        error "'lint' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
 
@@ -133,32 +129,30 @@ pipeline {
                 """
                 script {
                     echo "Exécution de 'format:check' pour Node.js (OpenAI)..."
-                    def openaiFormatResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_FORMAT'
+                    try {
+                        def openaiFormatOutput = sh(script: """
                             set -eux
                             cd /app/openai
                             npm run format:check
-                        EOF_NODE_OPENAI_FORMAT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
-                    echo openaiFormatResult.stdout.trim()
-                    if (openaiFormatResult.status != 0) {
-                        error "'format:check' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiFormatResult.status}"
+                        """, returnStdout: true).trim()
+                        echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
+                        echo openaiFormatOutput
+                    } catch (hudson.AbortException e) {
+                        error "'format:check' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
                 script {
                     echo "Exécution de 'lint' pour Node.js (OpenAI)..."
-                    def openaiLintResult = sh(script: """
-                        docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_LINT'
+                    try {
+                        def openaiLintOutput = sh(script: """
                             set -eux
                             cd /app/openai
                             npm run lint
-                        EOF_NODE_OPENAI_LINT
-                    """, returnStdout: true, returnStatus: true)
-                    echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
-                    echo openaiLintResult.stdout.trim()
-                    if (openaiLintResult.status != 0) {
-                        error "'lint' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiLintResult.status}"
+                        """, returnStdout: true).trim()
+                        echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
+                        echo openaiLintOutput
+                    } catch (hudson.AbortException e) {
+                        error "'lint' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
 
