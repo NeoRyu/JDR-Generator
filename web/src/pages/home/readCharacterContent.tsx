@@ -652,10 +652,21 @@ export function ReadCharacterContent({
             <DialogDescription>
               Voulez-vous vraiment générer une nouvelle illustration de portrait
               pour le personnage {character.details?.name} ? Cette action est irréversible...
-              <img className="object-cover rounded shadow cursor-pointer"
-                   src={`data:image/png;base64,${character.illustration?.imageBlob}`}
-                   alt={character.details?.image || "Illustration"}
-              />
+
+              { (selectedCharacter?.illustration?.imageBlob || character.illustration?.imageBlob)
+                  ? (
+                      <img className="object-cover rounded shadow cursor-pointer"
+                           src={`data:image/png;base64,${character.illustration?.imageBlob}`}
+                           alt={character.details?.image || "Illustration"}
+                      />
+                  ) : (
+                      <img
+                          className="rounded shadow w-64 h-64 object-contain cursor-pointer"
+                          src={``}
+                          alt={"Illustration manquante"}
+                      />
+                  )
+              }
             </DialogDescription>
             <DialogFooter>
               <Button variant="outline" onClick={() => setShowConfirmationModal(false)}>Annuler</Button>
