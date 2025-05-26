@@ -18,7 +18,7 @@ pipeline {
                 NODE_IMAGE = 'node:20-alpine'
             }
             steps {
-                echo '--- Début des vérifications de qualité du code ---'
+                echo '--- Démarrage des vérifications de qualité du code ---'
 
                 // Maven (Java) - Capture de la sortie via fichier temporaire
                 script {
@@ -30,16 +30,11 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        # Use internal variables to avoid Groovy interpolation issues with paths/variables
-                        MAVEN_IMAGE_INTERNAL="${MAVEN_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        MAVEN_OUTPUT_FILE_PATH_INTERNAL="${mavenOutputFilePath}"
+                        CONTAINER_ID=\\$(docker create "${MAVEN_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/api/." "\\\$CONTAINER_ID:/app/api/"
+                        docker start "\\\$CONTAINER_ID"
 
-                        CONTAINER_ID=\\$(docker create "\${MAVEN_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/api/." "\$CONTAINER_ID:/app/api/"
-                        docker start "\$CONTAINER_ID"
-
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
                             set -eux
                             cd /app/api
                             mvn clean verify
@@ -47,12 +42,12 @@ pipeline {
 
                         DOCKER_EXEC_STATUS=\\$?
 
-                        docker cp "\$CONTAINER_ID:/tmp/maven_output_temp.txt" "\${MAVEN_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker cp "\\\$CONTAINER_ID:/tmp/maven_output_temp.txt" "${mavenOutputFilePath}"
 
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
 
-                        exit \$DOCKER_EXEC_STATUS
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${mavenScriptPath}"
 
@@ -90,19 +85,16 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_INSTALL'
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/web/." "\\\$CONTAINER_ID:/app/web/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_INSTALL'
                             set -eux
                             cd /app/web
                             npm install
                         EOF_WEB_INSTALL
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
                     """.stripIndent())
                     sh "chmod +x ${webInstallScriptPath}"
 
@@ -125,23 +117,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        WEB_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${webFormatOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/web/." "\\\$CONTAINER_ID:/app/web/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
                             set -eux
                             cd /app/web
                             npm run format:check
                         EOF_WEB_FORMAT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/web_format_output_temp.txt" "\${WEB_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/web_format_output_temp.txt" "${webFormatOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${webFormatScriptPath}"
 
@@ -178,23 +166,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        WEB_LINT_OUTPUT_FILE_PATH_INTERNAL="${webLintOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/web/." "\\\$CONTAINER_ID:/app/web/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
                             set -eux
                             cd /app/web
                             npm run lint
                         EOF_WEB_LINT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/web_lint_output_temp.txt" "\${WEB_LINT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/web_lint_output_temp.txt" "${webLintOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${webLintScriptPath}"
 
@@ -230,19 +214,16 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_INSTALL'
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/gemini/." "\\\$CONTAINER_ID:/app/gemini/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_INSTALL'
                             set -eux
                             cd /app/gemini
                             npm install
                         EOF_GEMINI_INSTALL
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
                     """.stripIndent())
                     sh "chmod +x ${geminiInstallScriptPath}"
 
@@ -265,23 +246,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        GEMINI_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${geminiFormatOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/gemini/." "\\\$CONTAINER_ID:/app/gemini/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
                             set -eux
                             cd /app/gemini
                             npm run format:check
                         EOF_GEMINI_FORMAT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/gemini_format_output_temp.txt" "\${GEMINI_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/gemini_format_output_temp.txt" "${geminiFormatOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${geminiFormatScriptPath}"
 
@@ -318,23 +295,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        GEMINI_LINT_OUTPUT_FILE_PATH_INTERNAL="${geminiLintOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/gemini/." "\\\$CONTAINER_ID:/app/gemini/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
                             set -eux
                             cd /app/gemini
                             npm run lint
                         EOF_GEMINI_LINT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/gemini_lint_output_temp.txt" "\${GEMINI_LINT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/gemini_lint_output_temp.txt" "${geminiLintOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${geminiLintScriptPath}"
 
@@ -370,19 +343,16 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_INSTALL'
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/openai/." "\\\$CONTAINER_ID:/app/openai/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_INSTALL'
                             set -eux
                             cd /app/openai
                             npm install
                         EOF_OPENAI_INSTALL
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
                     """.stripIndent())
                     sh "chmod +x ${openaiInstallScriptPath}"
 
@@ -405,23 +375,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        OPENAI_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${openaiFormatOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/openai/." "\\\$CONTAINER_ID:/app/openai/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
                             set -eux
                             cd /app/openai
                             npm run format:check
                         EOF_OPENAI_FORMAT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/openai_format_output_temp.txt" "\${OPENAI_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/openai_format_output_temp.txt" "${openaiFormatOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${openaiFormatScriptPath}"
 
@@ -458,23 +424,19 @@ pipeline {
                         #!/bin/sh
                         set -eux
 
-                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
-                        WORKSPACE_INTERNAL="${WORKSPACE}"
-                        OPENAI_LINT_OUTPUT_FILE_PATH_INTERNAL="${openaiLintOutputFilePath}"
-
-                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
-                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
-                        docker start "\$CONTAINER_ID"
-                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
+                        CONTAINER_ID=\\$(docker create "${NODE_IMAGE}" /bin/sh)
+                        docker cp "${WORKSPACE}/openai/." "\\\$CONTAINER_ID:/app/openai/"
+                        docker start "\\\$CONTAINER_ID"
+                        docker exec "\\\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
                             set -eux
                             cd /app/openai
                             npm run lint
                         EOF_OPENAI_LINT_INNER
                         DOCKER_EXEC_STATUS=\\$?
-                        docker cp "\$CONTAINER_ID:/tmp/openai_lint_output_temp.txt" "\${OPENAI_LINT_OUTPUT_FILE_PATH_INTERNAL}"
-                        docker stop "\$CONTAINER_ID" || true
-                        docker rm "\$CONTAINER_ID" || true
-                        exit \$DOCKER_EXEC_STATUS
+                        docker cp "\\\$CONTAINER_ID:/tmp/openai_lint_output_temp.txt" "${openaiLintOutputFilePath}"
+                        docker stop "\\\$CONTAINER_ID" || true
+                        docker rm "\\\$CONTAINER_ID" || true
+                        exit \\\$DOCKER_EXEC_STATUS
                     """.stripIndent())
                     sh "chmod +x ${openaiLintScriptPath}"
 
