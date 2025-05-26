@@ -24,7 +24,7 @@ pipeline {
                 script {
                     echo "Exécution des vérifications de qualité de code Maven..."
                     try {
-                        def mavenOutput = sh(script: "docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app maven:3.8.5-openjdk-17 /bin/bash -s", returnStdout: true).trim()0
+                        def mavenOutput = sh(script: "docker run --rm --user root -v /var/jenkins_home/workspace/JDR-Generator-Code-Quality:/app maven:3.8.5-openjdk-17 /bin/bash -s", returnStdout: true).trim()
                         echo "--- Sortie des vérifications de qualité de code Maven ---"
                         echo mavenOutput
                         if (mavenOutput.contains("BUILD FAILURE")) {
