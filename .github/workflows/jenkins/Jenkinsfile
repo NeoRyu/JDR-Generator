@@ -25,58 +25,79 @@ pipeline {
                     echo "Exécution des vérifications de qualité de code Maven..."
                     try {
                         def mavenOutput = sh(script: """
-                            docker run --rm --user root -v "${WORKSPACE}":/app maven:3.8.5-openjdk-17 /bin/bash -s <<'EOF_MAVEN_CHECK'
-                                set -eux
-                                cd /app
-                                mvn clean verify
-                            EOF_MAVEN_CHECK
+                            set -eux
+                            docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/sh -c "cd /app && mvn clean verify"
                         """, returnStdout: true).trim()
                         echo "--- Sortie des vérifications de qualité de code Maven ---"
                         echo mavenOutput
-                        if (mavenOutput.contains("BUILD FAILURE")) {
-                            echo "Des vérifications de qualité du code ont échouées !"
-                            error("Les vérifications de qualité du code Maven ont échoué.")
-                        } else {
-                            echo "Les vérifications de qualité du code Maven sont réussies."
-                        }
-                    } catch (Exception e) {
-                        echo "Une erreur est survenue lors de l'exécution des vérifications de qualité du code : ${e.getMessage()}"
-                        error("Échec des vérifications de qualité du code en raison d'une erreur d'exécution.")
+                        echo "Les vérifications de qualité du code Maven sont réussies."
+                    } catch (hudson.AbortException e) {
+                        echo "Une erreur est survenue lors de l'exécution des vérifications de qualité du code Maven : ${e.getMessage()}"
+                        error("Les vérifications de qualité du code Maven ont échoué.")
                     }
                 }
 
-                // Node.js (Web)
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_WEB_INSTALL'
-                        set -eux
-                        cd /app/web
-                        npm install
-                    EOF_NODE_WEB_INSTALL
-                """
+                // Node.js (Web) - npm install, format:check, lint
+                script {
+                    echo "Exécution de 'npm install' pour Node.js (Web)..."
+                    try {
+                        sh """
+                            set -eux
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_INSTALL'
+                                set -eux
+                                cd /app/web
+                                npm install
+                            EOF_WEB_INSTALL
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+                        """
+                    } catch (hudson.AbortException e) {
+                        error "'npm install' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
+                    }
+                }
+
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Web)..."
                     try {
                         def webFormatOutput = sh(script: """
                             set -eux
-                            echo "Contenu de /app AVANT cd /app/web (pour debug):"
-                            ls -F /app
-                            cd /app/web
-                            npm run format:check
-                        """, returnStdout: true).trim() // sh lèvera une exception si la commande échoue
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT'
+                                set -eux
+                                cd /app/web
+                                npm run format:check
+                            EOF_WEB_FORMAT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+                        """, returnStdout: true).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
                         echo webFormatOutput
                     } catch (hudson.AbortException e) {
                         error "'format:check' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
+
                 script {
                     echo "Exécution de 'lint' pour Node.js (Web)..."
                     try {
                         def webLintOutput = sh(script: """
                             set -eux
-                            cd /app/web
-                            npm run lint
-                        """, returnStdout: true).trim() // sh lèvera une exception si la commande échoue
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT'
+                                set -eux
+                                cd /app/web
+                                npm run lint
+                            EOF_WEB_LINT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+                        """, returnStdout: true).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Web) ---"
                         echo webLintOutput
                     } catch (hudson.AbortException e) {
@@ -84,21 +105,43 @@ pipeline {
                     }
                 }
 
-                // Node.js (Gemini)
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_GEMINI_INSTALL'
-                        set -eux
-                        cd /app/gemini
-                        npm install
-                    EOF_NODE_GEMINI_INSTALL
-                """
+                // Node.js (Gemini) - npm install, format:check, lint
+                script {
+                    echo "Exécution de 'npm install' pour Node.js (Gemini)..."
+                    try {
+                        sh """
+                            set -eux
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_INSTALL'
+                                set -eux
+                                cd /app/gemini
+                                npm install
+                            EOF_GEMINI_INSTALL
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+                        """
+                    } catch (hudson.AbortException e) {
+                        error "'npm install' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
+                    }
+                }
+
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Gemini)..."
                     try {
                         def geminiFormatOutput = sh(script: """
                             set -eux
-                            cd /app/gemini
-                            npm run format:check
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT'
+                                set -eux
+                                cd /app/gemini
+                                npm run format:check
+                            EOF_GEMINI_FORMAT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
                         """, returnStdout: true).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
                         echo geminiFormatOutput
@@ -106,13 +149,22 @@ pipeline {
                         error "'format:check' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
+
                 script {
                     echo "Exécution de 'lint' pour Node.js (Gemini)..."
                     try {
                         def geminiLintOutput = sh(script: """
                             set -eux
-                            cd /app/gemini
-                            npm run lint
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT'
+                                set -eux
+                                cd /app/gemini
+                                npm run lint
+                            EOF_GEMINI_LINT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
                         """, returnStdout: true).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
                         echo geminiLintOutput
@@ -121,21 +173,43 @@ pipeline {
                     }
                 }
 
-                // Node.js (OpenAI)
-                sh """
-                    docker run --rm --user root -v "${WORKSPACE}":/app "${NODE_IMAGE}" /bin/sh -s <<'EOF_NODE_OPENAI_INSTALL'
-                        set -eux
-                        cd /app/openai
-                        npm install
-                    EOF_NODE_OPENAI_INSTALL
-                """
+                // Node.js (OpenAI) - npm install, format:check, lint
+                script {
+                    echo "Exécution de 'npm install' pour Node.js (OpenAI)..."
+                    try {
+                        sh """
+                            set -eux
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_INSTALL'
+                                set -eux
+                                cd /app/openai
+                                npm install
+                            EOF_OPENAI_INSTALL
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+                        """
+                    } catch (hudson.AbortException e) {
+                        error "'npm install' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
+                    }
+                }
+
                 script {
                     echo "Exécution de 'format:check' pour Node.js (OpenAI)..."
                     try {
                         def openaiFormatOutput = sh(script: """
                             set -eux
-                            cd /app/openai
-                            npm run format:check
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT'
+                                set -eux
+                                cd /app/openai
+                                npm run format:check
+                            EOF_OPENAI_FORMAT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
                         """, returnStdout: true).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
                         echo openaiFormatOutput
@@ -143,13 +217,22 @@ pipeline {
                         error "'format:check' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
                     }
                 }
+
                 script {
                     echo "Exécution de 'lint' pour Node.js (OpenAI)..."
                     try {
                         def openaiLintOutput = sh(script: """
                             set -eux
-                            cd /app/openai
-                            npm run lint
+                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
+                            docker start \$CONTAINER_ID
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT'
+                                set -eux
+                                cd /app/openai
+                                npm run lint
+                            EOF_OPENAI_LINT
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
                         """, returnStdout: true).trim()
                         echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
                         echo openaiLintOutput
