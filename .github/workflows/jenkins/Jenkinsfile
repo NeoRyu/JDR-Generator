@@ -26,35 +26,28 @@ pipeline {
                     def mavenOutputFilePath = "${WORKSPACE}/maven_output.txt"
                     try {
                         sh <<'EOF_JENKINS_SH_MAVEN'
-                            set -eux # Affiche les commandes et échoue à la première erreur
+                            set -eux
 
-                            # Création et démarrage du conteneur Maven temporaire
                             CONTAINER_ID=\$(docker create "${MAVEN_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/api/." \$CONTAINER_ID:/app/api/ # Copie le dossier API dans le conteneur
+                            docker cp "${WORKSPACE}/api/." \$CONTAINER_ID:/app/api/
                             docker start \$CONTAINER_ID
 
-                            # Exécution de Maven dans le conteneur, capture de la sortie et du statut
                             docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
                                 set -eux
-                                cd /app/api # IMPORTANT : Changement de répertoire vers le sous-projet Java
+                                cd /app/api
                                 mvn clean verify
                             EOF_MAVEN_CHECK_INNER
 
-                            # Récupère le statut de la commande 'docker exec'
                             DOCKER_EXEC_STATUS=\$?
 
-                            # Copie le fichier de sortie du conteneur vers l'espace de travail Jenkins
                             docker cp \$CONTAINER_ID:/tmp/maven_output_temp.txt "${mavenOutputFilePath}"
 
-                            # Arrêt et suppression du conteneur Docker
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
 
-                            # Exite le script shell de Jenkins avec le statut de la commande Maven
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_MAVEN
 
-                        // Lecture de la sortie capturée depuis le fichier temporaire
                         def mavenOutput = readFile(mavenOutputFilePath).trim()
                         echo "--- Sortie des vérifications de qualité de code Maven ---"
                         echo mavenOutput
@@ -72,11 +65,11 @@ pipeline {
                         echo partialOutput
                         error("Les vérifications de qualité du code Maven ont échoué. Détails: ${e.getMessage()}")
                     } finally {
-                        sh "rm -f ${mavenOutputFilePath}" // Nettoyage du fichier temporaire
+                        sh "rm -f ${mavenOutputFilePath}"
                     }
                 }
 
-                // Node.js (Web) - npm install : utilise docker cp et here-document (pas de capture de sortie spécifique nécessaire)
+                // Node.js (Web) - npm install
                 script {
                     echo "Exécution de 'npm install' pour Node.js (Web)..."
                     try {
@@ -98,7 +91,7 @@ pipeline {
                     }
                 }
 
-                // Node.js (Web) - format:check : utilise docker cp et capture la sortie via fichier
+                // Node.js (Web) - format:check
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Web)..."
                     def webFormatOutputFilePath = "${WORKSPACE}/web_format_output.txt"
@@ -123,7 +116,7 @@ pipeline {
                         def webFormatOutput = readFile(webFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
                         echo webFormatOutput
-                        if (!webFormatOutput.isEmpty()) { // Vérifier si la sortie contient quelque chose (avertissements/erreurs)
+                        if (!webFormatOutput.isEmpty()) {
                            echo "Sortie de 'format:check' (si applicable): ${webFormatOutput}"
                         }
                     } catch (hudson.AbortException e) {
@@ -139,7 +132,7 @@ pipeline {
                     }
                 }
 
-                // Node.js (Web) - lint : utilise docker cp et capture la sortie via fichier
+                // Node.js (Web) - lint
                 script {
                     echo "Exécution de 'lint' pour Node.js (Web)..."
                     def webLintOutputFilePath = "${WORKSPACE}/web_lint_output.txt"
