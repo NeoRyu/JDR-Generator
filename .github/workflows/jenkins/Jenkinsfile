@@ -58,6 +58,8 @@ pipeline {
                     try {
                         def webFormatOutput = sh(script: """
                             set -eux
+                            echo "Contenu de /app AVANT cd /app/web (pour debug):"
+                            ls -F /app
                             cd /app/web
                             npm run format:check
                         """, returnStdout: true).trim() // sh lèvera une exception si la commande échoue
