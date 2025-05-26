@@ -540,7 +540,7 @@
       <workItem from="1747810064676" duration="25761000" />
       <workItem from="1747895955733" duration="28595000" />
       <workItem from="1747980648698" duration="22218000" />
-      <workItem from="1748240064598" duration="23371000" />
+      <workItem from="1748240064598" duration="23768000" />
     </task>
     <task id="LOCAL-00215" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />

@@ -20,32 +20,63 @@ pipeline {
             steps {
                 echo '--- Début des vérifications de qualité du code ---'
 
-                // Maven (Java) - Utilise le here-document pour le script exécuté dans le conteneur Maven
+                // Maven (Java) - Capture de la sortie via fichier temporaire
                 script {
                     echo "Exécution des vérifications de qualité de code Maven..."
+                    def mavenOutputFilePath = "${WORKSPACE}/maven_output.txt"
                     try {
-                        def mavenOutput = sh(script: """
-                            docker run --rm --user root -v "${WORKSPACE}":/app "${MAVEN_IMAGE}" /bin/bash -s <<'EOF_MAVEN_CHECK'
-                                set -eux # Affiche les commandes et échoue à la première erreur
+                        sh <<'EOF_JENKINS_SH_MAVEN'
+                            set -eux # Affiche les commandes et échoue à la première erreur
+
+                            # Création et démarrage du conteneur Maven temporaire
+                            CONTAINER_ID=\$(docker create "${MAVEN_IMAGE}" /bin/sh)
+                            docker cp "${WORKSPACE}/api/." \$CONTAINER_ID:/app/api/ # Copie le dossier API dans le conteneur
+                            docker start \$CONTAINER_ID
+
+                            # Exécution de Maven dans le conteneur, capture de la sortie et du statut
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
+                                set -eux
                                 cd /app/api # IMPORTANT : Changement de répertoire vers le sous-projet Java
                                 mvn clean verify
-                            EOF_MAVEN_CHECK
-                        """, returnStdout: true).trim()
+                            EOF_MAVEN_CHECK_INNER
+
+                            # Récupère le statut de la commande 'docker exec'
+                            DOCKER_EXEC_STATUS=\$?
+
+                            # Copie le fichier de sortie du conteneur vers l'espace de travail Jenkins
+                            docker cp \$CONTAINER_ID:/tmp/maven_output_temp.txt "${mavenOutputFilePath}"
+
+                            # Arrêt et suppression du conteneur Docker
+                            docker stop \$CONTAINER_ID || true
+                            docker rm \$CONTAINER_ID || true
+
+                            # Exite le script shell de Jenkins avec le statut de la commande Maven
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_MAVEN
+
+                        // Lecture de la sortie capturée depuis le fichier temporaire
+                        def mavenOutput = readFile(mavenOutputFilePath).trim()
                         echo "--- Sortie des vérifications de qualité de code Maven ---"
                         echo mavenOutput
                         if (mavenOutput.contains("BUILD FAILURE")) {
-                            echo "Des vérifications de qualité du code Maven ont échoué !"
-                            error("Les vérifications de qualité du code Maven ont échoué.")
+                            error("Les vérifications de qualité du code Maven ont échoué (BUILD FAILURE détecté dans la sortie).")
                         } else {
                             echo "Les vérifications de qualité du code Maven sont réussies."
                         }
                     } catch (hudson.AbortException e) {
-                        echo "Une erreur est survenue lors de l'exécution des vérifications de qualité du code Maven : ${e.getMessage()}"
-                        error("Les vérifications de qualité du code Maven ont échoué.")
+                        def partialOutput = ''
+                        if (fileExists(mavenOutputFilePath)) {
+                            partialOutput = readFile(mavenOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle des vérifications de qualité du code Maven (en cas d'échec) ---"
+                        echo partialOutput
+                        error("Les vérifications de qualité du code Maven ont échoué. Détails: ${e.getMessage()}")
+                    } finally {
+                        sh "rm -f ${mavenOutputFilePath}" // Nettoyage du fichier temporaire
                     }
                 }
 
-                // Node.js (Web) - npm install : utilise docker cp et here-document (pas besoin de returnStdout)
+                // Node.js (Web) - npm install : utilise docker cp et here-document (pas de capture de sortie spécifique nécessaire)
                 script {
                     echo "Exécution de 'npm install' pour Node.js (Web)..."
                     try {
@@ -67,57 +98,85 @@ pipeline {
                     }
                 }
 
-                // Node.js (Web) - format:check : utilise docker cp et capture la sortie
+                // Node.js (Web) - format:check : utilise docker cp et capture la sortie via fichier
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Web)..."
+                    def webFormatOutputFilePath = "${WORKSPACE}/web_format_output.txt"
                     try {
-                        def webFormatResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_WEB_FORMAT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/web
                                 npm run format:check
                             EOF_WEB_FORMAT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/web_format_output_temp.txt "${webFormatOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_WEB_FORMAT
+
+                        def webFormatOutput = readFile(webFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
-                        echo webFormatResult.stdout.trim()
-                        if (webFormatResult.status != 0) {
-                            error "'format:check' pour Node.js (Web) a échoué avec le code de sortie ${webFormatResult.status}"
+                        echo webFormatOutput
+                        if (!webFormatOutput.isEmpty()) { // Vérifier si la sortie contient quelque chose (avertissements/erreurs)
+                           echo "Sortie de 'format:check' (si applicable): ${webFormatOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(webFormatOutputFilePath)) {
+                            partialOutput = readFile(webFormatOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'format:check' pour Node.js (Web) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'format:check' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${webFormatOutputFilePath}"
                     }
                 }
 
-                // Node.js (Web) - lint : utilise docker cp et capture la sortie
+                // Node.js (Web) - lint : utilise docker cp et capture la sortie via fichier
                 script {
                     echo "Exécution de 'lint' pour Node.js (Web)..."
+                    def webLintOutputFilePath = "${WORKSPACE}/web_lint_output.txt"
                     try {
-                        def webLintResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_WEB_LINT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/web
                                 npm run lint
                             EOF_WEB_LINT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/web_lint_output_temp.txt "${webLintOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_WEB_LINT
+
+                        def webLintOutput = readFile(webLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Web) ---"
-                        echo webLintResult.stdout.trim()
-                        if (webLintResult.status != 0) {
-                            error "'lint' pour Node.js (Web) a échoué avec le code de sortie ${webLintResult.status}"
+                        echo webLintOutput
+                        if (!webLintOutput.isEmpty()) {
+                           echo "Sortie de 'lint' (si applicable): ${webLintOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(webLintOutputFilePath)) {
+                            partialOutput = readFile(webLintOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'lint' pour Node.js (Web) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'lint' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${webLintOutputFilePath}"
                     }
                 }
 
@@ -146,54 +205,82 @@ pipeline {
                 // Node.js (Gemini) - format:check
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Gemini)..."
+                    def geminiFormatOutputFilePath = "${WORKSPACE}/gemini_format_output.txt"
                     try {
-                        def geminiFormatResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_GEMINI_FORMAT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/gemini
                                 npm run format:check
                             EOF_GEMINI_FORMAT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/gemini_format_output_temp.txt "${geminiFormatOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_GEMINI_FORMAT
+
+                        def geminiFormatOutput = readFile(geminiFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
-                        echo geminiFormatResult.stdout.trim()
-                        if (geminiFormatResult.status != 0) {
-                            error "'format:check' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiFormatResult.status}"
+                        echo geminiFormatOutput
+                        if (!geminiFormatOutput.isEmpty()) {
+                           echo "Sortie de 'format:check' (si applicable): ${geminiFormatOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(geminiFormatOutputFilePath)) {
+                            partialOutput = readFile(geminiFormatOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'format:check' pour Node.js (Gemini) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'format:check' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${geminiFormatOutputFilePath}"
                     }
                 }
 
                 // Node.js (Gemini) - lint
                 script {
                     echo "Exécution de 'lint' pour Node.js (Gemini)..."
+                    def geminiLintOutputFilePath = "${WORKSPACE}/gemini_lint_output.txt"
                     try {
-                        def geminiLintResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_GEMINI_LINT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/gemini
                                 npm run lint
                             EOF_GEMINI_LINT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/gemini_lint_output_temp.txt "${geminiLintOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_GEMINI_LINT
+
+                        def geminiLintOutput = readFile(geminiLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
-                        echo geminiLintResult.stdout.trim()
-                        if (geminiLintResult.status != 0) {
-                            error "'lint' pour Node.js (Gemini) a échoué avec le code de sortie ${geminiLintResult.status}"
+                        echo geminiLintOutput
+                        if (!geminiLintOutput.isEmpty()) {
+                           echo "Sortie de 'lint' (si applicable): ${geminiLintOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(geminiLintOutputFilePath)) {
+                            partialOutput = readFile(geminiLintOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'lint' pour Node.js (Gemini) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'lint' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${geminiLintOutputFilePath}"
                     }
                 }
 
@@ -222,54 +309,82 @@ pipeline {
                 // Node.js (OpenAI) - format:check
                 script {
                     echo "Exécution de 'format:check' pour Node.js (OpenAI)..."
+                    def openaiFormatOutputFilePath = "${WORKSPACE}/openai_format_output.txt"
                     try {
-                        def openaiFormatResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_OPENAI_FORMAT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/openai
                                 npm run format:check
                             EOF_OPENAI_FORMAT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/openai_format_output_temp.txt "${openaiFormatOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_OPENAI_FORMAT
+
+                        def openaiFormatOutput = readFile(openaiFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
-                        echo openaiFormatResult.stdout.trim()
-                        if (openaiFormatResult.status != 0) {
-                            error "'format:check' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiFormatResult.status}"
+                        echo openaiFormatOutput
+                        if (!openaiFormatOutput.isEmpty()) {
+                           echo "Sortie de 'format:check' (si applicable): ${openaiFormatOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(openaiFormatOutputFilePath)) {
+                            partialOutput = readFile(openaiFormatOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'format:check' pour Node.js (OpenAI) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'format:check' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${openaiFormatOutputFilePath}"
                     }
                 }
 
                 // Node.js (OpenAI) - lint
                 script {
                     echo "Exécution de 'lint' pour Node.js (OpenAI)..."
+                    def openaiLintOutputFilePath = "${WORKSPACE}/openai_lint_output.txt"
                     try {
-                        def openaiLintResult = sh(script: """
+                        sh <<'EOF_JENKINS_SH_OPENAI_LINT'
                             set -eux
                             CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
                             docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
                             docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT_INNER'
+                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/openai
                                 npm run lint
                             EOF_OPENAI_LINT_INNER
+                            DOCKER_EXEC_STATUS=\$?
+                            docker cp \$CONTAINER_ID:/tmp/openai_lint_output_temp.txt "${openaiLintOutputFilePath}"
                             docker stop \$CONTAINER_ID || true
                             docker rm \$CONTAINER_ID || true
-                        """, returnStdout: true, returnStatus: true)
+                            exit \$DOCKER_EXEC_STATUS
+                        EOF_JENKINS_SH_OPENAI_LINT
+
+                        def openaiLintOutput = readFile(openaiLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
-                        echo openaiLintResult.stdout.trim()
-                        if (openaiLintResult.status != 0) {
-                            error "'lint' pour Node.js (OpenAI) a échoué avec le code de sortie ${openaiLintResult.status}"
+                        echo openaiLintOutput
+                        if (!openaiLintOutput.isEmpty()) {
+                           echo "Sortie de 'lint' (si applicable): ${openaiLintOutput}"
                         }
                     } catch (hudson.AbortException e) {
+                        def partialOutput = ''
+                        if (fileExists(openaiLintOutputFilePath)) {
+                            partialOutput = readFile(openaiLintOutputFilePath).trim()
+                        }
+                        echo "--- Sortie partielle de 'lint' pour Node.js (OpenAI) (en cas d'échec) ---"
+                        echo partialOutput
                         error "'lint' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${openaiLintOutputFilePath}"
                     }
                 }
 
