@@ -28,11 +28,11 @@ pipeline {
                         sh <<'EOF_JENKINS_SH_MAVEN'
                             set -eux
 
-                            CONTAINER_ID=\$(docker create "${MAVEN_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/api/." \$CONTAINER_ID:/app/api/
-                            docker start \$CONTAINER_ID
+                            CONTAINER_ID=`docker create "${MAVEN_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/api/." $CONTAINER_ID:/app/api/
+                            docker start $CONTAINER_ID
 
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/api
                                 mvn clean verify
@@ -40,10 +40,10 @@ pipeline {
 
                             DOCKER_EXEC_STATUS=\$?
 
-                            docker cp \$CONTAINER_ID:/tmp/maven_output_temp.txt "${mavenOutputFilePath}"
+                            docker cp $CONTAINER_ID:/tmp/maven_output_temp.txt "${mavenOutputFilePath}"
 
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
 
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_MAVEN
@@ -75,16 +75,16 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_WEB_INSTALL'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_INSTALL'
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_INSTALL'
                                 set -eux
                                 cd /app/web
                                 npm install
                             EOF_WEB_INSTALL
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                         EOF_JENKINS_SH_WEB_INSTALL
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
@@ -98,18 +98,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_WEB_FORMAT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/web
                                 npm run format:check
                             EOF_WEB_FORMAT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/web_format_output_temp.txt "${webFormatOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/web_format_output_temp.txt "${webFormatOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_WEB_FORMAT
 
@@ -139,18 +139,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_WEB_LINT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/web/." \$CONTAINER_ID:/app/web/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/web
                                 npm run lint
                             EOF_WEB_LINT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/web_lint_output_temp.txt "${webLintOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/web_lint_output_temp.txt "${webLintOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_WEB_LINT
 
@@ -179,16 +179,16 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_GEMINI_INSTALL'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_INSTALL'
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_INSTALL'
                                 set -eux
                                 cd /app/gemini
                                 npm install
                             EOF_GEMINI_INSTALL
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                         EOF_JENKINS_SH_GEMINI_INSTALL
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
@@ -202,18 +202,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_GEMINI_FORMAT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/gemini
                                 npm run format:check
                             EOF_GEMINI_FORMAT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/gemini_format_output_temp.txt "${geminiFormatOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/gemini_format_output_temp.txt "${geminiFormatOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_GEMINI_FORMAT
 
@@ -243,18 +243,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_GEMINI_LINT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/gemini/." \$CONTAINER_ID:/app/gemini/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/gemini
                                 npm run lint
                             EOF_GEMINI_LINT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/gemini_lint_output_temp.txt "${geminiLintOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/gemini_lint_output_temp.txt "${geminiLintOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_GEMINI_LINT
 
@@ -283,16 +283,16 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_OPENAI_INSTALL'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_INSTALL'
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_INSTALL'
                                 set -eux
                                 cd /app/openai
                                 npm install
                             EOF_OPENAI_INSTALL
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                         EOF_JENKINS_SH_OPENAI_INSTALL
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
@@ -306,18 +306,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_OPENAI_FORMAT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/openai
                                 npm run format:check
                             EOF_OPENAI_FORMAT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/openai_format_output_temp.txt "${openaiFormatOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/openai_format_output_temp.txt "${openaiFormatOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_OPENAI_FORMAT
 
@@ -347,18 +347,18 @@ pipeline {
                     try {
                         sh <<'EOF_JENKINS_SH_OPENAI_LINT'
                             set -eux
-                            CONTAINER_ID=\$(docker create "${NODE_IMAGE}" /bin/sh)
-                            docker cp "${WORKSPACE}/openai/." \$CONTAINER_ID:/app/openai/
-                            docker start \$CONTAINER_ID
-                            docker exec \$CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
+                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
+                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
+                            docker start $CONTAINER_ID
+                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
                                 set -eux
                                 cd /app/openai
                                 npm run lint
                             EOF_OPENAI_LINT_INNER
                             DOCKER_EXEC_STATUS=\$?
-                            docker cp \$CONTAINER_ID:/tmp/openai_lint_output_temp.txt "${openaiLintOutputFilePath}"
-                            docker stop \$CONTAINER_ID || true
-                            docker rm \$CONTAINER_ID || true
+                            docker cp $CONTAINER_ID:/tmp/openai_lint_output_temp.txt "${openaiLintOutputFilePath}"
+                            docker stop $CONTAINER_ID || true
+                            docker rm $CONTAINER_ID || true
                             exit \$DOCKER_EXEC_STATUS
                         EOF_JENKINS_SH_OPENAI_LINT
 

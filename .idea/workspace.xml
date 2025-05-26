@@ -9,7 +9,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
       <change beforePath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change afterPath="$PROJECT_DIR$/.github/workflows/localhost/JDR-Generator_start_app_standalone.sh" afterDir="false" />
@@ -540,23 +539,7 @@
       <workItem from="1747810064676" duration="25761000" />
       <workItem from="1747895955733" duration="28595000" />
       <workItem from="1747980648698" duration="22218000" />
-      <workItem from="1748240064598" duration="23768000" />
-    </task>
-    <task id="LOCAL-00215" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747661507675</created>
-      <option name="number" value="00215" />
-      <option name="presentableId" value="LOCAL-00215" />
-      <option name="project" value="LOCAL" />
-      <updated>1747661507675</updated>
-    </task>
-    <task id="LOCAL-00216" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747662350247</created>
-      <option name="number" value="00216" />
-      <option name="presentableId" value="LOCAL-00216" />
-      <option name="project" value="LOCAL" />
-      <updated>1747662350247</updated>
+      <workItem from="1748240064598" duration="24095000" />
     </task>
     <task id="LOCAL-00217" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -934,7 +917,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748269245265</updated>
     </task>
-    <option name="localTasksCounter" value="264" />
+    <task id="LOCAL-00264" summary="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1748269973806</created>
+      <option name="number" value="00264" />
+      <option name="presentableId" value="LOCAL-00264" />
+      <option name="project" value="LOCAL" />
+      <updated>1748269973806</updated>
+    </task>
+    <task id="LOCAL-00265" summary="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1748270179379</created>
+      <option name="number" value="00265" />
+      <option name="presentableId" value="LOCAL-00265" />
+      <option name="project" value="LOCAL" />
+      <updated>1748270179379</updated>
+    </task>
+    <option name="localTasksCounter" value="266" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
