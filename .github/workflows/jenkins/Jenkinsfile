@@ -24,29 +24,40 @@ pipeline {
                 script {
                     echo "Exécution des vérifications de qualité de code Maven..."
                     def mavenOutputFilePath = "${WORKSPACE}/maven_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_MAVEN'
+                    def mavenScriptPath = "${WORKSPACE}/run_maven_checks.sh"
+
+                    writeFile(file: mavenScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        # Use internal variables to avoid Groovy interpolation issues with paths/variables
+                        MAVEN_IMAGE_INTERNAL="${MAVEN_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        MAVEN_OUTPUT_FILE_PATH_INTERNAL="${mavenOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${MAVEN_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/api/." "\$CONTAINER_ID:/app/api/"
+                        docker start "\$CONTAINER_ID"
+
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
                             set -eux
+                            cd /app/api
+                            mvn clean verify
+                        EOF_MAVEN_CHECK_INNER
 
-                            CONTAINER_ID=`docker create "${MAVEN_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/api/." $CONTAINER_ID:/app/api/
-                            docker start $CONTAINER_ID
+                        DOCKER_EXEC_STATUS=\\$?
 
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_MAVEN_CHECK_INNER' > /tmp/maven_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/api
-                                mvn clean verify
-                            EOF_MAVEN_CHECK_INNER
+                        docker cp "\$CONTAINER_ID:/tmp/maven_output_temp.txt" "\${MAVEN_OUTPUT_FILE_PATH_INTERNAL}"
 
-                            DOCKER_EXEC_STATUS=\$?
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
 
-                            docker cp $CONTAINER_ID:/tmp/maven_output_temp.txt "${mavenOutputFilePath}"
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${mavenScriptPath}"
 
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_MAVEN
+                    try {
+                        sh "${mavenScriptPath}"
 
                         def mavenOutput = readFile(mavenOutputFilePath).trim()
                         echo "--- Sortie des vérifications de qualité de code Maven ---"
@@ -65,29 +76,42 @@ pipeline {
                         echo partialOutput
                         error("Les vérifications de qualité du code Maven ont échoué. Détails: ${e.getMessage()}")
                     } finally {
-                        sh "rm -f ${mavenOutputFilePath}"
+                        sh "rm -f ${mavenOutputFilePath} || true"
+                        sh "rm -f ${mavenScriptPath} || true"
                     }
                 }
 
                 // Node.js (Web) - npm install
                 script {
                     echo "Exécution de 'npm install' pour Node.js (Web)..."
-                    try {
-                        sh <<'EOF_JENKINS_SH_WEB_INSTALL'
+                    def webInstallScriptPath = "${WORKSPACE}/run_web_install.sh"
+
+                    writeFile(file: webInstallScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_INSTALL'
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_INSTALL'
-                                set -eux
-                                cd /app/web
-                                npm install
-                            EOF_WEB_INSTALL
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                        EOF_JENKINS_SH_WEB_INSTALL
+                            cd /app/web
+                            npm install
+                        EOF_WEB_INSTALL
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                    """.stripIndent())
+                    sh "chmod +x ${webInstallScriptPath}"
+
+                    try {
+                        sh "${webInstallScriptPath}"
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${webInstallScriptPath} || true"
                     }
                 }
 
@@ -95,23 +119,34 @@ pipeline {
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Web)..."
                     def webFormatOutputFilePath = "${WORKSPACE}/web_format_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_WEB_FORMAT'
+                    def webFormatScriptPath = "${WORKSPACE}/run_web_format_check.sh"
+
+                    writeFile(file: webFormatScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        WEB_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${webFormatOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_FORMAT_INNER' > /tmp/web_format_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/web
-                                npm run format:check
-                            EOF_WEB_FORMAT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/web_format_output_temp.txt "${webFormatOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_WEB_FORMAT
+                            cd /app/web
+                            npm run format:check
+                        EOF_WEB_FORMAT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/web_format_output_temp.txt" "\${WEB_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${webFormatScriptPath}"
+
+                    try {
+                        sh "${webFormatScriptPath}"
 
                         def webFormatOutput = readFile(webFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Web) ---"
@@ -128,7 +163,8 @@ pipeline {
                         echo partialOutput
                         error "'format:check' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${webFormatOutputFilePath}"
+                        sh "rm -f ${webFormatOutputFilePath} || true"
+                        sh "rm -f ${webFormatScriptPath} || true"
                     }
                 }
 
@@ -136,23 +172,34 @@ pipeline {
                 script {
                     echo "Exécution de 'lint' pour Node.js (Web)..."
                     def webLintOutputFilePath = "${WORKSPACE}/web_lint_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_WEB_LINT'
+                    def webLintScriptPath = "${WORKSPACE}/run_web_lint.sh"
+
+                    writeFile(file: webLintScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        WEB_LINT_OUTPUT_FILE_PATH_INTERNAL="${webLintOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/web/." "\$CONTAINER_ID:/app/web/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/web/." $CONTAINER_ID:/app/web/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_WEB_LINT_INNER' > /tmp/web_lint_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/web
-                                npm run lint
-                            EOF_WEB_LINT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/web_lint_output_temp.txt "${webLintOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_WEB_LINT
+                            cd /app/web
+                            npm run lint
+                        EOF_WEB_LINT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/web_lint_output_temp.txt" "\${WEB_LINT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${webLintScriptPath}"
+
+                    try {
+                        sh "${webLintScriptPath}"
 
                         def webLintOutput = readFile(webLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Web) ---"
@@ -169,29 +216,42 @@ pipeline {
                         echo partialOutput
                         error "'lint' pour Node.js (Web) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${webLintOutputFilePath}"
+                        sh "rm -f ${webLintOutputFilePath} || true"
+                        sh "rm -f ${webLintScriptPath} || true"
                     }
                 }
 
                 // Node.js (Gemini) - npm install
                 script {
                     echo "Exécution de 'npm install' pour Node.js (Gemini)..."
-                    try {
-                        sh <<'EOF_JENKINS_SH_GEMINI_INSTALL'
+                    def geminiInstallScriptPath = "${WORKSPACE}/run_gemini_install.sh"
+
+                    writeFile(file: geminiInstallScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_INSTALL'
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_INSTALL'
-                                set -eux
-                                cd /app/gemini
-                                npm install
-                            EOF_GEMINI_INSTALL
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                        EOF_JENKINS_SH_GEMINI_INSTALL
+                            cd /app/gemini
+                            npm install
+                        EOF_GEMINI_INSTALL
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                    """.stripIndent())
+                    sh "chmod +x ${geminiInstallScriptPath}"
+
+                    try {
+                        sh "${geminiInstallScriptPath}"
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${geminiInstallScriptPath} || true"
                     }
                 }
 
@@ -199,23 +259,34 @@ pipeline {
                 script {
                     echo "Exécution de 'format:check' pour Node.js (Gemini)..."
                     def geminiFormatOutputFilePath = "${WORKSPACE}/gemini_format_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_GEMINI_FORMAT'
+                    def geminiFormatScriptPath = "${WORKSPACE}/run_gemini_format_check.sh"
+
+                    writeFile(file: geminiFormatScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        GEMINI_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${geminiFormatOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_FORMAT_INNER' > /tmp/gemini_format_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/gemini
-                                npm run format:check
-                            EOF_GEMINI_FORMAT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/gemini_format_output_temp.txt "${geminiFormatOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_GEMINI_FORMAT
+                            cd /app/gemini
+                            npm run format:check
+                        EOF_GEMINI_FORMAT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/gemini_format_output_temp.txt" "\${GEMINI_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${geminiFormatScriptPath}"
+
+                    try {
+                        sh "${geminiFormatScriptPath}"
 
                         def geminiFormatOutput = readFile(geminiFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (Gemini) ---"
@@ -232,7 +303,8 @@ pipeline {
                         echo partialOutput
                         error "'format:check' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${geminiFormatOutputFilePath}"
+                        sh "rm -f ${geminiFormatOutputFilePath} || true"
+                        sh "rm -f ${geminiFormatScriptPath} || true"
                     }
                 }
 
@@ -240,23 +312,34 @@ pipeline {
                 script {
                     echo "Exécution de 'lint' pour Node.js (Gemini)..."
                     def geminiLintOutputFilePath = "${WORKSPACE}/gemini_lint_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_GEMINI_LINT'
+                    def geminiLintScriptPath = "${WORKSPACE}/run_gemini_lint.sh"
+
+                    writeFile(file: geminiLintScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        GEMINI_LINT_OUTPUT_FILE_PATH_INTERNAL="${geminiLintOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/gemini/." "\$CONTAINER_ID:/app/gemini/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/gemini/." $CONTAINER_ID:/app/gemini/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_GEMINI_LINT_INNER' > /tmp/gemini_lint_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/gemini
-                                npm run lint
-                            EOF_GEMINI_LINT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/gemini_lint_output_temp.txt "${geminiLintOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_GEMINI_LINT
+                            cd /app/gemini
+                            npm run lint
+                        EOF_GEMINI_LINT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/gemini_lint_output_temp.txt" "\${GEMINI_LINT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${geminiLintScriptPath}"
+
+                    try {
+                        sh "${geminiLintScriptPath}"
 
                         def geminiLintOutput = readFile(geminiLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (Gemini) ---"
@@ -273,29 +356,42 @@ pipeline {
                         echo partialOutput
                         error "'lint' pour Node.js (Gemini) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${geminiLintOutputFilePath}"
+                        sh "rm -f ${geminiLintOutputFilePath} || true"
+                        sh "rm -f ${geminiLintScriptPath} || true"
                     }
                 }
 
                 // Node.js (OpenAI) - npm install
                 script {
                     echo "Exécution de 'npm install' pour Node.js (OpenAI)..."
-                    try {
-                        sh <<'EOF_JENKINS_SH_OPENAI_INSTALL'
+                    def openaiInstallScriptPath = "${WORKSPACE}/run_openai_install.sh"
+
+                    writeFile(file: openaiInstallScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_INSTALL'
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_INSTALL'
-                                set -eux
-                                cd /app/openai
-                                npm install
-                            EOF_OPENAI_INSTALL
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                        EOF_JENKINS_SH_OPENAI_INSTALL
+                            cd /app/openai
+                            npm install
+                        EOF_OPENAI_INSTALL
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                    """.stripIndent())
+                    sh "chmod +x ${openaiInstallScriptPath}"
+
+                    try {
+                        sh "${openaiInstallScriptPath}"
                     } catch (hudson.AbortException e) {
                         error "'npm install' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
+                    } finally {
+                        sh "rm -f ${openaiInstallScriptPath} || true"
                     }
                 }
 
@@ -303,23 +399,34 @@ pipeline {
                 script {
                     echo "Exécution de 'format:check' pour Node.js (OpenAI)..."
                     def openaiFormatOutputFilePath = "${WORKSPACE}/openai_format_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_OPENAI_FORMAT'
+                    def openaiFormatScriptPath = "${WORKSPACE}/run_openai_format_check.sh"
+
+                    writeFile(file: openaiFormatScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        OPENAI_FORMAT_OUTPUT_FILE_PATH_INTERNAL="${openaiFormatOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_FORMAT_INNER' > /tmp/openai_format_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/openai
-                                npm run format:check
-                            EOF_OPENAI_FORMAT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/openai_format_output_temp.txt "${openaiFormatOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_OPENAI_FORMAT
+                            cd /app/openai
+                            npm run format:check
+                        EOF_OPENAI_FORMAT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/openai_format_output_temp.txt" "\${OPENAI_FORMAT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${openaiFormatScriptPath}"
+
+                    try {
+                        sh "${openaiFormatScriptPath}"
 
                         def openaiFormatOutput = readFile(openaiFormatOutputFilePath).trim()
                         echo "--- Sortie de 'format:check' pour Node.js (OpenAI) ---"
@@ -336,7 +443,8 @@ pipeline {
                         echo partialOutput
                         error "'format:check' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${openaiFormatOutputFilePath}"
+                        sh "rm -f ${openaiFormatOutputFilePath} || true"
+                        sh "rm -f ${openaiFormatScriptPath} || true"
                     }
                 }
 
@@ -344,23 +452,34 @@ pipeline {
                 script {
                     echo "Exécution de 'lint' pour Node.js (OpenAI)..."
                     def openaiLintOutputFilePath = "${WORKSPACE}/openai_lint_output.txt"
-                    try {
-                        sh <<'EOF_JENKINS_SH_OPENAI_LINT'
+                    def openaiLintScriptPath = "${WORKSPACE}/run_openai_lint.sh"
+
+                    writeFile(file: openaiLintScriptPath, text: """
+                        #!/bin/sh
+                        set -eux
+
+                        NODE_IMAGE_INTERNAL="${NODE_IMAGE}"
+                        WORKSPACE_INTERNAL="${WORKSPACE}"
+                        OPENAI_LINT_OUTPUT_FILE_PATH_INTERNAL="${openaiLintOutputFilePath}"
+
+                        CONTAINER_ID=\\$(docker create "\${NODE_IMAGE_INTERNAL}" /bin/sh)
+                        docker cp "\${WORKSPACE_INTERNAL}/openai/." "\$CONTAINER_ID:/app/openai/"
+                        docker start "\$CONTAINER_ID"
+                        docker exec "\$CONTAINER_ID" /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
                             set -eux
-                            CONTAINER_ID=`docker create "${NODE_IMAGE}" /bin/sh`
-                            docker cp "${WORKSPACE}/openai/." $CONTAINER_ID:/app/openai/
-                            docker start $CONTAINER_ID
-                            docker exec $CONTAINER_ID /bin/sh -s <<'EOF_OPENAI_LINT_INNER' > /tmp/openai_lint_output_temp.txt 2>&1
-                                set -eux
-                                cd /app/openai
-                                npm run lint
-                            EOF_OPENAI_LINT_INNER
-                            DOCKER_EXEC_STATUS=\$?
-                            docker cp $CONTAINER_ID:/tmp/openai_lint_output_temp.txt "${openaiLintOutputFilePath}"
-                            docker stop $CONTAINER_ID || true
-                            docker rm $CONTAINER_ID || true
-                            exit \$DOCKER_EXEC_STATUS
-                        EOF_JENKINS_SH_OPENAI_LINT
+                            cd /app/openai
+                            npm run lint
+                        EOF_OPENAI_LINT_INNER
+                        DOCKER_EXEC_STATUS=\\$?
+                        docker cp "\$CONTAINER_ID:/tmp/openai_lint_output_temp.txt" "\${OPENAI_LINT_OUTPUT_FILE_PATH_INTERNAL}"
+                        docker stop "\$CONTAINER_ID" || true
+                        docker rm "\$CONTAINER_ID" || true
+                        exit \$DOCKER_EXEC_STATUS
+                    """.stripIndent())
+                    sh "chmod +x ${openaiLintScriptPath}"
+
+                    try {
+                        sh "${openaiLintScriptPath}"
 
                         def openaiLintOutput = readFile(openaiLintOutputFilePath).trim()
                         echo "--- Sortie de 'lint' pour Node.js (OpenAI) ---"
@@ -377,15 +496,15 @@ pipeline {
                         echo partialOutput
                         error "'lint' pour Node.js (OpenAI) a échoué. Détails: ${e.getMessage()}"
                     } finally {
-                        sh "rm -f ${openaiLintOutputFilePath}"
+                        sh "rm -f ${openaiLintOutputFilePath} || true"
+                        sh "rm -f ${openaiLintScriptPath} || true"
                     }
                 }
-
-                echo '--- Fin des vérifications de qualité du code ---'
             }
+
             post {
                 always {
-                    echo "Nettoyage du conteneur Docker..."
+                    echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
                 }
                 failure {
                     echo "Des vérifications de qualité du code ont échouées !"
