@@ -87,7 +87,7 @@ public class OpenaiService implements GeminiGenerationConfiguration {
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
-      CharacterDetailsEntity characterDetailsEntity) {
+          CharacterDetailsEntity characterDetailsEntity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "OpenaiService pour le personnage {{id={}}}",
@@ -95,18 +95,27 @@ public class OpenaiService implements GeminiGenerationConfiguration {
     try {
       final byte[] imageBytes = this.illustrate(characterDetailsEntity.getImage());
       if (imageBytes != null && imageBytes.length > 0) {
-        final CharacterIllustrationModel characterIllustrationModel =
-            CharacterIllustrationModel.builder()
-                .imageLabel(characterDetailsEntity.getImage())
-                .imageBlob(imageBytes)
-                .imageDetails(characterDetailsEntity)
-                .build();
-        CharacterIllustrationEntity characterIllustrationEntity =
-            this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-        this.characterIllustrationService.save(characterIllustrationEntity);
-        LOGGER.info(
-            "Illustration générée et enregistrée pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+        try {
+          this.characterIllustrationService.findByCharacterDetailsId(characterDetailsEntity.getId());
+          this.characterIllustrationService.updateIllustration(
+                  characterDetailsEntity.getId(), imageBytes, characterDetailsEntity.getImage());
+          LOGGER.info(
+                  "Illustration mise à jour et enregistrée pour le personnage {{id={}}}",
+                  characterDetailsEntity.getId());
+        } catch (RuntimeException e) {
+          final CharacterIllustrationModel characterIllustrationModel =
+                  CharacterIllustrationModel.builder()
+                          .imageLabel(characterDetailsEntity.getImage())
+                          .imageBlob(imageBytes)
+                          .imageDetails(characterDetailsEntity)
+                          .build();
+          CharacterIllustrationEntity characterIllustrationEntity =
+                  this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+          this.characterIllustrationService.save(characterIllustrationEntity);
+          LOGGER.info(
+                  "Illustration générée et enregistrée pour le personnage {{id={}}}",
+                  characterDetailsEntity.getId());
+        }
       } else {
         LOGGER.warn(
             "La génération d'illustration via OpenaiService a retourné un "

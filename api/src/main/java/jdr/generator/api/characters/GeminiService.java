@@ -124,18 +124,28 @@ public class GeminiService implements GeminiGenerationConfiguration {
           if (imageNode != null) {
             byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
 
-            final CharacterIllustrationModel characterIllustrationModel =
-                CharacterIllustrationModel.builder()
-                    .imageLabel(characterDetailsEntity.getImage())
-                    .imageBlob(imageBytes)
-                    .imageDetails(characterDetailsEntity)
-                    .build();
-            CharacterIllustrationEntity characterIllustrationEntity =
-                this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-            this.characterIllustrationService.save(characterIllustrationEntity);
-            LOGGER.info(
-                "Illustration générée et enregistrée pour le personnage {{id={}}}",
-                characterDetailsEntity.getId());
+            try {
+              this.characterIllustrationService.findByCharacterDetailsId(characterDetailsEntity.getId());
+              this.characterIllustrationService.updateIllustration(
+                      characterDetailsEntity.getId(), imageBytes, characterDetailsEntity.getImage());
+              LOGGER.info(
+                      "Illustration mise à jour et enregistrée pour le personnage {{id={}}}",
+                      characterDetailsEntity.getId());
+
+            } catch (RuntimeException e) {
+              final CharacterIllustrationModel characterIllustrationModel =
+                      CharacterIllustrationModel.builder()
+                              .imageLabel(characterDetailsEntity.getImage())
+                              .imageBlob(imageBytes)
+                              .imageDetails(characterDetailsEntity)
+                              .build();
+              CharacterIllustrationEntity characterIllustrationEntity =
+                      this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
+              this.characterIllustrationService.save(characterIllustrationEntity);
+              LOGGER.info(
+                      "Nouvelle illustration générée et enregistrée pour le personnage {{id={}}}",
+                      characterDetailsEntity.getId());
+            }
           }
         } catch (JsonProcessingException e) {
           LOGGER.error(
@@ -236,6 +246,12 @@ public class GeminiService implements GeminiGenerationConfiguration {
           characterDetailsModel.name,
           characterContextModel.promptGender,
           characterContextEntity.getId());
+
+      CharacterIllustrationEntity illustrationEntity = new CharacterIllustrationEntity();
+      illustrationEntity.setImageDetails(characterDetailsEntity);
+      illustrationEntity.setImageLabel(characterDetailsEntity.getImage());
+      illustrationEntity = characterIllustrationService.save(illustrationEntity);
+      LOGGER.info("Initial illustration entity created for character ID: {}. ID: {}", characterDetailsEntity.getId(), illustrationEntity.getId());
 
       // Lancement asynchrone de la génération de l'illustration via OpenaiService
       this.openaiService.generateIllustrationAsync(characterDetailsEntity);
