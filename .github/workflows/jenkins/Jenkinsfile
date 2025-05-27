@@ -3,7 +3,7 @@ pipeline {
     agent {
         docker {
             image 'eli256/jenkins-docker-image-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
-            args '--entrypoint='''
+            // args '--entrypoint='''
             // args '-u root:root --entrypoint='''
             // args '-v /var/run/docker.sock:/var/run/docker.sock -u root:root --entrypoint='''
             // >Changer args '-u root:root' si un utilisateur non-root est défini dans l'image agent
