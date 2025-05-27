@@ -12,7 +12,7 @@ export function cn(...inputs: ClassValue[]) {
  */
 export const arrayBufferToBase64 = (buffer: ArrayBuffer): Promise<string> => {
   return new Promise((resolve, reject) => {
-    const blob = new Blob([buffer], { type: 'image/png' }); // Assurez-vous du type MIME de l'image générée
+    const blob = new Blob([buffer], { type: 'image/png' });
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') {
@@ -23,7 +23,7 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer): Promise<string> => {
         reject(new Error("FileReader n'a pas retourné une chaîne de caractères."));
       }
     };
-    reader.onerror = (error) => reject(error);
+    reader.onerror = () => reject(reader.error || new Error('FileReader encountered an unknown error.'));
     reader.readAsDataURL(blob);
   });
 };

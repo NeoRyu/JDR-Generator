@@ -84,10 +84,14 @@ pipeline {
                         sh '''
                             npm ci
                         '''
-                         echo '--- WEB : Run ESLint (Frontend) ---'
-                        sh '''
-                            npx eslint . || true
-                        '''
+                        echo '--- WEB : Run ESLint (Frontend) ---'
+                        try {
+                            sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                            echo 'WEB : ESLint s\'est exécuté avec succès.'
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            echo "WEB : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                            currentBuild.result = 'UNSTABLE'
+                        }
                     }
                 }
                 echo '--- WEB : Fin des vérifications de qualité du code ---'
@@ -104,13 +108,21 @@ pipeline {
                             npm ci
                         '''
                         echo '--- GEMINI : Run ESLint ---'
-                        sh '''
-                            npx eslint . || true
-                        '''
+                        try {
+                            sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                            echo 'GEMINI : ESLint s\'est exécuté avec succès.'
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            echo "GEMINI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                            currentBuild.result = 'UNSTABLE'
+                        }
                         echo '--- GEMINI : Run npm audit ---'
-                        sh '''
-                            npm audit --omit=dev || true
-                        '''
+                        try {
+                            sh 'npm audit --omit=dev'
+                            echo 'GEMINI : npm audit s\'est exécuté avec succès.'
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            echo "GEMINI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                            currentBuild.result = 'UNSTABLE'
+                        }
                     }
                 }
                 echo '--- GEMINI : Fin des vérifications de qualité du code ---'
@@ -127,13 +139,21 @@ pipeline {
                             npm ci
                         '''
                         echo '--- OPENAI : Run ESLint ---'
-                        sh '''
-                            npx eslint . || true
-                        '''
+                        try {
+                            sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                            echo 'OPENAI : ESLint s\'est exécuté avec succès.'
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            echo "OPENAI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                            currentBuild.result = 'UNSTABLE'
+                        }
                         echo '--- OPENAI : Run npm audit ---'
-                        sh '''
-                            npm audit --omit=dev || true
-                        '''
+                       try {
+                            sh 'npm audit --omit=dev'
+                            echo 'OPENAI : npm audit s\'est exécuté avec succès.'
+                        } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                            echo "OPENAI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                            currentBuild.result = 'UNSTABLE'
+                        }
                     }
                 }
                 echo '--- OPENAI : Fin des vérifications de qualité du code ---'
