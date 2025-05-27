@@ -6,7 +6,7 @@ pipeline {
     }
 
     tools { // http://localhost:8080/manage/configureTools/
-        nodejs 'NodeJS 22.11'
+        nodejs 'NodeJS_20.11'
         maven 'Maven 3.8.5'
     }
 
@@ -119,19 +119,19 @@ pipeline {
             }
         }
 
-    }
+        post {
+            always {
+                echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
+                sh 'docker system prune -f || true'
+                // sh 'rm -rf ~/.npm/_logs || true'
+            }
+            failure {
+                echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
+            }
+            success {
+                echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
+            }
+        }
 
-    post {
-        always {
-            echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
-            sh 'docker system prune -f || true'
-            // sh 'rm -rf ~/.npm/_logs || true'
-        }
-        failure {
-            echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
-        }
-        success {
-            echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
-        }
     }
 }
