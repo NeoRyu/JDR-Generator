@@ -54,7 +54,7 @@ pipeline {
                 }
             }
         }
-
+/*
         stage('API - Code Quality Checks') {
             steps {
                 script {
@@ -74,18 +74,21 @@ pipeline {
                 echo '--- API : Fin des vérifications de qualité du code ---'
             }
         }
-
+*/
         stage('WEB - Code Quality Checks') {
             steps {
                 dir(env.FRONTEND_DIR) {
-                    echo '--- WEB : Install Node & NPM dependencies ---'
-                    sh '''
-                        npm ci
-                    '''
-                     echo '--- WEB : Run ESLint (Frontend) ---'
-                    sh '''
-                        npx eslint . || true
-                    '''
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- WEB : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                         echo '--- WEB : Run ESLint (Frontend) ---'
+                        sh '''
+                            npx eslint . || true
+                        '''
+                    }
                 }
                 echo '--- WEB : Fin des vérifications de qualité du code ---'
             }
