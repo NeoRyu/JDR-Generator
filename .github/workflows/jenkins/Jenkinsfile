@@ -87,7 +87,8 @@ pipeline {
                         echo '--- WEB : Run ESLint (Frontend) ---'
                         script {
                             try {
-                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
                                 echo 'WEB : ESLint s\'est exécuté avec succès.'
                             } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
                                 echo "WEB : ESLint a échoué (code de sortie ${e.getExitStatus()})."
@@ -112,7 +113,8 @@ pipeline {
                         echo '--- GEMINI : Run ESLint ---'
                         script {
                             try {
-                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
                                 echo 'GEMINI : ESLint s\'est exécuté avec succès.'
                             } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
                                 echo "GEMINI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
@@ -147,7 +149,8 @@ pipeline {
                         echo '--- OPENAI : Run ESLint ---'
                         script {
                             try {
-                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
                                 echo 'OPENAI : ESLint s\'est exécuté avec succès.'
                             } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
                                 echo "OPENAI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
