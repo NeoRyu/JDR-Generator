@@ -6,8 +6,9 @@ pipeline {
     }
 
     tools { // http://localhost:8080/manage/configureTools/
-        nodejs 'NodeJS_20.11'
-        maven 'Maven 3.8.5'
+        nodejs 'NodeJS_20.11.1'
+        maven 'Maven_3.8.5'
+        jdk 'JDK_17_LTS'
     }
 
     environment {
@@ -18,10 +19,10 @@ pipeline {
 
         MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
         NODE_IMAGE = 'node:20-alpine'
-        PATH = "${JAVA_HOME}/bin:${env.PATH}"
     }
 
     stages {
+
         stage('Jenkinsfile') {
             steps {
                 script {
@@ -38,26 +39,30 @@ pipeline {
             }
         }
 
-        stage('Checkout Code') {
+        stage('GIT - Checkout Code') {
             steps {
-                echo '--- GIT : https://github.com/NeoRyu/JDR-Generator ---'
+                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
                 git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
             }
         }
 
         stage('API - Code Quality Checks') {
             steps {
-                dir(env.BACKEND_DIR) {
-                    sh 'mvn --version'
-                    sh 'java --version'
-                    echo '--- API : Run Checkstyle ---'
-                    sh '''
-                        mvn checkstyle:check || true
-                    '''
-                    echo '--- API : Run OWASP Dependency Check ---'
-                    sh '''
-                        mvn org.owasp:dependency-check-maven:check || true
-                    '''
+                script { // Nécessaire pour utiliser 'withJava' dans un bloc 'steps' de stage
+                    withJava(jdk: 'JDK_17_LTS') { // UTILISATION DU JDK SPÉCIFIQUE ICI
+                        dir(env.BACKEND_DIR) {
+                            sh 'mvn --version'
+                            sh 'java --version'
+                            echo '--- API : Run Checkstyle ---'
+                            sh '''
+                                mvn checkstyle:check || true
+                            '''
+                            echo '--- API : Run OWASP Dependency Check ---'
+                            sh '''
+                                mvn org.owasp:dependency-check-maven:check || true
+                            '''
+                        }
+                    }
                 }
                 echo '--- API : Fin des vérifications de qualité du code ---'
             }
@@ -114,24 +119,28 @@ pipeline {
                     sh '''
                         npm audit --omit=dev || true
                     '''
+                    // sh 'docker system prune -f || true' // Ceci était un test et devrait être dans post.
                 }
                 echo '--- OPENAI : Fin des vérifications de qualité du code ---'
             }
         }
 
-        post {
-            always {
+    } // Fin du bloc stages
+
+    post {
+        always {
+            script {
                 echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
                 sh 'docker system prune -f || true'
                 // sh 'rm -rf ~/.npm/_logs || true'
             }
-            failure {
-                echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
-            }
-            success {
-                echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
-            }
         }
-
+        failure {
+            echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
+        }
+        success {
+            echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
+        }
     }
+
 }
