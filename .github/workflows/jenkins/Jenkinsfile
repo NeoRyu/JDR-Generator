@@ -54,7 +54,7 @@ pipeline {
                 }
             }
         }
-/*
+
         stage('API - Code Quality Checks') {
             steps {
                 script {
@@ -74,7 +74,7 @@ pipeline {
                 echo '--- API : Fin des vérifications de qualité du code ---'
             }
         }
-*/
+
         stage('WEB - Code Quality Checks') {
             steps {
                 dir(env.FRONTEND_DIR) {
