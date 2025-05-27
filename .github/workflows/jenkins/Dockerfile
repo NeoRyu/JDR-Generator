@@ -1,4 +1,4 @@
-# Utilise l'image Jenkins LTS officielle comme base
+# docker build -t eli256/jenkins-docker-image .
 FROM jenkins/jenkins:lts-jdk17
 
 # Passer en utilisateur root pour installer Docker CLI

@@ -2,8 +2,11 @@ pipeline {
     // agent any // {label 'linux'}
     agent {
         docker {
-            image 'alpine/git:latest'
-            args '-u root:root'
+            image 'jdr-generator-jenkins-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
+            args '--entrypoint='''
+            // args '-u root:root --entrypoint='''
+            // args '-v /var/run/docker.sock:/var/run/docker.sock -u root:root --entrypoint='''
+            // >Changer args '-u root:root' si un utilisateur non-root est défini dans l'image agent
         }
     }
 
@@ -11,11 +14,12 @@ pipeline {
         choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche')
     }
 
-    tools { // http://localhost:8080/manage/configureTools/
-        nodejs 'NodeJS_20.11.1'
-        maven 'Maven_3.8.5'
-        jdk 'JDK_17_LTS'
-    }
+    // tools : Définis dans l'agent et configuré dans http://localhost:8080/manage/configureTools/
+    // tools {
+    //     nodejs 'NodeJS_20.11.1'
+    //     maven 'Maven_3.8.5'
+    //     jdk 'JDK_17_LTS'
+    // }
 
     environment {
         // MODULES PATHS
@@ -23,7 +27,8 @@ pipeline {
         BACKEND_DIR = 'api'
         GEMINI_DIR  = 'gemini'
         OPENAI_DIR  = 'openai'
-        // IMAGES SPECIFICS
+
+        // INFO : IMAGES SPECIFIQUES CONTENUS DANS L'AGENT
         MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
         NODE_IMAGE = 'node:20-alpine'
         JDK_IMAGE = 'amazoncorretto:17'
@@ -41,15 +46,11 @@ pipeline {
         stage('Jenkinsfile') {
             steps {
                 script {
-                    def jenkinsfilePath = "${env.WORKSPACE}/Jenkinsfile"
-                    if (fileExists(jenkinsfilePath)) {
-                        def scriptContent = readFile(jenkinsfilePath)
-                        echo "===== Jenkinsfile (début) ====="
-                        echo scriptContent
-                        echo "===== Jenkinsfile (fin) ====="
-                    } else {
-                        echo "Fichier Jenkinsfile introuvable dans le workspace"
-                    }
+                    // Le Jenkinsfile est à la racine du workspace après le checkout.
+                    def scriptContent = readFile('Jenkinsfile')
+                    echo "===== Jenkinsfile (début) ====="
+                    echo scriptContent
+                    echo "===== Jenkinsfile (fin) ====="
                 }
             }
         }
@@ -57,19 +58,17 @@ pipeline {
         stage('API - Code Quality Checks') {
             steps {
                 script {
-                    withJava(jdk: 'JDK_17_LTS') {
-                        dir(env.BACKEND_DIR) {
-                            sh 'mvn --version'
-                            sh 'java --version'
-                            echo '--- API : Run Checkstyle ---'
-                            sh '''
-                                mvn checkstyle:check || true
-                            '''
-                            echo '--- API : Run OWASP Dependency Check ---'
-                            sh '''
-                                mvn org.owasp:dependency-check-maven:check || true
-                            '''
-                        }
+                    dir(env.BACKEND_DIR) {
+                        sh 'mvn --version'
+                        sh 'java --version'
+                        echo '--- API : Run Checkstyle ---'
+                        sh '''
+                            mvn checkstyle:check || true
+                        '''
+                        echo '--- API : Run OWASP Dependency Check ---'
+                        sh '''
+                            mvn org.owasp:dependency-check-maven:check || true
+                        '''
                     }
                 }
                 echo '--- API : Fin des vérifications de qualité du code ---'
