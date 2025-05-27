@@ -23,7 +23,7 @@ export const arrayBufferToBase64 = (buffer: ArrayBuffer): Promise<string> => {
         reject(new Error("FileReader n'a pas retourné une chaîne de caractères."));
       }
     };
-    reader.onerror = () => reject(reader.error || new Error('FileReader encountered an unknown error.'));
+    reader.onerror = () => reject(new Error(reader.error?.message || 'FileReader encountered an unknown error.'));
     reader.readAsDataURL(blob);
   });
 };

@@ -8,11 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents). Jobs pipeline result :&#10;- OK : Lancement de l'agent Docker&#10;- OK : Checkout Git dans l'agent&#10;- OK : Lecture du Jenkinsfile&#10;- OK : Étape API - Code Quality Checks&#10;- OK : Étape WEB - Code Quality Checks&#10;- WIP : Étape WEB - Code Quality Checks&#10;- WIP : Étape WEB - Code Quality Checks&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/jenkins/Jenkinsfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/OpenaiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/OpenaiService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/src/lib/utils.ts" beforeDir="false" afterPath="$PROJECT_DIR$/web/src/lib/utils.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change afterPath="$PROJECT_DIR$/.github/workflows/localhost/JDR-Generator_start_app_standalone.sh" afterDir="false" />
@@ -544,15 +540,7 @@
       <workItem from="1747895955733" duration="28595000" />
       <workItem from="1747980648698" duration="22218000" />
       <workItem from="1748240064598" duration="24799000" />
-      <workItem from="1748327159638" duration="20055000" />
-    </task>
-    <task id="LOCAL-00236" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (user root)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747829434203</created>
-      <option name="number" value="00236" />
-      <option name="presentableId" value="LOCAL-00236" />
-      <option name="project" value="LOCAL" />
-      <updated>1747829434203</updated>
+      <workItem from="1748327159638" duration="21634000" />
     </task>
     <task id="LOCAL-00237" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (user root)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -938,7 +926,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748347955938</updated>
     </task>
-    <option name="localTasksCounter" value="285" />
+    <task id="LOCAL-00285" summary="[Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents). Jobs pipeline result :&#10;- OK : Lancement de l'agent Docker&#10;- OK : Checkout Git dans l'agent&#10;- OK : Lecture du Jenkinsfile&#10;- OK : Étape API - Code Quality Checks&#10;- OK : Étape WEB - Code Quality Checks&#10;- WIP : Étape WEB - Code Quality Checks&#10;- WIP : Étape WEB - Code Quality Checks&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1748349704299</created>
+      <option name="number" value="00285" />
+      <option name="presentableId" value="LOCAL-00285" />
+      <option name="project" value="LOCAL" />
+      <updated>1748349704299</updated>
+    </task>
+    <option name="localTasksCounter" value="286" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
