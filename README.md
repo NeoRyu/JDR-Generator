@@ -511,8 +511,13 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 2.  **Téléchargement d'une image Docker de Jenkins contenant docker (construite à partir du Dockerfile dans le dossier) :**
 
     ```bash
+    cd .github/workflows/jenkins/agent/
+    docker build -t eli256/jenkins-docker-image-agent:latest .
     cd .github/workflows/jenkins/
+    docker stop jenkins-container
+    docker rm jenkins-container
     docker build -t eli256/jenkins-docker-image .
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image:latest
     ```
 
     * Ceci construira l'image Docker personnalisée eli256/jenkins-docker-image à partir du Dockerfile situé dans le dossier actuel. Cette image sera basée sur jenkins/jenkins:lts-jdk17 et inclura le client Docker.
@@ -620,7 +625,7 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
     ```bash
     docker stop jenkins-container
     docker rm jenkins-container
-    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image:latest    
     ```
 
     * Ceci supprimera le conteneur, mais vos données seront normalement conservées dans le répertoire monté (ex : `C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins`).

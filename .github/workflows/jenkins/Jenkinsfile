@@ -2,7 +2,7 @@ pipeline {
     // agent any // {label 'linux'}
     agent {
         docker {
-            image 'jdr-generator-jenkins-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
+            image 'eli256/jenkins-docker-image-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
             args '--entrypoint='''
             // args '-u root:root --entrypoint='''
             // args '-v /var/run/docker.sock:/var/run/docker.sock -u root:root --entrypoint='''

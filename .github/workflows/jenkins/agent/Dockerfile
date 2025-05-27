@@ -1,18 +1,11 @@
-# docker build -t jdr-generator-jenkins-agent:latest .
+# docker build -t eli256/jenkins-docker-image-agent:latest .
 FROM amazoncorretto:17-alpine-jdk
 
 # Installer Git (pour que la stage 'GIT - Checkout Code' fonctionne pleinement dans le conteneur)
 RUN apk add --no-cache git
 
-# Installer Node.js (version 20.11.1)
-# > Étape 1 : Téléchargement et extraction
-ENV NODE_VERSION=20.11.1
-RUN apk add --no-cache --virtual .build-deps python3 make gcc g++ \
-    && wget -qO- https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz | tar xzf - -C /usr/local --strip-components=1 \
-    && apk del .build-deps
-# > Étape 2 : Mettre à jour le PATH et installer npm@latest ( /usr/local/bin -> PATH )
-ENV PATH="/usr/local/bin:${PATH}"
-RUN npm install -g npm@latest
+# Installer les versions de Node.js et npm via apk disponible dans les dépôts Alpine.
+RUN apk add --no-cache nodejs npm
 
 # Installer Maven (version 3.8.5)
 ENV MAVEN_VERSION=3.8.5
