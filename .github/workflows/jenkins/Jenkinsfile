@@ -47,7 +47,7 @@ pipeline {
             steps {
                 script {
                     // Le Jenkinsfile est à la racine du workspace après le checkout.
-                    def scriptContent = readFile('Jenkinsfile')
+                    def scriptContent = readFile('.github/workflows/jenkins/Jenkinsfile')
                     echo "===== Jenkinsfile (début) ====="
                     echo scriptContent
                     echo "===== Jenkinsfile (fin) ====="
