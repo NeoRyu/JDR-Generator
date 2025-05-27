@@ -12,16 +12,25 @@ pipeline {
     }
 
     environment {
+        // MODULES PATHS
         FRONTEND_DIR = 'web'
         BACKEND_DIR = 'api'
         GEMINI_DIR  = 'gemini'
         OPENAI_DIR  = 'openai'
-
+        // IMAGES SPECIFICS
         MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
         NODE_IMAGE = 'node:20-alpine'
+        JDK_IMAGE = 'amazoncorretto:17'
     }
 
     stages {
+
+        stage('GIT - Checkout Code') {
+            steps {
+                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
+                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
+            }
+        }
 
         stage('Jenkinsfile') {
             steps {
@@ -39,17 +48,10 @@ pipeline {
             }
         }
 
-        stage('GIT - Checkout Code') {
-            steps {
-                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
-                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
-            }
-        }
-
         stage('API - Code Quality Checks') {
             steps {
-                script { // Nécessaire pour utiliser 'withJava' dans un bloc 'steps' de stage
-                    withJava(jdk: 'JDK_17_LTS') { // UTILISATION DU JDK SPÉCIFIQUE ICI
+                script {
+                    withJava(jdk: 'JDK_17_LTS') {
                         dir(env.BACKEND_DIR) {
                             sh 'mvn --version'
                             sh 'java --version'
@@ -119,7 +121,6 @@ pipeline {
                     sh '''
                         npm audit --omit=dev || true
                     '''
-                    // sh 'docker system prune -f || true' // Ceci était un test et devrait être dans post.
                 }
                 echo '--- OPENAI : Fin des vérifications de qualité du code ---'
             }
@@ -131,7 +132,7 @@ pipeline {
         always {
             script {
                 echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
-                sh 'docker system prune -f || true'
+                // sh 'docker system prune -f || true'
                 // sh 'rm -rf ~/.npm/_logs || true'
             }
         }
