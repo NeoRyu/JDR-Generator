@@ -1,5 +1,11 @@
 pipeline {
-    agent any // {label 'linux'}
+    // agent any // {label 'linux'}
+    agent {
+        docker {
+            image 'alpine/git:latest'
+            args '-u root:root'
+        }
+    }
 
     parameters {
         choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche')
@@ -132,6 +138,11 @@ pipeline {
         always {
             script {
                 echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
+                // Pas besoin de 'docker system prune' ici : chaque stage est dans un conteneur temp
+                // Les conteneurs lancés par 'agent { docker { ... } }' sont automatiquement deleted
+                // NB : Nécessitera un stop/delete spécifique si des conteneurs sont run
+                //      manuellement dans un step 'sh docker run'.
+
                 // sh 'docker system prune -f || true'
                 // sh 'rm -rf ~/.npm/_logs || true'
             }
