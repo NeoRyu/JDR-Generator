@@ -9,7 +9,6 @@ pipeline {
 
     parameters {
         choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche à checkout pour le contexte (optionnel)')
-        // Un paramètre optionnel pour spécifier des tables spécifiques à exporter
         string(name: 'TABLES_TO_EXPORT', defaultValue: '', description: 'Tables spécifiques à exporter (ex: character_details character_illustration). Laisser vide pour toute la DB.')
     }
 
@@ -26,6 +25,13 @@ pipeline {
 
     stages {
 
+        stage('Declarative: Checkout SCM') {
+            steps {
+                echo '--- Checkout initial du SCM pour lire le Jenkinsfile ---'
+                checkout scm
+            }
+        }
+
         stage('GIT - Checkout Code (Optional)') {
             steps {
                 echo '--- https://github.com/NeoRyu/JDR-Generator ---'
@@ -39,6 +45,8 @@ pipeline {
                     echo "--- DATABASE : Exporting Data ---"
                     sh """
                     echo "Vérification du statut du conteneur MySQL '${env.MYSQL_CONTAINER_NAME}'..."
+                    id
+
                     docker ps --filter "name=${env.MYSQL_CONTAINER_NAME}" --format "{{.Names}}" | grep -q "${env.MYSQL_CONTAINER_NAME}"
                     if [ \$? -ne 0 ]; then
                         echo "Erreur : Le conteneur MySQL '${env.MYSQL_CONTAINER_NAME}' n'est pas en cours d'exécution."
