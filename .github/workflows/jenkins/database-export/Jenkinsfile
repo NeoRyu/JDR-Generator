@@ -37,10 +37,6 @@ pipeline {
             steps {
                 script {
                     echo "--- DATABASE : Exporting Data ---"
-                    // Vérifier si le conteneur MySQL est en cours d'exécution
-                    // La commande 'docker' est exécutée par l'agent Docker,
-                    // et grâce au montage du docker.sock, elle interagit avec le daemon de l'hôte.
-                    sh """
                     echo "Vérification du statut du conteneur MySQL '${env.MYSQL_CONTAINER_NAME}'..."
                     docker ps --filter "name=${env.MYSQL_CONTAINER_NAME}" --format "{{.Names}}" | grep -q "${env.MYSQL_CONTAINER_NAME}"
                     if [ \$? -ne 0 ]; then
@@ -53,7 +49,6 @@ pipeline {
                     TIMESTAMP=\$(date +%Y%m%d%H%M%S)
                     FILENAME="jdr_generator_db_data_\${TIMESTAMP}.sql"
 
-                    # Construction de la commande mysqldump, incluant les tables si spécifiées
                     MYSQLDUMP_CMD="docker exec \\"${env.MYSQL_CONTAINER_NAME}\\" mysqldump -u \\"${env.MYSQL_DB_USER}\\" -p\\"${env.MYSQL_DB_PASSWORD}\\" --no-create-info --no-create-db \\"${env.MYSQL_DB_NAME}\\""
 
                     if [ -n "${params.TABLES_TO_EXPORT}" ]; then
@@ -63,9 +58,6 @@ pipeline {
                         echo "Export de toute la base de données '${env.MYSQL_DB_NAME}'..."
                     fi
 
-                    # Exécute mysqldump *à l'intérieur* du conteneur MySQL via docker exec.
-                    # Utilise les variables d'environnement Jenkins pour les identifiants.
-                    # Redirige la sortie vers le fichier dans le workspace de Jenkins.
                     \${MYSQLDUMP_CMD} > "\${FILENAME}"
 
                     if [ \$? -eq 0 ]; then
@@ -74,7 +66,6 @@ pipeline {
                         echo "Erreur lors de l'export des données de la base de données. Code de sortie : \$? "
                         exit 1
                     fi
-                    """
                 }
             }
             post {
@@ -83,8 +74,10 @@ pipeline {
                     echo "Fichier d'export de données archivé dans Jenkins."
                 }
                 failure {
-                    echo "L'export des données de la base de données a échoué."
-                    currentBuild.result = 'FAILURE'
+                    script {
+                        echo "L'export des données de la base de données a échoué."
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
