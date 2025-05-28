@@ -18,14 +18,18 @@ RUN wget -qO- https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bin
 # Installer le client Docker CLI
 RUN apk add --no-cache docker
 
-# Vérifications (pour s'assurer que tout est bien installé)
+# Créer l'utilisateur 'jenkins' avec l'UID 1000
+RUN addgroup -S jenkins && adduser -S jenkins -G jenkins -u 1000
+# Ajoutez un groupe avec le GID du groupe Docker sur l'hôte (999), et ajoutez l'utilisateur jenkins à ce groupe.
+RUN addgroup -S docker_agent_group -g 999 \
+    && adduser jenkins docker_agent_group
+
+# Passer à l'utilisateur 'jenkins' pour les commandes suivantes
+USER jenkins
+
+# Vérifications
 RUN java -version
 RUN mvn -version
 RUN node -v
 RUN npm -v
 RUN docker --version
-
-# L'utilisateur par défaut de amazoncorretto:17-alpine-jdk est root.
-# Pour avoir un utilisateur non-root pour les builds Jenkins, vous devrez le créer/définir ici :
-# RUN addgroup -S jenkins && adduser -S jenkins -G jenkins
-# USER jenkins
