@@ -248,6 +248,46 @@ JDR-Generator/
 
 Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compose. Cela simplifie la configuration de l'environnement et assure une cohérence entre les différents déploiements.
 
+
+### Configuration requise du démon Docker sur l'hôte (pour les utilisateurs Windows/Docker Desktop)
+
+Si vous utilisez Docker Desktop sur Windows et que vous rencontrez des erreurs de "permission denied" lors de l'exécution de pipelines Jenkins qui tentent d'interagir avec Docker (par exemple, pour exporter des bases de données ou construire des images), cela est généralement dû au fait que le socket Docker (`/var/run/docker.sock`) n'a pas les permissions de groupe adéquates par défaut.
+
+Pour résoudre ce problème de manière persistante, vous devez configurer le démon Docker via l'interface de Docker Desktop :
+
+1.  **Ouvrez Docker Desktop.**
+2.  Cliquez sur l'icône **Paramètres** (la roue dentée) en haut à droite.
+3.  Dans le menu de gauche, sélectionnez **"Docker Engine"**.
+4.  Dans l'éditeur de texte JSON qui apparaît, **ajoutez ou assurez-vous que la ligne `"group": "docker"` est présente** au sein de l'objet JSON principal. Votre configuration pourrait ressembler à ceci :
+
+    ```json
+    {
+      "group": "docker",
+      
+      "builder": {
+        "gc": {
+          "defaultKeepStorage": "20GB",
+          "enabled": true
+        }
+      },
+      "experimental": false
+    }
+    ```
+    Assurez-vous que la syntaxe JSON est correcte (les virgules entre les éléments sont importantes). Laissez les autres configurations si elles existent. Comme dans l'exemple ci-dessus.
+
+5.  Cliquez sur le bouton **"Apply & Restart"** (Appliquer et Redémarrer) en bas à droite de la fenêtre des paramètres.
+
+Docker Desktop redémarrera son moteur, et le socket `/var/run/docker.sock` aura désormais le groupe `docker` comme propriétaire, permettant à votre agent Jenkins (configuré avec `--group-add 999`) d'y accéder.
+
+**Pour vérifier (facultatif mais recommandé après redémarrage) :**
+Ouvrez le terminal de votre distribution WSL2 (ex: Ubuntu) et exécutez :
+```bash
+ls -l /var/run/docker.sock
+```
+Le résultat devrait maintenant ressembler à ```srw-rw---- 1 root docker ... /var/run/docker.sock.```
+
+
+
 **Analyse des Images Docker :**
 
 * Le module **web** utilise un processus de build en deux étapes :
@@ -641,18 +681,23 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
         3.  Dans la section "Définition", choisissez "Pipeline script from SCM".
         4.  Sélectionnez "Git" comme gestionnaire de code source.
         5.  Configurez l'URL du dépôt (par exemple, `https://github.com/NeoRyu/JDR-Generator`) et les informations d'identification (le PAT GitHub que vous avez configuré).
-        6.  Spécifiez la branche à builder (par exemple, `main` ou `jenkins`).
-        7.  Assurez-vous que le "Script Path" est correct (par défaut, il devrait être `Jenkinsfile`).
+        6.  Spécifiez la branche à builder (par exemple, `*/main` et `*/jenkins`) le Jenkinsfile.
+        7.  Assurez-vous que le "Script Path" est correct (ex `/.github/workflows/jenkins/Jenkinsfile`).
         8.  Configurez les autres options selon vos besoins (par exemple, les déclencheurs de build).
-        9.  Sauvegardez le job.
+        9.  Sauvegardez le job, puis lancez le build. Si le script a des options, il risque d'échouer la première fois, mais mettra a jour votre configuration, relancez le build auquel cas.
+
 
 12. **NOTA BENE** (a effacer par la suite)
     ```bash
     cls
+    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins\agent
+    docker build -t eli256/jenkins-docker-image-agent:latest .
     cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins
     docker build -t eli256/jenkins-docker-image .
+    
     docker stop jenkins-container
     docker rm jenkins-container
+    
     docker run -d -p 8080:8080 -p 50000:50000 --name jenkins-container -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
     docker logs -f jenkins-container
     ```

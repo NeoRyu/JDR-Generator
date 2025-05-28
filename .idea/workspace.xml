@@ -8,7 +8,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- WIP : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
-      <change beforePath="$PROJECT_DIR$/.github/workflows/jenkins/agent/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/jenkins/agent/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change afterPath="$PROJECT_DIR$/.github/workflows/localhost/JDR-Generator_start_app_standalone.sh" afterDir="false" />
@@ -243,7 +244,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Batch.docker-push">
+  <component name="RunManager" selected="Shell Script.docker-start-app.sh">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
@@ -559,15 +560,7 @@
       <workItem from="1748240064598" duration="24799000" />
       <workItem from="1748327159638" duration="27603000" />
       <workItem from="1748366668195" duration="368000" />
-      <workItem from="1748415893096" duration="14407000" />
-    </task>
-    <task id="LOCAL-00247" summary="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : OK - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747839338853</created>
-      <option name="number" value="00247" />
-      <option name="presentableId" value="LOCAL-00247" />
-      <option name="project" value="LOCAL" />
-      <updated>1747839338853</updated>
+      <workItem from="1748415893096" duration="17514000" />
     </task>
     <task id="LOCAL-00248" summary="[DOCKER-COMPOSE] JDR-Generator : &#10;Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&#10;docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP :: Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -953,7 +946,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748432565083</updated>
     </task>
-    <option name="localTasksCounter" value="296" />
+    <task id="LOCAL-00296" summary="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- WIP : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1748433119647</created>
+      <option name="number" value="00296" />
+      <option name="presentableId" value="LOCAL-00296" />
+      <option name="project" value="LOCAL" />
+      <updated>1748433119647</updated>
+    </task>
+    <option name="localTasksCounter" value="297" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
