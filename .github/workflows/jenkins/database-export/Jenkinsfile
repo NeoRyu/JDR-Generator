@@ -37,6 +37,7 @@ pipeline {
             steps {
                 script {
                     echo "--- DATABASE : Exporting Data ---"
+                    sh """
                     echo "Vérification du statut du conteneur MySQL '${env.MYSQL_CONTAINER_NAME}'..."
                     docker ps --filter "name=${env.MYSQL_CONTAINER_NAME}" --format "{{.Names}}" | grep -q "${env.MYSQL_CONTAINER_NAME}"
                     if [ \$? -ne 0 ]; then
@@ -66,6 +67,7 @@ pipeline {
                         echo "Erreur lors de l'export des données de la base de données. Code de sortie : \$? "
                         exit 1
                     fi
+                    """
                 }
             }
             post {
