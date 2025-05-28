@@ -1,4 +1,5 @@
 # docker build -t eli256/jenkins-docker-image .
+# docker push eli256/jenkins-docker-image:latest
 FROM jenkins/jenkins:lts-jdk17
 
 # Passer en utilisateur root pour installer Docker CLI
