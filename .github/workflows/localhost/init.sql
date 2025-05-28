@@ -1,3 +1,5 @@
+-- docker exec -it jdr-generator-mysql-container-1 mysql -u jdr_user -proot jdr_generator_db
+
 -- S'assurer que root@localhost a bien le mot de passe 'root'
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
 
