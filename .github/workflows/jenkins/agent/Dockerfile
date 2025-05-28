@@ -18,11 +18,8 @@ RUN wget -qO- https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/bin
 # Installer le client Docker CLI
 RUN apk add --no-cache docker
 
-# Créer l'utilisateur 'jenkins' avec l'UID 1000
+# Créer l'utilisateur 'jenkins' avec l'UID 1000 et son groupe principal GID 1000
 RUN addgroup -S jenkins && adduser -S jenkins -G jenkins -u 1000
-# Ajoutez un groupe avec le GID du groupe Docker sur l'hôte (999), et ajoutez l'utilisateur jenkins à ce groupe.
-RUN addgroup -S docker_agent_group -g 999 \
-    && adduser jenkins docker_agent_group
 
 # Passer à l'utilisateur 'jenkins' pour les commandes suivantes
 USER jenkins
