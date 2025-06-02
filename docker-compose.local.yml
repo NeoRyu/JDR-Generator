@@ -31,6 +31,7 @@ services:
       SPRING_PROFILES_ACTIVE: localdocker
       GEMINI_API_URL: http://gemini-container:3001/gemini # URL du service Gemini dans le réseau Docker
       OPENAI_API_URL: http://openai-container:3002/openai # URL du service OpenAI dans le réseau Docker
+      FREEPIK_API_URL: http://freepik-container:3003/freepik # URL du service Freepik dans le réseau Docker
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-container:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=false&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000 # Ajout délais
       SPRING_DATASOURCE_USERNAME: jdr_user
       SPRING_DATASOURCE_PASSWORD: root # ATTENTION: Sécurité !
@@ -90,6 +91,18 @@ services:
       - "3002:3002" # Mapping port hôte:port conteneur
     environment:
       PORT: 3002 # Variable d'environnement pour l'application OpenAI
+    networks:
+      - jdr-network
+
+  freepik-container:
+    image: eli256/jdr-generator-freepik:latest
+    build:
+      context: ./freepik
+      dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'freepik'
+    ports:
+      - "3003:3003" # Mapping port hôte:port conteneur
+    environment:
+      PORT: 3003 # Variable d'environnement pour l'application Freepik
     networks:
       - jdr-network
 

@@ -7,24 +7,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- WIP : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
-      <change afterPath="$PROJECT_DIR$/freepik/.ebignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/app.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/eslint.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/package.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/src/controllers/illustration.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/tsconfig.json" afterDir="false" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[Freepik] JDR-Generator : Ajout d'un module Freepik pour utiliser une API de generation d'image moins onéreuse&#10;&#10;- [OK - JENKINS] Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- [WIP - JENKINS] : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/build__FREEPIK_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/clean__FREEPIK_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/clean_xtrem__FREEPIK_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/lint__FREEPIK_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/start__FREEPIK_.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/FreepikService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.github/workflows/localhost/docker-push.bat" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/localhost/docker-push.bat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/CharactersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/characters/GeminiService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application-localdocker.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application-localdocker.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/api/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freepik/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/freepik/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freepik/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/freepik/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freepik/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/freepik/src/controllers/illustration.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/openai/src/controllers/illustration.ts" afterDir="false" />
     </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change afterPath="$PROJECT_DIR$/.github/workflows/localhost/JDR-Generator_start_app_standalone.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/freepik/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/freepik/.env" beforeDir="false" afterPath="$PROJECT_DIR$/freepik/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/openai/.env" beforeDir="false" afterPath="$PROJECT_DIR$/openai/.env" afterDir="false" />
     </list>
@@ -154,14 +157,17 @@
     "nodejs_interpreter_path": "node",
     "nodejs_package_manager_path": "npm",
     "npm.build (1).executor": "Run",
+    "npm.build (FREEPIK).executor": "Run",
     "npm.build (GEMINI).executor": "Run",
     "npm.build (OPENAI).executor": "Run",
     "npm.build (WEB).executor": "Run",
     "npm.build.executor": "Run",
     "npm.build2.executor": "Run",
+    "npm.clean (FREEPIK).executor": "Run",
     "npm.clean (GEMINI).executor": "Run",
     "npm.clean (OPENAI).executor": "Run",
     "npm.clean-xtrem (1).executor": "Run",
+    "npm.clean-xtrem (FREEPIK).executor": "Run",
     "npm.clean-xtrem (GEMINI).executor": "Run",
     "npm.clean-xtrem (OPENAI).executor": "Run",
     "npm.clean-xtrem (WEB).executor": "Run",
@@ -169,8 +175,11 @@
     "npm.clean.executor": "Run",
     "npm.format.executor": "Run",
     "npm.lint (1).executor": "Run",
+    "npm.lint (FREEPIK).executor": "Run",
     "npm.lint (GEMINI).executor": "Run",
     "npm.lint.executor": "Run",
+    "npm.npm install in JDR-Generator\\freepik.executor": "Run",
+    "npm.start (FREEPIK).executor": "Run",
     "npm.start (GEMINI).executor": "Run",
     "npm.start (OPENAI).executor": "Run",
     "npm.start (WEB).executor": "Run",
@@ -240,6 +249,7 @@
       <recent name="jdr.generator.api.config" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="jdr.generator.api.characters" />
       <recent name="jdr.generator.api.scala" />
       <recent name="jdr.generator.api.characters.illustration" />
       <recent name="jdr.generator.api.controllers" />
@@ -256,22 +266,11 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Batch.docker-push">
+  <component name="RunManager" selected="npm.start (FREEPIK)">
     <configuration name="run (API)" type="Application" factoryName="Application" folderName="API">
       <option name="MAIN_CLASS_NAME" value="jdr.generator.api.ApiApplication" />
       <module name="api" />
       <option name="VM_PARAMETERS" value="-Dconsole.encoding=UTF-8 --add-opens java.base/java.lang=ALL-UNNAMED " />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="docker-push (1)" type="BatchConfigurationType" factoryName="Batch" temporary="true">
-      <module name="JDR-Generator" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="./.github/workflows" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SCRIPT_NAME" value="docker-push.bat" />
-      <option name="PARAMETERS" value="" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -368,29 +367,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="m0v" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="api" />
-      <option name="ENV_FILES" value="" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/api/src/main/java/jdr/generator/api/tools/m0v.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration default="true" type="Python.FlaskServer">
       <module name="FantasyGenerator" />
       <option name="ENV_FILES" value="" />
@@ -441,25 +417,20 @@
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <method v="2" />
     </configuration>
-    <configuration name="localhost/docker-compose.local.yml: Compose Deployment" type="docker-deploy" factoryName="docker-compose.yml" temporary="true" server-name="Docker">
-      <deployment type="docker-compose.yml">
-        <settings>
-          <option name="sourceFilePath" value=".github/workflows/localhost/docker-compose.local.yml" />
-        </settings>
-      </deployment>
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Application.run (API)" />
       <item itemvalue="Application.start (API)" />
       <item itemvalue="Application.PythonScriptGeneratorExecutor" />
       <item itemvalue="Batch.docker-push" />
-      <item itemvalue="Batch.docker-push (1)" />
       <item itemvalue="Docker.DOCKER START" />
-      <item itemvalue="Docker.localhost/docker-compose.local.yml: Compose Deployment" />
       <item itemvalue="Maven.build (API) (Docker LOCAL)" />
       <item itemvalue="Maven.build (API)" />
       <item itemvalue="Node.js.bin\www" />
+      <item itemvalue="npm.clean (FREEPIK)" />
+      <item itemvalue="npm.build (FREEPIK)" />
+      <item itemvalue="npm.clean-xtrem (FREEPIK)" />
+      <item itemvalue="npm.lint (FREEPIK)" />
+      <item itemvalue="npm.start (FREEPIK)" />
       <item itemvalue="npm.clean (GEMINI)" />
       <item itemvalue="npm.build (GEMINI)" />
       <item itemvalue="npm.clean-xtrem (GEMINI)" />
@@ -472,18 +443,17 @@
       <item itemvalue="npm.start (OPENAI)" />
       <item itemvalue="npm.build (WEB)" />
       <item itemvalue="npm.start (WEB)" />
-      <item itemvalue="Python.m0v" />
       <item itemvalue="Shell Script.docker-build" />
       <item itemvalue="Shell Script.docker-start-app.sh" />
       <item itemvalue="Spring Boot.ApiApplication" />
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Batch.docker-push" />
-        <item itemvalue="Shell Script.docker-start-app.sh" />
-        <item itemvalue="Docker.localhost/docker-compose.local.yml: Compose Deployment" />
-        <item itemvalue="Python.m0v" />
-        <item itemvalue="Batch.docker-push (1)" />
+        <item itemvalue="npm.start (FREEPIK)" />
+        <item itemvalue="npm.lint (FREEPIK)" />
+        <item itemvalue="npm.clean-xtrem (FREEPIK)" />
+        <item itemvalue="npm.build (FREEPIK)" />
+        <item itemvalue="npm.clean (FREEPIK)" />
       </list>
     </recent_temporary>
   </component>
@@ -573,15 +543,7 @@
       <workItem from="1748327159638" duration="27603000" />
       <workItem from="1748366668195" duration="368000" />
       <workItem from="1748415893096" duration="17514000" />
-      <workItem from="1748847769951" duration="14730000" />
-    </task>
-    <task id="LOCAL-00248" summary="[DOCKER-COMPOSE] JDR-Generator : &#10;Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&#10;docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP :: Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
-      <option name="closed" value="true" />
-      <created>1747919119940</created>
-      <option name="number" value="00248" />
-      <option name="presentableId" value="LOCAL-00248" />
-      <option name="project" value="LOCAL" />
-      <updated>1747919119941</updated>
+      <workItem from="1748847769951" duration="19871000" />
     </task>
     <task id="LOCAL-00249" summary="[WIP FEATURE] JDR-Generator : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas)&#10;&#10;- DONE - DOCKER-COMPOSE : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;- WIP - Jenkins : Configuration du workflow Jenkins - update to capture and manage error &#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002">
       <option name="closed" value="true" />
@@ -967,7 +929,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748433119647</updated>
     </task>
-    <option name="localTasksCounter" value="297" />
+    <task id="LOCAL-00297" summary="[Freepik] JDR-Generator : Ajout d'un module Freepik pour utiliser une API de generation d'image moins onéreuse&#10;&#10;- [OK - JENKINS] Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- [WIP - JENKINS] : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1748870662780</created>
+      <option name="number" value="00297" />
+      <option name="presentableId" value="LOCAL-00297" />
+      <option name="project" value="LOCAL" />
+      <updated>1748870662781</updated>
+    </task>
+    <option name="localTasksCounter" value="298" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -998,7 +968,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (user root)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (maven:3.8.5-openjdk-17)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (workspace /app ?)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
     <MESSAGE value="[JENKINS] JDR-Generator : Configuration du workflow Jenkins : WIP (test affichage fichier api)&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002" />
@@ -1023,7 +992,8 @@
     <MESSAGE value="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- WIP : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
-    <option name="LAST_COMMIT_MESSAGE" value="[OK - Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- WIP : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
+    <MESSAGE value="[Freepik] JDR-Generator : Ajout d'un module Freepik pour utiliser une API de generation d'image moins onéreuse&#10;&#10;- [OK - JENKINS] Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- [WIP - JENKINS] : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
+    <option name="LAST_COMMIT_MESSAGE" value="[Freepik] JDR-Generator : Ajout d'un module Freepik pour utiliser une API de generation d'image moins onéreuse&#10;&#10;- [OK - JENKINS] Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents).&#10;- [WIP - JENKINS] : Ajout d'un script de dump des données de la db sur le container mysql&#10; &#10;- [FIX] Forcer l'encodage de la base de données en utf8mb4_unicode_ci&#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XDebuggerManager">

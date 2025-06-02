@@ -28,6 +28,7 @@ public class CharactersController {
   private final GeminiService geminiService;
   private final CharacterDetailsService characterDetailsService;
   private final OpenaiService openaiService;
+  private final FreepikService freepikService;
 
   /**
    * Constructor for the CharactersController.
@@ -35,14 +36,18 @@ public class CharactersController {
    * @param geminiService Service for interacting with the Gemini API.
    * @param characterDetailsService Service for managing character details.
    * @param openaiService Service for interacting with the OpenAI API.
+   * @param freepikService Service for interacting with the Freepik API.
    */
   CharactersController(
-      GeminiService geminiService,
-      CharacterDetailsService characterDetailsService,
-      OpenaiService openaiService) {
+          GeminiService geminiService,
+          CharacterDetailsService characterDetailsService,
+          OpenaiService openaiService,
+          FreepikService freepikService
+  ) {
     this.geminiService = geminiService;
     this.characterDetailsService = characterDetailsService;
     this.openaiService = openaiService;
+    this.freepikService = freepikService;
   }
 
   /**
@@ -118,7 +123,8 @@ public class CharactersController {
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = geminiHost)
   public byte[] illustrate(@PathVariable Long id) {
-    return openaiService.regenerateIllustration(id);
+    return freepikService.regenerateIllustration(id);
+    // return openaiService.regenerateIllustration(id);
     // return geminiService.regenerateIllustration(id);
   }
 
