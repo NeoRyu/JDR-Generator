@@ -45,9 +45,9 @@ REM ====================================================
 REM Étape 5 : Tagging des images construites
 REM ====================================================
 echo Tagging des images pour Docker Hub...
-docker tag eli256/jdr-generator-api:latest eli256/jdr-generator-api:%TAG%
-docker tag eli256/jdr-generator-web:latest eli256/jdr-generator-web:%TAG%
-docker tag eli256/jdr-generator-gemini:latest eli256/jdr-generator-gemini:%TAG%
+REM docker tag eli256/jdr-generator-api:latest eli256/jdr-generator-api:%TAG%
+REM docker tag eli256/jdr-generator-web:latest eli256/jdr-generator-web:%TAG%
+REM docker tag eli256/jdr-generator-gemini:latest eli256/jdr-generator-gemini:%TAG%
 docker tag eli256/jdr-generator-openai:latest eli256/jdr-generator-openai:%TAG%
 echo Tagging des images terminé.
 echo.
@@ -56,12 +56,12 @@ REM ====================================================
 REM Étape 6 : Poussée des images vers Docker Hub
 REM ====================================================
 echo Poussée des images vers Docker Hub...
-docker push eli256/jdr-generator-api:%TAG% || (echo Erreur de push api. && GOTO :EOF)
-docker push eli256/jdr-generator-api:latest || (echo Erreur de push api. && GOTO :EOF)
-docker push eli256/jdr-generator-web:%TAG% || (echo Erreur de push web. && GOTO :EOF)
-docker push eli256/jdr-generator-web:latest || (echo Erreur de push web. && GOTO :EOF)
-docker push eli256/jdr-generator-gemini:%TAG% || (echo Erreur de push gemini. && GOTO :EOF)
-docker push eli256/jdr-generator-gemini:latest || (echo Erreur de push gemini. && GOTO :EOF)
+REM docker push eli256/jdr-generator-api:%TAG% || (echo Erreur de push api. && GOTO :EOF)
+REM docker push eli256/jdr-generator-api:latest || (echo Erreur de push api. && GOTO :EOF)
+REM docker push eli256/jdr-generator-web:%TAG% || (echo Erreur de push web. && GOTO :EOF)
+REM docker push eli256/jdr-generator-web:latest || (echo Erreur de push web. && GOTO :EOF)
+REM docker push eli256/jdr-generator-gemini:%TAG% || (echo Erreur de push gemini. && GOTO :EOF)
+REM docker push eli256/jdr-generator-gemini:latest || (echo Erreur de push gemini. && GOTO :EOF)
 docker push eli256/jdr-generator-openai:%TAG% || (echo Erreur de push openai. && GOTO :EOF)
 docker push eli256/jdr-generator-openai:latest || (echo Erreur de push openai. && GOTO :EOF)
 echo Poussée des images terminée.
