@@ -58,7 +58,7 @@ pipeline {
                     TIMESTAMP=\$(date +%Y%m%d%H%M%S)
                     FILENAME="jdr_generator_db_data_\${TIMESTAMP}.sql"
 
-                    MYSQLDUMP_CMD="docker exec \\"${env.MYSQL_CONTAINER_NAME}\\" mysqldump -u \\"${env.MYSQL_DB_USER}\\" -p\\"${env.MYSQL_DB_PASSWORD}\\" --no-create-info --no-create-db \\"${env.MYSQL_DB_NAME}\\""
+                    MYSQLDUMP_CMD="docker exec ${env.MYSQL_CONTAINER_NAME} mysqldump -u ${env.MYSQL_DB_USER} -p${env.MYSQL_DB_PASSWORD} --no-create-info --no-create-db ${env.MYSQL_DB_NAME}"
 
                     if [ -n "${params.TABLES_TO_EXPORT}" ]; then
                         echo "Export des tables spécifiques : ${params.TABLES_TO_EXPORT}..."
