@@ -28,18 +28,24 @@ JDR-Generator est une application complète pour la création de personnages de 
 * React (TypeScript)
 * MySQL
 * FlywayDB
-* Google Gemini API
-* OpenAI API
-* npm ou yarn
-* Docker (pour le déploiement)
+* Google Gemini API (gemini / imagen)
+* OpenAI API (chatgpt / dall-e)
+* Freepik API (flux-dev)
+* Maven / NPM
+* Docker / Docker Hub
+* Github Actions
+* Jenkins
+* ...
 
 ## Pré-requis
 
-* Node.js (pour NestJS et React)
-* JDK (Java Development Kit) 8 ou supérieur (pour l'API Java)
-* MySQL Server
+* Github
+* Node.js
+* JDK 11
+* MySQL Workbench
 * npm ou yarn
-* Docker (si vous utilisez les commandes Docker fournies)
+* Docker Desktop
+* GIT Bash
 
 ## Notes Importantes
 
