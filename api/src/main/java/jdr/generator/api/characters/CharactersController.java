@@ -24,10 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/characters")
 public class CharactersController {
-  private static final String geminiHost = "http://localhost:5173";
+  private static final String webModuleHost = "http://localhost:5173";
   private final GeminiService geminiService;
   private final CharacterDetailsService characterDetailsService;
   private final OpenaiService openaiService;
+  private final FreepikService freepikService;
 
   /**
    * Constructor for the CharactersController.
@@ -35,14 +36,18 @@ public class CharactersController {
    * @param geminiService Service for interacting with the Gemini API.
    * @param characterDetailsService Service for managing character details.
    * @param openaiService Service for interacting with the OpenAI API.
+   * @param freepikService Service for interacting with the Freepik API.
    */
   CharactersController(
-      GeminiService geminiService,
-      CharacterDetailsService characterDetailsService,
-      OpenaiService openaiService) {
+          GeminiService geminiService,
+          CharacterDetailsService characterDetailsService,
+          OpenaiService openaiService,
+          FreepikService freepikService
+  ) {
     this.geminiService = geminiService;
     this.characterDetailsService = characterDetailsService;
     this.openaiService = openaiService;
+    this.freepikService = freepikService;
   }
 
   /**
@@ -100,24 +105,27 @@ public class CharactersController {
       value = {"/generate"},
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
+  @CrossOrigin(origins = webModuleHost)
   public CharacterDetailsModel generate(@RequestBody DefaultContextJson data) {
     return geminiService.generate(data);
   }
 
   /**
-   * Generates an illustration based on the provided prompt.
+   * Regenerates an illustration for an existing character.
+   * This method replaces the old POST /illustrate to use PUT and an ID.
+   * It takes the character's ID and triggers the regeneration process
+   * using the character's existing context and details to build the prompt.
    *
-   * @param imagePrompt The prompt for the image generation.
-   * @return An array of bytes representing the generated image.
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
    */
-  @RequestMapping(
-      value = {"/illustrate"},
-      method = RequestMethod.POST)
+  @PutMapping("/illustrate/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
-  public byte[] illustrate(@RequestBody String imagePrompt) {
-    return openaiService.illustrate(imagePrompt);
+  @CrossOrigin(origins = webModuleHost)
+  public byte[] illustrate(@PathVariable Long id) {
+    return freepikService.regenerateIllustration(id);
+    // return openaiService.regenerateIllustration(id);
+    // return geminiService.regenerateIllustration(id);
   }
 
   /**
@@ -130,7 +138,7 @@ public class CharactersController {
       value = {"/stats/{id}"},
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
+  @CrossOrigin(origins = webModuleHost)
   public String stats(@PathVariable Long id) {
     return geminiService.stats(id);
   }

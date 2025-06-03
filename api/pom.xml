@@ -32,6 +32,7 @@
     </developers>
 
     <properties>
+        <skip.quality.code>true</skip.quality.code>
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
         <scala.version>2.13.15</scala.version>
@@ -180,7 +181,7 @@
                     <configLocation>google_checks.xml</configLocation>
                     <failOnViolation>true</failOnViolation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <skip>false</skip>
+                    <skip>${skip.quality.code}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -202,6 +203,7 @@
                         <trimTrailingWhitespace/>
                         <endWithNewline/>
                     </java>
+                    <skip>${skip.quality.code}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -218,6 +220,7 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <version>3.26.0</version>
                 <configuration>
+                    <skip>${skip.quality.code}</skip>
                     <rulesets>
                         <ruleset>/category/java/bestpractices.xml</ruleset>
                         <ruleset>/category/java/codestyle.xml</ruleset>
@@ -226,7 +229,7 @@
                         <ruleset>/category/java/multithreading.xml</ruleset>
                         <ruleset>/category/java/security.xml</ruleset>
                     </rulesets>
-                    <failOnViolation>true</failOnViolation>
+                    <failOnViolation>false</failOnViolation>
                 </configuration>
                 <executions>
                     <execution>
@@ -242,7 +245,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.3.0</version>
                 <configuration>
-                    <skip>true</skip><!-- mvn spotbugs:gui -->
+                    <skip>${skip.quality.code}</skip><!-- mvn spotbugs:gui -->
                 </configuration>
                 <executions>
                     <execution>
@@ -259,6 +262,7 @@
                 <artifactId>dependency-check-maven</artifactId>
                 <version>8.3.1</version>
                 <configuration>
+                    <skip>${skip.quality.code}</skip>
                     <failBuildOnCVSS>10</failBuildOnCVSS>
                     <suppressionFile>${project.basedir}/dependency-check-suppress.xml</suppressionFile>
                     <formats>

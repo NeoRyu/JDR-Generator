@@ -16,7 +16,7 @@ const deleteCharacterRequest = async (
     if (response.status !== 204) {
       throw new Error(`Unexpected status code: ${response.status}`);
     }
-    return response.data; // Retournez les données de la réponse si nécessaire
+    return response.data;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       console.error(`Erreur : ${error.message || "Erreur inconnue"}`);

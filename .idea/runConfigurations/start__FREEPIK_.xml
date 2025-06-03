@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start (FREEPIK)" type="js.build_tools.npm" folderName="FREEPIK">
+    <package-json value="$PROJECT_DIR$/freepik/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="start" />
+    </scripts>
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>

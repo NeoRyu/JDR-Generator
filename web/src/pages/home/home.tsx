@@ -93,7 +93,7 @@ export function Home() {
         jsonData: selectedCharacter.jsonData,
       };
       await updateCharacterService.updateCharacter(fullModel);
-      void refetch(); // Ajout de void pour ignorer la promesse
+      await refetch();
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
@@ -134,7 +134,7 @@ export function Home() {
               </DialogTrigger>
               {/* FENÊTRE DE SAISIE DU CONTEXTE POUR CREATION */}
               <DialogContent>
-                <DialogTitle>Création d'un nouveau personnage</DialogTitle>
+                <DialogTitle>ACTION : Création d'un nouveau personnage</DialogTitle>
                 <DialogDescription>
                   Remplissez les champs pour générer un nouveau personnage.
                 </DialogDescription>
@@ -198,6 +198,7 @@ export function Home() {
                 <TableHeader>
                   <TableRow>
                     <TableHead className="table-head">Date de création</TableHead>
+                    <TableHead className="table-head">Portrait</TableHead>
                     <TableHead className="table-head">Genre</TableHead>
                     <TableHead className="table-head">Nom du personnage</TableHead>
                     <TableHead className="table-head">Age</TableHead>

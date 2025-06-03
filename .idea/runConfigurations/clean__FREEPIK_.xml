@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="clean-xtrem (WEB)" type="js.build_tools.npm" folderName="WEB">
-    <package-json value="$PROJECT_DIR$/web/package.json" />
+  <configuration default="false" name="clean (FREEPIK)" type="js.build_tools.npm" folderName="FREEPIK">
+    <package-json value="$PROJECT_DIR$/freepik/package.json" />
     <command value="run" />
     <scripts>
-      <script value="clean-xtrem" />
+      <script value="clean" />
     </scripts>
     <node-interpreter value="project" />
     <envs />

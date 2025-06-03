@@ -1,0 +1,199 @@
+pipeline {
+    // agent any // {label 'linux'}
+    agent {
+        docker {
+            image 'eli256/jenkins-docker-image-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
+            // args '--entrypoint='''
+            // args '-u root:root --entrypoint='''
+            // args '-v /var/run/docker.sock:/var/run/docker.sock -u root:root --entrypoint='''
+            // >Changer args '-u root:root' si un utilisateur non-root est défini dans l'image agent
+        }
+    }
+
+    parameters {
+        choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche')
+    }
+
+    // tools : Définis dans l'agent et configuré dans http://localhost:8080/manage/configureTools/
+    // tools {
+    //     nodejs 'NodeJS_20.11.1'
+    //     maven 'Maven_3.8.5'
+    //     jdk 'JDK_17_LTS'
+    // }
+
+    environment {
+        // MODULES PATHS
+        FRONTEND_DIR = 'web'
+        BACKEND_DIR = 'api'
+        GEMINI_DIR  = 'gemini'
+        OPENAI_DIR  = 'openai'
+
+        // INFO : IMAGES SPECIFIQUES CONTENUS DANS L'AGENT
+        MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
+        NODE_IMAGE = 'node:20-alpine'
+        JDK_IMAGE = 'amazoncorretto:17'
+    }
+
+    stages {
+
+        stage('GIT - Checkout Code') {
+            steps {
+                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
+                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
+            }
+        }
+
+        stage('Jenkinsfile') {
+            steps {
+                script {
+                    // Le Jenkinsfile est à la racine du workspace après le checkout.
+                    def scriptContent = readFile('.github/workflows/jenkins/code-quality/Jenkinsfile')
+                    echo "===== Jenkinsfile (début) ====="
+                    echo scriptContent
+                    echo "===== Jenkinsfile (fin) ====="
+                }
+            }
+        }
+
+        stage('API - Code Quality Checks') {
+            steps {
+                script {
+                    dir(env.BACKEND_DIR) {
+                        sh 'mvn --version'
+                        sh 'java --version'
+                        echo '--- API : Run Checkstyle ---'
+                        sh '''
+                            mvn checkstyle:check || true
+                        '''
+                        echo '--- API : Run OWASP Dependency Check ---'
+                        sh '''
+                            mvn org.owasp:dependency-check-maven:check || true
+                        '''
+                    }
+                }
+                echo '--- API : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('WEB - Code Quality Checks') {
+            steps {
+                dir(env.FRONTEND_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- WEB : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- WEB : Run ESLint (Frontend) ---'
+                        script {
+                            try {
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
+                                echo 'WEB : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "WEB : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- WEB : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('GEMINI - Code Quality Checks') {
+            steps {
+                dir(env.GEMINI_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- GEMINI : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- GEMINI : Run ESLint ---'
+                        script {
+                            try {
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
+                                echo 'GEMINI : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "GEMINI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                        echo '--- GEMINI : Run npm audit ---'
+                        script {
+                            try {
+                                sh 'npm audit --omit=dev'
+                                echo 'GEMINI : npm audit s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "GEMINI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- GEMINI : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('OPENAI - Code Quality Checks') {
+            steps {
+                dir(env.OPENAI_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- OPENAI : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- OPENAI : Run ESLint ---'
+                        script {
+                            try {
+                                // sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                sh 'npx eslint . --report-unused-disable-directives'
+                                echo 'OPENAI : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "OPENAI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                        echo '--- OPENAI : Run npm audit ---'
+                        script {
+                            try {
+                                sh 'npm audit --omit=dev'
+                                echo 'OPENAI : npm audit s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "OPENAI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- OPENAI : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+    } // Fin du bloc stages
+
+    post {
+        always {
+            script {
+                echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
+                // Pas besoin de 'docker system prune' ici : chaque stage est dans un conteneur temp
+                // Les conteneurs lancés par 'agent { docker { ... } }' sont automatiquement deleted
+                // NB : Nécessitera un stop/delete spécifique si des conteneurs sont run
+                //      manuellement dans un step 'sh docker run'.
+
+                // sh 'docker system prune -f || true'
+                // sh 'rm -rf ~/.npm/_logs || true'
+            }
+        }
+        failure {
+            echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
+        }
+        success {
+            echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
+        }
+    }
+
+}

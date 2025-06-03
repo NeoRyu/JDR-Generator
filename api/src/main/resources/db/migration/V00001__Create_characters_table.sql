@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS `jdr_generator_db`;
+CREATE DATABASE IF NOT EXISTS jdr_generator_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 #ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
 
 DROP TABLE IF EXISTS `character_illustration`, `character_details`, `character_context`, `character_json_data` CASCADE;

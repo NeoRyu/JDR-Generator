@@ -96,9 +96,12 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
                   <Button
                     type="button"
                     onClick={handleFormSubmit}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded shadow-md transition duration-300 ease-in-out transform hover:scale-95"
+                    className="button-aura"
                   >
-                    Sauvegarder le personnage
+                    <>
+                      <Pen />
+                      Sauvegarder le personnage
+                    </>
                   </Button>
                 )}
               </div>

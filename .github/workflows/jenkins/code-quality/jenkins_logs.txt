@@ -1,0 +1,702 @@
+Started by user COUPEZ Frédéric
+
+Checking out git https://github.com/NeoRyu/JDR-Generator into /var/jenkins_home/workspace/JDR-Generator-Code-Quality@script/124363f0a1b25ade85ff4be870a1d258fd087358cffd84009f5ee8df54708837 to read .github/workflows/jenkins/Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality@script/124363f0a1b25ade85ff4be870a1d258fd087358cffd84009f5ee8df54708837/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+Seen branch in repository origin/aws
+Seen branch in repository origin/jenkins
+Seen branch in repository origin/main
+Seen branch in repository origin/qodana-automation-1149567177
+Seen branch in repository origin/release_1.0
+Seen 5 remote branches
+ > git show-ref --tags -d # timeout=10
+Checking out Revision 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 (origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 # timeout=10
+
+Commit message: "[Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents). Jobs pipeline result : - OK : Lancement de l'agent Docker - OK : Checkout Git dans l'agent - OK : Lecture du Jenkinsfile - OK : Étape API - Code Quality Checks - OK : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks"
+ > git rev-list --no-walk 65ab3e8c4625501f51dc3cee7cdb864cf8e89acc # timeout=10
+
+[Pipeline] Start of Pipeline
+
+[Pipeline] node
+Running on Jenkins
+ in /var/jenkins_home/workspace/JDR-Generator-Code-Quality
+[Pipeline] {
+
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+
+Seen branch in repository origin/aws
+Seen branch in repository origin/jenkins
+Seen branch in repository origin/main
+Seen branch in repository origin/qodana-automation-1149567177
+Seen branch in repository origin/release_1.0
+Seen 5 remote branches
+ > git show-ref --tags -d # timeout=10
+
+Checking out Revision 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 (origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+
+ > git checkout -f 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 # timeout=10
+
+Commit message: "[Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents). Jobs pipeline result : - OK : Lancement de l'agent Docker - OK : Checkout Git dans l'agent - OK : Lecture du Jenkinsfile - OK : Étape API - Code Quality Checks - OK : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks"
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+
+[Pipeline] sh
+
++ docker inspect -f . eli256/jenkins-docker-image-agent:latest
+.
+
+[Pipeline] }
+
+[Pipeline] // withEnv
+
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 20a8fb0371ce8226eecc9d43a119c38423111c24d03a8fd470281d13ebd7a650
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/JDR-Generator-Code-Quality --volumes-from 20a8fb0371ce8226eecc9d43a119c38423111c24d03a8fd470281d13ebd7a650 -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** eli256/jenkins-docker-image-agent:latest cat
+
+$ docker top e500bed77ec35545cdf72218a3ba490bb9bbddec8e09e16011eafe6d63c92e53 -eo pid,comm
+[Pipeline] {
+
+[Pipeline] withEnv
+[Pipeline] {
+
+[Pipeline] stage
+[Pipeline] { (GIT - Checkout Code)
+
+[Pipeline] echo
+--- https://github.com/NeoRyu/JDR-Generator ---
+[Pipeline] git
+The recommended git tool is: NONE
+No credentials specified
+Warning: JENKINS-30600: special launcher org.jenkinsci.plugins.docker.workflow.WithContainerStep$Decorator$1@27b5f41; decorates hudson.Launcher$LocalLauncher@7887798c will be ignored (a typical symptom is the Git executable not being run inside a designated container)
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/JDR-Generator-Code-Quality/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/NeoRyu/JDR-Generator # timeout=10
+Fetching upstream changes from https://github.com/NeoRyu/JDR-Generator
+ > git --version # timeout=10
+ > git --version # 'git version 2.39.5'
+ > git fetch --tags --force --progress -- https://github.com/NeoRyu/JDR-Generator +refs/heads/*:refs/remotes/origin/* # timeout=10
+
+ > git rev-parse refs/remotes/origin/jenkins^{commit} # timeout=10
+
+Checking out Revision 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 (refs/remotes/origin/jenkins)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 # timeout=10
+
+ > git branch -a -v --no-abbrev # timeout=10
+
+ > git branch -D jenkins # timeout=10
+
+ > git checkout -b jenkins 8aadecacd0577795bd5d9dc8bea5c0e2d94f20a0 # timeout=10
+
+Commit message: "[Jenkins] JDR-Generator : Configuration du workflow Jenkins avec images Docker custom (contrôleur et agents). Jobs pipeline result : - OK : Lancement de l'agent Docker - OK : Checkout Git dans l'agent - OK : Lecture du Jenkinsfile - OK : Étape API - Code Quality Checks - OK : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks - WIP : Étape WEB - Code Quality Checks"
+[Pipeline] }
+
+[Pipeline] // stage
+
+[Pipeline] stage
+[Pipeline] { (Jenkinsfile)
+
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] readFile
+
+[Pipeline] echo
+===== Jenkinsfile (début) =====
+[Pipeline] echo
+
+pipeline {
+    // agent any // {label 'linux'}
+    agent {
+        docker {
+            image 'eli256/jenkins-docker-image-agent:latest' // .github/workflows/jenkins/agent/Dockerfile
+            // args '--entrypoint='''
+            // args '-u root:root --entrypoint='''
+            // args '-v /var/run/docker.sock:/var/run/docker.sock -u root:root --entrypoint='''
+            // >Changer args '-u root:root' si un utilisateur non-root est défini dans l'image agent
+        }
+    }
+
+    parameters {
+        choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche')
+    }
+
+    // tools : Définis dans l'agent et configuré dans http://localhost:8080/manage/configureTools/
+    // tools {
+    //     nodejs 'NodeJS_20.11.1'
+    //     maven 'Maven_3.8.5'
+    //     jdk 'JDK_17_LTS'
+    // }
+
+    environment {
+        // MODULES PATHS
+        FRONTEND_DIR = 'web'
+        BACKEND_DIR = 'api'
+        GEMINI_DIR  = 'gemini'
+        OPENAI_DIR  = 'openai'
+
+        // INFO : IMAGES SPECIFIQUES CONTENUS DANS L'AGENT
+        MAVEN_IMAGE = 'maven:3.8.5-openjdk-17'
+        NODE_IMAGE = 'node:20-alpine'
+        JDK_IMAGE = 'amazoncorretto:17'
+    }
+
+    stages {
+
+        stage('GIT - Checkout Code') {
+            steps {
+                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
+                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
+            }
+        }
+
+        stage('Jenkinsfile') {
+            steps {
+                script {
+                    // Le Jenkinsfile est à la racine du workspace après le checkout.
+                    def scriptContent = readFile('.github/workflows/jenkins/Jenkinsfile')
+                    echo "===== Jenkinsfile (début) ====="
+                    echo scriptContent
+                    echo "===== Jenkinsfile (fin) ====="
+                }
+            }
+        }
+
+        stage('API - Code Quality Checks') {
+            steps {
+                script {
+                    dir(env.BACKEND_DIR) {
+                        sh 'mvn --version'
+                        sh 'java --version'
+                        echo '--- API : Run Checkstyle ---'
+                        sh '''
+                            mvn checkstyle:check || true
+                        '''
+                        echo '--- API : Run OWASP Dependency Check ---'
+                        sh '''
+                            mvn org.owasp:dependency-check-maven:check || true
+                        '''
+                    }
+                }
+                echo '--- API : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('WEB - Code Quality Checks') {
+            steps {
+                dir(env.FRONTEND_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- WEB : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- WEB : Run ESLint (Frontend) ---'
+                        script {
+                            try {
+                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                echo 'WEB : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "WEB : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- WEB : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('GEMINI - Code Quality Checks') {
+            steps {
+                dir(env.GEMINI_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- GEMINI : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- GEMINI : Run ESLint ---'
+                        script {
+                            try {
+                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                echo 'GEMINI : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "GEMINI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                        echo '--- GEMINI : Run npm audit ---'
+                        script {
+                            try {
+                                sh 'npm audit --omit=dev'
+                                echo 'GEMINI : npm audit s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "GEMINI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- GEMINI : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+        stage('OPENAI - Code Quality Checks') {
+            steps {
+                dir(env.OPENAI_DIR) {
+                    // Ajout d'une variable d'environnement pour le cache NPM
+                    withEnv(['NPM_CONFIG_CACHE=./.npm-cache']) {
+                        echo '--- OPENAI : Install Node & NPM dependencies ---'
+                        sh '''
+                            npm ci
+                        '''
+                        echo '--- OPENAI : Run ESLint ---'
+                        script {
+                            try {
+                                sh 'npx eslint . --report-unused-disable-directives --max-warnings 0'
+                                echo 'OPENAI : ESLint s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "OPENAI : ESLint a échoué (code de sortie ${e.getExitStatus()})."
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                        echo '--- OPENAI : Run npm audit ---'
+                        script {
+                            try {
+                                sh 'npm audit --omit=dev'
+                                echo 'OPENAI : npm audit s\'est exécuté avec succès.'
+                            } catch (org.jenkinsci.plugins.workflow.steps.FlowInterruptedException e) {
+                                echo "OPENAI : npm audit a échoué (code de sortie ${e.getExitStatus()}) : ${e.message}"
+                                currentBuild.result = 'UNSTABLE'
+                            }
+                        }
+                    }
+                }
+                echo '--- OPENAI : Fin des vérifications de qualité du code ---'
+            }
+        }
+
+    } // Fin du bloc stages
+
+    post {
+        always {
+            script {
+                echo "Nettoyage des fichiers temporaires et des conteneurs Docker..."
+                // Pas besoin de 'docker system prune' ici : chaque stage est dans un conteneur temp
+                // Les conteneurs lancés par 'agent { docker { ... } }' sont automatiquement deleted
+                // NB : Nécessitera un stop/delete spécifique si des conteneurs sont run
+                //      manuellement dans un step 'sh docker run'.
+
+                // sh 'docker system prune -f || true'
+                // sh 'rm -rf ~/.npm/_logs || true'
+            }
+        }
+        failure {
+            echo "Jenkins Pipeline : Des vérifications de qualité du code ont échouées !"
+        }
+        success {
+            echo "Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !"
+        }
+    }
+
+}
+[Pipeline] echo
+===== Jenkinsfile (fin) =====
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (API - Code Quality Checks)
+
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/JDR-Generator-Code-Quality/api
+[Pipeline] {
+
+[Pipeline] sh
++ mvn --version
+
+Apache Maven 3.8.5 (3599d3414f046de2324203b78ddcf9b5e4388aa0)
+Maven home: /usr/local/apache-maven
+Java version: 17.0.15, vendor: Amazon.com Inc., runtime: /usr/lib/jvm/java-17-amazon-corretto
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "5.15.153.1-microsoft-standard-wsl2", arch: "amd64", family: "unix"
+
+[Pipeline] sh
++ java --version
+openjdk 17.0.15 2025-04-15 LTS
+OpenJDK Runtime Environment Corretto-17.0.15.6.1 (build 17.0.15+6-LTS)
+OpenJDK 64-Bit Server VM Corretto-17.0.15.6.1 (build 17.0.15+6-LTS, mixed mode, sharing)
+
+[Pipeline] echo
+--- API : Run Checkstyle ---
+[Pipeline] sh
++ mvn checkstyle:check
+
+[INFO] Scanning for projects...
+
+[INFO] 
+[INFO] -------------------------< jdr.generator:api >--------------------------
+[INFO] Building api 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-checkstyle-plugin:3.3.1:check (default-cli) @ api ---
+
+[INFO] You have 0 Checkstyle violations.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:03 min
+[INFO] Finished at: 2025-05-27T13:17:42Z
+[INFO] ------------------------------------------------------------------------
+[Pipeline] echo
+--- API : Run OWASP Dependency Check ---
+[Pipeline] sh
+
++ mvn org.owasp:dependency-check-maven:check
+
+[INFO] Scanning for projects...
+
+[INFO] 
+[INFO] -------------------------< jdr.generator:api >--------------------------
+[INFO] Building api 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+
+[INFO] 
+[INFO] --- dependency-check-maven:8.3.1:check (default-cli) @ api ---
+
+[INFO] Checking for updates
+[INFO] Skipping NVD check since last check was within 4 hours.
+[WARNING] A new version of dependency-check is available. Consider updating to version 12.1.0.
+[INFO] Skipping RetireJS update since last update was within 24 hours.
+[INFO] Skipping Hosted Suppressions file update since last update was within 2 hours.
+[INFO] Skipping Known Exploited Vulnerabilities update check since last check was within 24 hours.
+[INFO] Check for updates complete (72 ms)
+[INFO] 
+
+Dependency-Check is an open source tool performing a best effort analysis of 3rd party dependencies; false positives and false negatives may exist in the analysis performed by the tool. Use of the tool and the reporting provided constitutes acceptance for use in an AS IS condition, and there are NO warranties, implied or otherwise, with regard to the analysis or its use. Any use of the tool and the reporting provided is at the user’s risk. In no event shall the copyright holder or OWASP be held liable for any damages whatsoever arising out of or in connection with the use of this tool, the analysis performed, or the resulting report.
+
+
+   About ODC: https://jeremylong.github.io/DependencyCheck/general/internals.html
+   False Positives: https://jeremylong.github.io/DependencyCheck/general/suppression.html
+
+💖 Sponsor: https://github.com/sponsors/jeremylong
+
+
+[INFO] Analysis Started
+[INFO] Finished Archive Analyzer (3 seconds)
+[INFO] Finished File Name Analyzer (0 seconds)
+
+[INFO] Finished Jar Analyzer (1 seconds)
+[INFO] Finished Dependency Merging Analyzer (0 seconds)
+[INFO] Finished Version Filter Analyzer (0 seconds)
+[INFO] Finished Hint Analyzer (0 seconds)
+
+[INFO] Created CPE Index (2 seconds)
+
+[INFO] Finished CPE Analyzer (5 seconds)
+[INFO] Finished False Positive Analyzer (0 seconds)
+[INFO] Finished NVD CVE Analyzer (0 seconds)
+[INFO] Finished RetireJS Analyzer (0 seconds)
+
+[INFO] Finished Sonatype OSS Index Analyzer (5 seconds)
+[INFO] Finished Vulnerability Suppression Analyzer (0 seconds)
+[INFO] Finished Known Exploited Vulnerability Analyzer (0 seconds)
+[INFO] Finished Dependency Bundling Analyzer (0 seconds)
+[INFO] Suppression Rule had zero matches: SuppressionRule{gav=PropertyType{value=org.json:json, regex=false, caseSensitive=false},cvssBelow={7.0,}}
+[INFO] Finished Unused Suppression Rule Analyzer (0 seconds)
+[INFO] Analysis Complete (16 seconds)
+
+[INFO] Writing report to: /var/jenkins_home/workspace/JDR-Generator-Code-Quality/api/target/dependency-check-report/dependency-check-report.html
+[INFO] Writing report to: /var/jenkins_home/workspace/JDR-Generator-Code-Quality/api/target/dependency-check-report/dependency-check-report.json
+
+[WARNING] 
+
+One or more dependencies were identified with known vulnerabilities in api:
+
+spring-context-6.2.6.jar (pkg:maven/org.springframework/spring-context@6.2.6, cpe:2.3:a:pivotal_software:spring_framework:6.2.6:*:*:*:*:*:*:*, cpe:2.3:a:vmware:spring_framework:6.2.6:*:*:*:*:*:*:*) : CVE-2025-22233
+
+
+See the dependency-check report for more details.
+
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:44 min
+[INFO] Finished at: 2025-05-27T13:20:32Z
+[INFO] ------------------------------------------------------------------------
+
+[Pipeline] }
+
+[Pipeline] // dir
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] echo
+
+--- API : Fin des vérifications de qualité du code ---
+[Pipeline] }
+
+[Pipeline] // stage
+
+[Pipeline] stage
+[Pipeline] { (WEB - Code Quality Checks)
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/JDR-Generator-Code-Quality/web
+
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+
+[Pipeline] echo
+--- WEB : Install Node & NPM dependencies ---
+[Pipeline] sh
++ npm ci
+
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+
+
+added 488 packages, and audited 489 packages in 4m
+
+163 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+[Pipeline] echo
+--- WEB : Run ESLint (Frontend) ---
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] sh
++ npx eslint . --report-unused-disable-directives --max-warnings 0
+
+[Pipeline] echo
+WEB : ESLint s'est exécuté avec succès.
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] }
+
+[Pipeline] // withEnv
+
+[Pipeline] }
+
+[Pipeline] // dir
+[Pipeline] echo
+--- WEB : Fin des vérifications de qualité du code ---
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (GEMINI - Code Quality Checks)
+
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/JDR-Generator-Code-Quality/gemini
+[Pipeline] {
+
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] echo
+--- GEMINI : Install Node & NPM dependencies ---
+[Pipeline] sh
++ npm ci
+
+npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+
+npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+
+npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+
+npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+
+
+added 230 packages, and audited 231 packages in 1m
+
+60 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+[Pipeline] echo
+--- GEMINI : Run ESLint ---
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] sh
++ npx eslint . --report-unused-disable-directives --max-warnings 0
+
+[Pipeline] echo
+
+GEMINI : ESLint s'est exécuté avec succès.
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] echo
+--- GEMINI : Run npm audit ---
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] sh
+
++ npm audit '--omit=dev'
+
+found 0 vulnerabilities
+
+[Pipeline] echo
+GEMINI : npm audit s'est exécuté avec succès.
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] }
+
+[Pipeline] // withEnv
+[Pipeline] }
+
+[Pipeline] // dir
+[Pipeline] echo
+--- GEMINI : Fin des vérifications de qualité du code ---
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (OPENAI - Code Quality Checks)
+
+[Pipeline] dir
+Running in /var/jenkins_home/workspace/JDR-Generator-Code-Quality/openai
+[Pipeline] {
+
+[Pipeline] withEnv
+[Pipeline] {
+
+[Pipeline] echo
+--- OPENAI : Install Node & NPM dependencies ---
+[Pipeline] sh
++ npm ci
+
+
+added 244 packages, and audited 245 packages in 1m
+
+56 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+[Pipeline] echo
+--- OPENAI : Run ESLint ---
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] sh
++ npx eslint . --report-unused-disable-directives --max-warnings 0
+
+[Pipeline] echo
+OPENAI : ESLint s'est exécuté avec succès.
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] echo
+--- OPENAI : Run npm audit ---
+[Pipeline] script
+[Pipeline] {
+
+[Pipeline] sh
++ npm audit '--omit=dev'
+
+found 0 vulnerabilities
+
+[Pipeline] echo
+OPENAI : npm audit s'est exécuté avec succès.
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] }
+
+[Pipeline] // withEnv
+
+[Pipeline] }
+
+[Pipeline] // dir
+[Pipeline] echo
+--- OPENAI : Fin des vérifications de qualité du code ---
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] script
+
+[Pipeline] {
+[Pipeline] echo
+Nettoyage des fichiers temporaires et des conteneurs Docker...
+[Pipeline] }
+
+[Pipeline] // script
+[Pipeline] echo
+Jenkins Pipeline : Toutes les vérifications de qualité du code ont réussies !
+[Pipeline] }
+
+[Pipeline] // stage
+[Pipeline] }
+
+[Pipeline] // withEnv
+[Pipeline] }
+$ docker stop --time=1 e500bed77ec35545cdf72218a3ba490bb9bbddec8e09e16011eafe6d63c92e53
+
+$ docker rm -f --volumes e500bed77ec35545cdf72218a3ba490bb9bbddec8e09e16011eafe6d63c92e53
+[Pipeline] // withDockerContainer
+
+[Pipeline] }
+[Pipeline] // withEnv
+
+[Pipeline] }
+
+[Pipeline] // node
+[Pipeline] End of Pipeline
+
+Finished: SUCCESS

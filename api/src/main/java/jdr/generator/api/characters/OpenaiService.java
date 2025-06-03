@@ -73,7 +73,8 @@ public class OpenaiService implements GeminiGenerationConfiguration {
       OBJECT_MAPPER.readTree(jsonString); // Tentative de parsing pour vérifier la validité
       return jsonString;
     } catch (JsonProcessingException e) {
-      LOGGER.warn("La chaîne '{}' n'est pas un JSON valide : {}", jsonString, e.getMessage());
+      LOGGER.warn("La chaîne '{}' n'est pas un JSON valide : {}",
+              jsonString, e.getMessage());
       return "{}";
     }
   }
@@ -81,57 +82,67 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   /**
    * Asynchronously generates an illustration for a character using the OpenAI API.
    *
-   * @param characterDetailsEntity The details of the character for whom to generate the
+   * @param entity The details of the character for whom to generate the
    *     illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
-      CharacterDetailsEntity characterDetailsEntity) {
+          CharacterDetailsEntity entity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "OpenaiService pour le personnage {{id={}}}",
-        characterDetailsEntity.getId());
+        entity.getId());
     try {
-      final byte[] imageBytes = this.illustrate(characterDetailsEntity.getImage());
+      final byte[] imageBytes = this.illustrate(entity.getImage());
       if (imageBytes != null && imageBytes.length > 0) {
-        final CharacterIllustrationModel characterIllustrationModel =
-            CharacterIllustrationModel.builder()
-                .imageLabel(characterDetailsEntity.getImage())
-                .imageBlob(imageBytes)
-                .imageDetails(characterDetailsEntity)
-                .build();
-        CharacterIllustrationEntity characterIllustrationEntity =
-            this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-        this.characterIllustrationService.save(characterIllustrationEntity);
-        LOGGER.info(
-            "Illustration générée et enregistrée pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+        try {
+          this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
+          this.characterIllustrationService.updateIllustration(
+                  entity.getId(), imageBytes, entity.getImage());
+          LOGGER.info(
+                  "Illustration mise à jour et enregistrée pour le personnage {{id={}}}",
+                  entity.getId());
+        } catch (RuntimeException e) {
+          final CharacterIllustrationModel characterIllustrationModel =
+                  CharacterIllustrationModel.builder()
+                          .imageLabel(entity.getImage())
+                          .imageBlob(imageBytes)
+                          .imageDetails(entity)
+                          .build();
+          CharacterIllustrationEntity characterIllustrationEntity =
+                  this.modelMapper.map(characterIllustrationModel,
+                          CharacterIllustrationEntity.class);
+          this.characterIllustrationService.save(characterIllustrationEntity);
+          LOGGER.info(
+                  "Illustration générée et enregistrée pour le personnage {{id={}}}",
+                  entity.getId());
+        }
       } else {
         LOGGER.warn(
             "La génération d'illustration via OpenaiService a retourné un "
                 + "blob null ou vide pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+            entity.getId());
       }
     } catch (HttpClientErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (client) via "
               + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (serveur) via "
               + "OpenaiService pour le personnage {{id={}}} : Status={}, Body={}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (Exception e) {
       LOGGER.error(
           "Erreur inattendue lors de la génération d'illustration via "
               + "OpenaiService pour le personnage {{id={}}} : {}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
@@ -231,7 +242,8 @@ public class OpenaiService implements GeminiGenerationConfiguration {
                 characterDetailsEntity.getId());
           } catch (JsonProcessingException e) {
             LOGGER.error(
-                "Erreur lors de l'analyse du JSON stats généré par OpenAI : {}", e.getMessage());
+                "Erreur lors de l'analyse du JSON stats généré par OpenAI : {}",
+                    e.getMessage());
             LOGGER.warn("Saving raw stats JSON due to parsing error: {}", statsJson);
             try {
               this.saveCharacterJsonData(
@@ -246,12 +258,14 @@ public class OpenaiService implements GeminiGenerationConfiguration {
 
           } catch (Exception e) {
             LOGGER.error(
-                "Error saving character JSON data for ID {}", characterDetailsEntity.getId(), e);
+                "Error saving character JSON data for ID {}",
+                    characterDetailsEntity.getId(), e);
             throw new RuntimeException("Error saving character JSON data", e);
           }
         } else {
           LOGGER.warn(
-              "No stats JSON received from OpenAI module /stats, " + "skipping save for ID {}.",
+              "No stats JSON received from OpenAI module /stats, "
+                      + "skipping save for ID {}.",
               characterDetailsEntity.getId());
         }
       } catch (Exception e) {
@@ -265,10 +279,12 @@ public class OpenaiService implements GeminiGenerationConfiguration {
       return characterDetailsModel;
 
     } catch (JsonProcessingException e) {
-      LOGGER.error("Error processing JSON response from OpenAI /generate: {}", e.getMessage());
+      LOGGER.error("Error processing JSON response from OpenAI /generate: {}",
+              e.getMessage());
       throw new RuntimeException("Error processing JSON response from OpenAI /generate", e);
     } catch (RuntimeException e) {
-      LOGGER.error("RuntimeException during OpenaiService orchestration: {}", e.getMessage(), e);
+      LOGGER.error("RuntimeException during OpenaiService orchestration: {}",
+              e.getMessage(), e);
       throw e;
     } catch (Exception e) {
       LOGGER.error("Unexpected error during OpenaiService orchestration", e);
@@ -322,11 +338,13 @@ public class OpenaiService implements GeminiGenerationConfiguration {
           return null;
         }
       } catch (JsonProcessingException e) {
-        LOGGER.error("Error parsing JSON response from OpenAI /illustrate: {}", e.getMessage());
+        LOGGER.error("Error parsing JSON response from OpenAI /illustrate: {}",
+                e.getMessage());
         return null;
       } catch (IllegalArgumentException e) {
         LOGGER.error(
-            "Error decoding Base64 image data received from OpenAI module: {}", e.getMessage());
+            "Error decoding Base64 image data received from OpenAI module: {}",
+                e.getMessage());
         return null;
       }
 
@@ -337,29 +355,84 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   }
 
   /**
+   * Regenerates an illustration for an existing character based on its stored details.
+   *
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
+   */
+  @Transactional
+  public byte[] regenerateIllustration(Long id) {
+    LOGGER.info("Regenerating illustration for character ID: {}", id);
+    try {
+      CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
+      String imagePrompt = characterDetails.getImage();
+      /*
+      // TODO : Il faudrait mettre en place un service de traduction de prompt en FR -> EN
+      //  Afin d'avoir un prompt plus détaillé et permettant a l'utilisateur d'obtenir une
+      //  generation d'image plus précise. Langue EN requise pour beaucoup d'IA generative d'image
+
+      CharacterContextEntity characterContext =
+              characterContextService.findById(characterDetails.getContextId());
+      String imagePrompt = String.format(
+
+              "Highly detailed and artistic illustration in a heroic-fantasy style for a %s %s %s."
+              + " Focus on %s, %s, %s. Clothing: %s. "
+              + "Distinctive trait: %s. Physical description: %s."
+              + "Age: %d. Birth place: %s. Residence: %s. Background: %s. Current goal: %s.",
+              characterContext.getPromptGender(),
+              characterContext.getPromptRace(),
+              characterContext.getPromptClass(),
+              characterDetails.getName(),
+              characterDetails.getSelfDescription(),
+              characterDetails.getAttitudeTowardsWorld(),
+              characterDetails.getClothingPreferences(),
+              characterDetails.getDistinctiveTrait(),
+              characterDetails.getPhysicalDescription(),
+              characterDetails.getAge(),
+              characterDetails.getBirthPlace(),
+              characterDetails.getResidenceLocation(),
+              characterDetails.getChildhoodStory(),
+              characterDetails.getGoal()
+      );
+      */
+      byte[] newImageBlob = illustrate(imagePrompt);
+      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+
+      return newImageBlob;
+
+    } catch (Exception e) {
+      LOGGER.error("Error during illustration regeneration for character ID: {}", id, e);
+      throw new RuntimeException("Error during illustration regeneration", e);
+    }
+  }
+
+  /**
    * Retrieves character statistics from the OpenAI API for a given character ID.
    *
    * @param characterDetailsId The ID of the character details.
    * @return A JSON string containing the character's statistics.
-   * @throws RuntimeException if there is an error communicating with the OpenAI API or if character
-   *     details or context are not found.
+   * @throws RuntimeException if there is an error communicating with the OpenAI API or if
+   *     character details or context are not found.
    */
   @Override
   public String stats(Long characterDetailsId) {
-    LOGGER.info("Preparing data for OpenAI module /stats for character ID: {}", characterDetailsId);
+    LOGGER.info("Preparing data for OpenAI module /stats for character ID: {}",
+            characterDetailsId);
 
     CharacterDetailsEntity characterDetailsEntity =
         characterDetailsService.findById(characterDetailsId);
     if (characterDetailsEntity == null) {
       LOGGER.error(
-          "Character details entity not found for stats call for ID: {}", characterDetailsId);
+          "Character details entity not found for stats call for ID: {}",
+              characterDetailsId);
       throw new RuntimeException("Character details not found for ID: " + characterDetailsId);
     }
 
     Long contextId = characterDetailsEntity.getContextId();
     CharacterContextEntity characterContextEntity = characterContextService.findById(contextId);
     if (characterContextEntity == null) {
-      LOGGER.error("Character context entity not found for stats call for ID: {}", contextId);
+      LOGGER.error("Character context entity not found for stats call for ID: {}",
+              contextId);
       throw new RuntimeException("Character context not found for ID: " + contextId);
     }
 
@@ -436,7 +509,8 @@ public class OpenaiService implements GeminiGenerationConfiguration {
             "OpenAI /stats API request failed with status code: " + response.getStatusCode());
       }
 
-      LOGGER.info("Statistiques API response received from OpenAI module: {}", response.getBody());
+      LOGGER.info("Statistiques API response received from OpenAI module: {}",
+              response.getBody());
       return response.getBody();
 
     } catch (Exception e) {

@@ -1,0 +1,113 @@
+// jenkins/database-export/Jenkinsfile
+// Les fichiers SQL se trouve dans .jenkins/jobs/<Nom_pipeline:JDR-Generator-DB-Export>/builds/<number>/archive/
+
+pipeline {
+    agent {
+        docker {
+            image 'eli256/jenkins-docker-image-agent:latest'
+            args '-v /var/run/docker.sock:/var/run/docker.sock --group-add 999 --group-add 0'
+        }
+    }
+
+    parameters {
+        choice(choices: ['jenkins','main'], name: 'BRANCH_TO_BUILD', description: 'Choix de la branche à checkout pour le contexte (optionnel)')
+        string(name: 'TABLES_TO_EXPORT', defaultValue: '', description: 'Tables spécifiques à exporter (ex: character_details character_illustration). Laisser vide pour toute la DB.')
+    }
+
+    environment {
+
+        MYSQL_CONTAINER_NAME = 'jdr-generator-mysql-container-1'
+        MYSQL_DB_USER = 'jdr_user'
+        // Mot de passe : Idéalement, utilisez les credentials Jenkins pour la sécurité.
+        // Exemple avec un credential de type "Secret text" nommé 'mysql-jdr-db-password' :
+        // MYSQL_DB_PASSWORD_CRED = credentials('mysql-jdr-db-password')
+        MYSQL_DB_PASSWORD = 'root'
+        MYSQL_DB_NAME = 'jdr_generator_db'
+    }
+
+    stages {
+
+        stage('Declarative: Checkout SCM') {
+            steps {
+                echo '--- Checkout initial du SCM pour lire le Jenkinsfile ---'
+                checkout scm
+            }
+        }
+
+        stage('GIT - Checkout Code (Optional)') {
+            steps {
+                echo '--- https://github.com/NeoRyu/JDR-Generator ---'
+                git branch: "${params.BRANCH_TO_BUILD}", url: 'https://github.com/NeoRyu/JDR-Generator'
+            }
+        }
+
+        stage('Database - Export Data') {
+            steps {
+                script {
+                    echo "--- DATABASE : Exporting Data ---"
+                    sh """
+                    echo "Vérification du statut du conteneur MySQL '${env.MYSQL_CONTAINER_NAME}'..."
+                    id
+
+                    docker ps --filter "name=${env.MYSQL_CONTAINER_NAME}" --format "{{.Names}}" | grep -q "${env.MYSQL_CONTAINER_NAME}"
+                    if [ \$? -ne 0 ]; then
+                        echo "Erreur : Le conteneur MySQL '${env.MYSQL_CONTAINER_NAME}' n'est pas en cours d'exécution."
+                        echo "Veuillez vous assurer que votre environnement Docker Compose est démarré sur l'hôte (par ex. via docker-start-app.sh)."
+                        exit 1
+                    fi
+                    echo "Conteneur MySQL '${env.MYSQL_CONTAINER_NAME}' est bien en cours d'exécution."
+
+                    TIMESTAMP=\$(date +%Y%m%d%H%M%S)
+                    FILENAME="jdr_generator_db_data_\${TIMESTAMP}.sql"
+
+                    MYSQLDUMP_CMD="docker exec ${env.MYSQL_CONTAINER_NAME} mysqldump -u ${env.MYSQL_DB_USER} -p${env.MYSQL_DB_PASSWORD} --no-create-info --no-create-db ${env.MYSQL_DB_NAME}"
+
+                    if [ -n "${params.TABLES_TO_EXPORT}" ]; then
+                        echo "Export des tables spécifiques : ${params.TABLES_TO_EXPORT}..."
+                        MYSQLDUMP_CMD="\${MYSQLDUMP_CMD} ${params.TABLES_TO_EXPORT}"
+                    else
+                        echo "Export de toute la base de données '${env.MYSQL_DB_NAME}'..."
+                    fi
+
+                    \${MYSQLDUMP_CMD} > "\${FILENAME}"
+
+                    if [ \$? -eq 0 ]; then
+                        echo "Export des données de la base de données terminé avec succès : \$(pwd)/\${FILENAME}"
+                    else
+                        echo "Erreur lors de l'export des données de la base de données. Code de sortie : \$? "
+                        exit 1
+                    fi
+                    """
+                }
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: 'jdr_generator_db_data_*.sql', fingerprint: true
+                    echo "Fichier d'export de données archivé dans Jenkins."
+                }
+                failure {
+                    script {
+                        echo "L'export des données de la base de données a échoué."
+                        currentBuild.result = 'FAILURE'
+                    }
+                }
+            }
+        }
+    } // Fin du bloc stages
+
+    post {
+        always {
+            script {
+                echo "Nettoyage des fichiers temporaires."
+                // Ce Jenkinsfile n'est responsable que de l'export, pas de la gestion de la stack Docker.
+                // Donc pas de 'docker-compose down' ici.
+            }
+        }
+        failure {
+            echo "Jenkins Pipeline : L'export des données a échoué !"
+        }
+        success {
+            echo "Jenkins Pipeline : L'export des données a réussi !"
+        }
+    }
+}

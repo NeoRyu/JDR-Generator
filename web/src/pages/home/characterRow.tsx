@@ -7,7 +7,9 @@ import {ReadCharacterContent} from "@/pages/home/readCharacterContent.tsx";
 import {UpdateCharacterDialog} from "@/pages/home/updateCharacterContent.tsx";
 import {DeleteCharacterContent} from "@/pages/home/deleteCharacterContent.tsx";
 import {ModalTypes} from "@/pages/home/home.tsx";
-import {Dispatch, SetStateAction} from "react";
+import {Dispatch, SetStateAction, useEffect, useState} from "react";
+import {RegenerateIllustrationButton} from "@/pages/home/regenerateIllustrationButton.tsx";
+import {Loader2} from "lucide-react";
 
 interface CharacterRowProps {
   character: CharacterFull;
@@ -34,17 +36,36 @@ export function CharacterRow({
   deletingCharacters,
   setDeletingCharacters,
 }: CharacterRowProps) {
+
   const handleReadCharacter = (character: CharacterFull) => {
     setSelectedCharacter(character);
     setModalType("read");
   };
+
+  const [localImageBlob, setLocalImageBlob] = useState(character.illustration?.imageBlob || null);
+  const [isImageLoading, setIsImageLoading] = useState(true);
+
+  useEffect(() => {
+    if (character.illustration?.imageBlob !== localImageBlob) {
+      if (character.illustration?.imageBlob) {
+        setLocalImageBlob(character.illustration.imageBlob); // Met à jour le blob local
+        setIsImageLoading(false); // Stop le chargement (spinner)
+      } else {
+        // Si l'image a été retirée ou n'existe plus
+        setIsImageLoading(false);
+        setLocalImageBlob(null);
+      }
+    } else {
+      setIsImageLoading(false);
+    }
+  }, [character.illustration?.imageBlob]);
 
   const handleUpdateCharacter = async (
     updatedCharacter: CharacterDetailsModel,
   ) => {
     try {
       await updateCharacter(updatedCharacter);
-      await refetch();
+      void refetch();
       setModalType(null);
       setSelectedCharacter(null);
     } catch (error) {
@@ -60,16 +81,43 @@ export function CharacterRow({
       style={{
         backgroundColor: isDeleting ? "rgba(255, 0, 0, 0.1)" : "transparent",
       }}
+      className={
+        deletingCharacters.includes(character.details?.id || 0) ? "opacity-50" : ""
+      }
     >
       <TableCell>
         {dayjs(character.details.createdAt).format("DD/MM/YYYY")}
       </TableCell>
       <TableCell>
-        {character.context?.promptGender == "Male"
-          ? "♂"
-          : character.context?.promptGender == "Female"
-            ? "♀"
-            : "⚥"}
+        {isImageLoading ? (
+            <div className="w-16 h-16 flex items-center justify-center bg-gray-100 rounded">
+              <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
+            </div>
+        ) : localImageBlob ? (
+            <img
+                className="w-16 h-16 object-cover rounded shadow cursor-pointer"
+                src={`data:image/png;base64,${localImageBlob}`}
+                alt={character.details?.image || "Illustration"}
+                onLoad={() => setIsImageLoading(false)}
+                onError={() => {
+                  console.error("Failed to load image for character:", character.details?.name);
+                  setIsImageLoading(false);
+                  setLocalImageBlob(null);
+                }}
+            />
+        ) : (
+            <div className="w-16 h-16 bg-gray-200 flex items-center justify-center rounded">
+              <span className="text-xs text-gray-500">Pas d'image</span>
+            </div>
+        )}
+      </TableCell>
+      <TableCell>
+        <div className="text-2xl flex items-center justify-center font-bold">
+          {character.context?.promptGender == "Male" ? "♂"
+              : character.context?.promptGender == "Female" ? "♀"
+                  : "⚧"
+          }
+        </div>
       </TableCell>
       <TableCell>{character.details.name}</TableCell>
       <TableCell>{character.details.age}</TableCell>
@@ -78,6 +126,7 @@ export function CharacterRow({
       <TableCell>{character.context?.promptClass}</TableCell>
       <TableCell>{character.details.goal}</TableCell>
       <TableCell>{character.context?.promptSystem}</TableCell>
+
       <TableCell>
         <div className="flex gap-2">
           <ReadCharacterContent
@@ -87,6 +136,7 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             handleReadCharacter={handleReadCharacter}
+            handleUpdateIllustration={refetch}
           />
           <UpdateCharacterDialog
             modalType={modalType === "update" ? "update" : null}
@@ -95,6 +145,12 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             updateCharacter={handleUpdateCharacter}
+          />
+          <RegenerateIllustrationButton
+              character={character}
+              refetch={refetch}
+              selectedCharacter={selectedCharacter}
+              setSelectedCharacter={setSelectedCharacter}
           />
           <DeleteCharacterContent
             modalType={modalType === "delete" ? "delete" : null}

@@ -3,12 +3,22 @@ import {Dispatch, SetStateAction, useState} from "react";
 import {CharacterFull} from "@/components/model/character-full.model.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Table, TableBody, TableCell, TableRow} from "@/components/ui/table";
-import {Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger,} from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
-import {Eye} from "lucide-react";
+import {Eye, Users} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {useRegenerateIllustration} from "@/services/illustrateCharacters.service.ts";
+import {Loader2} from "lucide-react";
+import {arrayBufferToBase64} from "@/lib/utils.ts";
 
 interface ReadCharacterContentProps {
   character: CharacterFull;
@@ -17,6 +27,7 @@ interface ReadCharacterContentProps {
   modalType: ModalTypes;
   setModalType: Dispatch<SetStateAction<ModalTypes>>;
   handleReadCharacter: (character: CharacterFull) => void;
+  handleUpdateIllustration: () => void;
 }
 
 const renderJsonData = (jsonData: any, level = 0): JSX.Element[] => {
@@ -90,8 +101,13 @@ export function ReadCharacterContent({
   setModalType,
   selectedCharacter,
   setSelectedCharacter,
+  handleReadCharacter,
+  handleUpdateIllustration
 }: ReadCharacterContentProps) {
   const { theme } = useTheme();
+
+  const [isRegenerating, setIsRegenerating] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
 
   if (!character || !character.details) {
@@ -103,13 +119,53 @@ export function ReadCharacterContent({
     parsedJson =
       character.jsonData &&
       character.jsonData.jsonData &&
-      typeof character.jsonData.jsonData === "string"
-        ? JSON.parse(character.jsonData.jsonData)
+      typeof character.jsonData.jsonData === "string" // DOT NOT EDIT OR DELETE THIS !
+        ? JSON.parse(character.jsonData.jsonData)     // -> Requis pour l'affichage du TAB stats
         : null;
-    if (parsedJson) console.log("Parsed JSON:", parsedJson);
   } catch (error) {
     console.error("Erreur lors de l'analyse du JSON :", error);
   }
+
+  // Initialisation du hook de mutation pour la régénération
+  const regenerateIllustrationMutation = useRegenerateIllustration();
+
+  const handleConfirmRegeneration = async () => {
+    if (!selectedCharacter?.details?.id) {
+      console.error("Character ID is missing for regeneration.");
+      return;
+    }
+
+    setShowConfirmationModal(false); // Ferme la modale de confirmation
+    setIsRegenerating(true); // Active le loading
+
+    try {
+      const response = await regenerateIllustrationMutation.mutateAsync(selectedCharacter.details.id);
+      // La réponse est un ArrayBuffer, il faut le convertir en base64 pour l'afficher
+      // const newImageBlob = Buffer.from(response.data).toString('base64');
+      const newImageBlob = await arrayBufferToBase64(response.data);
+
+      // Mise à jour de l'état local du personnage sélectionné avec la nouvelle image
+      setSelectedCharacter(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          illustration: {
+            ...prev.illustration,
+            imageBlob: newImageBlob,
+          },
+        };
+      });
+
+      // Notifier le composant parent (Home) pour rafraîchir potentiellement la liste ou le cache
+      handleUpdateIllustration();
+      console.log("Illustration régénérée avec succès !");
+    } catch (error) {
+      console.error("Erreur lors de la régénération de l'illustration :", error);
+      // Gérer l'affichage d'erreurs à l'utilisateur si nécessaire
+    } finally {
+      setIsRegenerating(false); // Désactive le loading
+    }
+  };
 
   return (
     <Dialog
@@ -129,6 +185,7 @@ export function ReadCharacterContent({
           onClick={() => {
             setModalType("read");
             setSelectedCharacter(character);
+            handleReadCharacter(character);
           }}
           className="button"
           type="button"
@@ -143,31 +200,68 @@ export function ReadCharacterContent({
       >
         <div className="flex flex-col items-stretch">
           <div className="flex items-start">
-            {character.illustration && character.illustration.imageBlob ? (
-              <img
-                className="rounded shadow w-64 h-64 object-contain"
-                src={`data:image/png;base64,${character.illustration.imageBlob}`}
-                alt={character.details?.image || "Illustration du personnage"}
-              />
-            ) : (
-              <div className="rounded shadow w-64 h-64 no-img">
-                <span className="text-gray-500">
-                  {character.details?.image
-                    ? `Illustration non disponible : ${character.details.image}`
-                    : "Aucune illustration disponible"}
-                </span>
-              </div>
+            {isRegenerating ? (
+                <div className="rounded shadow w-64 h-64 object-contain">
+                  <div className="loading-spiraleclispe-container">
+                    <div className="loading-spiraleclispe">
+                      <span>{/* ANIMATION LOADING */}</span>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  { (selectedCharacter?.illustration?.imageBlob || character.illustration?.imageBlob)
+                    ? (
+                    <img
+                      className="rounded shadow w-64 h-64 object-contain"
+                      src={`data:image/png;base64,${
+                        selectedCharacter?.illustration?.imageBlob || character.illustration?.imageBlob
+                      }`}
+                      alt={character.details?.image || "Illustration du personnage"}
+                    />
+                  ) : (
+                    <div className="rounded shadow w-64 h-64 no-img">
+                      <span className="text-gray-500">
+                        {character.details?.image
+                          ? `Illustration non disponible : ${character.details.image}`
+                          : "Aucune illustration disponible"}
+                      </span>
+                    </div>
+                  )}
+                </div>
             )}
             <div className="flex-1">
-              <DialogTitle className="character-name">
-                {character.context?.promptGender == "Male"
-                  ? "♂"
-                  : character.context?.promptGender == "Female"
-                    ? "♀"
-                    : "⚥"}
-                &nbsp;
-                {character.details?.name}
-              </DialogTitle>
+              <div className="flex items-center justify-between">
+                <DialogTitle className="character-name">
+                  {character.context?.promptGender == "Male"
+                    ? "♂"
+                    : character.context?.promptGender == "Female"
+                      ? "♀"
+                      : "⚥"}
+                  &nbsp;
+                  {character.details?.name}
+                </DialogTitle>
+                <div style={{ padding: "20px 0 0" }}>
+                  <Button
+                      onClick={() => setShowConfirmationModal(true)}
+                      disabled={isRegenerating}
+                      variant="default"
+                      className="button-aura"
+                  >
+                    {isRegenerating ? (
+                        <>
+                          &nbsp;<Loader2 className="mr-2 h-4 w-4 animate-spin"/>
+                          Génération en cours... &nbsp;
+                        </>
+                    ) : (
+                        <>
+                          &nbsp;<Users className="mr-2 h-4 w-4" />
+                          Générer un nouveau portrait &nbsp;
+                        </>
+                    )}
+                  </Button>
+                </div>
+              </div>
               <DialogDescription className="character-context">
                 <div className="flex character-context">
                   <div className="w-55 mint">
@@ -551,6 +645,39 @@ export function ReadCharacterContent({
             </TabsContent>
           </Tabs>
         </div>
+
+        <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
+          <DialogContent>
+            <DialogTitle>ACTION : Régénération du portrait de {character.details?.name}</DialogTitle>
+            <DialogDescription>
+              Voulez-vous vraiment générer une nouvelle illustration de portrait
+              pour le personnage {character.details?.name} ? Cette action est irréversible...
+
+              { (selectedCharacter?.illustration?.imageBlob || character.illustration?.imageBlob)
+                  ? (
+                      <img className="object-cover rounded shadow cursor-pointer"
+                           src={`data:image/png;base64,${character.illustration?.imageBlob}`}
+                           alt={character.details?.image || "Illustration"}
+                      />
+                  ) : (
+                      <img
+                          className="rounded shadow w-64 h-64 object-contain cursor-pointer"
+                          src={``}
+                          alt={"Illustration manquante"}
+                      />
+                  )
+              }
+            </DialogDescription>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setShowConfirmationModal(false)}>Annuler</Button>
+              <Button onClick={handleConfirmRegeneration} disabled={regenerateIllustrationMutation.isLoading}>
+                {regenerateIllustrationMutation.isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Confirmer
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
       </DialogContent>
     </Dialog>
   );

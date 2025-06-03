@@ -63,6 +63,10 @@ public class GeminiService implements GeminiGenerationConfiguration {
   @Qualifier("openaiService")
   private final OpenaiService openaiService;
 
+  @SuppressWarnings("SpringQualifierCopyableLombok")
+  @Qualifier("freepikService")
+  private final FreepikService freepikService;
+
   /**
    * Cleans a JSON string received from the Gemini API.
    *
@@ -106,68 +110,79 @@ public class GeminiService implements GeminiGenerationConfiguration {
   /**
    * Asynchronously generates illustration for a character using the Imagen API (via GeminiService).
    *
-   * @param characterDetailsEntity The details of the character for generate the illustration.
+   * @param entity The details of the character for generate the illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
-      CharacterDetailsEntity characterDetailsEntity) {
+      CharacterDetailsEntity entity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "Imagen (GeminiService) pour le personnage {{id={}}}",
-        characterDetailsEntity.getId());
+        entity.getId());
     try {
-      final String imgBlob = this.illustrate(characterDetailsEntity.getImage());
+      final String imgBlob = this.illustrate(entity.getImage());
       if (imgBlob != null) {
         try {
           JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlob).get("image");
           if (imageNode != null) {
             byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
 
-            final CharacterIllustrationModel characterIllustrationModel =
-                CharacterIllustrationModel.builder()
-                    .imageLabel(characterDetailsEntity.getImage())
-                    .imageBlob(imageBytes)
-                    .imageDetails(characterDetailsEntity)
-                    .build();
-            CharacterIllustrationEntity characterIllustrationEntity =
-                this.modelMapper.map(characterIllustrationModel, CharacterIllustrationEntity.class);
-            this.characterIllustrationService.save(characterIllustrationEntity);
-            LOGGER.info(
-                "Illustration générée et enregistrée pour le personnage {{id={}}}",
-                characterDetailsEntity.getId());
+            try {
+              this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
+              this.characterIllustrationService.updateIllustration(
+                      entity.getId(), imageBytes, entity.getImage());
+              LOGGER.info(
+                      "Illustration mise à jour et enregistrée pour {{id={}}}",
+                      entity.getId());
+
+            } catch (RuntimeException e) {
+              final CharacterIllustrationModel characterIllustrationModel =
+                      CharacterIllustrationModel.builder()
+                              .imageLabel(entity.getImage())
+                              .imageBlob(imageBytes)
+                              .imageDetails(entity)
+                              .build();
+              CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(
+                      characterIllustrationModel, CharacterIllustrationEntity.class
+              );
+              this.characterIllustrationService.save(characterIllustrationEntity);
+              LOGGER.info(
+                      "Nouvelle illustration générée et enregistrée pour {{id={}}}",
+                      entity.getId());
+            }
           }
         } catch (JsonProcessingException e) {
           LOGGER.error(
               "Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}",
-              characterDetailsEntity.getId(),
+              entity.getId(),
               e.getMessage());
         }
       } else {
         LOGGER.warn(
             "La génération d'illustration via Imagen (GeminiService) a retourné "
                 + "un blob null pour le personnage {{id={}}}",
-            characterDetailsEntity.getId());
+            entity.getId());
       }
     } catch (HttpClientErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (client) via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (serveur) via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (Exception e) {
       LOGGER.error(
           "Erreur inattendue lors de la génération d'illustration via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
-          characterDetailsEntity.getId(),
+          entity.getId(),
           e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
@@ -192,7 +207,8 @@ public class GeminiService implements GeminiGenerationConfiguration {
 
     if (response.getStatusCode() != HttpStatus.OK) {
       LOGGER.error(
-          "API Gemini /generate request failed with status code: {}", response.getStatusCode());
+          "API Gemini /generate request failed with status code: {}",
+              response.getStatusCode());
       throw new RuntimeException("API Gemini /generate request failed");
     }
 
@@ -237,8 +253,15 @@ public class GeminiService implements GeminiGenerationConfiguration {
           characterContextModel.promptGender,
           characterContextEntity.getId());
 
-      // Lancement asynchrone de la génération de l'illustration via OpenaiService
-      this.openaiService.generateIllustrationAsync(characterDetailsEntity);
+      CharacterIllustrationEntity illustrationEntity = new CharacterIllustrationEntity();
+      illustrationEntity.setImageDetails(characterDetailsEntity);
+      illustrationEntity.setImageLabel(characterDetailsEntity.getImage());
+      illustrationEntity = characterIllustrationService.save(illustrationEntity);
+      LOGGER.info("Initial illustration entity created for character ID: {}. ID: {}",
+              characterDetailsEntity.getId(), illustrationEntity.getId());
+
+      // Lancement asynchrone de la génération de l'illustration via une IA générative
+      this.freepikService.generateIllustrationAsync(characterDetailsEntity);
 
       String statsJson = this.stats(characterDetailsEntity.getId());
       LOGGER.info("Stats JSON generated by GeminiService: {}", statsJson);
@@ -249,7 +272,8 @@ public class GeminiService implements GeminiGenerationConfiguration {
         LOGGER.info("Character JSON stats data saved successfully");
       } catch (JsonProcessingException e) {
         LOGGER.error(
-            "Erreur lors de l'analyse du JSON stats généré par GeminiService : {}", e.getMessage());
+            "Erreur lors de l'analyse du JSON stats généré par GeminiService : {}",
+                e.getMessage());
         this.saveCharacterJsonData(
             characterDetailsEntity.getId(), statsJson.isEmpty() ? "{}" : statsJson);
         LOGGER.warn("Character JSON stats data saved with raw JSON due to parsing error.");
@@ -284,12 +308,81 @@ public class GeminiService implements GeminiGenerationConfiguration {
         restTemplate.exchange(apiUrl, HttpMethod.POST, request, String.class);
 
     if (response.getStatusCode() != HttpStatus.OK) {
-      LOGGER.error("API illustrate request failed with status code: {}", response.getStatusCode());
+      LOGGER.error("API illustrate request failed with status code: {}",
+              response.getStatusCode());
       throw new RuntimeException("API illustrate request failed");
     }
 
     LOGGER.info("Illustration API response: {}", response.getBody());
     return response.getBody();
+  }
+
+  /**
+   * Regenerates an illustration for an existing character based on its stored details,
+   * similar to OpenaiService.
+   *
+   * @param id The ID of the character for which to regenerate the illustration.
+   * @return An array of bytes representing the regenerated image.
+   * @throws RuntimeException if the illustration regeneration fails.
+   */
+  @Transactional
+  public byte[] regenerateIllustration(Long id) {
+    LOGGER.info("Regenerating illustration via Gemini (Imagen) for character ID: {}", id);
+    try {
+      CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
+      String imagePrompt = characterDetails.getImage();
+
+      final String imgBlobResponse = illustrate(imagePrompt);
+      if (imgBlobResponse == null) {
+        LOGGER.warn("Image generation via Imagen (GeminiService) "
+                + "returned a null blob for character {{id={}}}", id);
+        throw new RuntimeException("Image generation returned null.");
+      }
+
+      JsonNode imageNode = OBJECT_MAPPER.readTree(imgBlobResponse).get("image");
+      if (imageNode == null) {
+        LOGGER.error("Image node not found in response for character {{id={}}}", id);
+        throw new RuntimeException("Image data not found in API response.");
+      }
+      byte[] newImageBlob = Base64.getDecoder().decode(imageNode.asText());
+
+      // Update the existing illustration
+      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+      LOGGER.info("Illustration regenerated and updated for character {{id={}}}", id);
+
+      return newImageBlob;
+
+    } catch (HttpClientErrorException e) {
+      LOGGER.error(
+              "Erreur lors de l'appel à l'API d'illustration (client) via "
+                      + "Imagen (GeminiService) pour la régénération du "
+                      + "portrait du personnage {{id={}}} : Status={}, Body={}",
+              id, e.getStatusCode(), e.getResponseBodyAsString());
+      throw new RuntimeException(
+              "Erreur client lors de la régénération de l'illustration: "
+                      + e.getResponseBodyAsString(), e);
+    } catch (HttpServerErrorException e) {
+      LOGGER.error(
+              "Erreur lors de l'appel à l'API d'illustration (serveur) via "
+                      + "Imagen (GeminiService) pour la régénération du personnage "
+                      + "{{id={}}} : Status={}, Body={}",
+              id, e.getStatusCode(), e.getResponseBodyAsString());
+      throw new RuntimeException(
+              "Erreur serveur lors de la régénération de l'illustration: "
+                      + e.getResponseBodyAsString(), e);
+    } catch (JsonProcessingException e) {
+      LOGGER.error(
+              "Erreur lors de l'analyse du blob d'image pour la "
+                      + "régénération du personnage {{id={}}} : {}",
+              id, e.getMessage());
+      throw new RuntimeException("Erreur lors de l'analyse de la réponse d'illustration.", e);
+    } catch (Exception e) {
+      LOGGER.error(
+              "Erreur inattendue lors de la régénération d'illustration via "
+                      + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
+              id, e.getMessage());
+      throw new RuntimeException("Erreur inattendue lors de la régénération de l'illustration.", e);
+    }
   }
 
   /**
@@ -363,7 +456,8 @@ public class GeminiService implements GeminiGenerationConfiguration {
 
     if (response.getStatusCode() != HttpStatus.OK) {
       LOGGER.error(
-          "API Gemini /stats request failed with status code: {}", response.getStatusCode());
+          "API Gemini /stats request failed with status code: {}",
+              response.getStatusCode());
       throw new RuntimeException("API Gemini /stats request failed");
     }
 

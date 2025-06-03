@@ -28,25 +28,31 @@ JDR-Generator est une application complète pour la création de personnages de 
 * React (TypeScript)
 * MySQL
 * FlywayDB
-* Google Gemini API
-* OpenAI API
-* npm ou yarn
-* Docker (pour le déploiement)
+* Google Gemini API (gemini / imagen)
+* OpenAI API (chatgpt / dall-e)
+* Freepik API (flux-dev)
+* Maven / NPM
+* Docker / Docker Hub
+* Github Actions
+* Jenkins
+* ...
 
 ## Pré-requis
 
-* Node.js (pour NestJS et React)
-* JDK (Java Development Kit) 8 ou supérieur (pour l'API Java)
-* MySQL Server
+* Github
+* Node.js
+* JDK 11
+* MySQL Workbench
 * npm ou yarn
-* Docker (si vous utilisez les commandes Docker fournies)
+* Docker Desktop
+* GIT Bash
 
 ## Notes Importantes
 
 * **Variables d'environnement :** La configuration correcte des variables d'environnement est cruciale pour le bon fonctionnement du projet. Consultez les fichiers `.env.example` (ou équivalents) dans chaque répertoire pour connaître les variables requises.
 * **Dépendances Java :** Assurez-vous d'avoir un JDK et un outil de build Java (Maven ou Gradle) correctement installés et configurés.
 * **Conflits de ports :** Les différentes parties du projet (API Java, API NestJS, Web) peuvent utiliser des ports différents. Si vous rencontrez des conflits, vous devrez peut-être modifier les configurations de port.
-* **Documentation Supplémentaire :** Chaque module (api, gemini, web) devrait avoir son propre README avec des instructions plus détaillées.
+* **Documentation Supplémentaire :** Chaque module (api, gemini, web) a son propre README avec des instructions plus détaillées.
 * **Scripts NestJS :** Les commandes `clean`, `build` et `start` pour l'API NestJS font référence aux scripts définis dans le fichier `package.json` du répertoire `gemini`.
 * **Fichiers Docker Compose :** Ce projet utilise deux fichiers `docker-compose` distincts :
     * `docker-compose.yml` : Configuration pour le déploiement sur AWS Elastic Beanstalk.
@@ -74,12 +80,16 @@ JDR-Generator est une application complète pour la création de personnages de 
 2.  **Configurer les variables d'environnement :**
 
     * Vous devrez configurer les variables d'environnement spécifiques à chaque partie du projet (API Java, API NestJS, Web). Des exemples de fichiers `.env.example` devraient être fournis dans chaque répertoire si possible.
-    * Les variables d'environnement incluent généralement les clés d'API (Google Gemini, OpenAI), les informations de connexion à la base de données MySQL, et d'autres paramètres de configuration.
+    * Les variables d'environnement incluent généralement les clés d'API (Google Gemini et Imagen, Freepik Flux-dev, OpenAI Dall-E & ChatGPT), les informations de connexion à la base de données MySQL, et d'autres paramètres de configuration.
 
-3.  **Installer les dépendances de l'API NestJS (Gemini) :**
+3.  **Installer les dépendances des API NestJS :**
 
     ```bash
     cd gemini
+    npm install
+    cd openai
+    npm install
+    cd freepik
     npm install
     ```
 
@@ -93,12 +103,12 @@ JDR-Generator est une application complète pour la création de personnages de 
 5.  **Installer les dépendances de l'API Java :**
 
     * L'installation des dépendances Java se fait généralement via un outil de gestion de dépendances comme Maven ou Gradle. Assurez-vous d'avoir l'outil approprié installé et configurez le projet pour télécharger les dépendances. (Si vous utilisez IntelliJ IDEA, il gérera souvent cela automatiquement).
-    * Si vous utilisez Maven, par exemple, vous pouvez construire le projet avec :
+   * Si vous utilisez Maven, par exemple, vous pouvez construire le projet avec :
 
-        ```bash
-        cd api
-        mvn clean install
-        ```
+       ```bash
+       cd api
+       mvn clean install
+       ```
 
 ## Exécution du Projet
 
@@ -140,7 +150,7 @@ JDR-Generator est une application complète pour la création de personnages de 
 
         ```bash
         cd api
-        java -jar target/nom-de-votre-application.jar  # Remplacez nom-de-votre-application.jar par le nom réel du fichier JAR
+        java -jar target/api-0.0.1-SNAPSHOT.jar 
         ```
 
 4.  **Exécuter l'interface Web (React) :**
@@ -159,33 +169,254 @@ JDR-Generator est une application complète pour la création de personnages de 
 
 ## Structure du Projet
 
+```
 JDR-Generator/
-├── api/          # API Backend Java (avec Scala)
+├── .env
+├── .gitignore
+├── docker-compose.local.yml           <-- Fichier Docker Compose principal
+├── JDR-Generator.iml
+├── api/
+│   ├── README.md
+│   ├── Dockerfile                     <-- Dockerfile pour le service API
+│   ├── pom.xml
+│   └── src/
+│       ├── main/
+│       │   ├── scala/
+│       │   │   └── ...                <-- Inutile actuellement, permettra plus tard un decoupage
+│       │   └── java/
+│       │       ├── characters/
+│       │       │   ├── context/
+│       │       │   │   ├── CharacterContextEntity.java
+│       │       │   │   ├── CharacterContextModel.java
+│       │       │   │   ├── CharacterContextRepository.java
+│       │       │   │   ├── CharacterContextService.java
+│       │       │   │   ├── CharacterContextServiceImpl.java
+│       │       │   │   └── CharacterContextJson.java
+│       │       │   ├── details/
+│       │       │   │   ├── CharacterDetailsEntity.java
+│       │       │   │   ├── CharacterDetailsModel.java
+│       │       │   │   ├── CharacterDetailsNotFoundException.java
+│       │       │   │   ├── CharacterDetailsRepository.java
+│       │       │   │   ├── CharacterDetailsService.java
+│       │       │   │   ├── CharacterDetailsServiceImpl.java
+│       │       │   │   ├── CharacterBooleanDeserializer.java
+│       │       │   │   └── CharacterIntegerDeserializer.java
+│       │       │   ├── illustration/
+│       │       │   │   ├── CharacterIllustrationEntity.java
+│       │       │   │   ├── CharacterIllustrationModel.java
+│       │       │   │   ├── CharacterIllustrationRepository.java
+│       │       │   │   ├── CharacterIllustrationService.java
+│       │       │   │   └── CharacterIllustrationServiceImpl.java
+│       │       │   ├── stats/
+│       │       │   │   ├── CharacterJsonDataEntity.java
+│       │       │   │   ├── CharacterJsonDataModel.java
+│       │       │   │   ├── CharacterJsonDataRepository.java
+│       │       │   │   ├── CharacterJsonDataService.java
+│       │       │   │   └── CharacterJsonDataServiceImpl.java
+│       │       │   ├── CharacterFullModel.java
+│       │       │   ├── CharacterController.java                <-- controlleur principal
+│       │       │   ├── FreepikService.java                     <-- utilisé pour illustrate
+│       │       │   ├── GeminiService.java                      <-- utilisé pour generate et stats
+│       │       │   └── OpenaiService.java                      <-- inutilisé actuellement
+│       │       ├── config/
+│       │       │   ├── CorsConfig.java
+│       │       │   ├── GeminiGenerationConfiguration.java
+│       │       │   ├── ModelMapperConfig.java
+│       │       │   └── RestTemplateConfig.java
+│       │       ├── tools/
+│       │       │   └── m0v.py          <-- Petit script python evitant la mise en veille de l'ecran
+│       │       ├── ApiApplication.java                         <-- classe principale
+│       │       ├── FlywayDatabaseConfig.java                   <-- creation de la base de donnée
+│       │       ├── InvalidContextException.java
+│       │       └── RestPreconditions.java 
+│       └── resources/
+│           ├── db/
+│           │   └── migration/                                  <-- fichiers SQL pour FlywayDB
+│           │       ├── V00001__Create_characters_table.sql
+│           │       ├── V00002__Create_character_json_data.sql
+│           │       └── ...
+│           ├── banner.txt
+│           ├── application.yml                     <-- pour le build localhost de l'application
+│           └── application-localdocker.yml         <-- pour le build de l'image docker en localhost
+├── freepik/
+│   ├── dist/
+│   ├── node_modules/
 │   ├── src/
-│   ├── pom.xml   # (ou build.gradle)
-│   └── ...
-├── gemini/       # API Backend NestJS (pour Gemini/OpenAI)
-│   ├── src/
+│   │   └── controllers/
+│   │       ├── illustration.ts             <-- Utilisé par défault. 0.01 € l'image (100 gratuites).
+│   ├── .ebignore
+│   ├── .env                                <-- Mettre votre clef d'API ici
+│   ├── .gitignore
+│   ├── app.ts
+│   ├── Dockerfile                          <-- Dockerfile pour le service Freepik
+│   ├── eslint.config.js
 │   ├── package.json
-│   └── ...
-├── web/          # Frontend React/TypeScript
+│   ├── package-lock.json
+│   ├── README.md
+│   └── tsconfig.json
+├── gemini/
+│   ├── dist/
+│   ├── node_modules/
 │   ├── src/
+│   │   └── controllers/
+│   │       ├── background.ts               <-- Gratuit. Utilisé par défault
+│   │       ├── illustration.ts             <-- Devenu inutilisable en Europe, sinon gratuit.
+│   │       └── statistiques.ts             <-- Gratuit. Utilisé par défault
+│   ├── .ebignore
+│   ├── .env                                <-- Mettre votre clef d'API ici
+│   ├── .gitignore
+│   ├── app.ts
+│   ├── Dockerfile                          <-- Dockerfile pour le service Gemini
+│   ├── eslint.config.js
 │   ├── package.json
-│   └── ...
-├── README.md     # Fichier README principal
-└── ...
+│   ├── package-lock.json
+│   ├── README.md
+│   └── tsconfig.json
+├── openai/
+│   ├── dist/
+│   ├── node_modules/
+│   ├── src/
+│   │   └── controllers/
+│   │       ├── background.ts               <-- Payant, prix prohibitif...
+│   │       ├── illustration.ts             <-- Payant, prix prohibitif...
+│   │       └── statistiques.ts             <-- Payant, prix prohibitif...
+│   ├── .ebignore
+│   ├── .env                                <-- Mettre votre clef d'API ici
+│   ├── .gitignore
+│   ├── app.ts
+│   ├── Dockerfile                          <-- Dockerfile pour le service OpenAI
+│   ├── eslint.config.js
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── README.md
+│   └── tsconfig.json
+├── web/
+│   └── src/
+│   │   ├── components/
+│   │   │   ├── form/
+│   │   │   │   └── character-form.tsx      <-- Formulaire pour mise à jour des champs
+│   │   │   ├── model/
+│   │   │   │   ├── character-context.model.tsx
+│   │   │   │   ├── character-details.model.tsx
+│   │   │   │   ├── character-full.model.tsx
+│   │   │   │   ├── character-illustration.model.tsx
+│   │   │   │   └── character-stats.model.tsx
+│   │   │   ├── ui
+│   │   │   │   └── ...                      <-- divers elements .tsx pour l'interface web
+│   │   │   └── theme-provider.tsx
+│   │   ├── lib/ 
+│   │   │   └── utils.ts
+│   │   ├── pages/ (home/)
+│   │   │   └── home/
+│   │   │       ├── listes/                  <-- Fourni des listes de présaisie (non limitative) pour le contexte
+│   │   │       │   └── characterClasses.tsx
+│   │   │       │   └── characterGenders.tsx
+│   │   │       │   └── characterRaces.tsx
+│   │   │       │   └── characterUniverses.tsx
+│   │   │       ├── home.tsx                                <-- Page principale
+│   │   │       ├── characterRow.tsx                        <-- ligne de perso sur la page principale
+│   │   │       ├── readCharacterContent.tsx                <-- Modale le visualisation du perso complet
+│   │   │       ├── updateCharacterContent.tsx              <-- Modale de mise a jour du perso (cf: character-form)
+│   │   │       ├── regenerateIllustrationButton.tsx        <-- Boutton mettant a jour le portrait du perso
+│   │   │       └── deleteCharacterContent.tsx              <-- Suppression definitive d'un perso
+│   │   ├── services/                       <-- C'est ici que sont fait les call vers le module 'api'
+│   │   │   ├── getListCharacterFull.service.ts
+│   │   │   ├── createCharacter.service.ts
+│   │   │   ├── updateCharacter.service.ts
+│   │   │   ├── illustrateCharacter.service.ts
+│   │   │   └── deleteCharacter.service.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── vite-env.d.ts
+│   ├── vite.config.ts
+│   ├── tailwind.config.ts
+│   ├── postcss.config.ts
+│   ├── tsconfig.json
+│   ├── package.json
+│   ├── index.html
+│   ├── Dockerfile                          <-- Dockerfile pour le service Web
+│   └── component.json
+├── .github/
+│   └── workflows/
+│       ├── aws/                         <-- TODO : non fonctionnel, laissé pour y regarder plus tard...
+│       │    ├── docker-compose.yml
+│       │    ├── Dockerrun.aws.json
+│       │    ├── deploy-aws.yml
+│       │    └── aws.zip
+│       ├── jenkins/                     <-- workflows pour controlleur Jenkins dockerisé avec agent
+│       │   ├── agent
+│       │   │   └── Dockerfile             <-- 1. docker build -t eli256/jenkins-docker-image-agent:latest .
+│       │   ├── code-quality
+│       │   │   ├── Jenjenkins_logs.txt
+│       │   │   └── Jenkinsfile                 <-- jobs pipeline a créer : http://localhost:8080/job
+│       │   ├── database-export
+│       │   │   └── Jenkinsfile                 <-- jobs pipeline a créer : http://localhost:8080/job
+│       │   └── Dockerfile                 <-- 2. docker build -t eli256/jenkins-docker-image .
+│       ├── localhost/
+│       │   ├── docker-push.bat          <-- Script shell ms-dos de push Docker Hub (via docker-compose.local.yml)
+│       │   ├── docker-start-app.sh      <-- Script shell linux deployant l'app dockerisée via docker-compose.local.yml
+│       │   ├── init.sql                 <-- Script sql gérant le password d'un user root pour docker-compose.local.yml
+│       │   └── ...
+│       ├── code-quality.yml             <-- Script Gituhub Actions : Gestion de la qualité de code (modifiez le pom.xml du module api en : <skip.quality.code>false</skip.quality.code> )
+│       ├── docker-push.yml              <-- Script Gituhub Actions : Si des changes ont eu lieu dans l'un des modules, va builder, créer une image docker et la deployer sur Docker Hub
+│       └── qodana_code_quality.yml      <-- Script Gituhub Actions : Permet de consulter la santé et qualité du code de l'app
+└── LICENSE                              <-- Apache License
+```
 
 
 ## Utilisation de Docker
 
-Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compose. Cela simplifie la configuration de l'environnement et assure une cohérence entre les différents déploiements.
+Ce projet peut être déployé et exécuté à l'aide de Docker et Docker Compose. 
+Cela simplifie la configuration de l'environnement et assure une cohérence entre les différents déploiements.
+
+
+### Configuration requise du démon Docker sur l'hôte (pour les utilisateurs Windows/Docker Desktop)
+
+Si vous utilisez Docker Desktop sur Windows et que vous rencontrez des erreurs de "permission denied" lors de l'exécution de pipelines Jenkins 
+qui tentent d'interagir avec Docker (par exemple, pour exporter des bases de données ou construire des images), cela est généralement dû au fait 
+que le socket Docker (`/var/run/docker.sock`) n'a pas les permissions de groupe adéquates par défaut.
+
+Pour résoudre ce problème de manière persistante, vous devez configurer le démon Docker via l'interface de Docker Desktop :
+
+1.  **Ouvrez Docker Desktop.**
+2.  Cliquez sur l'icône **Paramètres** (la roue dentée) en haut à droite.
+3.  Dans le menu de gauche, sélectionnez **"Docker Engine"**.
+4.  Dans l'éditeur de texte JSON qui apparaît, **ajoutez ou assurez-vous que la ligne `"group": "docker"` est présente** au sein de l'objet JSON principal. Votre configuration pourrait ressembler à ceci :
+
+    ```json
+    {
+      "group": "docker",
+      
+      "builder": {
+        "gc": {
+          "defaultKeepStorage": "20GB",
+          "enabled": true
+        }
+      },
+      "experimental": false
+    }
+    ```
+    Assurez-vous que la syntaxe JSON est correcte (les virgules entre les éléments sont importantes). Laissez les autres configurations si elles existent. Comme dans l'exemple ci-dessus.
+
+5.  Cliquez sur le bouton **"Apply & Restart"** (Appliquer et Redémarrer) en bas à droite de la fenêtre des paramètres.
+
+Docker Desktop redémarrera son moteur, et le socket `/var/run/docker.sock` aura désormais le groupe `docker` comme propriétaire, permettant à votre agent Jenkins (configuré avec `--group-add 999`) d'y accéder.
+
+**Pour vérifier (facultatif, mais recommandé après redémarrage) :**
+Ouvrez le terminal de votre distribution WSL2 (ex: Ubuntu) et exécutez :
+```bash
+ls -l /var/run/docker.sock
+```
+Le résultat devrait maintenant ressembler à ```srw-rw---- 1 root docker ... /var/run/docker.sock.```
+
+
 
 **Analyse des Images Docker :**
 
 * Le module **web** utilise un processus de build en deux étapes :
     * Une première image Node.js est utilisée pour builder l'application React avec Vite.
     * Les fichiers statiques buildés sont ensuite copiés dans une image Nginx, qui sert l'application web.
-* Les modules **gemini** et **openai** utilisent des images Node.js pour exécuter leurs applications NestJS (TypeScript) après la compilation.
+* Les modules **gemini**, **openai** et **freepik** utilisent des images Node.js pour exécuter leurs applications NestJS (TypeScript) après la compilation.
 * Le module **api** utilise une image Maven pour builder l'application Java (qui inclut également du code Scala). L'image finale pour l'exécution sera une image JRE (Java Runtime Environment).
 
 **Pré-requis :**
@@ -328,6 +559,7 @@ Pour utiliser correctement l'API OpenAI, suivez ces étapes :
 API_KEY=sk-your-openai-api-key
 ORG_ID=org-your-organization-id
 ```
+
 7.  **Sécurisez votre clé API :** Ne partagez jamais votre clé API publiquement (par exemple, dans votre code source). Utilisez toujours des variables d'environnement pour la stocker en toute sécurité.
 
 
@@ -356,7 +588,7 @@ docker-compose -f docker-compose.local.yml restart # Redémarre les conteneurs l
 * **Construction et taggage d'une image Docker (exemple pour l'API Java) :**
 
 ```bash
-docker build -t <votre_nom_utilisateur_docker>/jdr-generator-api:latest -f api/Dockerfile . # Construit et taggue l'image locale de l'API Java
+docker build -t eli256/jdr-generator-api:latest -f api/Dockerfile . # Construit et taggue l'image locale de l'API Java
 ```
 
 ### 7. PowerShell Policy (si nécessaire)
@@ -412,7 +644,176 @@ Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un *pus
 2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
 3.  **Build et push des images :** Pour ce module 'web', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : https://hub.docker.com/repositories/eli256
 
-En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
+En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement automatisé de l'application (sans les api key cependant).
+
+
+# Configuration et Utilisation de Jenkins avec Docker
+
+Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker Desktop pour ce projet.
+
+## Étapes d'Installation et Configuration
+
+Obligatoire : Remplacez dans les commandes suivantes le `<projects_repositories_path>` par le chemin d'accès vers le repo de projet JDR-Generator, par exemple :
+`c/<projects_repositories_path>/JDR-Generator` sur mon poste sera `c/Users/fredericcoupez/IdeaProjects/JDR-Generator`
+
+1.  **Création et accès au répertoire de stockage de Jenkins :**
+
+    Ce setup Jenkins utilise un montage de volume (`-v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home`) pour persister les données de votre instance Jenkins (configurations, jobs, plugins, historique des builds, etc.) sur votre machine locale.
+    
+    **Pourquoi cette approche ?**
+    La persistance des données est **fortement recommandée** et **essentielle** pour un environnement de développement ou de production. Sans cela, chaque fois que le conteneur Jenkins est supprimé (par exemple, lors d'une mise à jour de l'image Docker ou d'un nettoyage), toutes vos configurations et votre travail seraient perdus, vous obligeant à reconfigurer Jenkins à chaque fois.
+    
+    **Impact sur les performances au démarrage :**
+    Le fait de persister de nombreuses données peut entraîner un temps de démarrage de Jenkins plus long, car l'instance doit lire et charger toutes ses configurations depuis le volume monté. Ce comportement est normal et est le prix de la rétention de vos données et de la simplicité de gestion.
+
+    ```bash
+    cd C:\<projects_repositories_path>\JDR-Generator\
+    mkdir -p .jenkins
+    ```
+
+    * Ceci crée le répertoire où les données de Jenkins seront persistées.
+    * **Important :** Assurez-vous que l'utilisateur qui exécute Docker a les droits de lecture et d'écriture dans ce répertoire.
+    * **Note :** Ce répertoire est ajouté à `.gitignore` pour éviter de versionner les données sensibles.
+
+2.  **Téléchargement d'une image Docker de Jenkins contenant docker (construite à partir du Dockerfile dans le dossier) :**
+    
+    ```bash
+    cd .github/workflows/jenkins/agent/
+    docker build -t eli256/jenkins-docker-image-agent:latest .
+    cd .github/workflows/jenkins/
+    docker stop jenkins-container
+    docker rm jenkins-container
+    docker build -t eli256/jenkins-docker-image .
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image:latest
+    ```
+
+    * Ceci construira l'image Docker personnalisée eli256/jenkins-docker-image à partir du Dockerfile situé dans le dossier actuel. Cette image sera basée sur jenkins/jenkins:lts-jdk17 et inclura le client Docker.
+    * Jenkins sera accessible sur le port 8080 de votre hôte
+    * Le port 50000 est utilisé pour les agents Jenkins (communication maître/esclave).
+    * Cela va prendre quelques minutes la première fois, car Docker doit télécharger les couches de l'image de base et installer le client Docker.
+
+3.  **Montage et exécution du conteneur Jenkins :**
+
+    En exécutant la commande `docker images`, vous devriez voir l'image eli256/jenkins-docker-image dans la liste.
+
+    ```bash
+    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image
+    ```
+
+    * `--name jenkins-container`: Nomme le conteneur Jenkins "jenkins-container".
+    * `-d`: Exécute le conteneur en mode détaché (en arrière-plan).
+    * `-p 8080:8080 -p 50000:50000`: Mappe les ports 8080 et 50000 du conteneur aux ports correspondants de l'hôte.
+    * `-v /var/run/docker.sock:/var/run/docker.sock`: Monte le socket Docker de l'hôte pour permettre à Jenkins d'exécuter des commandes Docker (Docker-out-of-Docker).
+    * `-v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home`: Path à éditer ; Monte le répertoire de stockage de Jenkins sur l'hôte dans le répertoire `/var/jenkins_home` du conteneur.
+    * `eli256/jenkins-docker-image`: En utilisant l'image custom buildée (via le Dockerfile)
+
+    **Alternative :**
+
+    Si vous ne souhaitez pas persister les données de Jenkins et que vous préférez que chaque lancement du conteneur soit une instance "vierge" (par exemple, pour des tests très spécifiques et éphémères), vous pouvez **retirer le montage de volume** (`-v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home`) de la commande `docker run`.
+    **AVERTISSEMENT** : L'utilisation de Jenkins sans persistance entraînera la perte de toutes les données du /var/jenkins_home (jobs, plugins, utilisateurs, historique de builds) à chaque suppression du conteneur.
+
+    ```bash
+    docker run -d --name jenkins-container --group-add 999 --group-add 0 -p 9000:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    ```
+
+4.  **Accès à l'application web Jenkins :**
+
+    Accédez à Jenkins dans votre navigateur web via :
+
+    ```
+    http://localhost:8080/
+    ```
+
+5.  **Déverrouillage de Jenkins (si nécessaire) :**
+
+    Si Jenkins est verrouillé, vous aurez besoin du mot de passe administrateur initial. Récupérez-le avec la commande :
+
+    ```bash
+    docker exec jenkins-container cat /var/jenkins_home/secrets/initialAdminPassword
+    ```
+
+    * Ceci affiche le mot de passe généré automatiquement. Collez-le dans le champ approprié sur la page web de Jenkins.
+
+    * **Lecture des logs du conteneur Jenkins :**
+
+        Le mot de passe initial peut également apparaître dans les logs de démarrage du conteneur Jenkins. Pour surveiller le démarrage ou diagnostiquer des problèmes avec le service Jenkins lui-même, utilisez la commande suivante :
+
+       ```bash
+       docker logs -f jenkins-container
+       ```
+
+       * Cette commande affiche les logs récents du conteneur Jenkins. Le mot de passe initial y est normallement imprimé lors du premier démarrage. Ces logs sont également essentiels pour le débogage général du service Jenkins.
+
+6.  **Configuration initiale de Jenkins :**
+
+    * Jenkins vous guidera à travers l'installation des plugins recommandés et la création du premier utilisateur administrateur.
+
+7.  **Configuration d'un Personal Access Token (PAT) GitHub pour Jenkins :**
+
+    1.  **Générez un Personal Access Token (PAT) sur GitHub :**
+
+        * Allez dans les paramètres de votre compte GitHub ("Settings") : https://github.com/settings/profile.
+        * Cliquez sur "Developer settings" puis "Personal access tokens" et "Fine-grained personal access tokens" : https://github.com/settings/personal-access-tokens
+        * Cliquez sur "Generate new token".
+        * Donnez un nom descriptif à votre token.
+        * Choisissez les permissions minimales nécessaires : Pour cloner votre dépôt, la permission "Contents" avec l'accès "Read-only" suffit.
+        * Cliquez sur "Generate token" et copiez et mémorisez le token immédiatement. Il sera impossible de le retrouver par la suite ! Ne le partagez pas, cela permettrait à une tierce personne d'utiliser vos secrets sur GitHub pour effectuer des actions directement.
+
+    2.  **Ajoutez les identifiants à Jenkins :**
+
+        * Dans Jenkins, allez dans "Administrer Jenkins" -> "Identifiants" -> "System" -> "Identifiants globaux (illimité)" -> "Add credentials".
+        * Choisissez "Secret text" comme type d'identifiant.
+        * Dans le champ "Secret", collez le Personal Access Token que vous avez généré sur Github.
+        * Donnez un "ID" (par exemple, `github-pat-content-read`) et une "Description (par exemple, `Accès à GitHub avec Personal Access Token : Content en read-only`) à vos Credentials.
+        * Cliquez sur "Create".
+
+8.  **Installation manuelle de plugins :**
+
+    1.  Allez dans "Administrer Jenkins" -> "Gérer les plugins".
+    2.  Cliquez sur l'onglet "Disponible".
+    3.  Recherchez le plugin souhaité et installez-le. 
+    4.  Redémarrez Jenkins.
+
+9.  **Redémarrage de Jenkins (si possible) :**
+
+    Si Jenkins rencontre des problèmes, essayez de le redémarrer depuis le conteneur :
+
+    ```bash
+    docker exec jenkins-container /bin/jenkins.sh restart
+    ```
+
+    * Ceci tente un redémarrage en douceur de Jenkins.
+
+10. **Suppression et recréation du conteneur Jenkins :**
+
+    Si le redémarrage ne fonctionne pas automatiquement, relancer manuellement le container depuis Docker Desktop.
+    Autrement, vous pouvez supprimer et recréer le conteneur :
+
+    ```bash
+    docker stop jenkins-container
+    docker rm jenkins-container
+    docker run -d --name jenkins-container -p 9000:8080 -p 50000:50000 --group-add 999 --group-add 0 -v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    docker logs -f jenkins-container
+    ```
+
+    * Ceci supprimera le conteneur, mais vos données seront normalement conservées dans le répertoire monté (ex : `C:/<projects_repositories_path>/JDR-Generator/.jenkins`).
+
+11. **Création d'un Pipeline Jenkins avec Jenkinsfile :**
+
+    * Pour ce projet, nous utilisons un `Jenkinsfile` pour définir le pipeline de build. Le `Jenkinsfile` se trouve dans le repertoire .github/workflows/jenkins du dépôt et décrit les étapes du workflow de qualité du code.
+
+    * **Créer une nouvelle Pipeline :**
+
+        1.  Dans Jenkins, cliquez sur "Créer un nouveau Job".
+        2.  Choisissez "Pipeline" et donnez-lui un nom (par exemple, "JDR-Generator-Code-Quality").
+        3.  Dans la section "Définition", choisissez "Pipeline script from SCM".
+        4.  Sélectionnez "Git" comme gestionnaire de code source.
+        5.  Configurez l'URL du dépôt (par exemple, `https://github.com/NeoRyu/JDR-Generator`) et les informations d'identification (le PAT GitHub que vous avez configuré).
+        6.  Spécifiez la branche à builder (par exemple, `*/main` et `*/jenkins`) le Jenkinsfile.
+        7.  Assurez-vous que le "Script Path" est correct (ex `/.github/workflows/jenkins/Jenkinsfile`).
+        8.  Configurez les autres options selon vos besoins (par exemple, les déclencheurs de build).
+        9.  Sauvegardez le job, puis lancez le build. Si le script a des options, il risque d'échouer la première fois, mais mettra a jour votre configuration, relancez le build auquel cas.
+
 
 ## Licence
 
