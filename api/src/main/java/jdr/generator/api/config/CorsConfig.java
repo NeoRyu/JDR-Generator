@@ -35,6 +35,7 @@ public class CorsConfig {
                     "http://localhost:3000",
                     "http://localhost:3001",
                     "http://localhost:3002",
+                    "http://localhost:3003",
                     "http://localhost:3006",
                     "http://localhost:3007",
                     "http://127.0.0.1",     // L'adresse IP loopback
@@ -44,6 +45,7 @@ public class CorsConfig {
                     "http://127.0.0.1:3000",
                     "http://127.0.0.1:3001",
                     "http://127.0.0.1:3002",
+                    "http://127.0.0.1:3003",
                     "http://127.0.0.1:3006",
                     "http://127.0.0.1:3007"
             ));

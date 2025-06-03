@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/characters")
 public class CharactersController {
-  private static final String geminiHost = "http://localhost:5173";
+  private static final String webModuleHost = "http://localhost:5173";
   private final GeminiService geminiService;
   private final CharacterDetailsService characterDetailsService;
   private final OpenaiService openaiService;
@@ -105,7 +105,7 @@ public class CharactersController {
       value = {"/generate"},
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
+  @CrossOrigin(origins = webModuleHost)
   public CharacterDetailsModel generate(@RequestBody DefaultContextJson data) {
     return geminiService.generate(data);
   }
@@ -121,7 +121,7 @@ public class CharactersController {
    */
   @PutMapping("/illustrate/{id}")
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
+  @CrossOrigin(origins = webModuleHost)
   public byte[] illustrate(@PathVariable Long id) {
     return freepikService.regenerateIllustration(id);
     // return openaiService.regenerateIllustration(id);
@@ -138,7 +138,7 @@ public class CharactersController {
       value = {"/stats/{id}"},
       method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  @CrossOrigin(origins = geminiHost)
+  @CrossOrigin(origins = webModuleHost)
   public String stats(@PathVariable Long id) {
     return geminiService.stats(id);
   }
