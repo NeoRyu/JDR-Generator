@@ -1,5 +1,10 @@
+# cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins\agent
+# docker build -t eli256/jenkins-docker-image-agent:latest .
+# cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins
 # docker build -t eli256/jenkins-docker-image .
 # docker push eli256/jenkins-docker-image:latest
+# docker run -d -p 9000:8080 -p 50000:50000 --group-add 999 --name jenkins-container -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+
 FROM jenkins/jenkins:lts-jdk17
 
 # Passer en utilisateur root pour installer Docker CLI

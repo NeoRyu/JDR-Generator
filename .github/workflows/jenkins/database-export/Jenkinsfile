@@ -1,4 +1,6 @@
 // jenkins/database-export/Jenkinsfile
+// Les fichiers SQL se trouve dans .jenkins/jobs/<Nom_pipeline:JDR-Generator-DB-Export>/builds/<number>/archive/
+
 pipeline {
     agent {
         docker {

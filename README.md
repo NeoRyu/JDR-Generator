@@ -653,7 +653,7 @@ Ce document décrit les étapes pour configurer et utiliser Jenkins avec Docker 
 
 ## Étapes d'Installation et Configuration
 
-Remplacez `<projects_repositories_path>` par le chemin d'accès vers le repo de projet JDR-Generator, par exemple :
+Obligatoire : Remplacez dans les commandes suivantes le `<projects_repositories_path>` par le chemin d'accès vers le repo de projet JDR-Generator, par exemple :
 `c/<projects_repositories_path>/JDR-Generator` sur mon poste sera `c/Users/fredericcoupez/IdeaProjects/JDR-Generator`
 
 1.  **Création et accès au répertoire de stockage de Jenkins :**
@@ -713,7 +713,7 @@ Remplacez `<projects_repositories_path>` par le chemin d'accès vers le repo de 
     **AVERTISSEMENT** : L'utilisation de Jenkins sans persistance entraînera la perte de toutes les données du /var/jenkins_home (jobs, plugins, utilisateurs, historique de builds) à chaque suppression du conteneur.
 
     ```bash
-    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    docker run -d --name jenkins-container --group-add 999 --group-add 0 -p 9000:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
     ```
 
 4.  **Accès à l'application web Jenkins :**
@@ -792,7 +792,8 @@ Remplacez `<projects_repositories_path>` par le chemin d'accès vers le repo de 
     ```bash
     docker stop jenkins-container
     docker rm jenkins-container
-    docker run -d --name jenkins-container -p 8080:8080 -p 50000:50000 -v /var/run/docker.sock:/var/run/docker.sock -v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home eli256/jenkins-docker-image:latest    
+    docker run -d --name jenkins-container -p 9000:8080 -p 50000:50000 --group-add 999 --group-add 0 -v /c/<projects_repositories_path>/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
+    docker logs -f jenkins-container
     ```
 
     * Ceci supprimera le conteneur, mais vos données seront normalement conservées dans le répertoire monté (ex : `C:/<projects_repositories_path>/JDR-Generator/.jenkins`).
@@ -814,21 +815,6 @@ Remplacez `<projects_repositories_path>` par le chemin d'accès vers le repo de 
         9.  Sauvegardez le job, puis lancez le build. Si le script a des options, il risque d'échouer la première fois, mais mettra a jour votre configuration, relancez le build auquel cas.
 
 
-12. **NOTA BENE** (a effacer par la suite)
-    ```bash
-    cls
-    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins\agent
-    docker build -t eli256/jenkins-docker-image-agent:latest .
-    cd C:\Users\fredericcoupez\IdeaProjects\JDR-Generator\.github\workflows\jenkins
-    docker build -t eli256/jenkins-docker-image .
-    
-    docker stop jenkins-container
-    docker rm jenkins-container
-    
-    docker run -d -p 8080:8080 -p 50000:50000 --group-add 999 --name jenkins-container -v /c/Users/fredericcoupez/IdeaProjects/JDR-Generator/.jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock eli256/jenkins-docker-image
-    docker logs -f jenkins-container
-    ```
-    
 ## Licence
 
 ```markdow
