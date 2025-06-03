@@ -40,7 +40,7 @@ Ce module est une application Node.js/Express/TypeScript conçue pour fournir un
 
   ```
   PORT=3003
-  API_KEY=sk-votre-cle-api-openai
+  API_KEY=sk-votre-cle-api-freepik
   DOWNLOAD_FOLDER=jdr-generator
   ```
 
@@ -149,7 +149,7 @@ CMD [ "npm", "start" ]
 
 ```bash
 cd C:\<projects_repositories_path>\JDR-Generator\api
-docker build -t jdr-generator-openai -f Dockerfile .
+docker build -t jdr-generator-freepik -f Dockerfile .
 ```
 
 ### Exécution du conteneur Docker
@@ -157,10 +157,10 @@ docker build -t jdr-generator-openai -f Dockerfile .
 ```bash
 docker run -p 3003:3003 \
            -e PORT=3003 \
-           -e API_KEY=sk-votre-cle-api-openai \
+           -e API_KEY=sk-votre-cle-api-freepik \
            -e DOWNLOAD_FOLDER=jdr-generator \
            -v /chemin/vers/vos/telechargements:/app/downloads \
-           jdr-generator-openai
+           jdr-generator-freepik
 ```
 
 - Remplacez `/chemin/vers/vos/telechargements` par le chemin réel sur votre machine hôte où vous souhaitez enregistrer les images.
@@ -172,15 +172,15 @@ Exemple de configuration dans `docker-compose.yml` :
 
 ```yaml
 services:
-  openai:
+  freepik-container:
     build:
-      context: ./openai
+      context: ./freepik
       dockerfile: Dockerfile
     ports:
       - "3003:3003"
     environment:
       PORT: 3003
-      API_KEY: sk-votre-cle-api-openai
+      API_KEY: sk-votre-cle-api-freepik
       DOWNLOAD_FOLDER: jdr-generator
     volumes:
       - /chemin/vers/vos/telechargements:/app/downloads
@@ -196,7 +196,7 @@ Cette approche permet d'assurer un code de haute qualité et de simplifier le pr
 ### Workflow de Qualité du Code
 
 La qualité du code est vérifiée automatiquement à chaque _push_ et _pull request_ grâce à un workflow GitHub Actions défini dans le fichier `.github/workflows/code-quality.yml`.
-Ce workflow contient une section dédiée à la partie du projet `nodejs-code-quality-openai` et s'exécute depuis toutes les branches.
+Ce workflow contient une section dédiée à la partie du projet `nodejs-code-quality-freepik` et s'exécute depuis toutes les branches.
 
 **Fonctionnement :**
 
@@ -222,7 +222,7 @@ Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un _pus
 
 **Fonctionnement :**
 
-- Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici openai/).
+- Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici freepik/).
 - Il est possible de déclencher manuellement le workflow pour forcer la reconstruction de toutes les images.
 - Cette approche optimise le temps d'exécution et l'utilisation des ressources.
 
@@ -230,7 +230,7 @@ Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un _pus
 
 1.  **Checkout du code :** Récupère la dernière version du code source.
 2.  **Connexion à Docker Hub :** Utilise les secrets GitHub `DOCKERHUB_USERNAME` et `DOCKERHUB_TOKEN` pour se connecter au compte Docker Hub.
-3.  **Build et push des images :** Pour ce module 'openai', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : [https://hub.docker.com/repositories/eli256](https://hub.docker.com/repositories/eli256)
+3.  **Build et push des images :** Pour ce module 'freepik', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag `latest`, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : [https://hub.docker.com/repositories/eli256](https://hub.docker.com/repositories/eli256)
 
 En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.
 
