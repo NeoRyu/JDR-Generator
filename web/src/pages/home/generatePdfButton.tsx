@@ -34,7 +34,7 @@ export const GeneratePdfButton: React.FC<GeneratePdfButtonProps> = ({ character 
             const url = window.URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            const fileName = `Fiche_Personnage_${character.details.name || character.details.id}.pdf`;
+            const fileName = `JDR-Generator - ${character.details.name || character.details.id}.pdf`;
             link.setAttribute('download', fileName);
 
             document.body.appendChild(link);
