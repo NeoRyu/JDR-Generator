@@ -10,6 +10,7 @@ import {ModalTypes} from "@/pages/home/home.tsx";
 import {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {RegenerateIllustrationButton} from "@/pages/home/regenerateIllustrationButton.tsx";
 import {Loader2} from "lucide-react";
+import {GeneratePdfButton} from "@/pages/home/generatePdfButton.tsx";
 
 interface CharacterRowProps {
   character: CharacterFull;
@@ -145,6 +146,9 @@ export function CharacterRow({
             selectedCharacter={selectedCharacter}
             setSelectedCharacter={setSelectedCharacter}
             updateCharacter={handleUpdateCharacter}
+          />
+          <GeneratePdfButton
+              character={character}
           />
           <RegenerateIllustrationButton
               character={character}

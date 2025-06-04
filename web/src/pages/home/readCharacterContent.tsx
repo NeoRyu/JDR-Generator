@@ -19,6 +19,7 @@ import {Button} from "@/components/ui/button";
 import {useRegenerateIllustration} from "@/services/illustrateCharacters.service.ts";
 import {Loader2} from "lucide-react";
 import {arrayBufferToBase64} from "@/lib/utils.ts";
+import {GeneratePdfButton} from "@/pages/home/generatePdfButton.tsx";
 
 interface ReadCharacterContentProps {
   character: CharacterFull;
@@ -190,6 +191,7 @@ export function ReadCharacterContent({
           className="button"
           type="button"
           variant="outline"
+          title="Voir le profil détaillé du personnage"
         >
           <Eye />
         </Button>
@@ -677,6 +679,10 @@ export function ReadCharacterContent({
             </DialogFooter>
           </DialogContent>
         </Dialog>
+
+        <DialogFooter className="mt-4" >
+          <GeneratePdfButton character={character} />
+        </DialogFooter>
 
       </DialogContent>
     </Dialog>

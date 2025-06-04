@@ -30,9 +30,4 @@ app.listen(port, () => {
   } else {
     console.error("ERROR: API_KEY environment variable is NOT set. Freepik API calls will fail.");
   }
-  // Afficher pour debug le chemin réel utilisé par dotenv
-  console.log(`dotenv config path used: ${path.resolve(__dirname, '../.env')}`);
-  // Vérifiez les valeurs ici APRÈS le chargement de dotenv
-  console.log(`Debug: USER_WINDOW = ${process.env.USER_WINDOW}`);
-  console.log(`Debug: DOWNLOAD_FOLDER = ${process.env.DOWNLOAD_FOLDER}`);
 });
