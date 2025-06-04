@@ -6,9 +6,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.*;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -16,6 +14,7 @@ import com.lowagie.text.FontFactory;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +39,38 @@ public class PdfGeneratorService {
     private static final Logger LOGGER = LogManager.getLogger();
     private final ObjectMapper objectMapper;
     private final String CRLF = "\n"; // Saut de ligne
+    private final Font infoError = FontFactory.getFont(FontFactory.HELVETICA, 16, Color.RED);
 
     private final CharacterContextService characterContextService;
     private final CharacterDetailsService characterDetailsService;
     private final CharacterIllustrationService characterIllustrationService;
     private final CharacterJsonDataService characterJsonDataService;
+
+    private static class BackgroundPageEvent extends PdfPageEventHelper {
+        private Image backgroundImage;
+
+        // Le constructeur prend l'image à utiliser comme arrière-plan
+        public BackgroundPageEvent(Image image) {
+            this.backgroundImage = image;
+        }
+
+        @Override
+        public void onEndPage(PdfWriter writer, Document document) {
+            try {
+                // Obtenir un calque de contenu sous le texte et les autres éléments
+                PdfContentByte canvas = writer.getDirectContentUnder();
+                // Redimensionne l'image pour qu'elle couvre toute la page
+                backgroundImage.scaleAbsolute(document.getPageSize().getWidth(), document.getPageSize().getHeight());
+                // Positionne l'image en bas à gauche de la page (0,0)
+                backgroundImage.setAbsolutePosition(0, 0);
+                // Ajoute l'image au canevas
+                canvas.addImage(backgroundImage);
+            } catch (DocumentException e) {
+                // Log l'erreur si l'image ne peut pas être ajoutée
+                LOGGER.error("Erreur lors de l'ajout de l'image de fond au PDF: " + e.getMessage());
+            }
+        }
+    }
     
     private String getIndent(final int level) {
         String indent = " ".repeat(level);
@@ -129,6 +155,7 @@ public class PdfGeneratorService {
     }
 
     public byte[] generateCharacterPdf(Long characterId) throws DocumentException {
+        // RECUPERATION DES DONNEES
         CharacterDetailsEntity c_details =
                 this.characterDetailsService.findById(characterId);
         CharacterContextEntity c_context =
@@ -139,12 +166,32 @@ public class PdfGeneratorService {
                         .findByCharacterDetailsId(characterId)
                         .orElse(null);
 
+        // -- DEBUT DE CREATION DU DOCUMENT PDF --
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             Document document = new Document();
-            PdfWriter.getInstance(document, baos);
-            document.open();
+            PdfWriter writer = PdfWriter.getInstance(document, baos);
 
+            // AJOUT DE L'IMAGE DE FOND
+            Image parchmentImage = null;
+            try {
+                // Charge l'image "pdf_background.jpg" depuis les ressources
+                final String backgroundImgName = "pdf-background.jpg";
+                InputStream imageStream = getClass().getClassLoader()
+                        .getResourceAsStream(backgroundImgName);
+                if (imageStream != null) {
+                    parchmentImage = Image.getInstance(imageStream.readAllBytes());
+                    // On définie l'événement de page AVANT d'ouvrir le document
+                    writer.setPageEvent(new BackgroundPageEvent(parchmentImage));
+                } else {
+                    LOGGER.warn("Image de fond '" + backgroundImgName + "' non trouvée dans " +
+                            "les ressources. Le PDF sera généré sans fond.");
+                }
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors du chargement de l'image de fond: " + e.getMessage());
+            }
+
+            document.open();
 
             // Création d'une table à deux colonnes (60% / 40%)
             PdfPTable headerTable = new PdfPTable(new float[]{60f, 40f});
@@ -188,7 +235,6 @@ public class PdfGeneratorService {
             imageCell.setVerticalAlignment(Element.ALIGN_TOP);
 
             // Ajout du portrait du personnage
-            final Font infoError = FontFactory.getFont(FontFactory.HELVETICA, 16, Color.RED);
             try {
                 if (c_illustration != null && c_illustration.getImageBlob() != null
                         && c_illustration.getImageBlob().length > 0 ) {
@@ -391,3 +437,4 @@ public class PdfGeneratorService {
     }
 
 }
+
