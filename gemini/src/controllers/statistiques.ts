@@ -12,9 +12,9 @@ const model: GenerativeModel = genAI.getGenerativeModel({
   model: ''+process.env.AI_TEXT_MODEL,
   generationConfig: {
     maxOutputTokens: configMaxOutputTokens,
-    temperature: 0.7,
-    topP: 0.8,
-    topK: 40,
+    temperature: 0.4,
+    topP: 0.6,
+    topK: 20,
   },
 });
 
