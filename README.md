@@ -223,7 +223,8 @@ JDR-Generator/
 │       │       │   ├── CharacterController.java                <-- controlleur principal
 │       │       │   ├── FreepikService.java                     <-- utilisé pour illustrate
 │       │       │   ├── GeminiService.java                      <-- utilisé pour generate et stats
-│       │       │   └── OpenaiService.java                      <-- inutilisé actuellement
+│       │       │   ├── OpenaiService.java                      <-- inutilisé actuellement
+│       │       │   └── PdfGeneratorService.java                <-- service gérant la création PDF
 │       │       ├── config/
 │       │       │   ├── CorsConfig.java
 │       │       │   ├── GeminiGenerationConfiguration.java

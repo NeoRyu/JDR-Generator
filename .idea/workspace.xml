@@ -7,7 +7,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
+    <list default="true" id="ba5f8568-163e-4622-8a32-851760208b19" name="Changes" comment="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;- OK : Ajustement de la configuration Gemini pour les statistiques&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    </list>
     <list id="46fdb49d-ebbb-4a71-8c51-fb94ba060067" name="DONT PUSH THIS" comment="">
       <change beforePath="$PROJECT_DIR$/freepik/.env" beforeDir="false" afterPath="$PROJECT_DIR$/freepik/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/gemini/.env" beforeDir="false" afterPath="$PROJECT_DIR$/gemini/.env" afterDir="false" />
@@ -39,7 +42,7 @@
     </option>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="pdf-generator" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -130,7 +133,7 @@
     "Shell Script.Docker Stop All.executor": "Run",
     "Shell Script.docker-build.executor": "Run",
     "Spring Boot.ApiApplication.executor": "Run",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "prompts-service",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/api/src/main/scala/jdr/generator/api/scala/tools",
     "last_opened_file_path": "C:/Users/fredericcoupez/IdeaProjects/JDR-Generator/web/src/components",
@@ -552,23 +555,7 @@
       <workItem from="1748327159638" duration="27603000" />
       <workItem from="1748366668195" duration="368000" />
       <workItem from="1748415893096" duration="17514000" />
-      <workItem from="1748847769951" duration="90570000" />
-    </task>
-    <task id="LOCAL-00265" summary="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
-      <option name="closed" value="true" />
-      <created>1748270179379</created>
-      <option name="number" value="00265" />
-      <option name="presentableId" value="LOCAL-00265" />
-      <option name="project" value="LOCAL" />
-      <updated>1748270179379</updated>
-    </task>
-    <task id="LOCAL-00266" summary="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
-      <option name="closed" value="true" />
-      <created>1748270299904</created>
-      <option name="number" value="00266" />
-      <option name="presentableId" value="LOCAL-00266" />
-      <option name="project" value="LOCAL" />
-      <updated>1748270299904</updated>
+      <workItem from="1748847769951" duration="92155000" />
     </task>
     <task id="LOCAL-00267" summary="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173">
       <option name="closed" value="true" />
@@ -946,7 +933,23 @@
       <option name="project" value="LOCAL" />
       <updated>1749124099834</updated>
     </task>
-    <option name="localTasksCounter" value="314" />
+    <task id="LOCAL-00314" summary="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1749134941868</created>
+      <option name="number" value="00314" />
+      <option name="presentableId" value="LOCAL-00314" />
+      <option name="project" value="LOCAL" />
+      <updated>1749134941868</updated>
+    </task>
+    <task id="LOCAL-00315" summary="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;- OK : Ajustement de la configuration Gemini pour les statistiques&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173">
+      <option name="closed" value="true" />
+      <created>1749135006132</created>
+      <option name="number" value="00315" />
+      <option name="presentableId" value="LOCAL-00315" />
+      <option name="project" value="LOCAL" />
+      <updated>1749135006132</updated>
+    </task>
+    <option name="localTasksCounter" value="316" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -977,7 +980,6 @@
   <component name="VcsManagerConfiguration">
     <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_NEW_TODO" value="false" />
-    <MESSAGE value="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - update to capture and manage error&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - nouvelle approche&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - try again&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[WIP - Jenkins] JDR-Generator : Configuration du workflow Jenkins - try use jenkins image agent&#10; &#10;- [DONE - FEATURE] : Ajout d'une fonctionnalité de regénération de l'illustration (si manquante ou ne nous convenant pas) - correctif creant un character_illustration lors du generate (avant reponse de ai artwork) afin de ne pas bloquer la suppression ou la possibilité de regenrer une illustration&#10;- [DONE - DOCKER-COMPOSE] : Gros correctifs pour faire fonctionner correctement l'application en local par simple execution du docker-compose.local.yml &#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml down --rmi all&#10;&gt; docker-compose -p jdr-generator -f docker-compose.local.yml up --build&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;-&gt; http://localhost:5173" />
@@ -1002,7 +1004,8 @@
     <MESSAGE value="[OK - FEAT] JDR-Generator : Génération d'une fiche de personnage au format PDF&#10;- OK : indentation, puce, police, couleur, alignement, taille, saut de page, bold/italic/underline, spacing, image de fond de page, background derriere le portrait, header &amp; footer, police custom, ...&#10;- TODO : file metadata&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[DONE - FEAT] JDR-Generator : Génération d'une fiche de personnage au format PDF :: indentation, puce, police, couleur, alignement, taille, saut de page, bold/italic/underline, spacing, image de fond de page, background derriere le portrait, header &amp; footer, police custom, file metadata&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
     <MESSAGE value="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
-    <option name="LAST_COMMIT_MESSAGE" value="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
+    <MESSAGE value="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;- OK : Ajustement de la configuration Gemini pour les statistiques&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
+    <option name="LAST_COMMIT_MESSAGE" value="[TODO - PROMPTS IA] JDR-Generator : Centralisation des prompts, nottament ceux pour la génération de l'illustration qui auront un context selectionnable lors de la generation permettant de choisir un style de portrait prédéfini. Ajouts de nouveaux prompts et correction de models et forms liés.&#10;&#10;- OK : Ajustement de la configuration Gemini pour les statistiques&#10;&#10;Rappel des ports de l'application&#10;- mysql-container: 3306&#10;- api-container: 8080&#10;- web-container: 80&#10;- gemini-container: 3001&#10;- openai-container: 3002&#10;- jenkins-container : 9000&#10;-&gt; http://localhost:5173" />
     <option name="NON_MODAL_COMMIT_POSTPONE_SLOW_CHECKS" value="false" />
   </component>
   <component name="XDebuggerManager">
