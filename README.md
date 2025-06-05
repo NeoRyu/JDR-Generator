@@ -60,13 +60,19 @@ JDR-Generator est une application complète pour la création de personnages de 
 
 ## Captures d'écran
 
-![{A9C4900F-274B-451F-8097-A1AAAA3B500F}](https://github.com/user-attachments/assets/d60becac-93b7-4940-a3fc-5e1d26516053)
+![{F0A5CDFB-8C59-43A8-BB03-C3DF31FAEA74}](https://github.com/user-attachments/assets/f8825340-3e43-4de8-95ae-05641253d000)
 ![{8857CA56-EF92-4868-B4CB-4E9C6E2CEC95}](https://github.com/user-attachments/assets/f3972e04-553b-4e44-ac17-6f5fbbb517d4)
 ![{A8D02D44-A30A-41B4-A562-6219D38B19C1}](https://github.com/user-attachments/assets/78b3df51-f65c-483c-9311-a40c00f8344c)
 ![{E8893894-CADA-4F5E-96FE-9C47959FE2E9}](https://github.com/user-attachments/assets/58a7e538-0037-4ea4-93eb-a61fd597e1c1)
 ![{CE9E8BF3-B49E-4F1D-9233-77F1BD3D2E04}](https://github.com/user-attachments/assets/9781b1b9-d458-491f-9edd-7d566c5b3536)
 ![{20240EB7-0A44-45C2-9244-2EBCF16F60B5}](https://github.com/user-attachments/assets/35336cfb-e2b8-445d-905a-cbe03c6d761a)
+![{98F73FCB-130C-4BEA-82B7-C5D0ABEC9266}](https://github.com/user-attachments/assets/254f9fe1-bb5f-4dda-a683-226c26a7d452)
 ![{90DCBF62-C6FC-4F1F-AEFD-F95E6F257B82}](https://github.com/user-attachments/assets/e1bfb0bd-8f70-4b66-b7b3-dda68f52739a)
+
+Et voici un exemple de fiche de profil PDF pouvant être générée depuis l'application : 
+[JDR-Generator - Mona Sinclair.pdf](https://github.com/user-attachments/files/20611246/JDR-Generator.-.Mona.Sinclair.pdf)
+![{62A7A714-B53A-4C73-980C-8932EFAD81C9}](https://github.com/user-attachments/assets/4b79b567-72de-4d4e-ad97-dcd0eef29e8b)
+
 
 ## Installation
 
