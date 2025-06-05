@@ -171,6 +171,51 @@ public class PdfGeneratorService {
         }
     }
 
+    private static class PortraitCellBackgroundEvent implements PdfPCellEvent {
+        private Image cellBackgroundImage;
+
+        public PortraitCellBackgroundEvent(Image image) {
+            this.cellBackgroundImage = image;
+        }
+
+        @Override
+        public void cellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases) {
+            // canvases[PdfPTable.BACKGROUNDCANVAS] est le calque de fond de la cellule
+            // canvases[PdfPTable.TEXTCANVAS] est le calque de texte (où le contenu est dessiné)
+            PdfContentByte canvas = canvases[PdfPTable.BACKGROUNDCANVAS];
+
+            if (cellBackgroundImage != null) {
+                try {
+                    /*
+                    // Redimensionne l'image pour qu'elle corresponde aux dimensions de la cellule
+                    float imgWidth = position.getWidth();
+                    float imgHeight = position.getHeight();
+                    cellBackgroundImage.scaleAbsolute(imgWidth, imgHeight);
+                    // Positionne l'image en bas à gauche de la zone de la cellule
+                    cellBackgroundImage.setAbsolutePosition(position.getLeft(), position.getBottom());
+                    */
+
+                    // Redimensionne l'image pour qu'elle fasse 120% de sa taille d'origine
+                    float scaleFactor = 1.2f;
+                    float newWidth = position.getWidth() * scaleFactor;
+                    float newHeight = position.getHeight() * scaleFactor;
+                    cellBackgroundImage.scaleAbsolute(newWidth, newHeight);
+                    // Calcul de la position pour centrer l'image agrandie dans la cellule
+                    float offsetX = (newWidth - position.getWidth()) / 2f;
+                    float offsetY = (newHeight - position.getHeight()) / 2f;
+                    cellBackgroundImage.setAbsolutePosition(
+                            position.getLeft() - offsetX,
+                            position.getBottom() - offsetY
+                    );
+
+                    canvas.addImage(cellBackgroundImage);
+                } catch (DocumentException e) {
+                    LOGGER.error("Erreur lors de l'ajout de l'image de fond de cellule au PDF: " + e.getMessage());
+                }
+            }
+        }
+    }
+
     private String getIndent(final int level) {
         String indent = " ".repeat(level);
         switch (level) {
@@ -286,6 +331,10 @@ public class PdfGeneratorService {
                 .findByCharacterDetailsId(characterId)
                 .orElse(null);
 
+        // TODO : IMAGES UTILISEES
+        final String bgImg_Sheet = "pdf-background_3.jpg";
+        final String bgImg_Portrait = "pdf-frame_portrait.png";
+
         // -- DEBUT DE CREATION DU DOCUMENT PDF --
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
@@ -296,13 +345,12 @@ public class PdfGeneratorService {
             Image parchmentImage = null;
             try {
                 // Charge l'image "pdf_background.jpg" depuis les ressources
-                final String backgroundImgName = "pdf-background.jpg";
                 InputStream imageStream = getClass().getClassLoader()
-                        .getResourceAsStream(backgroundImgName);
+                        .getResourceAsStream(bgImg_Sheet);
                 if (imageStream != null) {
                     parchmentImage = Image.getInstance(imageStream.readAllBytes());
                 } else {
-                    LOGGER.warn("Image de fond '" + backgroundImgName + "' non trouvée dans " +
+                    LOGGER.warn("Image de fond '" + bgImg_Sheet + "' non trouvée dans " +
                             "les ressources. Le PDF sera généré sans fond.");
                 }
             } catch (IOException e) {
@@ -368,12 +416,25 @@ public class PdfGeneratorService {
 
             // --- Cellule de droite (Image) ---
             PdfPCell imageCell = new PdfPCell();
-            imageCell.setBorder(Rectangle.BOX); // TODO Ajoute une bordure à la cellule a retravailler
-            imageCell.setBorderWidth(2f);       // Épaisseur de la bordure (2 points)
-            imageCell.setBorderColor(new Color(139, 69, 19));
-            imageCell.setPadding(5f); // Marge interne pour que l'image ne touche pas la bordure
-            imageCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+            imageCell.setBorder(Rectangle.NO_BORDER);
+            imageCell.setPadding(0f); // Marge interne pour que l'image touche la bordure
+            imageCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             imageCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+            // Charger une image de fond pour la cellule du portrait
+            Image portraitCellBackgroundImage = null;
+            try {
+                InputStream portraitImageStream = getClass().getClassLoader()
+                        .getResourceAsStream(bgImg_Portrait);
+                if (portraitImageStream != null) {
+                    portraitCellBackgroundImage = Image.getInstance(portraitImageStream.readAllBytes());
+                    imageCell.setCellEvent(new PortraitCellBackgroundEvent(portraitCellBackgroundImage));
+                } else {
+                    LOGGER.warn("Image de fond de portrait '" + bgImg_Portrait + "' non trouvée.");
+                }
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors du chargement de l'image de fond du portrait: " + e.getMessage());
+            }
 
             // Ajout du portrait du personnage
             try {
