@@ -87,6 +87,7 @@ export const RegenerateIllustrationButton: React.FC<
                 variant="outline"
                 className="button-red"
                 style={{ color: "#e36804!important"}}
+                title="Générer un nouveau portrait pour le personnage"
             >
                 {isRegenerating ? <Loader2 className="animate-spin" /> : <Users />}
             </Button>

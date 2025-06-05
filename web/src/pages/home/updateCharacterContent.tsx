@@ -60,6 +60,7 @@ export const UpdateCharacterDialog: React.FC<UpdateCharacterDialogProps> = ({
           className="button"
           type="button"
           variant="outline"
+          title="Modifier le profil du personnage"
         >
           <Pen />
         </Button>

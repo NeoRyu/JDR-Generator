@@ -6,6 +6,7 @@ import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,38 +30,41 @@ public class CharactersController {
   private final CharacterDetailsService characterDetailsService;
   private final OpenaiService openaiService;
   private final FreepikService freepikService;
+  private final PdfGeneratorService pdfGeneratorService;
 
   /**
    * Constructor for the CharactersController.
    *
-   * @param geminiService Service for interacting with the Gemini API.
+   * @param geminiService           Service for interacting with the Gemini API.
    * @param characterDetailsService Service for managing character details.
-   * @param openaiService Service for interacting with the OpenAI API.
-   * @param freepikService Service for interacting with the Freepik API.
+   * @param openaiService           Service for interacting with the OpenAI API.
+   * @param freepikService          Service for interacting with the Freepik API.
    */
   CharactersController(
-          GeminiService geminiService,
           CharacterDetailsService characterDetailsService,
+          GeminiService geminiService,
           OpenaiService openaiService,
-          FreepikService freepikService
+          FreepikService freepikService,
+          PdfGeneratorService pdfGeneratorService
   ) {
-    this.geminiService = geminiService;
     this.characterDetailsService = characterDetailsService;
+    this.geminiService = geminiService;
     this.openaiService = openaiService;
     this.freepikService = freepikService;
+    this.pdfGeneratorService = pdfGeneratorService;
   }
 
   /**
    * Updates an existing character's details.
    *
-   * @param id The ID of the character to update.
+   * @param id               The ID of the character to update.
    * @param updatedCharacter The updated character data.
    * @return The updated CharacterDetailsEntity.
    */
   @PutMapping("/details/{id}")
   @Transactional
   public CharacterDetailsEntity updateCharacter(
-      @PathVariable Long id, @RequestBody CharacterFullModel updatedCharacter) {
+          @PathVariable Long id, @RequestBody CharacterFullModel updatedCharacter) {
     return characterDetailsService.updateCharacterDetails(id, updatedCharacter);
   }
 
@@ -102,8 +106,8 @@ public class CharactersController {
    * @return The generated CharacterDetailsModel.
    */
   @RequestMapping(
-      value = {"/generate"},
-      method = RequestMethod.POST)
+          value = {"/generate"},
+          method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = webModuleHost)
   public CharacterDetailsModel generate(@RequestBody DefaultContextJson data) {
@@ -135,11 +139,27 @@ public class CharactersController {
    * @return A string containing the character's statistics.
    */
   @RequestMapping(
-      value = {"/stats/{id}"},
-      method = RequestMethod.POST)
+          value = {"/stats/{id}"},
+          method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = webModuleHost)
   public String stats(@PathVariable Long id) {
     return geminiService.stats(id);
   }
+
+  /**
+   * PDF Generation
+   *
+   * @param id L'ID du personnage pour lequel générer le PDF.
+   * @return byte[] du PDF généré
+   */
+  @GetMapping(
+          value = "/pdf/generate/{id}",
+          produces = MediaType.APPLICATION_PDF_VALUE
+  )
+  @CrossOrigin(origins = webModuleHost)
+  public byte[] getCharacterPdf(@PathVariable Long id) {
+    return pdfGeneratorService.generateCharacterPdf(id);
+  }
+
 }

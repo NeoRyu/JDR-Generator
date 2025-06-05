@@ -351,6 +351,73 @@ textarea:focus {
   border-radius: 10px;
 }
 
+.button-bubble-aura {
+  box-sizing: unset;
+  content: "";
+  border: none;
+  z-index: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 0.5em;
+  transition: transform 0.4s cubic-bezier(0.55, 1, 0.15, 1);
+  will-change: transform;
+  color: #006c4c !important;
+  border-radius: 50px;
+  &:active {
+    transform: scale(0.92);
+    &::after {
+      opacity: 1;
+    }
+  }
+  &::after {
+    content: "";
+    position: relative;
+    inset: 0;
+    border-style: solid;
+    transition-property: opacity;
+    will-change: transform;
+  }
+  &:focus-visible::after {
+    content: "";
+    opacity: 1;
+    animation: pulsate 1s infinite;
+  }
+}
+.button-bubble-aura:before {
+  content: "";
+  background: linear-gradient(
+          45deg,
+          #ff0000,
+          #ff7300,
+          #fffb00,
+          #48ff00,
+          #00ffd5,
+          #002bff,
+          #7a00ff,
+          #ff00c8,
+          #ff0000
+  );
+  position: absolute;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  -webkit-filter: blur(5px);
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  animation: glowing-button-aura 20s linear infinite;
+  border-radius: 50px;
+}
+.button-bubble-aura:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  background-color: #f0f7fa;
+  box-shadow: inset 0 -4px 8px #91ca4b, 0 4px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 50px;
+  padding: 16px 20px;
+}
+
 .menuButton {
   margin: 10px;
 }
@@ -427,8 +494,6 @@ textarea:focus {
     content: "";
     position: absolute;
     inset: 0;
-    border-image-source: url("https://assets.codepen.io/4175254/mario-button-borders.png");
-    border-image-slice: 50%;
     border-image-width: 40px;
     border-style: solid;
     transform: scale(1.04, 1.08);

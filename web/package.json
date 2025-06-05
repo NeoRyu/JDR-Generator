@@ -14,7 +14,15 @@
     "preview": "vite preview"
   },
   "author": "NeoRyu",
-  "keywords": ["jdr-generator","ia","gemini","chatgpt","dall-e","imagen","Neo_Ryu"],
+  "keywords": [
+    "jdr-generator",
+    "ia",
+    "gemini",
+    "chatgpt",
+    "dall-e",
+    "imagen",
+    "Neo_Ryu"
+  ],
   "license": "Apache License",
   "description": "NodeJS Frontend React/Typescript UI to interact with module 'api'",
   "dependencies": {
@@ -23,6 +31,7 @@
     "@radix-ui/react-select": "^2.0.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tabs": "^1.1.3",
+    "@radix-ui/react-toast": "^1.2.14",
     "@types/node": "^20.10.5",
     "axios": "^1.6.3",
     "class-variance-authority": "^0.7.0",

@@ -83,6 +83,7 @@ export function DeleteCharacterContent({
           type="button"
           variant="outline"
           onClick={() => setModalType("delete")}
+          title="Supprimer définitivement ce personnage"
           disabled={isDeleteLoading} // Désactiver le bouton pendant le chargement
         >
           {isDeleteLoading ? <Loader2 className="animate-spin" /> : <Trash2 />}
