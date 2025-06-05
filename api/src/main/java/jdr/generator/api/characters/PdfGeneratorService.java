@@ -40,20 +40,23 @@ public class PdfGeneratorService {
     private final CharacterIllustrationService characterIllustrationService;
     private final CharacterJsonDataService characterJsonDataService;
 
-    // Bloc statique pour charger les polices personnalisées une seule fois au démarrage
+    // Bloc statique pour charger les polices personnalisées, une seule fois, au démarrage
     static {
         try {
-            // Exemple de chargement de polices personnalisées (ajustez les chemins et noms)
-            // Assurez-vous que ces fichiers .ttf existent dans src/main/resources/fonts/
-            // String fontPathRegular = "/fonts/Merriweather-Regular.ttf";
-            // String fontPathBold = "/fonts/Merriweather-Bold.ttf";
-
-            // FontFactory.register(fontPathRegular, "Merriweather");
-            // FontFactory.register(fontPathBold, "MerriweatherBold");
-
-            // LOGGER.info("Polices personnalisées enregistrées avec succès.");
-
-        } catch (/* DocumentException | IOException */ Exception e) { // Catch générique pour la démo, ajustez si besoin
+            FontFactory.register(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-extralight.ttf")
+                    .getFile(), "GooglePlayWriteFrModerneExtraLight");
+            FontFactory.register(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-light.ttf")
+                    .getFile(), "GooglePlayWriteFrModerneLight");
+            FontFactory.register(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-regular.ttf")
+                    .getFile(), "GooglePlayWriteFrModerneRegular");
+            FontFactory.register(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-thin.ttf")
+                    .getFile(), "GooglePlayWriteFrModerneThin");
+            LOGGER.info("Polices custom chargées avec succès.");
+        } catch (Exception e) {
             LOGGER.error("Erreur lors du chargement des polices personnalisées: " + e.getMessage());
         }
     }
@@ -72,7 +75,8 @@ public class PdfGeneratorService {
             this.characterContext = context;
             try {
                 // Charge la police de base une seule fois dans le constructeur
-                this.footerBaseFont = FontFactory.getFont(FontFactory.HELVETICA, 10, Color.BLACK).getBaseFont();
+                this.footerBaseFont = FontFactory.getFont("GooglePlayWriteFrModerneThin",
+                        10, Font.UNDERLINE, Color.BLACK).getBaseFont();
             } catch (DocumentException e) {
                 // Log l'erreur si la police ne peut pas être chargée
                 LOGGER.error("Erreur lors du chargement de la police pour le pied de page: " + e.getMessage());
@@ -183,20 +187,10 @@ public class PdfGeneratorService {
             // canvases[PdfPTable.BACKGROUNDCANVAS] est le calque de fond de la cellule
             // canvases[PdfPTable.TEXTCANVAS] est le calque de texte (où le contenu est dessiné)
             PdfContentByte canvas = canvases[PdfPTable.BACKGROUNDCANVAS];
-
             if (cellBackgroundImage != null) {
                 try {
-                    /*
-                    // Redimensionne l'image pour qu'elle corresponde aux dimensions de la cellule
-                    float imgWidth = position.getWidth();
-                    float imgHeight = position.getHeight();
-                    cellBackgroundImage.scaleAbsolute(imgWidth, imgHeight);
-                    // Positionne l'image en bas à gauche de la zone de la cellule
-                    cellBackgroundImage.setAbsolutePosition(position.getLeft(), position.getBottom());
-                    */
-
-                    // Redimensionne l'image pour qu'elle fasse 120% de sa taille d'origine
-                    float scaleFactor = 1.2f;
+                    // Redimensionne l'image pour qu'elle fasse 140% de sa taille d'origine
+                    float scaleFactor = 1.4f;
                     float newWidth = position.getWidth() * scaleFactor;
                     float newHeight = position.getHeight() * scaleFactor;
                     cellBackgroundImage.scaleAbsolute(newWidth, newHeight);
@@ -207,7 +201,35 @@ public class PdfGeneratorService {
                             position.getLeft() - offsetX,
                             position.getBottom() - offsetY
                     );
+                    canvas.addImage(cellBackgroundImage);
+                } catch (DocumentException e) {
+                    LOGGER.error("Erreur lors de l'ajout de l'image de fond de cellule au PDF: " + e.getMessage());
+                }
+            }
+        }
+    }
 
+    private static class ImageCellBackgroundEvent implements PdfPCellEvent {
+        private Image cellBackgroundImage;
+
+        public ImageCellBackgroundEvent(Image image) {
+            this.cellBackgroundImage = image;
+        }
+
+        @Override
+        public void cellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases) {
+            PdfContentByte canvas = canvases[PdfPTable.BACKGROUNDCANVAS];
+            if (cellBackgroundImage != null) {
+                try {
+                    // Redimensionne l'image pour qu'elle corresponde aux dimensions de la cellule
+                    float imgWidth = position.getWidth();
+                    float imgHeight = position.getHeight();
+                    cellBackgroundImage.scaleAbsolute(imgWidth, imgHeight);
+                    // Positionne l'image en bas à gauche de la zone de la cellule
+                    cellBackgroundImage.setAbsolutePosition(
+                            imgWidth/2,
+                            position.getBottom()
+                    );
                     canvas.addImage(cellBackgroundImage);
                 } catch (DocumentException e) {
                     LOGGER.error("Erreur lors de l'ajout de l'image de fond de cellule au PDF: " + e.getMessage());
@@ -242,8 +264,8 @@ public class PdfGeneratorService {
         return p;
     }
     private Phrase contextContentLabel(final String label, final float fontSize) {
-        final Font underlinedLabelFont = FontFactory.getFont(FontFactory.COURIER_BOLD,
-                fontSize, Font.UNDERLINE, Color.BLACK);
+        final Font underlinedLabelFont = FontFactory.getFont(
+                FontFactory.COURIER_BOLD, fontSize, Font.UNDERLINE, Color.BLACK);
         if (label == null || label.isEmpty()) {
             return new Phrase("", underlinedLabelFont);
         }
@@ -251,8 +273,8 @@ public class PdfGeneratorService {
                 + label.substring(1), underlinedLabelFont);
     }
     private Phrase contextContent(final String text, final float fontSize) {
-        final Font infoFont = FontFactory.getFont(FontFactory.COURIER_BOLD,
-                fontSize, Color.BLACK);
+        final Font infoFont = FontFactory.getFont(
+                FontFactory.COURIER_BOLD, fontSize, Color.BLACK);
         if (text == null || text.isEmpty()) {
             return new Phrase("", infoFont);
         }
@@ -276,8 +298,8 @@ public class PdfGeneratorService {
         return p;
     }
     private Phrase paragraphContentLabel(final String label, final float fontSize) {
-        final Font underlinedLabelFont = FontFactory.getFont(FontFactory.COURIER_BOLD,
-                fontSize, Font.UNDERLINE, Color.BLACK);
+        final Font underlinedLabelFont = FontFactory.getFont(
+                "GooglePlayWriteFrModerneRegular", fontSize, Font.BOLD, Color.BLACK);
         if (label == null || label.isEmpty()) {
             return new Phrase("", underlinedLabelFont);
         }
@@ -285,8 +307,8 @@ public class PdfGeneratorService {
                 + label.substring(1), underlinedLabelFont);
     }
     private Phrase paragraphContent(final String text, final float fontSize) {
-        final Font infoFont = FontFactory.getFont(FontFactory.COURIER_OBLIQUE,
-                fontSize, Color.BLACK);
+        final Font infoFont = FontFactory.getFont(
+                "GooglePlayWriteFrModerneThin", fontSize, Color.BLACK);
         if (text == null || text.isEmpty()) {
             return new Phrase("", infoFont);
         }
@@ -334,13 +356,13 @@ public class PdfGeneratorService {
         // TODO : IMAGES UTILISEES
         final String bgImg_Sheet = "pdf-background_3.jpg";
         final String bgImg_Portrait = "pdf-frame_portrait.png";
+        final String bgImg_Splash = "pdf-frame_splash.png";
 
         // -- DEBUT DE CREATION DU DOCUMENT PDF --
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             Document document = new Document();
             PdfWriter writer = PdfWriter.getInstance(document, baos);
-
             // AJOUT DE L'IMAGE DE FOND
             Image parchmentImage = null;
             try {
@@ -367,7 +389,6 @@ public class PdfGeneratorService {
                 document.addTitle(c_details.getName());
                 document.addAuthor("COUPEZ Frédéric");
                 document.addSubject("JDR-Generator");
-
                 // Mots-clés dynamiques
                 String keywords = c_context.getPromptSystem() + ", " +
                         c_context.getPromptRace() + ", " +
@@ -376,7 +397,6 @@ public class PdfGeneratorService {
                         c_context.getPromptGender();
                 document.addKeywords(keywords);
             }
-
             document.open();
 
             // Création d'une table à deux colonnes (60% / 40%)
@@ -388,15 +408,14 @@ public class PdfGeneratorService {
             PdfPCell textCell = new PdfPCell();
             textCell.setBorder(PdfPCell.NO_BORDER);
             textCell.setVerticalAlignment(Element.ALIGN_TOP);
-
             // NOM DU PERSONNAGE
-            Paragraph title = new Paragraph(c_details.getName().toUpperCase(),
-                    FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Color.BLACK));
+            Paragraph title = new Paragraph(c_details.getName().toUpperCase(), FontFactory.getFont(
+                    FontFactory.TIMES_BOLD, 24, Font.UNDERLINE, Color.BLACK)
+            );
             title.setAlignment(Element.ALIGN_CENTER);
             textCell.addElement(title);
             textCell.addElement(new Paragraph(CRLF));
             textCell.addElement(new Paragraph(CRLF));
-
             // INFOS PRINCIPALES (CONTEXTE + AGE)
             textCell.addElement(context("Univers",
                     c_context.getPromptSystem(), 14));
@@ -410,7 +429,20 @@ public class PdfGeneratorService {
             textCell.addElement(context("Age",
                     String.valueOf(c_details.getAge()), 14));
             textCell.addElement(new Paragraph(CRLF));
-
+            // Charger une image splash separator
+            Image splashCellBackgroundImage = null;
+            try {
+                InputStream splashImageStream = getClass().getClassLoader()
+                        .getResourceAsStream(bgImg_Splash);
+                if (splashImageStream != null) {
+                    splashCellBackgroundImage = Image.getInstance(splashImageStream.readAllBytes());
+                    textCell.setCellEvent(new ImageCellBackgroundEvent(splashCellBackgroundImage));
+                } else {
+                    LOGGER.warn("Image separator '" + bgImg_Splash + "' non trouvée.");
+                }
+            } catch (IOException e) {
+                LOGGER.error("Erreur lors du chargement de l'image separator : " + e.getMessage());
+            }
             // Ajout de la cellule de texte à la table
             headerTable.addCell(textCell);
 
@@ -420,7 +452,6 @@ public class PdfGeneratorService {
             imageCell.setPadding(0f); // Marge interne pour que l'image touche la bordure
             imageCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             imageCell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
             // Charger une image de fond pour la cellule du portrait
             Image portraitCellBackgroundImage = null;
             try {
@@ -435,7 +466,6 @@ public class PdfGeneratorService {
             } catch (IOException e) {
                 LOGGER.error("Erreur lors du chargement de l'image de fond du portrait: " + e.getMessage());
             }
-
             // Ajout du portrait du personnage
             try {
                 if (c_illustration != null && c_illustration.getImageBlob() != null
@@ -465,15 +495,13 @@ public class PdfGeneratorService {
                 imageCell.addElement(new Paragraph(
                         "ERREUR : Portrait non disponible.", infoError));
             }
-
             // Ajout de la cellule d'image à la table
             headerTable.addCell(imageCell);
             // Ajout de la table d'en-tête au document
             document.add(headerTable);
 
             // CONTEXTE : DESCRIPTION
-            document.add(paragraph(0, "Description",
-                    c_context.getPromptDescription(), 12));
+            document.add(context("Description", c_context.getPromptDescription(), 12));
             document.newPage();
 
             // DETAILS
