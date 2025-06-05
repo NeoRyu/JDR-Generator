@@ -3,9 +3,8 @@ package jdr.generator.api.characters;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.*;
-import com.lowagie.text.pdf.*; // Importe toutes les classes pdf
-
-import java.awt.Color; // Utilise java.awt.Color pour les couleurs
+import com.lowagie.text.pdf.*;
+import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -68,8 +67,11 @@ public class PdfGeneratorService {
         private CharacterContextEntity characterContext; // Pour l'univers
         private PdfTemplate totalPagesTemplate; // Pour le nombre total de pages
         private BaseFont footerBaseFont; // Police de base pré-chargée pour le pied de page
-
-        public CharacterPdfPageEvent(Image image, CharacterDetailsEntity details, CharacterContextEntity context) {
+        public CharacterPdfPageEvent(
+                Image image,
+                CharacterDetailsEntity details,
+                CharacterContextEntity context
+        ) {
             this.backgroundImage = image;
             this.characterDetails = details;
             this.characterContext = context;
@@ -79,11 +81,10 @@ public class PdfGeneratorService {
                         10, Font.UNDERLINE, Color.BLACK).getBaseFont();
             } catch (DocumentException e) {
                 // Log l'erreur si la police ne peut pas être chargée
-                LOGGER.error("Erreur lors du chargement de la police pour le pied de page: " + e.getMessage());
-                this.footerBaseFont = null; // S'assure que la police est null si le chargement échoue
+                LOGGER.error("Erreur lors du chargement de la police du footer: " + e.getMessage());
+                this.footerBaseFont = null; // Police est null si le chargement échoue
             }
         }
-
         // Méthode est appelée quand le document est fermé, c'est le moment de remplir le PdfTemplate
         @Override
         public void onCloseDocument(PdfWriter writer, Document document) {
@@ -92,19 +93,18 @@ public class PdfGeneratorService {
                 try {
                     totalPagesTemplate.beginText();
                     totalPagesTemplate.setFontAndSize(footerBaseFont, 10);
-                    totalPagesTemplate.showText(String.valueOf(writer.getPageNumber() - 1)); // -1 pour le nombre total de pages
+                    totalPagesTemplate.showText(String.valueOf(writer.getPageNumber() - 1));
+                    // -1 pour le nombre total de pages
                     totalPagesTemplate.endText();
                 } catch (DocumentException e) {
-                    LOGGER.error("Erreur lors du remplissage du PdfTemplate pour le nombre total de pages: " + e.getMessage());
+                    LOGGER.error("Erreur de remplissage du nb total de pages: " + e.getMessage());
                 }
             }
         }
-
         @Override
         public void onEndPage(PdfWriter writer, Document document) {
             PdfContentByte canvas = writer.getDirectContentUnder(); // Pour le fond
             PdfContentByte directContent = writer.getDirectContent(); // Pour le texte (en-tête/pied de page)
-
             // --- 1. Dessin de l'arrière-plan (comme avant) ---
             try {
                 if (backgroundImage != null) {
@@ -116,7 +116,6 @@ public class PdfGeneratorService {
             } catch (DocumentException e) { // Ajout de IOException
                 LOGGER.error("Erreur lors de l'ajout de l'image de fond au PDF: " + e.getMessage());
             }
-
             // --- 2. En-tête (à partir de la page 2) ---
             // Assurez-vous d'avoir importé com.lowagie.text.pdf.ColumnText;
             if (
@@ -134,40 +133,31 @@ public class PdfGeneratorService {
                 ColumnText.showTextAligned(directContent, Element.ALIGN_CENTER,
                         new Phrase(headerText, headerFont), x, y, 0);
             }
-
             // --- 3. Pied de page (numérotation "Page X sur Y") ---
             if (footerBaseFont != null) { // S'assure que la police a été chargée
-                Font footerFont = new Font(footerBaseFont, 10, Font.NORMAL, Color.BLACK); // Reconstruire l'objet Font pour la taille/couleur
-
+                Font footerFont = new Font(footerBaseFont, 10, Font.NORMAL, Color.BLACK);
                 String pageNumText = "[JDR-Generator] Page " + (writer.getPageNumber()) + " sur ";
-
                 float x = document.getPageSize().getWidth() / 2;
                 float y = document.getPageSize().getBottom() + 15;
-
                 directContent.beginText();
-                directContent.setFontAndSize(footerBaseFont, footerFont.getSize()); // Utilise la police de base pré-chargée
-
+                directContent.setFontAndSize(footerBaseFont, footerFont.getSize());
                 // Calcul de la largeur du texte "Page X sur "
-                float pageNumTextWidth = footerBaseFont.getWidthPoint(pageNumText, footerFont.getSize());
-
+                float pageNumTextWidth = footerBaseFont.getWidthPoint(
+                        pageNumText, footerFont.getSize());
                 // Calcul de la largeur estimée du nombre total de pages (pour centrage global)
-                float estimatedTotalPagesWidth = footerBaseFont.getWidthPoint("999", footerFont.getSize()); // Estime pour un nombre à 3 chiffres
+                float estimatedTotalPagesWidth = footerBaseFont.getWidthPoint(
+                        "99", footerFont.getSize()); // Estime pour un nombre à 2 chiffres
                 float totalFooterWidth = pageNumTextWidth + estimatedTotalPagesWidth;
-
                 // Position initiale ajustée pour le centrage global du pied de page
                 directContent.setTextMatrix(x - (totalFooterWidth / 2), y);
-
                 directContent.showText(pageNumText);
-
                 if (totalPagesTemplate == null) {
-                    // Crée le template une seule fois. Sa taille doit être suffisante pour le nombre max de pages.
+                    // Crée le template 1x. Sa taille doit être suffisante pour le nb max de pages.
                     totalPagesTemplate = writer.getDirectContent().createTemplate(50, 10);
                 }
-
                 // Place le template après le texte "Page X sur "
                 float xTotalPages = directContent.getXTLM() + pageNumTextWidth;
                 directContent.addTemplate(totalPagesTemplate, xTotalPages, y);
-
                 directContent.endText();
             } else {
                 LOGGER.warn("La police du pied de page n'a pas été chargée, le pied de page ne sera pas dessiné.");
@@ -387,8 +377,8 @@ public class PdfGeneratorService {
             // Définition des métadonnées du document
             if (c_details != null && c_context != null) {
                 document.addTitle(c_details.getName());
-                document.addAuthor("COUPEZ Frédéric");
-                document.addSubject("JDR-Generator");
+                document.addAuthor("Frédéric COUPEZ");
+                document.addSubject("JDR-Generator : https://github.com/NeoRyu/JDR-Generator/tree/main");
                 // Mots-clés dynamiques
                 String keywords = c_context.getPromptSystem() + ", " +
                         c_context.getPromptRace() + ", " +
@@ -464,7 +454,7 @@ public class PdfGeneratorService {
                     LOGGER.warn("Image de fond de portrait '" + bgImg_Portrait + "' non trouvée.");
                 }
             } catch (IOException e) {
-                LOGGER.error("Erreur lors du chargement de l'image de fond du portrait: " + e.getMessage());
+                LOGGER.error("Erreur de chargement du background du portrait: " + e.getMessage());
             }
             // Ajout du portrait du personnage
             try {
@@ -659,7 +649,8 @@ public class PdfGeneratorService {
                 // C'est un objet imbriqué (catégorie)
                 if (key != null && !key.isEmpty()) { // Correction de la condition logique
                     document.add(category(level,
-                            key.substring(0, 1).toUpperCase() + key.substring(1) + " :",
+                            key.substring(0, 1).toUpperCase()
+                                    + key.substring(1) + " :",
                             calcFontSize(14, level)));
                 } else {
                     // Si la clé est vide pour une map, ajoutez juste l'indentation et le ":"
