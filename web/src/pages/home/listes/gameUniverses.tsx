@@ -17,6 +17,7 @@ export const gameUniverses = [
   { value: "Midnight", label: "Midnight" },
   { value: "Nightprowler", label: "Nightprowler" },
   { value: "Pathfinder", label: "Pathfinder" },
+  { value: "Pendragon", label: "Pendragon" },
   { value: "Rêve de Dragon", label: "Rêve de Dragon" },
   { value: "Shadowrun", label: "Shadowrun" },
   { value: "Shaan", label: "Shaan" },

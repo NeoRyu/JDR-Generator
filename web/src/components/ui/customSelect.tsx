@@ -89,7 +89,7 @@ const CustomSelect = <T extends React.Key>({
         <ChevronDown className="h-4 w-4 opacity-50" />
       </div>
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md">
+        <div className="absolute z-10 mt-1 w-full rounded-md border bg-popover text-popover-foreground shadow-md max-h-48 overflow-y-auto">
           {options.map((option) => (
             <div
               key={option.value}
