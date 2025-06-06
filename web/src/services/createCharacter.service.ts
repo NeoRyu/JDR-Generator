@@ -17,15 +17,17 @@ export const useCreateCharacter = () => {
       promptRace: string;
       promptGender: string;
       promptClass?: string;
+      promptDrawStyle: string;
       promptDescription?: string;
     }) => {
       const cleanedData = {
-        ...payloadData,
-        promptSystem: cleanData(payloadData.promptSystem),
-        promptRace: cleanData(payloadData.promptRace),
-        promptGender: cleanData(payloadData.promptGender),
-        promptClass: cleanData(payloadData.promptClass),
-        promptDescription: cleanData(payloadData.promptDescription),
+          ...payloadData,
+          promptSystem: cleanData(payloadData.promptSystem),
+          promptRace: cleanData(payloadData.promptRace),
+          promptGender: cleanData(payloadData.promptGender),
+          promptClass: cleanData(payloadData.promptClass),
+          promptDrawStyle: cleanData(payloadData.promptDrawStyle),
+          promptDescription: cleanData(payloadData.promptDescription),
       };
       return await axios.post(
         `${API_BASE_URL}/characters/generate`,

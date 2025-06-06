@@ -6,7 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
+
+import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextService;
+import jdr.generator.api.characters.context.IllustrationDrawStyle;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsService;
 import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
@@ -69,19 +72,21 @@ public class FreepikService {
   /**
    * Asynchronously generates an illustration for a character using the Freepik API.
    *
-   * @param entity The details of the character for whom to generate the
-   *     illustration.
+   * @param promptDrawStyle The key and prompt defining the overall portrait style to generate
+   * @param entity The details of the character for whom to generate the illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
+          IllustrationDrawStyle promptDrawStyle,
           CharacterDetailsEntity entity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "FreepikService pour le personnage {{id={}}}",
         entity.getId());
     try {
-      final byte[] imageBytes = this.illustrate(entity.getImage());
+      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + entity.getImage();
+      final byte[] imageBytes = this.illustrate(promptPortrait);
       if (imageBytes != null && imageBytes.length > 0) {
         try {
           this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
@@ -138,16 +143,16 @@ public class FreepikService {
   /**
    * Generates an image based on the provided prompt using the Freepik API.
    *
-   * @param imagePrompt The prompt for the image generation.
+   * @param promptPortrait The complete prompt for the image generation.
    * @return A byte array representing the generated image, or null if an error occurs.
    * @throws RuntimeException if there is an error communicating with the Freepik API.
    */
-  public byte[] illustrate(String imagePrompt) {
+  public byte[] illustrate(String promptPortrait) {
     final String apiUrl = hostApiAi + (hostApiAi.endsWith("/") ? "illustrate" : "/illustrate");
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     JSONObject requestBody = new JSONObject();
-    requestBody.put("prompt", imagePrompt);
+    requestBody.put("prompt", promptPortrait);
     HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
 
     ResponseEntity<String> response;
@@ -176,7 +181,7 @@ public class FreepikService {
           LOGGER.error(
               "Freepik module /illustrate returned JSON without "
                   + "valid 'image' field for prompt: {}",
-              imagePrompt);
+              promptPortrait);
           return null;
         }
       } catch (JsonProcessingException e) {
@@ -207,9 +212,14 @@ public class FreepikService {
     LOGGER.info("Regenerating illustration for character ID: {}", id);
     try {
       CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
-      String imagePrompt = characterDetails.getImage();
-      byte[] newImageBlob = illustrate(imagePrompt);
-      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+      CharacterContextEntity characterContext = characterContextService.findById(id);
+      final IllustrationDrawStyle promptDrawStyle =
+              IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
+      final String promptPortrait = promptDrawStyle.getBasePrompt()
+              + " " + characterDetails.getImage();
+      byte[] newImageBlob = illustrate(promptPortrait);
+      characterIllustrationService.updateIllustration(
+              id, newImageBlob, characterDetails.getImage());
 
       return newImageBlob;
 

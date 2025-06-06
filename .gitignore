@@ -3,3 +3,6 @@
 /.idea/dataSources/
 /.jython_cache/
 /.jenkins/
+freepik/.env
+gemini/.env
+openai/.env

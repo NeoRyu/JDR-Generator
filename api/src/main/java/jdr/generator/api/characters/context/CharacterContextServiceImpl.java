@@ -92,6 +92,7 @@ public class CharacterContextServiceImpl implements CharacterContextService {
     characterContextModel.promptRace = data.getPromptRace();
     characterContextModel.promptGender = data.getPromptGender();
     characterContextModel.promptClass = data.getPromptClass();
+    characterContextModel.promptDrawStyle = data.getPromptDrawStyle();
     characterContextModel.promptDescription = data.getPromptDescription();
     characterContextModel.createdAt = java.util.Date.from(java.time.Instant.now());
     return characterContextModel;

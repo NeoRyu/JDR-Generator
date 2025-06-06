@@ -18,10 +18,6 @@ const model: GenerativeModel = genAI.getGenerativeModel({
   },
 });
 
-// Les prompts qui seront envoyés par la suite pour générer une réponse attendue
-const imagenPrompt =
-  "Using Imagen3, generate an illustration in a heroic-fantasy style, but not realistic, close to that of the French illustrator Grosnez (https://www.artstation.com/grosnez) based on this prompt: ";
-
 // Fonction contrôleur pour gérer les conversations
 export const generateImage = async (
   req: Request,
@@ -43,7 +39,7 @@ export const generateImage = async (
       }
 
       const result: GenerateContentResult = await model.generateContent({
-        contents: [{ role: "user", parts: [{ text: imagenPrompt + prompt }] }],
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
       });
       console.log("Gemini API response:", result); // Log de la réponse de l'API Gemini
 

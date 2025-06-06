@@ -4,10 +4,6 @@ import * as fs from "fs";
 // --- Global Configuration ---
 const dallEModel = process.env.AI_IMAGE_MODEL || "dall-e-3";
 const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
-
-// TODO : Mettre en place différents styles d'illustrations, modifier le contexte pour add cela.
-// const chillIllustrationPrompt = "Generate a highly detailed and artistic illustration in a heroic-fantasy style, suitable for a role-playing game character portrait. The style should resemble digital painting with soft gradients and a focus on character detail. Consider the overall mood and atmosphere. ";
-const photoRealisticPrompt = "Create a Photorealistic studio portrait of a mature-looking individual, taken with a professional camera, in a heroic fantasy setting. The lighting is dramatic and natural, emphasizing the character's features. The background is a smooth, dark gradient, carefully blurred to keep focus on the subject. The overall mood is serious and immersive, aiming for a high-resolution, unedited photograph. ";
 const maxRetries = 3;
 
 // --- OpenAI Configuration ---
@@ -59,17 +55,14 @@ export const generateImage = async (
 
   while (retryCount < maxRetries) {
     try {
-      const prompt = req.body.prompt;
-      console.log("generateImage :: prompt received:", prompt);
+      const fullPrompt = req.body.prompt;
+      console.log("generateImage :: prompt received:", fullPrompt);
 
-      if (!prompt) {
+      if (!fullPrompt) {
         console.error("No prompt provided.");
         res.status(400).json({ message: "No prompt provided." });
         return;
       }
-
-      // const fullPrompt = chillIllustrationPrompt + prompt;
-      const fullPrompt = photoRealisticPrompt + prompt;
 
       console.log("generateImage :: fullPrompt being sent:", fullPrompt);
       console.log(`Calling OpenAI DALL-E API with model: ${dallEModel}`);

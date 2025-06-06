@@ -20,6 +20,7 @@ import {gameUniverses} from "@/pages/home/listes/gameUniverses.tsx";
 import {characterRaces} from "@/pages/home/listes/characterRaces.tsx";
 import {characterGenders} from "@/pages/home/listes/characterGenders.tsx";
 import {characterClasses} from "@/pages/home/listes/characterClasses.tsx";
+import {illustrationDrawStyles} from "@/pages/home/listes/illustrationDrawStyles.tsx";
 import CustomSelect from "@/components/ui/customSelect.tsx";
 
 export type ModalTypes = "read" | "update" | "delete" | null;
@@ -46,11 +47,12 @@ export function Home() {
       useState<CharacterFull | null>(null);
   const [modalType, setModalType] = useState<ModalTypes>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [promptSystem, setPromptSystem] = useState("");
-  const [promptRace, setPromptRace] = useState("");
-  const [promptGender, setPromptGender] = useState("");
-  const [promptClass, setPromptClass] = useState("");
-  const [promptDescription, setPromptDescription] = useState("");
+  const [promptSystem, setPromptSystem] = useState('');
+  const [promptRace, setPromptRace] = useState('');
+  const [promptGender, setPromptGender] = useState('');
+  const [promptClass, setPromptClass] = useState('');
+  const [promptDrawStyle, setPromptDrawStyle] = useState('photoRealistic');
+  const [promptDescription, setPromptDescription] = useState('');
 
   const handleGenerate = () => {
     if (!promptSystem || !promptGender) {
@@ -62,6 +64,7 @@ export function Home() {
           promptClass,
           promptGender,
           promptRace,
+          promptDrawStyle,
           promptDescription,
         },
         {
@@ -71,6 +74,7 @@ export function Home() {
             setPromptRace("");
             setPromptGender("");
             setPromptClass("");
+            setPromptDrawStyle("photoRealistic");
             setPromptDescription("");
             setIsOpen(false);
             setModalType(null);
@@ -145,7 +149,7 @@ export function Home() {
                     onChange={setPromptSystem}
                     placeholder="Sélectionnez l'univers du jeu ou saisissez une valeur"
                 />
-                {/* ESPECE DU PERSONNAGE */}
+                {/* ESPÈCE DU PERSONNAGE */}
                 <CustomSelect
                     options={characterRaces}
                     value={promptRace}
@@ -166,20 +170,26 @@ export function Home() {
                     onChange={setPromptClass}
                     placeholder="Sélectionnez la classe du personnage ou saisissez une valeur"
                 />
-                {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GENERATION */}
+                <CustomSelect
+                    options={illustrationDrawStyles}
+                    value={promptDrawStyle}
+                    onChange={setPromptDrawStyle}
+                    placeholder="Sélectionnez un style graphique pour le portrait"
+                />
+                {/* DESCRIPTION EXTENSIBLE POUR PERMETTRE UN AFFINAGE LORS DE LA GÉNÉRATION */}
                 <Textarea
                     placeholder="Description"
                     value={promptDescription}
                     onChange={(event) => setPromptDescription(event.target.value)}
                 />
-                {/* BOUTON GENERER */}
+                {/* BOUTON GÉNÉRER */}
                 <DialogFooter>
                   <Button
                       type="button"
-                      disabled={isCreateLoading}
+                      disabled={isCreateLoading || !promptSystem || !promptGender || !promptDrawStyle}
                       onClick={handleGenerate}
                   >
-                    {isCreateLoading ? "Génération..." : "Générer !"}
+                    {isCreateLoading ? "Génération en cours..." : "Générer le personnage"}
                   </Button>
                 </DialogFooter>
               </DialogContent>

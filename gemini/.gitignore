@@ -28,7 +28,8 @@ typings/
 
 # js build / generate output
 dist
-.env.dev
+.env
+# git reset --soft HEAD~1 si commit d'un .env avec API_KEY
 
 ### VisualStudioCode ###
 .vscode/*

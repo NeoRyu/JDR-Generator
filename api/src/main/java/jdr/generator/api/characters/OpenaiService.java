@@ -8,10 +8,8 @@ import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
-import jdr.generator.api.characters.context.CharacterContextEntity;
-import jdr.generator.api.characters.context.CharacterContextModel;
-import jdr.generator.api.characters.context.CharacterContextService;
-import jdr.generator.api.characters.context.DefaultContextJson;
+
+import jdr.generator.api.characters.context.*;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
@@ -82,19 +80,22 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   /**
    * Asynchronously generates an illustration for a character using the OpenAI API.
    *
+   * @param promptDrawStyle The key and prompt defining the overall portrait style to generate
    * @param entity The details of the character for whom to generate the
    *     illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
+          IllustrationDrawStyle promptDrawStyle,
           CharacterDetailsEntity entity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "OpenaiService pour le personnage {{id={}}}",
         entity.getId());
     try {
-      final byte[] imageBytes = this.illustrate(entity.getImage());
+      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + entity.getImage();
+      final byte[] imageBytes = this.illustrate(promptPortrait);
       if (imageBytes != null && imageBytes.length > 0) {
         try {
           this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
@@ -224,7 +225,9 @@ public class OpenaiService implements GeminiGenerationConfiguration {
           characterContextEntity.getId());
 
       // Lancement asynchrone de la génération de l'illustration via ce service
-      generateIllustrationAsync(characterDetailsEntity);
+      final IllustrationDrawStyle promptDrawStyle =
+              IllustrationDrawStyle.fromKeyOrDefault(data.getPromptDrawStyle());
+      generateIllustrationAsync(promptDrawStyle, characterDetailsEntity);
 
       LOGGER.info(
           "Calling OpenAI module /stats via OpenaiService.stats for char ID: {}",
@@ -295,17 +298,17 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   /**
    * Generates an image based on the provided prompt using the OpenAI API.
    *
-   * @param imagePrompt The prompt for the image generation.
+   * @param promptPortrait The prompt for the image generation.
    * @return A byte array representing the generated image, or null if an error occurs.
    * @throws RuntimeException if there is an error communicating with the OpenAI API.
    */
   @Override
-  public byte[] illustrate(String imagePrompt) {
+  public byte[] illustrate(String promptPortrait) {
     final String apiUrl = hostApiAi + (hostApiAi.endsWith("/") ? "illustrate" : "/illustrate");
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     JSONObject requestBody = new JSONObject();
-    requestBody.put("prompt", imagePrompt);
+    requestBody.put("prompt", promptPortrait);
     HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
 
     ResponseEntity<String> response;
@@ -334,7 +337,7 @@ public class OpenaiService implements GeminiGenerationConfiguration {
           LOGGER.error(
               "OpenAI module /illustrate returned JSON without "
                   + "valid 'image' field for prompt: {}",
-              imagePrompt);
+                  promptPortrait);
           return null;
         }
       } catch (JsonProcessingException e) {
@@ -365,7 +368,11 @@ public class OpenaiService implements GeminiGenerationConfiguration {
     LOGGER.info("Regenerating illustration for character ID: {}", id);
     try {
       CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
-      String imagePrompt = characterDetails.getImage();
+      CharacterContextEntity characterContext = characterContextService.findById(id);
+      final IllustrationDrawStyle promptDrawStyle =
+              IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
+      final String promptPortrait = promptDrawStyle.getBasePrompt()
+              + " " + characterDetails.getImage();
       /*
       // TODO : Il faudrait mettre en place un service de traduction de prompt en FR -> EN
       //  Afin d'avoir un prompt plus détaillé et permettant a l'utilisateur d'obtenir une
@@ -395,8 +402,9 @@ public class OpenaiService implements GeminiGenerationConfiguration {
               characterDetails.getGoal()
       );
       */
-      byte[] newImageBlob = illustrate(imagePrompt);
-      characterIllustrationService.updateIllustration(id, newImageBlob, imagePrompt);
+      byte[] newImageBlob = illustrate(promptPortrait);
+      characterIllustrationService.updateIllustration(
+              id, newImageBlob, characterDetails.getImage());
 
       return newImageBlob;
 

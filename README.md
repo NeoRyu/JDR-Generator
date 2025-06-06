@@ -197,7 +197,8 @@ JDR-Generator/
 │       │       │   │   ├── CharacterContextRepository.java
 │       │       │   │   ├── CharacterContextService.java
 │       │       │   │   ├── CharacterContextServiceImpl.java
-│       │       │   │   └── CharacterContextJson.java
+│       │       │   │   ├── CharacterContextJson.java
+│       │       │   │   └── IllustrationDrawStyle.java     <-- Enum des prompts de style de portrait
 │       │       │   ├── details/
 │       │       │   │   ├── CharacterDetailsEntity.java
 │       │       │   │   ├── CharacterDetailsModel.java

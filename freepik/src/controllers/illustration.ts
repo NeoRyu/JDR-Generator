@@ -6,11 +6,6 @@ const maxRetries = 3;
 const pollingMaxAttempts = 30; // Nombre de tentatives ajustable pour le polling du statut
 const pollingDelayMs = 2000; // Délai entre les tentatives de polling (2 secondes)
 
-// TODO : Mettre en place différents styles d'illustrations, modifier le contexte pour add cela.
-// const chillIllustrationPrompt = "Generate a highly detailed and artistic illustration in a heroic-fantasy style, suitable for a role-playing game character portrait. The style should resemble digital painting with soft gradients and a focus on character detail. Consider the overall mood and atmosphere. ";
-const photoRealisticPrompt = "Create a Photorealistic studio portrait of a mature-looking individual, taken with a professional camera, in a heroic fantasy setting. The lighting is dramatic and natural, emphasizing the character's features. The background is a smooth, dark gradient, carefully blurred to keep focus on the subject. The overall mood is serious and immersive, aiming for a high-resolution, unedited photograph. ";
-// const photoCyberpunk = "Create a studio portrait of a mature-looking individual into a cyberpunk anime style, with neon lights, dark tones and a futuristic vibe like Ghost in the Shell. Suitable for a role-playing game character portrait. Consider the overall mood and atmosphere. ";
-
 // Interfaces pour les réponses de l'API Freepik
 interface FreepikTaskCreationResponse {
   data?: { // <-- AJOUT DE CETTE LIGNE
@@ -70,17 +65,14 @@ export const generateImage = async (
 
   while (retryCount < maxRetries) {
     try {
-      const prompt = req.body.prompt;
-      console.log("generateImage :: prompt received:", prompt);
+      const fullPrompt = req.body.prompt;
+      console.log("generateImage :: prompt received:", fullPrompt);
 
-      if (!prompt) {
+      if (!fullPrompt) {
         console.error("No prompt provided.");
         res.status(400).json({ message: "No prompt provided." });
         return;
       }
-
-      // const fullPrompt = chillIllustrationPrompt + prompt;
-      const fullPrompt = photoRealisticPrompt + prompt;
 
       console.log("generateImage :: fullPrompt being sent:", fullPrompt);
       console.log(`Calling FREEPIK API with model: ${freepikModel}`);
