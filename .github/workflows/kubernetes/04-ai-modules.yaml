@@ -1,0 +1,199 @@
+# kubernetes/04-ai-modules.yaml
+# > kubectl apply -f .github/workflows/kubernetes/04-ai-modules.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-gemini
+  labels:
+    app: jdr-generator-gemini
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jdr-generator-gemini
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-gemini
+    spec:
+      containers:
+        - name: gemini-ai
+          image: eli256/jdr-generator-gemini:latest
+          ports:
+            - containerPort: 3001
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-gemini-config
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-api-secrets
+                  key: GEMINI_API_KEY
+          livenessProbe:
+            httpGet:
+              path: /gemini/healthcheck
+              port: 3001
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /gemini/healthcheck
+              port: 3001
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdr-generator-gemini
+  labels:
+    app: jdr-generator-gemini
+spec:
+  ports:
+    - port: 3001
+      targetPort: 3001
+  selector:
+    app: jdr-generator-gemini
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-openai
+  labels:
+    app: jdr-generator-openai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jdr-generator-openai
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-openai
+    spec:
+      containers:
+        - name: openai-ai
+          image: eli256/jdr-generator-openai:latest
+          ports:
+            - containerPort: 3002
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-openai-config
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-api-secrets
+                  key: OPENAI_API_KEY
+            - name: ORGANIZATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-api-secrets
+                  key: OPENAI_ORG_ID
+          livenessProbe:
+            httpGet:
+              path: /openai/healthcheck
+              port: 3002
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /openai/healthcheck
+              port: 3002
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdr-generator-openai
+  labels:
+    app: jdr-generator-openai
+spec:
+  ports:
+    - port: 3002
+      targetPort: 3002
+  selector:
+    app: jdr-generator-openai
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-freepik
+  labels:
+    app: jdr-generator-freepik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jdr-generator-freepik
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-freepik
+    spec:
+      containers:
+        - name: freepik-ai
+          image: eli256/jdr-generator-freepik:latest
+          ports:
+            - containerPort: 3003
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-freepik-config
+          env:
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-api-secrets
+                  key: FREEPIK_API_KEY
+          livenessProbe:
+            httpGet:
+              path: /freepik/healthcheck
+              port: 3003
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /freepik/healthcheck
+              port: 3003
+            initialDelaySeconds: 20
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdr-generator-freepik
+  labels:
+    app: jdr-generator-freepik
+spec:
+  ports:
+    - port: 3003
+      targetPort: 3003
+  selector:
+    app: jdr-generator-freepik
+  type: ClusterIP
