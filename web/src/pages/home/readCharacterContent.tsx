@@ -1,5 +1,5 @@
 // readCharacterContent.tsx
-import {Dispatch, SetStateAction, useState} from "react";
+import {Dispatch, SetStateAction, useState, useEffect} from "react";
 import {CharacterFull} from "@/components/model/character-full.model.tsx";
 import {ScrollArea} from "@/components/ui/scroll-area";
 import {Table, TableBody, TableCell, TableRow} from "@/components/ui/table";
@@ -14,12 +14,13 @@ import {
 import {ModalTypes} from "@/pages/home/home.tsx";
 import {useTheme} from "@/components/theme-provider.tsx";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@radix-ui/react-tabs";
-import {Eye, Users} from "lucide-react";
+import {Eye, Loader2, Users} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {useRegenerateIllustration} from "@/services/illustrateCharacters.service.ts";
-import {Loader2} from "lucide-react";
 import {arrayBufferToBase64} from "@/lib/utils.ts";
 import {GeneratePdfButton} from "@/pages/home/generatePdfButton.tsx";
+import CustomSelect from "@/components/ui/customSelect.tsx";
+import { illustrationDrawStyles } from "@/pages/home/listes/illustrationDrawStyles.tsx";
 
 interface ReadCharacterContentProps {
   character: CharacterFull;
@@ -110,6 +111,9 @@ export function ReadCharacterContent({
   const [isRegenerating, setIsRegenerating] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [activeTab, setActiveTab] = useState("details");
+  const [newSelectedDrawStyle, setNewSelectedDrawStyle] = useState<string>(
+      character?.context?.promptDrawStyle || ""
+  );
 
   if (!character || !character.details) {
     return <div>Personnage non trouvé.</div>;
@@ -127,11 +131,16 @@ export function ReadCharacterContent({
     console.error("Erreur lors de l'analyse du JSON :", error);
   }
 
+  // useEffect pour initialiser le style quand la modale s'ouvre ou le personnage change
+  useEffect(() => {
+    setNewSelectedDrawStyle(character?.context?.promptDrawStyle || "");
+  }, [character]);
+
   // Initialisation du hook de mutation pour la régénération
   const regenerateIllustrationMutation = useRegenerateIllustration();
 
   const handleConfirmRegeneration = async () => {
-    if (!selectedCharacter?.details?.id) {
+    if (!selectedCharacter?.details?.id || !newSelectedDrawStyle) {
       console.error("Character ID is missing for regeneration.");
       return;
     }
@@ -140,7 +149,12 @@ export function ReadCharacterContent({
     setIsRegenerating(true); // Active le loading
 
     try {
-      const response = await regenerateIllustrationMutation.mutateAsync(selectedCharacter.details.id);
+      // Appel à mutateAsync avec l'objet payload {id, drawStyle}
+      const response = await regenerateIllustrationMutation.mutateAsync({
+        id: selectedCharacter.details.id,
+        drawStyle: newSelectedDrawStyle,
+      });
+
       // La réponse est un ArrayBuffer, il faut le convertir en base64 pour l'afficher
       // const newImageBlob = Buffer.from(response.data).toString('base64');
       const newImageBlob = await arrayBufferToBase64(response.data);
@@ -165,6 +179,14 @@ export function ReadCharacterContent({
       // Gérer l'affichage d'erreurs à l'utilisateur si nécessaire
     } finally {
       setIsRegenerating(false); // Désactive le loading
+    }
+  };
+
+  // Fonction pour basculer la modale de confirmation et initialiser le style
+  const toggleConfirmationModal = () => {
+    setShowConfirmationModal(!showConfirmationModal);
+    if (!showConfirmationModal && character?.context?.promptDrawStyle) {
+      setNewSelectedDrawStyle(character.context.promptDrawStyle);
     }
   };
 
@@ -245,7 +267,7 @@ export function ReadCharacterContent({
                 </DialogTitle>
                 <div style={{ padding: "20px 0 0" }}>
                   <Button
-                      onClick={() => setShowConfirmationModal(true)}
+                      onClick={toggleConfirmationModal}
                       disabled={isRegenerating}
                       variant="default"
                       className="button-aura"
@@ -648,16 +670,31 @@ export function ReadCharacterContent({
           </Tabs>
         </div>
 
-        <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
+        <Dialog open={showConfirmationModal} onOpenChange={toggleConfirmationModal}>
           <DialogContent>
             <DialogTitle>ACTION : Régénération du portrait de {character.details?.name}</DialogTitle>
             <DialogDescription>
               Voulez-vous vraiment générer une nouvelle illustration de portrait
               pour le personnage {character.details?.name} ? Cette action est irréversible...
 
+              <br/><br/>
+              <div className="flex flex-col gap-2">
+              <span>Style actuel : {illustrationDrawStyles.find(s =>
+                  s.value === character.context.promptDrawStyle)?.label
+                  || character.context.promptDrawStyle}
+              </span>
+              <CustomSelect
+                  options={illustrationDrawStyles}
+                  value={newSelectedDrawStyle}
+                  onChange={(value: string) => setNewSelectedDrawStyle(value)}
+                  placeholder="Sélectionnez un nouveau style"
+              />
+              </div>
+              <br/>
+
               { (selectedCharacter?.illustration?.imageBlob || character.illustration?.imageBlob)
                   ? (
-                      <img className="object-cover rounded shadow cursor-pointer"
+                      <img className="object-cover rounded shadow cursor-pointer mx-auto"
                            src={`data:image/png;base64,${character.illustration?.imageBlob}`}
                            alt={character.details?.image || "Illustration"}
                       />

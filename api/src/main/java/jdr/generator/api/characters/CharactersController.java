@@ -5,6 +5,7 @@ import jdr.generator.api.characters.context.DefaultContextJson;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import jdr.generator.api.characters.details.CharacterDetailsModel;
 import jdr.generator.api.characters.details.CharacterDetailsService;
+import jdr.generator.api.characters.illustration.RegenerateIllustrationRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,11 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/characters")
 public class CharactersController {
   private static final String webModuleHost = "http://localhost:5173";
-  private final GeminiService geminiService;
   private final CharacterDetailsService characterDetailsService;
+  private final PdfGeneratorService pdfGeneratorService;
+  private final GeminiService geminiService;
   private final OpenaiService openaiService;
   private final FreepikService freepikService;
-  private final PdfGeneratorService pdfGeneratorService;
 
   /**
    * Constructor for the CharactersController.
@@ -120,16 +121,17 @@ public class CharactersController {
    * It takes the character's ID and triggers the regeneration process
    * using the character's existing context and details to build the prompt.
    *
-   * @param id The ID of the character for which to regenerate the illustration.
+   * @param request The request body containing the character ID and the desired draw style.
    * @return An array of bytes representing the regenerated image.
    */
-  @PutMapping("/illustrate/{id}")
+  @PutMapping("/illustrate")
   @ResponseStatus(HttpStatus.OK)
   @CrossOrigin(origins = webModuleHost)
-  public byte[] illustrate(@PathVariable Long id) {
-    return freepikService.regenerateIllustration(id);
-    // return openaiService.regenerateIllustration(id);
-    // return geminiService.regenerateIllustration(id);
+  public byte[] illustrate(@RequestBody RegenerateIllustrationRequestDto request) {
+    return freepikService.regenerateIllustration(request.getId(), request.getDrawStyle());
+    // return openaiService.regenerateIllustration(request.getId(), request.getDrawStyle());
+    // return geminiService.regenerateIllustration(request.getId(), request.getDrawStyle());
+
   }
 
   /**

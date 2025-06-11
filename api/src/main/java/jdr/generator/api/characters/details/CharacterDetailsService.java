@@ -11,11 +11,11 @@ public interface CharacterDetailsService {
   /**
    * Saves a new character's details.
    *
-   * @param character The CharacterDetailsEntity to save.
+   * @param entity The CharacterDetailsEntity to save.
    * @return The saved CharacterDetailsEntity.
    */
-  CharacterDetailsEntity save(CharacterDetailsEntity character);
-
+  CharacterDetailsEntity save(CharacterDetailsEntity entity);
+  CharacterDetailsEntity saveAndFlush(CharacterDetailsEntity entity);
   /**
    * Finds character details by their ID.
    *

@@ -52,5 +52,4 @@ public class CharacterContextEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
-  // public void setContextId(Integer contextId) {}
 }

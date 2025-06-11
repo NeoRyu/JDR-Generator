@@ -1,5 +1,6 @@
 package jdr.generator.api.characters.details;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Date;
@@ -17,6 +18,7 @@ import lombok.Setter;
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true) // Indique à Jackson d'ignorer les champs JSON inconnus
 public class CharacterDetailsModel {
 
   @JsonProperty("name")

@@ -109,19 +109,19 @@ public class GeminiService implements GeminiGenerationConfiguration {
    * Asynchronously generates illustration for a character using the Imagen API (via GeminiService).
    *
    * @param promptDrawStyle The key and prompt defining the overall portrait style to generate
-   * @param entity The details of the character for generate the illustration.
+   * @param detailsEntity The details of the character for generate the illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
           IllustrationDrawStyle promptDrawStyle,
-          CharacterDetailsEntity entity) {
+          CharacterDetailsEntity detailsEntity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "Imagen (GeminiService) pour le personnage {{id={}}}",
-        entity.getId());
+        detailsEntity.getId());
     try {
-      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + entity.getImage();
+      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + detailsEntity.getImage();
       final String imgBlob = this.illustrate(promptPortrait);
       if (imgBlob != null) {
         try {
@@ -130,19 +130,19 @@ public class GeminiService implements GeminiGenerationConfiguration {
             byte[] imageBytes = Base64.getDecoder().decode(imageNode.asText());
 
             try {
-              this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
+              this.characterIllustrationService.findByCharacterDetailsId(detailsEntity.getId());
               this.characterIllustrationService.updateIllustration(
-                      entity.getId(), imageBytes, entity.getImage());
+                      detailsEntity.getId(), imageBytes, detailsEntity.getImage());
               LOGGER.info(
                       "Illustration mise à jour et enregistrée pour {{id={}}}",
-                      entity.getId());
+                      detailsEntity.getId());
 
             } catch (RuntimeException e) {
               final CharacterIllustrationModel characterIllustrationModel =
                       CharacterIllustrationModel.builder()
-                              .imageLabel(entity.getImage())
+                              .imageLabel(detailsEntity.getImage())
                               .imageBlob(imageBytes)
-                              .imageDetails(entity)
+                              .characterDetails(detailsEntity)
                               .build();
               CharacterIllustrationEntity characterIllustrationEntity = this.modelMapper.map(
                       characterIllustrationModel, CharacterIllustrationEntity.class
@@ -150,40 +150,40 @@ public class GeminiService implements GeminiGenerationConfiguration {
               this.characterIllustrationService.save(characterIllustrationEntity);
               LOGGER.info(
                       "Nouvelle illustration générée et enregistrée pour {{id={}}}",
-                      entity.getId());
+                      detailsEntity.getId());
             }
           }
         } catch (JsonProcessingException e) {
           LOGGER.error(
               "Erreur lors de l'analyse du blob d'image pour le personnage {{id={}}} : {}",
-              entity.getId(),
+              detailsEntity.getId(),
               e.getMessage());
         }
       } else {
         LOGGER.warn(
             "La génération d'illustration via Imagen (GeminiService) a retourné "
                 + "un blob null pour le personnage {{id={}}}",
-            entity.getId());
+            detailsEntity.getId());
       }
     } catch (HttpClientErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (client) via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (serveur) via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : Status={}, Body={}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (Exception e) {
       LOGGER.error(
           "Erreur inattendue lors de la génération d'illustration via "
               + "Imagen (GeminiService) pour le personnage {{id={}}} : {}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
@@ -244,7 +244,7 @@ public class GeminiService implements GeminiGenerationConfiguration {
               .contextId(characterContextEntity.getId())
               .build();
       characterDetailsEntity =
-          characterDetailsService.save(
+          characterDetailsService.saveAndFlush(
               modelMapper.map(characterDetailsModel, CharacterDetailsEntity.class));
 
       LOGGER.info(
@@ -255,9 +255,9 @@ public class GeminiService implements GeminiGenerationConfiguration {
           characterContextEntity.getId());
 
       CharacterIllustrationEntity illustrationEntity = new CharacterIllustrationEntity();
-      illustrationEntity.setImageDetails(characterDetailsEntity);
+      illustrationEntity.setCharacterDetails(characterDetailsEntity);
       illustrationEntity.setImageLabel(characterDetailsEntity.getImage());
-      illustrationEntity = characterIllustrationService.save(illustrationEntity);
+      illustrationEntity = characterIllustrationService.saveAndFlush(illustrationEntity);
       LOGGER.info("Initial illustration entity created for character ID: {}. ID: {}",
               characterDetailsEntity.getId(), illustrationEntity.getId());
 
@@ -265,9 +265,9 @@ public class GeminiService implements GeminiGenerationConfiguration {
       final IllustrationDrawStyle promptDrawStyle =
               IllustrationDrawStyle.fromKeyOrDefault(data.getPromptDrawStyle());
       // WARNING : Ne choisir qu'un seul des services de génération d'illustration IA !
-      //           Sinon plusieurs foreign_key seront attribués a un meme character_details
+      //           Sinon plusieurs foreign_key seront attribués à un meme character_details
       //           Le personnage ne sera alors tout bonnement pas chargé...
-      //           => Il faudra supprimer manuellement le/s character_illustration problématique/s
+      //           → Il faudra supprimer manuellement le/s character_illustration problématique/s
       this.freepikService.generateIllustrationAsync(promptDrawStyle, characterDetailsEntity);
       // OU // this.generateIllustrationAsync(promptDrawStyle, characterDetailsEntity);
       // OU // this.openaiService.generateIllustrationAsync(promptDrawStyle, characterDetailsEntity);
@@ -277,14 +277,14 @@ public class GeminiService implements GeminiGenerationConfiguration {
       try {
         String cleanedJson = cleanJsonString(statsJson);
         LOGGER.info("Cleaned Stats JSON: {}", cleanedJson);
-        this.saveCharacterJsonData(characterDetailsEntity.getId(), cleanedJson);
+        this.saveCharacterJsonData(characterDetailsEntity, cleanedJson);
         LOGGER.info("Character JSON stats data saved successfully");
       } catch (JsonProcessingException e) {
         LOGGER.error(
             "Erreur lors de l'analyse du JSON stats généré par GeminiService : {}",
                 e.getMessage());
         this.saveCharacterJsonData(
-            characterDetailsEntity.getId(), statsJson.isEmpty() ? "{}" : statsJson);
+            characterDetailsEntity, statsJson.isEmpty() ? "{}" : statsJson);
         LOGGER.warn("Character JSON stats data saved with raw JSON due to parsing error.");
       }
 
@@ -331,17 +331,20 @@ public class GeminiService implements GeminiGenerationConfiguration {
    * similar to OpenaiService.
    *
    * @param id The ID of the character for which to regenerate the illustration.
+   * @param newDrawStyle An optional new drawing style to use for the illustration. If null or empty,
    * @return An array of bytes representing the regenerated image.
-   * @throws RuntimeException if the illustration regeneration fails.
    */
   @Transactional
-  public byte[] regenerateIllustration(Long id) {
+  public byte[] regenerateIllustration(Long id, String newDrawStyle) {
     LOGGER.info("Regenerating illustration via Gemini (Imagen) for character ID: {}", id);
     try {
       CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
       CharacterContextEntity characterContext = characterContextService.findById(id);
+
       final IllustrationDrawStyle promptDrawStyle =
-              IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
+              (newDrawStyle != null && !newDrawStyle.isEmpty()) ?
+                      IllustrationDrawStyle.fromKeyOrDefault(newDrawStyle) :
+                      IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
       final String promptPortrait = promptDrawStyle.getBasePrompt()
               + " " + characterDetails.getImage();
       final String imgBlobResponse = illustrate(promptPortrait);
@@ -362,6 +365,10 @@ public class GeminiService implements GeminiGenerationConfiguration {
       characterIllustrationService.updateIllustration(
               id, newImageBlob, characterDetails.getImage());
       LOGGER.info("Illustration regenerated and updated for character {{id={}}}", id);
+
+      // Mise à jour du style choisi par l'utilisateur
+      characterContext.setPromptDrawStyle(newDrawStyle);
+      characterContextService.saveAndFlush(characterContext);
 
       return newImageBlob;
 
@@ -481,15 +488,15 @@ public class GeminiService implements GeminiGenerationConfiguration {
   /**
    * Saves the character's JSON statistics data.
    *
-   * @param characterDetailsId The ID of the character details.
+   * @param detailsEntity The ID of the character details.
    * @param jsonData The JSON data to save.
    * @throws JsonProcessingException if there is an error processing the JSON data.
    */
-  private void saveCharacterJsonData(Long characterDetailsId, String jsonData)
+  private void saveCharacterJsonData(CharacterDetailsEntity detailsEntity, String jsonData)
       throws JsonProcessingException {
     final CharacterJsonDataModel jsonDataModel =
         CharacterJsonDataModel.builder()
-            .characterDetailsId(characterDetailsId)
+            .characterDetails(detailsEntity)
             .jsonData(jsonData)
             .createdAt(java.util.Date.from(java.time.Instant.now()))
             .updatedAt(java.util.Date.from(java.time.Instant.now()))

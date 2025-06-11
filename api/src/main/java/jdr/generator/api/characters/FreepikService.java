@@ -15,7 +15,6 @@ import jdr.generator.api.characters.details.CharacterDetailsService;
 import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
 import jdr.generator.api.characters.illustration.CharacterIllustrationModel;
 import jdr.generator.api.characters.illustration.CharacterIllustrationService;
-import jdr.generator.api.characters.stats.CharacterJsonDataService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,61 +45,41 @@ public class FreepikService {
   private final CharacterDetailsService characterDetailsService;
   private final CharacterContextService characterContextService;
   private final CharacterIllustrationService characterIllustrationService;
-  private final CharacterJsonDataService characterJsonDataService;
   private final ModelMapper modelMapper;
 
-  /**
-   * Validates if a given JSON string is well-formed.
-   *
-   * @param jsonString The JSON string to validate.
-   * @return The original JSON string if valid, or "{}" if invalid.
-   */
-  private String cleanJsonString(String jsonString) {
-    if (jsonString == null) {
-      return "{}";
-    }
-    try {
-      OBJECT_MAPPER.readTree(jsonString); // Tentative de parsing pour vérifier la validité
-      return jsonString;
-    } catch (JsonProcessingException e) {
-      LOGGER.warn("La chaîne '{}' n'est pas un JSON valide : {}",
-              jsonString, e.getMessage());
-      return "{}";
-    }
-  }
 
   /**
    * Asynchronously generates an illustration for a character using the Freepik API.
    *
    * @param promptDrawStyle The key and prompt defining the overall portrait style to generate
-   * @param entity The details of the character for whom to generate the illustration.
+   * @param detailsEntity The details of the character for whom to generate the illustration.
    * @return A CompletableFuture representing the completion of the asynchronous operation.
    */
   @Async
   protected CompletableFuture<Void> generateIllustrationAsync(
           IllustrationDrawStyle promptDrawStyle,
-          CharacterDetailsEntity entity) {
+          CharacterDetailsEntity detailsEntity) {
     LOGGER.info(
         "Démarrage asynchrone de la génération d'illustration via "
             + "FreepikService pour le personnage {{id={}}}",
-        entity.getId());
+        detailsEntity.getId());
     try {
-      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + entity.getImage();
+      final String promptPortrait = promptDrawStyle.getBasePrompt() + " " + detailsEntity.getImage();
       final byte[] imageBytes = this.illustrate(promptPortrait);
       if (imageBytes != null && imageBytes.length > 0) {
         try {
-          this.characterIllustrationService.findByCharacterDetailsId(entity.getId());
+          this.characterIllustrationService.findByCharacterDetailsId(detailsEntity.getId());
           this.characterIllustrationService.updateIllustration(
-                  entity.getId(), imageBytes, entity.getImage());
+                  detailsEntity.getId(), imageBytes, detailsEntity.getImage());
           LOGGER.info(
                   "Illustration mise à jour et enregistrée pour le personnage {{id={}}}",
-                  entity.getId());
+                  detailsEntity.getId());
         } catch (RuntimeException e) {
           final CharacterIllustrationModel characterIllustrationModel =
                   CharacterIllustrationModel.builder()
-                          .imageLabel(entity.getImage())
+                          .imageLabel(detailsEntity.getImage())
                           .imageBlob(imageBytes)
-                          .imageDetails(entity)
+                          .characterDetails(detailsEntity)
                           .build();
           CharacterIllustrationEntity characterIllustrationEntity =
                   this.modelMapper.map(characterIllustrationModel,
@@ -108,33 +87,33 @@ public class FreepikService {
           this.characterIllustrationService.save(characterIllustrationEntity);
           LOGGER.info(
                   "Illustration générée et enregistrée pour le personnage {{id={}}}",
-                  entity.getId());
+                  detailsEntity.getId());
         }
       } else {
         LOGGER.warn(
             "La génération d'illustration via FreepikService a retourné un "
                 + "blob null ou vide pour le personnage {{id={}}}",
-            entity.getId());
+            detailsEntity.getId());
       }
     } catch (HttpClientErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (client) via "
               + "FreepikService pour le personnage {{id={}}} : Status={}, Body={}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (HttpServerErrorException e) {
       LOGGER.error(
           "Erreur lors de l'appel à l'API d'illustration (serveur) via "
               + "FreepikService pour le personnage {{id={}}} : Status={}, Body={}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getStatusCode(),
           e.getResponseBodyAsString());
     } catch (Exception e) {
       LOGGER.error(
           "Erreur inattendue lors de la génération d'illustration via "
               + "FreepikService pour le personnage {{id={}}} : {}",
-          entity.getId(),
+          detailsEntity.getId(),
           e.getMessage());
     }
     return CompletableFuture.completedFuture(null);
@@ -205,21 +184,35 @@ public class FreepikService {
    * Regenerates an illustration for an existing character based on its stored details.
    *
    * @param id The ID of the character for which to regenerate the illustration.
+   * @param newDrawStyle An optional new drawing style to use for the illustration. If null or empty,
    * @return An array of bytes representing the regenerated image.
    */
   @Transactional
-  public byte[] regenerateIllustration(Long id) {
+  public byte[] regenerateIllustration(Long id, String newDrawStyle) {
     LOGGER.info("Regenerating illustration for character ID: {}", id);
     try {
       CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
       CharacterContextEntity characterContext = characterContextService.findById(id);
+
       final IllustrationDrawStyle promptDrawStyle =
-              IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
+              (newDrawStyle != null && !newDrawStyle.isEmpty()) ?
+                      IllustrationDrawStyle.fromKeyOrDefault(newDrawStyle) :
+                      IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
       final String promptPortrait = promptDrawStyle.getBasePrompt()
               + " " + characterDetails.getImage();
+
       byte[] newImageBlob = illustrate(promptPortrait);
       characterIllustrationService.updateIllustration(
               id, newImageBlob, characterDetails.getImage());
+
+      // Mise à jour du style choisi par l'utilisateur
+      LOGGER.info("Current promptDrawStyle before update: {}",
+              characterContext.getPromptDrawStyle());
+      characterContext.setPromptDrawStyle(newDrawStyle);
+      LOGGER.info("promptDrawStyle during update: {}", newDrawStyle);
+      characterContext = characterContextService.saveAndFlush(characterContext);
+      LOGGER.info("promptDrawStyle after update: {}",
+              characterContext.getPromptDrawStyle());
 
       return newImageBlob;
 

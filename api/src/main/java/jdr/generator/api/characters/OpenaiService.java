@@ -109,7 +109,7 @@ public class OpenaiService implements GeminiGenerationConfiguration {
                   CharacterIllustrationModel.builder()
                           .imageLabel(entity.getImage())
                           .imageBlob(imageBytes)
-                          .imageDetails(entity)
+                          .characterDetails(entity)
                           .build();
           CharacterIllustrationEntity characterIllustrationEntity =
                   this.modelMapper.map(characterIllustrationModel,
@@ -239,7 +239,7 @@ public class OpenaiService implements GeminiGenerationConfiguration {
         if (statsJson != null && !statsJson.trim().isEmpty()) {
           try {
             OBJECT_MAPPER.readTree(statsJson);
-            this.saveCharacterJsonData(characterDetailsEntity.getId(), statsJson);
+            this.saveCharacterJsonData(characterDetailsEntity, statsJson);
             LOGGER.info(
                 "Character JSON stats data saved successfully for ID: {}",
                 characterDetailsEntity.getId());
@@ -250,7 +250,7 @@ public class OpenaiService implements GeminiGenerationConfiguration {
             LOGGER.warn("Saving raw stats JSON due to parsing error: {}", statsJson);
             try {
               this.saveCharacterJsonData(
-                  characterDetailsEntity.getId(), !statsJson.isEmpty() ? statsJson : "{}");
+                  characterDetailsEntity, !statsJson.isEmpty() ? statsJson : "{}");
             } catch (Exception saveRawError) {
               LOGGER.error(
                   "Error saving raw stats JSON for ID {}",
@@ -361,50 +361,29 @@ public class OpenaiService implements GeminiGenerationConfiguration {
    * Regenerates an illustration for an existing character based on its stored details.
    *
    * @param id The ID of the character for which to regenerate the illustration.
+   * @param newDrawStyle An optional new drawing style to use for the illustration. If null or empty,
    * @return An array of bytes representing the regenerated image.
    */
   @Transactional
-  public byte[] regenerateIllustration(Long id) {
+  public byte[] regenerateIllustration(Long id, String newDrawStyle) {
     LOGGER.info("Regenerating illustration for character ID: {}", id);
     try {
       CharacterDetailsEntity characterDetails = characterDetailsService.findById(id);
       CharacterContextEntity characterContext = characterContextService.findById(id);
+
       final IllustrationDrawStyle promptDrawStyle =
-              IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
+              (newDrawStyle != null && !newDrawStyle.isEmpty()) ?
+                      IllustrationDrawStyle.fromKeyOrDefault(newDrawStyle) :
+                      IllustrationDrawStyle.fromKeyOrDefault(characterContext.getPromptDrawStyle());
       final String promptPortrait = promptDrawStyle.getBasePrompt()
               + " " + characterDetails.getImage();
-      /*
-      // TODO : Il faudrait mettre en place un service de traduction de prompt en FR -> EN
-      //  Afin d'avoir un prompt plus détaillé et permettant a l'utilisateur d'obtenir une
-      //  generation d'image plus précise. Langue EN requise pour beaucoup d'IA generative d'image
-
-      CharacterContextEntity characterContext =
-              characterContextService.findById(characterDetails.getContextId());
-      String imagePrompt = String.format(
-
-              "Highly detailed and artistic illustration in a heroic-fantasy style for a %s %s %s."
-              + " Focus on %s, %s, %s. Clothing: %s. "
-              + "Distinctive trait: %s. Physical description: %s."
-              + "Age: %d. Birth place: %s. Residence: %s. Background: %s. Current goal: %s.",
-              characterContext.getPromptGender(),
-              characterContext.getPromptRace(),
-              characterContext.getPromptClass(),
-              characterDetails.getName(),
-              characterDetails.getSelfDescription(),
-              characterDetails.getAttitudeTowardsWorld(),
-              characterDetails.getClothingPreferences(),
-              characterDetails.getDistinctiveTrait(),
-              characterDetails.getPhysicalDescription(),
-              characterDetails.getAge(),
-              characterDetails.getBirthPlace(),
-              characterDetails.getResidenceLocation(),
-              characterDetails.getChildhoodStory(),
-              characterDetails.getGoal()
-      );
-      */
       byte[] newImageBlob = illustrate(promptPortrait);
       characterIllustrationService.updateIllustration(
               id, newImageBlob, characterDetails.getImage());
+
+      // Mise à jour du style choisi par l'utilisateur
+      characterContext.setPromptDrawStyle(newDrawStyle);
+      characterContextService.saveAndFlush(characterContext);
 
       return newImageBlob;
 
@@ -530,14 +509,14 @@ public class OpenaiService implements GeminiGenerationConfiguration {
   /**
    * Saves the character's JSON data to the database.
    *
-   * @param characterDetailsId The ID of the character details.
+   * @param detailsEntity The ID of the character details.
    * @param jsonData The JSON data to be saved.
    */
-  private void saveCharacterJsonData(Long characterDetailsId, String jsonData) {
+  private void saveCharacterJsonData(CharacterDetailsEntity detailsEntity, String jsonData) {
     try {
       final CharacterJsonDataModel jsonDataModel =
           CharacterJsonDataModel.builder()
-              .characterDetailsId(characterDetailsId)
+              .characterDetails(detailsEntity)
               .jsonData(jsonData)
               .createdAt(Date.from(Instant.now()))
               .updatedAt(Date.from(Instant.now()))
@@ -545,9 +524,9 @@ public class OpenaiService implements GeminiGenerationConfiguration {
       CharacterJsonDataEntity jsonDataEntity =
           modelMapper.map(jsonDataModel, CharacterJsonDataEntity.class);
       characterJsonDataService.save(jsonDataEntity);
-      LOGGER.info("Character JSON data saved successfully for ID: {}", characterDetailsId);
+      LOGGER.info("Character JSON data saved successfully for ID: {}", detailsEntity);
     } catch (Exception e) {
-      LOGGER.error("Error saving character JSON data for ID {}", characterDetailsId, e);
+      LOGGER.error("Error saving character JSON data for ID {}", detailsEntity, e);
       throw new RuntimeException("Error saving character JSON data", e);
     }
   }

@@ -2,7 +2,7 @@
 export const illustrationDrawStyles = [
     { value: "abstract", label: "Abstrait" },
     { value: "anime", label: "Anime" },
-    { value: "aquarelle", label: "Aquarelle" }, // Correction: watercolour -> aquarelle
+    { value: "aquarelle", label: "Aquarelle" },
     { value: "artNouveau", label: "Art Nouveau" },
     { value: "comicBook", label: "Bande Dessinée" },
     { value: "cartoon", label: "Cartoon" },

@@ -117,7 +117,7 @@ public class PdfGeneratorServiceTest {
 
         testCharacterJsonData = new CharacterJsonDataEntity();
         testCharacterJsonData.setId(TEST_CHARACTER_ID);
-        testCharacterJsonData.setCharacterDetailsId(TEST_CHARACTER_ID);
+        testCharacterJsonData.setCharacterDetails(testCharacterDetails);
         testCharacterJsonData.setJsonData("""
                 {
                   "attributes": {
@@ -143,6 +143,7 @@ public class PdfGeneratorServiceTest {
 
         testCharacterIllustration = new CharacterIllustrationEntity();
         testCharacterIllustration.setId(TEST_CHARACTER_ID);
+        testCharacterIllustration.setCharacterDetails(testCharacterDetails);
 
         String testImageFileName = "test-image.png";
 

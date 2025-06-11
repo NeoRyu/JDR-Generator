@@ -30,6 +30,9 @@ public class CharacterDetailsEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Column(name = "context_id", unique = true, nullable = false)
+  private Long contextId;
+
   @Column(name = "name", nullable = false)
   private String name;
 
@@ -85,7 +88,7 @@ public class CharacterDetailsEntity {
   private String conjugalHistory;
 
   @Column(name = "children")
-  private Integer children; // TODO : List<Character>
+  private Integer children;
 
   @Column(name = "education")
   private String education;
@@ -166,12 +169,8 @@ public class CharacterDetailsEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
-  @Column(name = "updated_at")
+  @Column(name = "updated_at", nullable = true)
   @Temporal(TemporalType.TIMESTAMP)
   private Date updatedAt;
 
-  @Column(name = "context_id")
-  private Long contextId;
-
-  // public void setContextId(Integer contextId) {}
 }

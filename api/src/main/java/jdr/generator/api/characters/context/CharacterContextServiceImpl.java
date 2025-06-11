@@ -35,17 +35,28 @@ public class CharacterContextServiceImpl implements CharacterContextService {
   /**
    * Saves a new character context.
    *
-   * @param context The CharacterContextEntity to save.
+   * @param entity The CharacterContextEntity to save.
    * @return The saved CharacterContextEntity.
    */
   @Override
   @Transactional
-  public CharacterContextEntity save(CharacterContextEntity context) {
-    LOGGER.info("Saving context: {}", context);
+  public CharacterContextEntity save(CharacterContextEntity entity) {
+    LOGGER.info("Saving context: {}", entity);
     try {
-      return this.characterContextRepository.save(context);
+      return this.characterContextRepository.save(entity);
     } catch (Exception e) {
-      LOGGER.error("Error saving context: {}", context, e);
+      LOGGER.error("Error saving context: {}", entity, e);
+      throw e;
+    }
+  }
+
+  @Transactional
+  public CharacterContextEntity saveAndFlush(CharacterContextEntity entity) {
+    LOGGER.info("Saving and flush context: {}", entity);
+    try {
+      return this.characterContextRepository.saveAndFlush(entity);
+    } catch (Exception e) {
+      LOGGER.error("Error saving and flush context: {}", entity, e);
       throw e;
     }
   }

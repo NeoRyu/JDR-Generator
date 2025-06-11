@@ -1,6 +1,8 @@
 package jdr.generator.api.characters.stats;
 
 import java.util.Date;
+
+import jdr.generator.api.characters.details.CharacterDetailsEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +19,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CharacterJsonDataModel {
   public Long id;
-  public Long characterDetailsId;
+  public CharacterDetailsEntity characterDetails;
   public String jsonData;
   public Date createdAt;
   public Date updatedAt;
