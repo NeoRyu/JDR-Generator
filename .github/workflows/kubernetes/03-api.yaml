@@ -1,0 +1,68 @@
+# kubernetes/03-api.yaml
+# > kubectl apply -f .github/workflows/kubernetes/03-api.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-api
+  labels:
+    app: jdr-generator-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jdr-generator-api
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-api
+    spec:
+      containers:
+        - name: api
+          image: eli256/jdr-generator-api:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-api-config
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              value: jdr_user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_PASSWORD
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1024Mi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jdr-generator-api
+  labels:
+    app: jdr-generator-api
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: jdr-generator-api
+  type: ClusterIP
