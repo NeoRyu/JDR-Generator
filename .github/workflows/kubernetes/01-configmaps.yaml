@@ -1,0 +1,18 @@
+apiVersion: v1
+# kubectl apply -f kubernetes/01-configmaps.yaml
+kind: ConfigMap
+metadata:
+  name: jdr-generator-api-config
+data:
+  GEMINI_SERVICE_URL: "http://jdr-generator-gemini:3001"
+  OPENAI_SERVICE_URL: "http://jdr-generator-openai:3002"
+  FREEPIK_SERVICE_URL: "http://jdr-generator-freepik:3003"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://jdr-generator-mysql:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
+  SPRING_PROFILES_ACTIVE: "prod"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-web-config
+data:
+  VITE_API_URL: "/api"

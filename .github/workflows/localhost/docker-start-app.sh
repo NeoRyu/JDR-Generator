@@ -4,7 +4,11 @@
 # --- HOW TO USE IT ---
 # "======================================================"
 # Ouvrez un terminal sur Linux/Unix, ou Git Bash sur Windows.
-# Git Bash : https://git-scm.com/downloads/win
+# > Git Bash : https://git-scm.com/downloads/win
+
+# Pour purger tout l'ancien contenu associé (images + containers + réseau) :
+# cd ~/IdeaProjects/JDR-Generator/
+# docker-compose -p jdr-generator -f docker-compose.local.yml down --volumes --rmi all
 
 # Naviguez jusqu'au répertoire où vous avez enregistré le fichier, par exemple :
 # cd ~/IdeaProjects/JDR-Generator/.github/workflows/localhost

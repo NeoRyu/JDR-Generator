@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS `jdr_generator_db`;
+# DROP DATABASE IF EXISTS `jdr_generator_db`;
 CREATE DATABASE IF NOT EXISTS `jdr_generator_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-USE `jdr_generator_db`;
+# ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+# USE `jdr_generator_db`;
 
 -- Suppression des tables existantes pour une recréation propre
 -- L'ordre est important pour les clés étrangères
