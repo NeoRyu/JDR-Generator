@@ -4,7 +4,12 @@
 #   kubectl get pods -l app=jdr-generator-web
 #   kubectl get service jdr-generator-web
 #   kubectl get nodes -o wide
-#   kubectl port-forward pod/jdr-generator-web-597fd654d5-zk8x8 3080:80
+#   kubectl get pods -l app=jdr-generator-web -o custom-columns=NAME:.metadata.name --no-headers
+#   kubectl port-forward pod/$(kubectl get pods -l app=jdr-generator-web -o custom-columns=NAME:.metadata.name --no-headers) 3080:80
+#   # kubectl rollout restart deployment/jdr-generator-api
+#   # kubectl get deployments
+#   # kubectl get pods
+#   # kubectl get services
 
 apiVersion: apps/v1
 kind: Deployment
@@ -27,6 +32,9 @@ spec:
           image: eli256/jdr-generator-web:latest
           ports:
             - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-web-config
           resources:
             requests:
               memory: "128Mi"

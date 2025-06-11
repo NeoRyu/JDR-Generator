@@ -3,6 +3,7 @@
 #   kubectl get deployments
 #   kubectl get pods -l app=jdr-generator-api
 #   kubectl get services
+#   # kubectl get pods -l app=jdr-generator-api -o custom-columns=NAME:.metadata.name --no-headers
 #   # kubectl logs jdr-generator-api-64bdb88cf9-zpf2z
 
 apiVersion: apps/v1

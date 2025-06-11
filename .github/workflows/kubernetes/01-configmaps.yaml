@@ -1,5 +1,5 @@
 # kubernetes/01-configmaps.yaml
-# > kubectl apply -f .github/workflows/kubernetes/00-secrets.yaml
+# > kubectl apply -f .github/workflows/kubernetes/01-configmaps.yaml
 #   kubectl get configmaps
 
 # ConfigMap pour le service API (Java)
@@ -23,7 +23,7 @@ kind: ConfigMap
 metadata:
   name: jdr-generator-web-config
 data:
-  VITE_API_URL: "/api"
+  VITE_API_URL: "http://localhost:8080/api" # une fois dans le cluster : "http://jdr-generator-api:8080/api"
 ---
 # ConfigMap pour le service Gemini (Node.js)
 apiVersion: v1
