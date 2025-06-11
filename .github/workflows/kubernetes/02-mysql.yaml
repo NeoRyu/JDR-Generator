@@ -1,5 +1,10 @@
 # kubernetes/02-mysql.yaml
 # > kubectl apply -f .github/workflows/kubernetes/02-mysql.yaml
+#   kubectl get pvc
+#   kubectl get deployments
+#   kubectl get pods -l app=jdr-generator-mysql
+#   kubectl get services
+#   # kubectl describe pod jdr-generator-mysql-754cd784-wgjp7
 
 apiVersion: v1
 kind: PersistentVolumeClaim

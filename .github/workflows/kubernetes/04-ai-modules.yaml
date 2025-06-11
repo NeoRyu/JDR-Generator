@@ -1,5 +1,12 @@
 # kubernetes/04-ai-modules.yaml
 # > kubectl apply -f .github/workflows/kubernetes/04-ai-modules.yaml
+#   # kubectl delete deployment jdr-generator-gemini-ai jdr-generator-openai-ai jdr-generator-freepik-ai
+#   # kubectl delete service jdr-generator-gemini-ai jdr-generator-openai-ai jdr-generator-freepik-ai
+#   kubectl get deployments
+#   kubectl get pods -l app=jdr-generator-gemini
+#   kubectl get pods -l app=jdr-generator-openai
+#   kubectl get pods -l app=jdr-generator-freepik
+#   kubectl get services
 
 apiVersion: apps/v1
 kind: Deployment

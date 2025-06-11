@@ -1,5 +1,6 @@
 # kubernetes/01-configmaps.yaml
 # > kubectl apply -f .github/workflows/kubernetes/00-secrets.yaml
+#   kubectl get configmaps
 
 # ConfigMap pour le service API (Java)
 apiVersion: v1
