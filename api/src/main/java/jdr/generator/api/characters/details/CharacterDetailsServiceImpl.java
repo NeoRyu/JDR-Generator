@@ -59,14 +59,25 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
   /**
    * Saves a new character's details.
    *
-   * @param character The CharacterDetailsEntity to save.
+   * @param entity The CharacterDetailsEntity to save.
    * @return The saved CharacterDetailsEntity.
    */
   @Override
   @Transactional
-  public CharacterDetailsEntity save(final CharacterDetailsEntity character) {
-    logger.info("Saving character details: {}", character);
-    return this.characterDetailsRepository.save(character);
+  public CharacterDetailsEntity save(final CharacterDetailsEntity entity) {
+    logger.info("Saving character details: {}", entity);
+    return this.characterDetailsRepository.save(entity);
+  }
+
+  @Transactional
+  public CharacterDetailsEntity saveAndFlush(CharacterDetailsEntity entity) {
+    logger.info("Saving and flush context: {}", entity);
+    try {
+      return this.characterDetailsRepository.saveAndFlush(entity);
+    } catch (Exception e) {
+      logger.error("Error saving and flush context: {}", entity, e);
+      throw e;
+    }
   }
 
   /**
@@ -116,15 +127,24 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
   }
 
   /**
-   * Deletes a character by their ID.
    *
    * @param id The ID of the character to delete.
    */
   @Override
-  @Transactional
+  @Transactional // Indispensable pour que les opérations de cascade JPA soient gérées
   public void deleteCharacter(Long id) {
-    logger.info("Deleting character details by ID: {}", id);
-    characterDetailsRepository.deleteById(id);
+    logger.info("Attempting to delete character details by ID: {}", id);
+    CharacterDetailsEntity entityToDelete = characterDetailsRepository.findById(id)
+            .orElseThrow(() -> new CharacterDetailsNotFoundException("Character with ID " + id + " not found."));
+    // La suppression de l'entité CharacterDetailsEntity
+    // déclenchera automatiquement la suppression en cascade de :
+    // 1. CharacterContextEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true)
+    // 2. CharacterIllustrationEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true,
+    //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
+    // 3. CharacterJsonDataEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true,
+    //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
+    characterDetailsRepository.delete(entityToDelete); // Suppression de l'entité gérée par JPA
+    logger.info("Character and all associated data for ID {} have been successfully deleted.", id);
   }
 
   /**
@@ -180,7 +200,7 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
                                               + detailsEntity.getId()));
                       CharacterIllustrationEntity illustrationEntity =
                           characterIllustrationRepository
-                              .findByImageDetails(detailsEntity)
+                              .findByCharacterDetailsId(detailsEntity.getId())
                               .orElse(null); // Illustration peut être null
                       CharacterJsonDataEntity jsonDataEntity =
                           characterJsonDataService
@@ -201,7 +221,7 @@ public class CharacterDetailsServiceImpl implements CharacterDetailsService {
                               ? modelMapper.map(jsonDataEntity, CharacterJsonDataModel.class)
                               : null;
                       return new CharacterFullModel(
-                          detailsModel, contextModel, illustrationModel, jsonDataModel);
+                              contextModel, detailsModel, jsonDataModel, illustrationModel);
                     } catch (Exception e) {
                       logger.error(
                           "Error processing character details: {}, model: {}",

@@ -22,6 +22,7 @@ public class CharacterContextModel {
   public String promptRace;
   public String promptGender;
   public String promptClass;
+  public String promptDrawStyle;
   public String promptDescription;
 
   public Date createdAt;

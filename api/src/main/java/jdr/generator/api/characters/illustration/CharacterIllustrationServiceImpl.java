@@ -23,18 +23,29 @@ public class CharacterIllustrationServiceImpl implements CharacterIllustrationSe
   /**
    * Saves a new character illustration.
    *
-   * @param characterIllustrationEntity The CharacterIllustrationEntity to save.
+   * @param entity The CharacterIllustrationEntity to save.
    * @return The saved CharacterIllustrationEntity.
    */
   @Override
   @Transactional
-  public CharacterIllustrationEntity save(CharacterIllustrationEntity characterIllustrationEntity) {
+  public CharacterIllustrationEntity save(CharacterIllustrationEntity entity) {
     LOGGER.info(
-        "Saving illustration with prompt : {}", characterIllustrationEntity.getImageLabel());
+        "Saving illustration with prompt : {}", entity.getImageLabel());
     try {
-      return characterIllustrationRepository.save(characterIllustrationEntity);
+      return characterIllustrationRepository.save(entity);
     } catch (Exception e) {
-      LOGGER.error("Error saving illustration: {}", characterIllustrationEntity, e);
+      LOGGER.error("Error saving illustration: {}", entity, e);
+      throw e;
+    }
+  }
+
+  @Transactional
+  public CharacterIllustrationEntity saveAndFlush(CharacterIllustrationEntity entity) {
+    LOGGER.info("Saving and flush context: {}", entity);
+    try {
+      return this.characterIllustrationRepository.saveAndFlush(entity);
+    } catch (Exception e) {
+      LOGGER.error("Error saving and flush context: {}", entity, e);
       throw e;
     }
   }
@@ -66,7 +77,7 @@ public class CharacterIllustrationServiceImpl implements CharacterIllustrationSe
     LOGGER.info("findByCharacterDetailsId for character ID: {}", characterDetailsId);
     CharacterDetailsEntity characterDetails = characterDetailsService.findById(characterDetailsId);
     return characterIllustrationRepository
-            .findByImageDetails(characterDetails)
+            .findByCharacterDetailsId(characterDetails.getId())
             .orElseThrow(() ->
                     new RuntimeException("Illustration not found for character details ID: "
                             + characterDetailsId)

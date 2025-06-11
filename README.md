@@ -197,7 +197,8 @@ JDR-Generator/
 │       │       │   │   ├── CharacterContextRepository.java
 │       │       │   │   ├── CharacterContextService.java
 │       │       │   │   ├── CharacterContextServiceImpl.java
-│       │       │   │   └── CharacterContextJson.java
+│       │       │   │   ├── CharacterContextJson.java
+│       │       │   │   └── IllustrationDrawStyle.java     <-- Enum des prompts de style de portrait
 │       │       │   ├── details/
 │       │       │   │   ├── CharacterDetailsEntity.java
 │       │       │   │   ├── CharacterDetailsModel.java
@@ -212,7 +213,8 @@ JDR-Generator/
 │       │       │   │   ├── CharacterIllustrationModel.java
 │       │       │   │   ├── CharacterIllustrationRepository.java
 │       │       │   │   ├── CharacterIllustrationService.java
-│       │       │   │   └── CharacterIllustrationServiceImpl.java
+│       │       │   │   ├── CharacterIllustrationServiceImpl.java
+│       │       │   │   └── RegenerateIllustrationRequestDto.java  <-- payload pour regen d'image
 │       │       │   ├── stats/
 │       │       │   │   ├── CharacterJsonDataEntity.java
 │       │       │   │   ├── CharacterJsonDataModel.java
@@ -223,7 +225,8 @@ JDR-Generator/
 │       │       │   ├── CharacterController.java                <-- controlleur principal
 │       │       │   ├── FreepikService.java                     <-- utilisé pour illustrate
 │       │       │   ├── GeminiService.java                      <-- utilisé pour generate et stats
-│       │       │   └── OpenaiService.java                      <-- inutilisé actuellement
+│       │       │   ├── OpenaiService.java                      <-- inutilisé actuellement
+│       │       │   └── PdfGeneratorService.java                <-- service gérant la création PDF
 │       │       ├── config/
 │       │       │   ├── CorsConfig.java
 │       │       │   ├── GeminiGenerationConfiguration.java
@@ -238,8 +241,7 @@ JDR-Generator/
 │       └── resources/
 │           ├── db/
 │           │   └── migration/                                  <-- fichiers SQL pour FlywayDB
-│           │       ├── V00001__Create_characters_table.sql
-│           │       ├── V00002__Create_character_json_data.sql
+│           │       ├── V00001__initial_schema.sql
 │           │       └── ...
 │           ├── banner.txt
 │           ├── application.yml                     <-- pour le build localhost de l'application
@@ -306,7 +308,7 @@ JDR-Generator/
 │   │   │   │   ├── character-details.model.tsx
 │   │   │   │   ├── character-full.model.tsx
 │   │   │   │   ├── character-illustration.model.tsx
-│   │   │   │   └── character-stats.model.tsx
+│   │   │   │   └── character-json.model.tsx
 │   │   │   ├── ui
 │   │   │   │   └── ...                      <-- divers elements .tsx pour l'interface web
 │   │   │   └── theme-provider.tsx
@@ -315,10 +317,11 @@ JDR-Generator/
 │   │   ├── pages/ (home/)
 │   │   │   └── home/
 │   │   │       ├── listes/                  <-- Fourni des listes de présaisie (non limitative) pour le contexte
-│   │   │       │   └── characterClasses.tsx
-│   │   │       │   └── characterGenders.tsx
-│   │   │       │   └── characterRaces.tsx
-│   │   │       │   └── characterUniverses.tsx
+│   │   │       │   ├── characterClasses.tsx
+│   │   │       │   ├── characterGenders.tsx
+│   │   │       │   ├── characterRaces.tsx
+│   │   │       │   ├── characterUniverses.tsx
+│   │   │       │   └── illustrationDrawStyles.tsx
 │   │   │       ├── home.tsx                                <-- Page principale
 │   │   │       ├── characterRow.tsx                        <-- ligne de perso sur la page principale
 │   │   │       ├── readCharacterContent.tsx                <-- Modale le visualisation du perso complet

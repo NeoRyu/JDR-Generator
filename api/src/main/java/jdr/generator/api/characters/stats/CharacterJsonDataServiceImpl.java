@@ -1,6 +1,8 @@
 package jdr.generator.api.characters.stats;
 
 import java.util.Optional;
+
+import jdr.generator.api.characters.context.CharacterContextEntity;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,17 +23,28 @@ public class CharacterJsonDataServiceImpl implements CharacterJsonDataService {
   /**
    * Saves a new character json data.
    *
-   * @param characterJsonDataEntity The CharacterJsonDataEntity to save.
+   * @param entity The CharacterJsonDataEntity to save.
    * @return The saved CharacterJsonDataEntity
    */
   @Override
   @Transactional
-  public CharacterJsonDataEntity save(CharacterJsonDataEntity characterJsonDataEntity) {
-    LOGGER.info("Saving character JSON data: {}", characterJsonDataEntity);
+  public CharacterJsonDataEntity save(CharacterJsonDataEntity entity) {
+    LOGGER.info("Saving character JSON data: {}", entity);
     try {
-      return characterJsonDataRepository.save(characterJsonDataEntity);
+      return characterJsonDataRepository.save(entity);
     } catch (Exception e) {
-      LOGGER.error("Error saving character JSON data: {}", characterJsonDataEntity, e);
+      LOGGER.error("Error saving character JSON data: {}", entity, e);
+      throw e;
+    }
+  }
+
+  @Transactional
+  public CharacterJsonDataEntity saveAndFlush(CharacterJsonDataEntity entity) {
+    LOGGER.info("Saving and flush context: {}", entity);
+    try {
+      return this.characterJsonDataRepository.saveAndFlush(entity);
+    } catch (Exception e) {
+      LOGGER.error("Error saving and flush context: {}", entity, e);
       throw e;
     }
   }

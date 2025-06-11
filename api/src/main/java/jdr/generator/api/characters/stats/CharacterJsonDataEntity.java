@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -35,8 +35,9 @@ public class CharacterJsonDataEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(name = "character_details_id", nullable = false)
-  private Long characterDetailsId;
+  @OneToOne
+  @JoinColumn(name = "character_details_id", unique = true, nullable = false)
+  private CharacterDetailsEntity characterDetails;
 
   @JdbcTypeCode(SqlTypes.JSON)
   @Column(name = "json_data", nullable = false)
@@ -50,7 +51,5 @@ public class CharacterJsonDataEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updatedAt;
 
-  @ManyToOne
-  @JoinColumn(name = "character_details_id", insertable = false, updatable = false)
-  private CharacterDetailsEntity characterDetails;
+
 }

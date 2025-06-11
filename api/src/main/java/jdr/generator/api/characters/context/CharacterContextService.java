@@ -10,10 +10,11 @@ public interface CharacterContextService {
   /**
    * Saves a new character context.
    *
-   * @param context The CharacterContextEntity to save.
+   * @param entity The CharacterContextEntity to save.
    * @return The saved CharacterContextEntity.
    */
-  CharacterContextEntity save(CharacterContextEntity context);
+  CharacterContextEntity save(CharacterContextEntity entity);
+  CharacterContextEntity saveAndFlush(CharacterContextEntity entity);
 
   /**
    * Finds a character context by its ID.
@@ -37,4 +38,5 @@ public interface CharacterContextService {
    * @return The created CharacterContextModel.
    */
   CharacterContextModel createCharacterContextModel(DefaultContextJson data);
+
 }

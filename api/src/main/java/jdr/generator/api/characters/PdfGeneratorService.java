@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextService;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
@@ -42,17 +44,17 @@ public class PdfGeneratorService {
     // Bloc statique pour charger les polices personnalisées, une seule fois, au démarrage
     static {
         try {
-            FontFactory.register(PdfGeneratorService.class
-                    .getResource("/fonts/playwrite-fr-moderne-extralight.ttf")
+            FontFactory.register(Objects.requireNonNull(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-extralight.ttf"))
                     .getFile(), "GooglePlayWriteFrModerneExtraLight");
-            FontFactory.register(PdfGeneratorService.class
-                    .getResource("/fonts/playwrite-fr-moderne-light.ttf")
+            FontFactory.register(Objects.requireNonNull(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-light.ttf"))
                     .getFile(), "GooglePlayWriteFrModerneLight");
-            FontFactory.register(PdfGeneratorService.class
-                    .getResource("/fonts/playwrite-fr-moderne-regular.ttf")
+            FontFactory.register(Objects.requireNonNull(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-regular.ttf"))
                     .getFile(), "GooglePlayWriteFrModerneRegular");
-            FontFactory.register(PdfGeneratorService.class
-                    .getResource("/fonts/playwrite-fr-moderne-thin.ttf")
+            FontFactory.register(Objects.requireNonNull(PdfGeneratorService.class
+                    .getResource("/fonts/playwrite-fr-moderne-thin.ttf"))
                     .getFile(), "GooglePlayWriteFrModerneThin");
             LOGGER.info("Polices custom chargées avec succès.");
         } catch (Exception e) {
@@ -222,7 +224,8 @@ public class PdfGeneratorService {
                     );
                     canvas.addImage(cellBackgroundImage);
                 } catch (DocumentException e) {
-                    LOGGER.error("Erreur lors de l'ajout de l'image de fond de cellule au PDF: " + e.getMessage());
+                    LOGGER.error("Erreur lors de l'ajout de l'image de fond " +
+                            "de cellule au PDF: {}", e.getMessage());
                 }
             }
         }
@@ -344,7 +347,7 @@ public class PdfGeneratorService {
                 .orElse(null);
 
         // TODO : IMAGES UTILISEES
-        final String bgImg_Sheet = "pdf-background_3.jpg";
+        final String bgImg_Sheet = "pdf-background.jpg";
         final String bgImg_Portrait = "pdf-frame_portrait.png";
         final String bgImg_Splash = "pdf-frame_splash.png";
 
@@ -623,7 +626,7 @@ public class PdfGeneratorService {
             String key = entry.getKey();
             Object value = entry.getValue();
             if (value instanceof ArrayList<?>) {
-                // C'est une liste (array)
+                // C'est une liste (array).
                 if (key != null && !key.isEmpty()) { // Correction de la condition logique
                     document.add(category(level, key.substring(0, 1).toUpperCase()
                             + key.substring(1), calcFontSize(14, level)));
@@ -646,7 +649,7 @@ public class PdfGeneratorService {
                     }
                 }
             } else if (value instanceof Map) {
-                // C'est un objet imbriqué (catégorie)
+                // C'est un objet imbriqué (catégorie).
                 if (key != null && !key.isEmpty()) { // Correction de la condition logique
                     document.add(category(level,
                             key.substring(0, 1).toUpperCase()

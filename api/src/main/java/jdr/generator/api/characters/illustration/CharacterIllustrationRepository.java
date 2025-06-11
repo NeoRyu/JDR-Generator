@@ -14,8 +14,8 @@ public interface CharacterIllustrationRepository
   /**
    * Finds a character illustration by its associated character details.
    *
-   * @param imageDetails The CharacterDetailsEntity to search by.
+   * @param characterDetailsId The ID of the CharacterDetailsEntity.
    * @return An Optional containing the found CharacterIllustrationEntity, or empty if not found.
    */
-  Optional<CharacterIllustrationEntity> findByImageDetails(CharacterDetailsEntity imageDetails);
+  Optional<CharacterIllustrationEntity> findByCharacterDetailsId(Long characterDetailsId);
 }

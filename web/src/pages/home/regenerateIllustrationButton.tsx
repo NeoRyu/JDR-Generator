@@ -1,7 +1,7 @@
 // src/pages/home/RegenerateIllustrationButton.tsx
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
-import {Loader2, Users} from "lucide-react";
+import { Loader2, Users } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -12,6 +12,8 @@ import {
 import { useRegenerateIllustration } from "@/services/illustrateCharacters.service.ts";
 import { arrayBufferToBase64 } from "@/lib/utils";
 import { CharacterFull } from "@/components/model/character-full.model.tsx";
+import CustomSelect from "@/components/ui/customSelect.tsx";
+import { illustrationDrawStyles } from "@/pages/home/listes/illustrationDrawStyles.tsx";
 
 interface RegenerateIllustrationButtonProps {
     character: CharacterFull;
@@ -25,8 +27,19 @@ export const RegenerateIllustrationButton: React.FC<
 > = ({ character, refetch, selectedCharacter, setSelectedCharacter }) => {
     const [isRegenerating, setIsRegenerating] = useState(false);
     const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+    const [selectedDrawStyle, setSelectedDrawStyle] = useState<string>("");
 
     const regenerateIllustrationMutation = useRegenerateIllustration();
+
+    React.useEffect(() => {
+        // Initialiser le style avec celui du personnage quand la modale s'ouvre ou le personnage change.
+        if (showConfirmationModal && character?.context?.promptDrawStyle && selectedDrawStyle === "") {
+            setSelectedDrawStyle(character.context.promptDrawStyle);
+        } else if (!showConfirmationModal && character?.context?.promptDrawStyle) {
+            // Si la modale est fermée, on peut vouloir réinitialiser si le personnage sélectionné change en arrière-plan
+            setSelectedDrawStyle(character.context.promptDrawStyle);
+        }
+    }, [character, showConfirmationModal]);
 
     const handleConfirmRegeneration = async () => {
         if (!character?.details?.id) {
@@ -38,28 +51,30 @@ export const RegenerateIllustrationButton: React.FC<
         setIsRegenerating(true); // Active l'état de chargement
 
         try {
-            const response = await regenerateIllustrationMutation.mutateAsync(
-                character.details.id
-            );
-            const newImageBlob = await arrayBufferToBase64(response.data);
+            // Déterminer le style final à envoyer à l'API
+            const finalDrawStyle = selectedDrawStyle || character.context.promptDrawStyle;
 
-            // Met à jour l'image du personnage dans la liste locale (géré par characterRow)
-            // On ne modifie pas directement l'état de 'characterRow' ici,
-            // on laisse le 'refetch' global ou la mise à jour de 'selectedCharacter' propager le changement.
+            // Appel à mutateAsync avec l'objet payload
+            const response = await regenerateIllustrationMutation.mutateAsync({
+                id: character.details.id,
+                drawStyle: finalDrawStyle,
+            });
 
-            // Si le personnage de cette ligne est également celui actuellement ouvert dans la modale de lecture,
-            // mettez à jour l'image dans la modale pour une consistance visuelle immédiate.
-            if (selectedCharacter && selectedCharacter.details?.id === character.details?.id) {
-                setSelectedCharacter(prev => {
-                    if (!prev) return null;
-                    return {
-                        ...prev,
-                        illustration: {
-                            ...prev.illustration,
-                            imageBlob: newImageBlob,
-                        },
-                    };
-                });
+            // Mise à jour de l'illustration du personnage sélectionné
+            if (response.data && selectedCharacter) {
+                const newImageBlob = await arrayBufferToBase64(response.data);
+                if (selectedCharacter.details?.id === character.details?.id) {
+                    setSelectedCharacter(prev => {
+                        if (!prev) return null;
+                        return {
+                            ...prev,
+                            illustration: {
+                                ...prev.illustration,
+                                imageBlob: newImageBlob,
+                            },
+                        };
+                    });
+                }
             }
 
             void refetch(); // Déclenche un rechargement complet de la liste des personnages dans Home.tsx
@@ -78,6 +93,14 @@ export const RegenerateIllustrationButton: React.FC<
         }
     };
 
+    const toggleConfirmationModal = () => {
+        setShowConfirmationModal(!showConfirmationModal);
+        // Initialiser le style au moment de l'ouverture si la modale s'ouvre
+        if (!showConfirmationModal && character?.context?.promptDrawStyle) {
+            setSelectedDrawStyle(character.context.promptDrawStyle);
+        }
+    };
+
     return (
         <>
             <Button
@@ -92,13 +115,26 @@ export const RegenerateIllustrationButton: React.FC<
                 {isRegenerating ? <Loader2 className="animate-spin" /> : <Users />}
             </Button>
 
-            <Dialog open={showConfirmationModal} onOpenChange={setShowConfirmationModal}>
-                <DialogContent>
+            <Dialog open={showConfirmationModal} onOpenChange={toggleConfirmationModal }>
+                <DialogContent className="max-w-md md:max-lg">
                     <DialogTitle>ACTION : Régénération du portrait de {character.details?.name}</DialogTitle>
                     <DialogDescription>
                         Voulez-vous vraiment générer une nouvelle illustration de portrait
                         pour le personnage {character.details?.name} ? Cette action est irréversible...
 
+                        <br/><br/>
+                        <div className="flex flex-col gap-2">
+                            <span>Style actuel :
+                                {illustrationDrawStyles.find(s => s.value === character.context.promptDrawStyle)?.label || character.context.promptDrawStyle}
+                            </span>
+                            <CustomSelect
+                                options={illustrationDrawStyles}
+                                value={selectedDrawStyle}
+                                onChange={(value: string) => setSelectedDrawStyle(value)}
+                                placeholder="Sélectionnez un nouveau style"
+                            />
+                        </div>
+                        <br/>
                         <img
                             className="object-cover rounded shadow cursor-pointer"
                             src={`data:image/png;base64,${character.illustration?.imageBlob}`}

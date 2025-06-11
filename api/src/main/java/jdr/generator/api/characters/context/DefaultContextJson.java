@@ -34,6 +34,10 @@ public class DefaultContextJson {
   String promptClass = "Nosferatu";
 
   @Builder.Default
+  @JsonProperty("promptDrawStyle")
+  String promptDrawStyle = "photoRealistic";
+
+  @Builder.Default
   @JsonProperty("promptDescription")
   String promptDescription = "";
 }

@@ -8,10 +8,11 @@ public interface CharacterIllustrationService {
   /**
    * Saves a new character illustration.
    *
-   * @param context The CharacterIllustrationEntity to save.
+   * @param entity The CharacterIllustrationEntity to save.
    * @return The saved CharacterIllustrationEntity.
    */
-  CharacterIllustrationEntity save(CharacterIllustrationEntity context);
+  CharacterIllustrationEntity save(CharacterIllustrationEntity entity);
+  CharacterIllustrationEntity saveAndFlush(CharacterIllustrationEntity entity);
 
   /**
    * Finds a character illustration by its ID.

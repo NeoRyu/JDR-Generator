@@ -10,10 +10,11 @@ public interface CharacterJsonDataService {
   /**
    * Saves new character JSON data.
    *
-   * @param characterJsonDataEntity The CharacterJsonDataEntity to save.
+   * @param entity The CharacterJsonDataEntity to save.
    * @return The saved CharacterJsonDataEntity.
    */
-  CharacterJsonDataEntity save(CharacterJsonDataEntity characterJsonDataEntity);
+  CharacterJsonDataEntity save(CharacterJsonDataEntity entity);
+  CharacterJsonDataEntity saveAndFlush(CharacterJsonDataEntity entity);
 
   /**
    * Finds character JSON data by its ID.

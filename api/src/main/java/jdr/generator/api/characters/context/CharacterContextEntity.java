@@ -42,6 +42,9 @@ public class CharacterContextEntity {
   @Column(name = "prompt_class")
   private String promptClass;
 
+  @Column(name = "prompt_draw_style", nullable = false)
+  private String promptDrawStyle;
+
   @Column(name = "prompt_description")
   private String promptDescription;
 
@@ -49,5 +52,4 @@ public class CharacterContextEntity {
   @Temporal(TemporalType.TIMESTAMP)
   private Date createdAt;
 
-  // public void setContextId(Integer contextId) {}
 }

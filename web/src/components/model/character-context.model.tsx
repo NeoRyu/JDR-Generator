@@ -4,6 +4,7 @@ export interface CharacterContext {
   promptRace: string;
   promptGender: string;
   promptClass: string;
+  promptDrawStyle: string;
   promptDescription: string;
   createdAt?: string;
 }
