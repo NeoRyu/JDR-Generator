@@ -83,13 +83,13 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdr-generator-mysql
+  name: mysql-container
   labels:
     app: jdr-generator-mysql
 spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-mysql
   ports:
     - port: 3306
       targetPort: 3306
-  selector:
-    app: jdr-generator-mysql
-  type: ClusterIP

@@ -61,13 +61,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdr-generator-api
+  name: api-container
   labels:
     app: jdr-generator-api
 spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-api
   ports:
     - port: 8080
       targetPort: 8080
-  selector:
-    app: jdr-generator-api
-  type: ClusterIP

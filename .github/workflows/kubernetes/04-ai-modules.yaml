@@ -61,16 +61,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdr-generator-gemini
+  name: gemini-container
   labels:
     app: jdr-generator-gemini
 spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-gemini
   ports:
     - port: 3001
       targetPort: 3001
-  selector:
-    app: jdr-generator-gemini
-  type: ClusterIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -130,16 +131,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdr-generator-openai
+  name: openai-container
   labels:
     app: jdr-generator-openai
 spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-openai
   ports:
     - port: 3002
       targetPort: 3002
-  selector:
-    app: jdr-generator-openai
-  type: ClusterIP
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -194,13 +196,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: jdr-generator-freepik
+  name: freepik-container
   labels:
     app: jdr-generator-freepik
 spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-freepik
   ports:
     - port: 3003
       targetPort: 3003
-  selector:
-    app: jdr-generator-freepik
-  type: ClusterIP
