@@ -57,14 +57,14 @@ services:
       context: ./web
       dockerfile: ./Dockerfile # Nom du Dockerfile dans le dossier 'web'
       args: # Ajout des arguments de build pour passer VITE_API_URL
-        - 'VITE_API_URL=${VITE_API_URL}'
+        - 'VITE_API_URL=/'
     ports:
       - "80:80" # Mapping port hôte:port conteneur
     depends_on:
       api-container:
         condition: service_healthy # Dépend du conteneur API sain
     environment:
-      VITE_API_URL: ${VITE_API_URL}
+      VITE_API_URL: /
     volumes:
       - ./web/nginx.conf:/etc/nginx/nginx.conf:ro # Monte nginx.conf depuis ./web/ pour proxifier
     networks:

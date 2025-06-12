@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/characters")
 public class CharactersController {
-  private static final String webModuleHost = "http://localhost:5173";
+  private static final String webModuleHost = "http://localhost:5173,http://localhost:3080";
   private final CharacterDetailsService characterDetailsService;
   private final PdfGeneratorService pdfGeneratorService;
   private final GeminiService geminiService;

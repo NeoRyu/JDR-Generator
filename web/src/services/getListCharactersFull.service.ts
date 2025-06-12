@@ -7,7 +7,7 @@ export interface CharactersResponse {
   data: CharacterFull[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback .env.local
 
 export const getListCharactersFull = () => {
   return useQuery<AxiosResponse<CharactersResponse>, Error>(

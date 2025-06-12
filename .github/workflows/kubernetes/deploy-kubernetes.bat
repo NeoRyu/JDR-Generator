@@ -32,6 +32,12 @@ kubectl delete service jdr-generator-freepik --ignore-not-found=true
 echo.
 echo Services anciens supprimés ou non trouvés.
 
+echo.
+echo Suppression des images docker
+echo docker-compose -p jdr-generator -f docker-compose.local.yml down --volumes --rmi all
+echo docker rmi eli256/jdr-generator-web:latest
+echo docker rmi eli256/jdr-generator-api:latest
+
 REM --- ÉTAPE 2: Application des Secrets ---
 echo.
 echo --- ÉTAPE 2: Application des Secrets (00-secrets.yaml) ---
@@ -89,6 +95,14 @@ kubectl rollout restart deployment/jdr-generator-openai
 kubectl rollout restart deployment/jdr-generator-freepik
 kubectl rollout restart deployment/jdr-generator-web
 echo Redémarrages des déploiements initiés.
+kubectl rollout status deployment/jdr-generator-gemini
+kubectl rollout status deployment/jdr-generator-openai
+kubectl rollout status deployment/jdr-generator-freepik
+kubectl rollout status deployment/jdr-generator-mysql
+kubectl rollout status deployment/jdr-generator-api
+kubectl rollout status deployment/jdr-generator-web
+echo "Redémarrages des déploiements terminé."
+
 
 REM --- ÉTAPE 6: Vérification des états ---
 echo.
@@ -144,6 +158,23 @@ REM sait comment contacter ces services via leurs noms de service internes.
 REM
 echo.
 echo Les fenêtres de port-forwarding devraient maintenant être ouvertes. Ne pas les fermer.
+echo.
+
+REM --- ÉTAPE 8 : Accès aux logs applicatif ---
+echo.
+echo =====================================================
+echo == ÉTAPE 8 : Accès aux logs applicatifs pour debug ==
+echo =====================================================
+echo.
+echo Pour accéder aux logs d'un pod (par ex API), utilisez la commande suivante pour obtenir son NAME :
+echo kubectl get pods -l app=jdr-generator-api
+echo.
+echo Vous devriez obtenir une réponse similaire à cet exemple :
+echo NAME                               READY   STATUS    RESTARTS   AGE
+echo jdr-generator-api-84fd8cd8-rd56n   1/1     Running   0          72s
+echo.
+echo Suivi de cette commande en remplaçant par le bon NAME :
+echo kubectl logs jdr-generator-api-84fd8cd8-rd56n
 echo.
 
 pause

@@ -9,9 +9,9 @@ metadata:
   name: jdr-generator-api-config
 data:
   GEMINI_SERVICE_URL: "http://gemini-container:3001"
-  OPENAI_SERVICE_URL: "http://gemini-container:3002"
-  FREEPIK_SERVICE_URL: "http://gemini-container:3003"
-  SPRING_DATASOURCE_URL: "jdbc:mysql://jdr-generator-mysql:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
+  OPENAI_SERVICE_URL: "http://openai-container:3002"
+  FREEPIK_SERVICE_URL: "http://freepik-container:3003"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-container:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
   SPRING_PROFILES_ACTIVE: "prod"
   MAX_TOKEN: "2048"                 # Valeur commune
   DOWNLOAD_FOLDER: "jdr-generator"  # Conservé, note sur l'adaptation K8s maintenue
@@ -23,8 +23,8 @@ kind: ConfigMap
 metadata:
   name: jdr-generator-web-config
 data:
-  VITE_API_URL: "http://localhost:8080"
-  # une fois dans le cluster : "http://api-container:8080/characters"
+  VITE_API_URL: "/"
+  # Utilise Nginx comme un proxy interne au cluster Kubernetes : "http://api-container:8080/characters"
 ---
 # ConfigMap pour le service Gemini (Node.js)
 apiVersion: v1

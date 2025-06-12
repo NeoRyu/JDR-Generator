@@ -7,7 +7,7 @@ function cleanData(chaine: string | undefined): string | undefined {
   return chaine;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback pour le dev local
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback .env.local
 
 export const useCreateCharacter = () => {
   return useMutation(

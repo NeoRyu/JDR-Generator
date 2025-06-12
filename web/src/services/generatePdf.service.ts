@@ -2,7 +2,7 @@
 import { useMutation, UseMutationResult } from "react-query";
 import axios, { AxiosResponse } from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback .env.local
 
 /**
  * Hook pour générer le PDF d'un personnage.

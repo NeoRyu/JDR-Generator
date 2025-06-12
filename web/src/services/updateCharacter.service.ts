@@ -29,7 +29,7 @@ function validateData(characterFull: CharacterFull) {
   }
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080"; // Fallback .env.local
 
 export const updateCharacter = () => {
   const updateCharacter = async (characterFull: CharacterFull) => {
