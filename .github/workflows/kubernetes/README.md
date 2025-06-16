@@ -72,14 +72,17 @@ Vous devez disposer d'un cluster Kubernetes opérationnel et accessible. Cela pe
 
 Assurez-vous que votre cluster est démarré et en bonne santé avant de procéder.
 
+![kubernetes_1-cluster](https://github.com/user-attachments/assets/59b11b1b-2910-43b0-9237-1743afc7189f)
+
+
 #### Installation de `kubectl`
 
 Si la commande `kubectl` n'est pas reconnue sur votre système après avoir suivi les prérequis de 
 votre cluster Kubernetes local (Minikube, Docker Desktop, etc.), cela signifie qu'elle n'est pas 
 correctement installée ou accessible via votre `PATH` système.
 
-Pour installer `kubectl`, il est **fortement recommandé de suivre la documentation officielle de 
-Kubernetes**, car les étapes varient en fonction de votre système d'exploitation (Windows, macOS, Linux).
+Pour installer `kubectl`, il est **fortement recommandé de suivre la documentation officielle de Kubernetes**,
+car les étapes varient en fonction de votre système d'exploitation (Windows, macOS, Linux).
 
 * **Documentation officielle pour l'installation de `kubectl` :**
   [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
@@ -167,6 +170,9 @@ vous pouvez accéder à l'application :
 **Note Importante :** Les commandes `kubectl port-forward` bloquent le terminal où elles sont exécutées. 
 Pour maintenir l'accès à l'application, ces fenêtres de terminal doivent rester ouvertes et les commandes actives. 
 Ne les fermez pas tant que vous utilisez l'application !
+
+
+![kubernetes--describe_port-forward](https://github.com/user-attachments/assets/d1699f4d-7eec-44be-97c9-8ee819d56213)
 
 
 ### Consultation des Logs
