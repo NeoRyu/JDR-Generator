@@ -500,7 +500,7 @@ Le déploiement sur Kubernetes utilise les composants suivants, définis dans le
     ./kubernetes/deploy-kubernetes.bat
     ```
 
-Pour toutes les informations approfondies et les étapes de dépannage, **référez-vous au [README du dossier `kubernetes/`](./kubernetes/README.md)**.
+Pour toutes les informations approfondies et les étapes de dépannage, **référez-vous au [README du dossier `kubernetes/`](.github/workflows/kubernetes/README.md)**.
 
 ___________
 # Licence

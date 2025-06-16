@@ -74,3 +74,10 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+# Exposition des endpoints Actuator :
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
