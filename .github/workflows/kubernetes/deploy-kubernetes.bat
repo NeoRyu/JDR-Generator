@@ -68,18 +68,30 @@ echo --- ÉTAPE 4: Application des déploiements et services mis a jour ---
 echo.
 echo Application des fichiers de déploiement et service.
 kubectl apply -f 02-mysql.yaml
-if %errorlevel% neq 0 (echo ERREUR: Échec de 02-mysql.yaml. Arrêt. & goto :eof)
+if %errorlevel% neq 0 (
+    echo ERREUR: Échec de 02-mysql.yaml. Arrêt.
+    goto :EOF
+)
 echo Verification des PersistentVolumeClaims (PVC) :
 kubectl get pvc
 echo.
 kubectl apply -f 03-api.yaml
-if %errorlevel% neq 0 (echo ERREUR: Échec de 03-api.yaml. Arrêt. & goto :eof)
+if %errorlevel% neq 0 (
+    echo ERREUR: Échec de 03-api.yaml. Arrêt.
+    goto :EOF
+)
 echo.
 kubectl apply -f 04-ai-modules.yaml
-if %errorlevel% neq 0 (echo ERREUR: Échec de 04-ai-modules.yaml. Arrêt. & goto :eof)
+if %errorlevel% neq 0 (
+    echo ERREUR: Échec de 04-ai-modules.yaml. Arrêt.
+    goto :EOF
+)
 echo.
 kubectl apply -f 05-frontend.yaml
-if %errorlevel% neq 0 (echo ERREUR: Échec de 05-frontend.yaml. Arrêt. & goto :eof)
+if %errorlevel% neq 0 (
+    echo ERREUR: Échec de 05-frontend.yaml. Arrêt.
+    goto :EOF
+)
 echo.
 echo Déploiements et Services appliqués.
 
@@ -88,20 +100,22 @@ echo.
 echo --- ÉTAPE 5: Redémarrage de tous les déploiements pour prendre en compte les changements ---
 echo.
 echo Ceci assure que les pods récupèrent les nouvelles ConfigMaps et les résolutions DNS.
+kubectl rollout restart deployment/jdr-generator-web
 kubectl rollout restart deployment/jdr-generator-api
 kubectl rollout restart deployment/jdr-generator-mysql
 kubectl rollout restart deployment/jdr-generator-gemini
 kubectl rollout restart deployment/jdr-generator-openai
 kubectl rollout restart deployment/jdr-generator-freepik
-kubectl rollout restart deployment/jdr-generator-web
 echo Redémarrages des déploiements initiés.
-kubectl rollout status deployment/jdr-generator-gemini
-kubectl rollout status deployment/jdr-generator-openai
+echo.
+echo En attente du redémarrage complet des déploiements...
 kubectl rollout status deployment/jdr-generator-freepik
+kubectl rollout status deployment/jdr-generator-openai
+kubectl rollout status deployment/jdr-generator-gemini
 kubectl rollout status deployment/jdr-generator-mysql
 kubectl rollout status deployment/jdr-generator-api
 kubectl rollout status deployment/jdr-generator-web
-echo "Redémarrages des déploiements terminé."
+echo Redémarrages des déploiements terminé.
 
 
 REM --- ÉTAPE 6: Vérification des états ---

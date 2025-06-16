@@ -215,6 +215,45 @@ Les `ConfigMaps` et la configuration des applications Spring Boot
 (comme avec `GEMINI_API_URL: ${GEMINI_SERVICE_URL:-http://localhost:3001}/gemini`) assurent que les 
 bonnes URLs sont utilisées en production dans Kubernetes tout en permettant un développement local facilité.
 
+-----------
+
+## Installation de Helm (Gestionnaire de packages Kubernetes)
+
+Helm est un outil essentiel pour simplifier le déploiement et la gestion de d'applications sur Kubernetes. 
+Il agit comme un "Store" pour Kubernetes, permettant de définir, installer et mettre à jour des 
+applications complexes de manière structurée.
+
+### Qu'est-ce que Helm ?
+
+* **Helm** est un **gestionnaire de packages pour Kubernetes**. Il permet de simplifier le déploiement, la gestion et la mise à jour des applications sur votre cluster.
+
+* Un **Helm Chart** est un "package" Helm. Il contient toutes les ressources Kubernetes (Deployments, Services, ConfigMaps, Secrets, etc.) nécessaires au déploiement d'une application. C'est un ensemble de fichiers YAML organisés de manière standardisée et enrichis de fonctionnalités de templating (modèles) pour une configuration facile.
+
+* La commande `helm install <NOM_DE_VOTRE_APP> <CHEMIN_VERS_VOTRE_CHART>` (par exemple, `helm install my-app ./my-app-chart`) permet de déployer une application. Elle applique automatiquement les Secrets, ConfigMaps, Deployments et Services définis dans le Chart.
+
+* La commande `helm upgrade <NOM_DE_VOTRE_APP> <CHEMIN_VERS_VOTRE_CHART>` est utilisée pour mettre à jour une application déjà déployée. Elle gère les redémarrages nécessaires et applique les modifications de configuration ou de version.
+
+### Installation de Helm sur Windows via Winget
+
+1.  **Vérifier la version de Winget** (assurez-vous d'avoir Winget d'installé et à jour) :
+    Ouvrez un terminal de commande et exécutez :
+    ```powershell
+    winget -v
+    ```
+    Si winget n'est pas installé, vous pouvez utiliser un autre package manager : https://helm.sh/docs/intro/install/#through-package-managers
+    
+2.  **Installer Helm** :
+    Exécutez la commande suivante dans PowerShell. Vous devrez accepter les termes et conditions du Microsoft Store si c'est la première fois que vous utilisez cette source avec Winget.
+    ```powershell
+    winget install Helm.Helm
+    ```
+    *(Capture d'écran ici : L'invite d'acceptation des termes et l'avancement de l'installation)*
+
+3.  **Vérifier l'installation de Helm** :
+    Une fois l'installation terminée, **fermez et rouvrez votre fenêtre PowerShell** pour que les modifications du chemin soient prises en compte. Ensuite, exécutez :
+    ```powershell
+    helm version
+    ```
 
 ___________
 # Licence
