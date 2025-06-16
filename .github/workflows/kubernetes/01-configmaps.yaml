@@ -12,7 +12,7 @@ data:
   OPENAI_SERVICE_URL: "http://openai-container:3002"
   FREEPIK_SERVICE_URL: "http://freepik-container:3003"
   SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-container:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
-  SPRING_PROFILES_ACTIVE: "prod"
+  SPRING_PROFILES_ACTIVE: "prod,kubernetes"
   MAX_TOKEN: "2048"                 # Valeur commune
   DOWNLOAD_FOLDER: "jdr-generator"  # Conservé, note sur l'adaptation K8s maintenue
   USER_WINDOW: "fredericcoupez"     # Conservé, note sur l'adaptation K8s maintenue

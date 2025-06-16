@@ -5,9 +5,9 @@ logging:
     jdr.generator.api: DEBUG
 
 # Configuration de l'URL de l'API des IA
-GEMINI_API_URL: ${GEMINI_SERVICE_URL:-http://localhost:3001}/gemini
-OPENAI_API_URL: ${OPENAI_SERVICE_URL:-http://localhost:3002}/openai
-FREEPIK_API_URL: ${FREEPIK_SERVICE_URL:-http://localhost:3003}/freepik
+GEMINI_API_URL: ${GEMINI_SERVICE_URL:-http://gemini-container:3001}/gemini
+OPENAI_API_URL: ${OPENAI_SERVICE_URL:-http://openai-container:3002}/openai
+FREEPIK_API_URL: ${FREEPIK_SERVICE_URL:-http://freepik-container:3003}/freepik
 
 spring:
   application:

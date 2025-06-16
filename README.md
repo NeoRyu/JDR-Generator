@@ -361,6 +361,14 @@ JDR-Generator/
 │       │   ├── database-export
 │       │   │   └── Jenkinsfile                 <-- jobs pipeline a créer : http://localhost:8080/job
 │       │   └── Dockerfile                 <-- 2. docker build -t eli256/jenkins-docker-image .
+│       ├── kubernetes/
+│       │   ├── 00-secrets.yaml
+│       │   ├── 01-configmaps.yaml
+│       │   ├── 02-mysql.yaml
+│       │   ├── 03-api.yaml
+│       │   ├── 04-ai-modules.yaml
+│       │   ├── 05-frontend.yaml
+│       │   └── deploy-kubernetes.bat
 │       ├── localhost/
 │       │   ├── docker-push.bat          <-- Script shell ms-dos de push Docker Hub (via docker-compose.local.yml)
 │       │   ├── docker-start-app.sh      <-- Script shell linux deployant l'app dockerisée via docker-compose.local.yml

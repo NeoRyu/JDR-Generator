@@ -8,11 +8,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// C'EST CETTE LIGNE QUI DOIT ÊTRE ICI ET EN PREMIER POUR CHARGER LE .ENV
+// CETTE LIGNE DOIT ÊTRE ICI ET EN PREMIER POUR CHARGER LE .ENV
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const app = express();
-const port = process.env.FREEEPIK_PORT ? parseInt(process.env.FREEEPIK_PORT, 10) : 3003;
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3003;
 
 app.use(bodyParser.json());
 
@@ -23,8 +23,8 @@ app.get("/freepik/healthcheck", (_req, res) => {
       .json({ status: "OK", port: port });
 });
 
-app.listen(port, () => {
-  console.log(`Freepik API Server running on port ${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Freepik API Server running on http://0.0.0.0:${port}`);
   if (process.env.API_KEY) {
     console.log(`API_KEY loaded successfully.`);
   } else {
