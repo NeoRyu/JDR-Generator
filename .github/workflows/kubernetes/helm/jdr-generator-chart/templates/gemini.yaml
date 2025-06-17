@@ -1,0 +1,134 @@
+# jdr-generator-chart/templates/gemini.yaml
+{{- if .Values.gemini.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-gemini
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gemini
+
+spec:
+  replicas: {{ .Values.gemini.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jdr-generator-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: gemini
+
+  template:
+    metadata:
+      {{- with .Values.gemini.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: gemini
+        {{- with .Values.gemini.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "jdr-generator-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.gemini.podSecurityContext | nindent 8 }}
+
+      containers:
+        - name: gemini
+          securityContext:
+            {{- toYaml .Values.gemini.securityContext | nindent 12 }}
+          image: "{{ .Values.gemini.image.repository }}:{{ .Values.gemini.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.gemini.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.gemini.containerPort }}
+              protocol: TCP
+          envFrom:
+            {{- if .Values.configmaps.gemini.enabled }}
+            - configMapRef:
+                name: {{ include "jdr-generator-chart.fullname" . }}-gemini-config
+            {{- end }}
+          env:
+            - name: PORT
+              value: {{ .Values.gemini.containerPort | quote }}
+
+            {{- if .Values.secrets.gemini.enabled }}
+            {{- if .Values.gemini.apiKeyExistingSecret }}
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.gemini.apiKeyExistingSecret }}
+                  key: {{ .Values.gemini.apiKeySecretKey }}
+            {{- else if .Values.secrets.gemini.GEMINI_API_KEY }}
+            - name: GEMINI_API_KEY
+              value: {{ .Values.secrets.gemini.GEMINI_API_KEY }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.gemini.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.gemini.readinessProbe.httpGet.path | default "/gemini/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.gemini.readinessProbe.initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .Values.gemini.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.gemini.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.gemini.readinessProbe.failureThreshold | default 3 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.gemini.livenessProbe.httpGet.path | default "/gemini/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.gemini.livenessProbe.initialDelaySeconds | default 15 }}
+            periodSeconds: {{ .Values.gemini.livenessProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ .Values.gemini.livenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.gemini.livenessProbe.failureThreshold | default 3 }}
+
+          resources:
+            {{- toYaml .Values.gemini.resources | nindent 12 }}
+          {{- with .Values.gemini.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.gemini.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gemini.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gemini.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.gemini.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-gemini-service
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gemini
+
+spec:
+  type: {{ .Values.gemini.service.type }}
+  selector:
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    app.kubernetes.io/component: gemini
+  ports:
+    - port: {{ .Values.gemini.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+{{- end }}

@@ -1,0 +1,134 @@
+# jdr-generator-chart/templates/freepik.yaml
+{{- if .Values.freepik.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-freepik
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: freepik
+
+spec:
+  replicas: {{ .Values.freepik.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jdr-generator-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: freepik
+
+  template:
+    metadata:
+      {{- with .Values.freepik.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: freepik
+        {{- with .Values.freepik.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "jdr-generator-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.freepik.podSecurityContext | nindent 8 }}
+
+      containers:
+        - name: freepik
+          securityContext:
+            {{- toYaml .Values.freepik.securityContext | nindent 12 }}
+          image: "{{ .Values.freepik.image.repository }}:{{ .Values.freepik.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.freepik.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.freepik.containerPort }}
+              protocol: TCP
+          envFrom:
+            {{- if .Values.configmaps.freepik.enabled }}
+            - configMapRef:
+                name: {{ include "jdr-generator-chart.fullname" . }}-freepik-config
+            {{- end }}
+          env:
+            - name: PORT
+              value: {{ .Values.freepik.containerPort | quote }}
+
+            {{- if .Values.secrets.freepik.enabled }}
+            {{- if .Values.freepik.apiKeyExistingSecret }}
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.freepik.apiKeyExistingSecret }}
+                  key: {{ .Values.freepik.apiKeySecretKey }}
+            {{- else if .Values.secrets.freepik.FREEPIK_API_KEY }}
+            - name: FREEPIK_API_KEY
+              value: {{ .Values.secrets.freepik.FREEPIK_API_KEY }}
+            {{- end }}
+            {{- end }}
+            {{- with .Values.freepik.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.freepik.readinessProbe.httpGet.path | default "/freepik/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.freepik.readinessProbe.initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .Values.freepik.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.freepik.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.freepik.readinessProbe.failureThreshold | default 3 }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.freepik.livenessProbe.httpGet.path | default "/freepik/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.freepik.livenessProbe.initialDelaySeconds | default 15 }}
+            periodSeconds: {{ .Values.freepik.livenessProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ .Values.freepik.livenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.freepik.livenessProbe.failureThreshold | default 3 }}
+
+          resources:
+            {{- toYaml .Values.freepik.resources | nindent 12 }}
+          {{- with .Values.freepik.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.freepik.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.freepik.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.freepik.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.freepik.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-freepik-service
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: freepik
+
+spec:
+  type: {{ .Values.freepik.service.type }}
+  selector:
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    app.kubernetes.io/component: freepik
+  ports:
+    - port: {{ .Values.freepik.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+{{- end }}

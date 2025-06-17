@@ -1,4 +1,5 @@
 # jdr-generator-chart/templates/mysql.yaml
+{{- if .Values.mysql.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:

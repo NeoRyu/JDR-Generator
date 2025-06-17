@@ -1,0 +1,128 @@
+# jdr-generator-chart/templates/openai.yaml
+{{- if .Values.openai.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-openai
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: openai
+
+spec:
+  replicas: {{ .Values.openai.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jdr-generator-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: openai
+
+  template:
+    metadata:
+      {{- with .Values.openai.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: openai
+        {{- with .Values.openai.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "jdr-generator-chart.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.openai.podSecurityContext | nindent 8 }}
+
+      containers:
+        - name: openai
+          securityContext:
+            {{- toYaml .Values.openai.securityContext | nindent 12 }}
+          image: "{{ .Values.openai.image.repository }}:{{ .Values.openai.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.openai.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.openai.containerPort }}
+              protocol: TCP
+          env:
+            - name: PORT
+              value: {{ .Values.openai.containerPort | quote }}
+            {{- if .Values.secrets.openai.enabled }}
+            {{- if .Values.openai.apiKeyExistingSecret }}
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openai.apiKeyExistingSecret }}
+                  key: {{ .Values.openai.apiKeySecretKey }}
+            {{- else if .Values.secrets.openai.OPENAI_API_KEY }}
+            - name: OPENAI_API_KEY
+              value: {{ .Values.secrets.openai.OPENAI_API_KEY }}
+            {{- end }}
+            {{- end }}
+
+            {{- if .Values.openai.orgIdExistingSecret }} # AJOUTÉ pour ORGANIZATION_ID
+            - name: ORGANIZATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.openai.orgIdExistingSecret }}
+                  key: {{ .Values.openai.orgIdSecretKey }}
+                  {{- end }}
+                  {{- with .Values.openai.extraEnv }}
+                  {{- toYaml . | nindent 12 }}
+                  {{- end }}
+
+          {{- with .Values.openai.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.openai.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+          resources:
+            {{- toYaml .Values.openai.resources | nindent 12 }}
+          {{- with .Values.openai.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+
+      {{- with .Values.openai.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openai.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openai.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.openai.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-openai-service
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: openai
+
+spec:
+  type: {{ .Values.openai.service.type }}
+  selector:
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    app.kubernetes.io/component: openai
+  ports:
+    - port: {{ .Values.openai.service.port }}
+      targetPort: {{ .Values.openai.containerPort }}
+      protocol: TCP
+      name: http
+{{- end }}

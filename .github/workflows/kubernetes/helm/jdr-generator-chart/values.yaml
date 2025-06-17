@@ -1,123 +1,209 @@
-# Default values for jdr-generator-chart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+# jdr-generator-chart/values.yaml
 
-# This will set the replicaset count more information can be found here: https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
-replicaCount: 1
+# Valeurs globales pour le chart
+# imagePullSecrets: [] # Décommentez et configurez si vous utilisez un registre privé
+# nameOverride: "" # Pour surcharger le nom du chart
+# fullnameOverride: "" # Pour surcharger le nom complet (release-name-chart-name)
 
-# This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
-image:
-  repository: nginx
-  # This sets the pull policy for images.
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+# Configuration de la section GEMINI
+gemini:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eli256/jdr-generator-gemini
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  containerPort: 3001
+  service:
+    type: ClusterIP
+    port: 3001
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "200m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"
+  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeySecretKey: "GEMINI_API_KEY"
+  
+# Configuration de la section OPENAI
+openai:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eli256/jdr-generator-openai
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  containerPort: 3002
+  service:
+    type: ClusterIP
+    port: 3002
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "200m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"
+  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeySecretKey: "OPENAI_API_KEY"
+  orgIdExistingSecret: "jdr-generator-api-secrets"
+  orgIdSecretKey: "OPENAI_ORG_ID"
 
-# This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-imagePullSecrets: []
-# This is to override the chart name.
-nameOverride: ""
-fullnameOverride: ""
+# Configuration de la section FREEPIK
+freepik:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eli256/jdr-generator-freepik
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  containerPort: 3003
+  service:
+    type: ClusterIP
+    port: 3003
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "200m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"
+  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeySecretKey: "FREEPIK_API_KEY"
 
-# This section builds out the service account more information can be found here: https://kubernetes.io/docs/concepts/security/service-accounts/
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+# Configuration de la section WEB
+web:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eli256/jdr-generator-web
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  containerPort: 80
+  service:
+    type: ClusterIP
+    port: 80
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "200m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  livenessProbe: {}
+  readinessProbe: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  volumes: []
+  volumeMounts: []
 
-# This is for setting Kubernetes Annotations to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: {}
-# This is for setting Kubernetes Labels to a Pod.
-# For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-podLabels: {}
+# Configuration de la section MYSQL
+mysql:
+  enabled: true
+  replicaCount: 1
+  image:
+    tag: "5.7"
+  rootPassword: "root"
+  username: "jdr_user"
+  password: "root"
+  databaseName: "jdr_generator_db"
+  existingSecret: "jdr-generator-mysql-secrets"
+  persistence:
+    size: 5Gi
+  service:
+    port: 3306
 
-podSecurityContext: {}
-  # fsGroup: 2000
+# Configuration de la section API
+api:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: eli256/jdr-generator-api
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  containerPort: 8080
+  service:
+    type: ClusterIP
+    port: 8080
+  extraEnv:
+    - name: SPRING_PROFILES_ACTIVE
+      value: "kubernetes"
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1024Mi"
+      cpu: "1"
+  readinessProbe:
+    httpGet:
+      path: /actuator/health
+    failureThreshold: 3
+    timeoutSeconds: 7
+    periodSeconds: 15
+    initialDelaySeconds: 45
+  livenessProbe:
+    httpGet:
+      path: /actuator/health
+    failureThreshold: 3
+    timeoutSeconds: 7
+    periodSeconds: 15
+    initialDelaySeconds: 45
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
-# This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
-service:
-  # This sets the service type more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types
-  type: ClusterIP
-  # This sets the ports more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/#field-spec-ports
-  port: 80
+# Configuration de la section CONFIGMAPS
+configmaps:
+  # Configuration des CONFIGMAPS
+  api:
+    enabled: true
+    data:
+      SPRING_PROFILES_ACTIVE: "prod,kubernetes"
+      MAX_TOKEN: "2048"
+      DOWNLOAD_FOLDER: "jdr-generator"
+      USER_WINDOW: "fredericcoupez"
 
-# This block is for setting up the ingress for more information can be found here: https://kubernetes.io/docs/concepts/services-networking/ingress/
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  web:
+    enabled: true
+    data:
+      VITE_API_URL: "/"
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+  gemini:
+    enabled: true
+    data:
+      AI_TEXT_MODEL: "gemini-2.0-flash"
+      AI_IMAGE_MODEL: "gemini-2.0-flash-exp-image-generation"
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
+  freepik:
+    enabled: true
+    data:
+      AI_LIST: "https://www.freepik.com/api/pricing"
 
-# This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
+  openai:
+    enabled: true
+    data:
+      AI_TEXT_MODEL: "gpt-4o-mini"
+      AI_IMAGE_MODEL: "dall-e-3"
+      AI_LIST: "https://platform.openai.com/docs/models"
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+secrets:
+  mysql:
+    enabled: true
+  gemini:
+    enabled: true
+  openai:
+    enabled: true
+  freepik:
+    enabled: true
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+# serviceAccount:
+#   create: true
+#   automount: true
+#   annotations: {}
+#   name: ""
