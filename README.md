@@ -370,7 +370,22 @@ JDR-Generator/
 │       │   ├── 03-api.yaml
 │       │   ├── 04-ai-modules.yaml
 │       │   ├── 05-frontend.yaml
-│       │   └── deploy-kubernetes.bat
+│       │   ├── deploy-kubernetes.bat
+│       │   └── helm/
+│       │       └── jdr-generator-chart/
+│       │           ├── .helmignore
+│       │           ├── Chart.yaml
+│       │           ├── values.yaml
+│       │           ├── charts/
+│       │           └── templates/
+│       │               ├── _helpers.tpl
+│       │               ├── api.yaml
+│       │               ├── configmaps.yaml
+│       │               ├── freepik.yaml
+│       │               ├── gemini.yaml
+│       │               ├── mysql.yaml
+│       │               ├── openai.yaml
+│       │               └── web.yaml
 │       ├── localhost/
 │       │   ├── README.md
 │       │   ├── docker-push.bat          <-- Script shell ms-dos de push Docker Hub (via docker-compose.local.yml)

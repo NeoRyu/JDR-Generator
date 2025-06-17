@@ -37,23 +37,29 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: "mysql:{{ .Values.mysql.image.tag }}"
+          image: "{{ .Values.mysql.image }}"
           ports:
             - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mysql.existingSecret }}
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
-              value: {{ .Values.mysql.databaseName }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
+                  key: MYSQL_DATABASE
             - name: MYSQL_USER
-              value: {{ .Values.mysql.username }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
+                  key: MYSQL_USER
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mysql.existingSecret }}
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
                   key: MYSQL_PASSWORD
           volumeMounts:
             - name: mysql-persistent-storage
@@ -74,9 +80,9 @@ metadata:
   name: {{ include "jdr-generator-chart.fullname" . }}-mysql-init-config
 data:
   init.sql: |
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ .Values.mysql.rootPassword }}';
-    CREATE USER IF NOT EXISTS '{{ .Values.mysql.username }}'@'%' IDENTIFIED BY '{{ .Values.mysql.password }}';
-    GRANT ALL PRIVILEGES ON {{ .Values.mysql.databaseName }}.* TO '{{ .Values.mysql.username }}'@'%';
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ .Values.secrets.mysql.data.MYSQL_ROOT_PASSWORD }}';
+    CREATE USER IF NOT EXISTS '{{ .Values.secrets.mysql.data.MYSQL_USER }}'@'%' IDENTIFIED BY '{{ .Values.secrets.mysql.data.MYSQL_PASSWORD }}';
+    GRANT ALL PRIVILEGES ON {{ .Values.secrets.mysql.data.MYSQL_DATABASE }}.* TO '{{ .Values.secrets.mysql.data.MYSQL_USER }}'@'%';
     FLUSH PRIVILEGES;
 ---
 apiVersion: v1
@@ -96,3 +102,4 @@ spec:
       targetPort: 3306
       protocol: TCP
       name: mysql
+{{- end }}

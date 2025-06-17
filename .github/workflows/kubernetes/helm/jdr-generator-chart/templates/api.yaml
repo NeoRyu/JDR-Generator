@@ -54,7 +54,7 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mysql.existingSecret }}
+                  name: {{ .Values.mysql.existingSecretName }}
                   key: {{ .Values.mysql.passwordSecretKey | default "MYSQL_PASSWORD" }}
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:mysql://{{ include "jdr-generator-chart.fullname" . }}-mysql-service:{{ .Values.mysql.service.port }}/{{ .Values.mysql.databaseName }}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
@@ -79,17 +79,17 @@ spec:
             httpGet:
               path: {{ .Values.api.livenessProbe.httpGet.path | default "/actuator/health/liveness" }}
               port: {{ .Values.api.containerPort }}
-            initialDelaySeconds: {{ .Values.api.livenessProbe.initialDelaySeconds | default 60 }}
+            initialDelaySeconds: {{ .Values.api.livenessProbe.initialDelaySeconds | default 45 }}
             periodSeconds: {{ .Values.api.livenessProbe.periodSeconds | default 15 }}
-            timeoutSeconds: {{ .Values.api.livenessProbe.timeoutSeconds | default 5 }}
+            timeoutSeconds: {{ .Values.api.livenessProbe.timeoutSeconds | default 7 }}
             failureThreshold: {{ .Values.api.livenessProbe.failureThreshold | default 3 }}
           readinessProbe:
             httpGet:
               path: {{ .Values.api.readinessProbe.httpGet.path | default "/actuator/health/readiness" }}
               port: {{ .Values.api.containerPort }}
-            initialDelaySeconds: {{ .Values.api.readinessProbe.initialDelaySeconds | default 30 }}
+            initialDelaySeconds: {{ .Values.api.readinessProbe.initialDelaySeconds | default 45 }}
             periodSeconds: {{ .Values.api.readinessProbe.periodSeconds | default 10 }}
-            timeoutSeconds: {{ .Values.api.readinessProbe.timeoutSeconds | default 5 }}
+            timeoutSeconds: {{ .Values.api.readinessProbe.timeoutSeconds | default 7 }}
             failureThreshold: {{ .Values.api.readinessProbe.failureThreshold | default 3 }}
           resources:
             {{- toYaml .Values.api.resources | nindent 12 }}

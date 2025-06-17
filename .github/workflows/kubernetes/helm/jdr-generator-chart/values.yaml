@@ -2,8 +2,29 @@
 
 # Valeurs globales pour le chart
 # imagePullSecrets: [] # Décommentez et configurez si vous utilisez un registre privé
-# nameOverride: "" # Pour surcharger le nom du chart
-# fullnameOverride: "" # Pour surcharger le nom complet (release-name-chart-name)
+nameOverride: "" # Pour surcharger le nom du chart (ex: my-app)
+fullnameOverride: "" # Pour surcharger le nom complet (release-name-chart-name)
+
+serviceAccount:
+  create: true
+  name: ""
+podSecurityContext: {}
+  # fsGroup: 2000
+  # runAsGroup: 2000
+# runAsUser: 1000
+securityContext: {}
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+# runAsUser: 1000
+nodeSelector: {}
+affinity: {}
+tolerations: []
+volumes: []
+volumeMounts: []
 
 # Configuration de la section GEMINI
 gemini:
@@ -24,9 +45,35 @@ gemini:
     limits:
       memory: "256Mi"
       cpu: "300m"
-  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeyExistingSecret: "jdr-generator-ai-secrets"
   apiKeySecretKey: "GEMINI_API_KEY"
-  
+  livenessProbe:
+    httpGet:
+      path: /gemini/healthcheck
+      port: 3001
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /gemini/healthcheck
+      port: 3001
+    initialDelaySeconds: 25
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  extraEnv: [ ]
+  podAnnotations: { }
+  podLabels: { }
+  podSecurityContext: { }
+  securityContext: { }
+  volumeMounts: [ ]
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  volumes: [ ]
+
 # Configuration de la section OPENAI
 openai:
   enabled: true
@@ -46,10 +93,36 @@ openai:
     limits:
       memory: "256Mi"
       cpu: "300m"
-  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeyExistingSecret: "jdr-generator-ai-secrets"
   apiKeySecretKey: "OPENAI_API_KEY"
-  orgIdExistingSecret: "jdr-generator-api-secrets"
+  orgIdExistingSecret: "jdr-generator-ai-secrets"
   orgIdSecretKey: "OPENAI_ORG_ID"
+  livenessProbe:
+    httpGet:
+      path: /openai/healthcheck
+      port: 3002
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /openai/healthcheck
+      port: 3002
+    initialDelaySeconds: 25
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  extraEnv: []
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumeMounts: []
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  volumes: []
 
 # Configuration de la section FREEPIK
 freepik:
@@ -70,8 +143,34 @@ freepik:
     limits:
       memory: "256Mi"
       cpu: "300m"
-  apiKeyExistingSecret: "jdr-generator-api-secrets"
+  apiKeyExistingSecret: "jdr-generator-ai-secrets"
   apiKeySecretKey: "FREEPIK_API_KEY"
+  livenessProbe:
+    httpGet:
+      path: /freepik/healthcheck
+      port: 3003
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /freepik/healthcheck
+      port: 3003
+    initialDelaySeconds: 25
+    periodSeconds: 15
+    timeoutSeconds: 5
+    failureThreshold: 3
+  extraEnv: []
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumeMounts: []
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  volumes: []
 
 # Configuration de la section WEB
 web:
@@ -92,33 +191,80 @@ web:
     limits:
       memory: "256Mi"
       cpu: "300m"
-  podAnnotations: {}
-  podLabels: {}
-  podSecurityContext: {}
-  securityContext: {}
-  livenessProbe: {}
-  readinessProbe: {}
-  nodeSelector: {}
-  tolerations: []
-  affinity: {}
-  volumes: []
-  volumeMounts: []
+  livenessProbe:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  readinessProbe:
+    httpGet:
+      path: /
+      port: 80
+    initialDelaySeconds: 10
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 3
+  extraEnv: [ ]
+  podAnnotations: { }
+  podLabels: { }
+  podSecurityContext: { }
+  securityContext: { }
+  volumeMounts: [ ]
+  nodeSelector: { }
+  affinity: { }
+  tolerations: [ ]
+  volumes: [ ]
 
 # Configuration de la section MYSQL
 mysql:
   enabled: true
   replicaCount: 1
-  image:
-    tag: "5.7"
-  rootPassword: "root"
-  username: "jdr_user"
-  password: "root"
-  databaseName: "jdr_generator_db"
-  existingSecret: "jdr-generator-mysql-secrets"
+  image: mysql:5.7
+  containerPort: 3306
+  service:
+    type: ClusterIP
+    port: 3306
   persistence:
     size: 5Gi
-  service:
-    port: 3306
+  # Les identifiants MySQL ne sont plus directement sous 'mysql', mais sous 'secrets.mysql.data'
+  # existingSecret: "jdr-generator-mysql-secrets"
+  # rootPassword: "root"
+  # databaseName: "jdr_generator_db"
+  # username: "jdr_user"
+  # password: "root"
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "200m"
+    limits:
+      memory: "256Mi"
+      cpu: "300m"
+  livenessProbe:
+    tcpSocket:
+      port: 3306
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+  readinessProbe:
+    exec:
+      command: ["mysqladmin", "ping", "-h", "localhost"]
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumeMounts: []
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  volumes: []
 
 # Configuration de la section API
 api:
@@ -156,7 +302,15 @@ api:
     timeoutSeconds: 7
     periodSeconds: 15
     initialDelaySeconds: 45
-
+  podAnnotations: {}
+  podLabels: {}
+  podSecurityContext: {}
+  securityContext: {}
+  volumeMounts: []
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+  volumes: []
 
 # Configuration de la section CONFIGMAPS
 configmaps:
@@ -192,18 +346,30 @@ configmaps:
       AI_IMAGE_MODEL: "dall-e-3"
       AI_LIST: "https://platform.openai.com/docs/models"
 
+# Configuration des SECRETS
 secrets:
-  mysql:
-    enabled: true
   gemini:
     enabled: true
   openai:
     enabled: true
   freepik:
     enabled: true
-
-# serviceAccount:
-#   create: true
-#   automount: true
-#   annotations: {}
-#   name: ""
+  # Configuration pour le secret MySQL
+  mysql:
+    enabled: true
+    create: true
+    existingSecretName: "jdr-generator-mysql-secrets"
+    data:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "jdr_generator_db"
+      MYSQL_USER: "jdr_user"
+      MYSQL_PASSWORD: "root"
+  # Configuration pour le secret contenant TOUTES les clés API des IA (Gemini, OpenAI, Freepik)
+  aiKeys:
+    create: true
+    existingSecretName: "jdr-generator-ai-secrets"
+    # IMPORTANT : Le bloc 'data' pour aiKeys est intentionnellement ABSENT ici.
+    # Les données sensibles pour ce secret DOIVENT être fournies via
+    # un fichier de valeurs externe (par exemple, ai-secrets-values.yaml)
+    # lors de l'exécution de 'helm install/upgrade -f'.
+    # Ce fichier values.yaml NE CONTIENDRA PAS les clés d'API sensibles.

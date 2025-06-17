@@ -63,31 +63,29 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.gemini.apiKeyExistingSecret }}
                   key: {{ .Values.gemini.apiKeySecretKey }}
-            {{- else if .Values.secrets.gemini.GEMINI_API_KEY }}
-            - name: GEMINI_API_KEY
-              value: {{ .Values.secrets.gemini.GEMINI_API_KEY }}
             {{- end }}
             {{- end }}
             {{- with .Values.gemini.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
 
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.gemini.readinessProbe.httpGet.path | default "/gemini/healthcheck" }}
-              port: http
-            initialDelaySeconds: {{ .Values.gemini.readinessProbe.initialDelaySeconds | default 20 }}
-            periodSeconds: {{ .Values.gemini.readinessProbe.periodSeconds | default 15 }}
-            timeoutSeconds: {{ .Values.gemini.readinessProbe.timeoutSeconds | default 5 }}
-            failureThreshold: {{ .Values.gemini.readinessProbe.failureThreshold | default 3 }}
           livenessProbe:
             httpGet:
               path: {{ .Values.gemini.livenessProbe.httpGet.path | default "/gemini/healthcheck" }}
               port: http
-            initialDelaySeconds: {{ .Values.gemini.livenessProbe.initialDelaySeconds | default 15 }}
+            initialDelaySeconds: {{ .Values.gemini.livenessProbe.initialDelaySeconds | default 20 }}
             periodSeconds: {{ .Values.gemini.livenessProbe.periodSeconds | default 10 }}
             timeoutSeconds: {{ .Values.gemini.livenessProbe.timeoutSeconds | default 5 }}
             failureThreshold: {{ .Values.gemini.livenessProbe.failureThreshold | default 3 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.gemini.readinessProbe.httpGet.path | default "/gemini/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.gemini.readinessProbe.initialDelaySeconds | default 25 }}
+            periodSeconds: {{ .Values.gemini.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.gemini.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.gemini.readinessProbe.failureThreshold | default 3 }}
+
 
           resources:
             {{- toYaml .Values.gemini.resources | nindent 12 }}

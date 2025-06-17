@@ -55,33 +55,37 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.openai.apiKeyExistingSecret }}
+                  name: {{ .Values.secrets.aiKeys.existingSecretName }}
                   key: {{ .Values.openai.apiKeySecretKey }}
-            {{- else if .Values.secrets.openai.OPENAI_API_KEY }}
-            - name: OPENAI_API_KEY
-              value: {{ .Values.secrets.openai.OPENAI_API_KEY }}
             {{- end }}
             {{- end }}
-
             {{- if .Values.openai.orgIdExistingSecret }} # AJOUTÉ pour ORGANIZATION_ID
             - name: ORGANIZATION_ID
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.openai.orgIdExistingSecret }}
                   key: {{ .Values.openai.orgIdSecretKey }}
-                  {{- end }}
-                  {{- with .Values.openai.extraEnv }}
-                  {{- toYaml . | nindent 12 }}
-                  {{- end }}
+            {{- end }}
+            {{- with .Values.openai.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
 
-          {{- with .Values.openai.livenessProbe }}
           livenessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
-          {{- with .Values.openai.readinessProbe }}
+            httpGet:
+              path: {{ .Values.openai.livenessProbe.httpGet.path | default "/openai/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.openai.livenessProbe.initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .Values.openai.livenessProbe.periodSeconds | default 10 }}
+            timeoutSeconds: {{ .Values.openai.livenessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.openai.livenessProbe.failureThreshold | default 3 }}
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
-          {{- end }}
+            httpGet:
+              path: {{ .Values.openai.readinessProbe.httpGet.path | default "/openai/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.openai.readinessProbe.initialDelaySeconds | default 25 }}
+            periodSeconds: {{ .Values.openai.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.openai.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.openai.readinessProbe.failureThreshold | default 3 }}
 
           resources:
             {{- toYaml .Values.openai.resources | nindent 12 }}

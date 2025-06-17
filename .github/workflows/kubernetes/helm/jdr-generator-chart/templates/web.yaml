@@ -1,4 +1,5 @@
 # jdr-generator-chart/templates/web.yaml
+{{- if .Values.web.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -93,3 +94,4 @@ spec:
       targetPort: {{ .Values.web.containerPort }}
       protocol: TCP
       name: http
+{{- end }}

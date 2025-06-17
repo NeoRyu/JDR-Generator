@@ -14,7 +14,7 @@ data:
   GEMINI_SERVICE_URL: {{ printf "http://%s-gemini-service:%d" (include "jdr-generator-chart.fullname" .) .Values.gemini.service.port | quote }}
   OPENAI_SERVICE_URL: {{ printf "http://%s-openai-service:%d" (include "jdr-generator-chart.fullname" .) .Values.openai.service.port | quote }}
   FREEPIK_SERVICE_URL: {{ printf "http://%s-freepik-service:%d" (include "jdr-generator-chart.fullname" .) .Values.freepik.service.port | quote }}
-  SPRING_DATASOURCE_URL: {{ printf "jdbc:mysql://%s-mysql-service:%d/%s?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&serverTimezone=UTC" (include "jdr-generator-chart.fullname" .) .Values.mysql.service.port .Values.mysql.databaseName | quote }}
+  SPRING_DATASOURCE_URL: {{ printf "jdbc:mysql://%s-mysql-service:%d/%s?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&serverTimezone=Europe/Amsterdam" (include "jdr-generator-chart.fullname" .) .Values.mysql.service.port .Values.mysql.databaseName | quote }}
 
   # Autres configurations pour l'API, tirées de values.yaml
   {{- range $key, $value := .Values.configmaps.api.data }}
@@ -23,7 +23,7 @@ data:
 ---
 {{- end }}
 
-{{- /* ConfigMap pour le service Web (React) */}}
+{{- /* ConfigMap pour le service Web (React/TS) */}}
 {{- if .Values.configmaps.web.enabled }}
 apiVersion: v1
 kind: ConfigMap

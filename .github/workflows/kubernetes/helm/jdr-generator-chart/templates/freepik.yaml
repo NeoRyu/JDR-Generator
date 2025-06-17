@@ -63,31 +63,28 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.freepik.apiKeyExistingSecret }}
                   key: {{ .Values.freepik.apiKeySecretKey }}
-            {{- else if .Values.secrets.freepik.FREEPIK_API_KEY }}
-            - name: FREEPIK_API_KEY
-              value: {{ .Values.secrets.freepik.FREEPIK_API_KEY }}
             {{- end }}
             {{- end }}
             {{- with .Values.freepik.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
 
-          readinessProbe:
-            httpGet:
-              path: {{ .Values.freepik.readinessProbe.httpGet.path | default "/freepik/healthcheck" }}
-              port: http
-            initialDelaySeconds: {{ .Values.freepik.readinessProbe.initialDelaySeconds | default 20 }}
-            periodSeconds: {{ .Values.freepik.readinessProbe.periodSeconds | default 15 }}
-            timeoutSeconds: {{ .Values.freepik.readinessProbe.timeoutSeconds | default 5 }}
-            failureThreshold: {{ .Values.freepik.readinessProbe.failureThreshold | default 3 }}
           livenessProbe:
             httpGet:
               path: {{ .Values.freepik.livenessProbe.httpGet.path | default "/freepik/healthcheck" }}
               port: http
-            initialDelaySeconds: {{ .Values.freepik.livenessProbe.initialDelaySeconds | default 15 }}
+            initialDelaySeconds: {{ .Values.freepik.livenessProbe.initialDelaySeconds | default 20 }}
             periodSeconds: {{ .Values.freepik.livenessProbe.periodSeconds | default 10 }}
             timeoutSeconds: {{ .Values.freepik.livenessProbe.timeoutSeconds | default 5 }}
             failureThreshold: {{ .Values.freepik.livenessProbe.failureThreshold | default 3 }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.freepik.readinessProbe.httpGet.path | default "/freepik/healthcheck" }}
+              port: http
+            initialDelaySeconds: {{ .Values.freepik.readinessProbe.initialDelaySeconds | default 25 }}
+            periodSeconds: {{ .Values.freepik.readinessProbe.periodSeconds | default 15 }}
+            timeoutSeconds: {{ .Values.freepik.readinessProbe.timeoutSeconds | default 5 }}
+            failureThreshold: {{ .Values.freepik.readinessProbe.failureThreshold | default 3 }}
 
           resources:
             {{- toYaml .Values.freepik.resources | nindent 12 }}

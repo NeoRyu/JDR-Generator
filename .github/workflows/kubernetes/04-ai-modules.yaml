@@ -36,7 +36,7 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-api-secrets
+                  name: jdr-generator-ai-secrets
                   key: GEMINI_API_KEY
           livenessProbe:
             httpGet:
@@ -101,12 +101,12 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-api-secrets
+                  name: jdr-generator-ai-secrets
                   key: OPENAI_API_KEY
             - name: ORGANIZATION_ID
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-api-secrets
+                  name: jdr-generator-ai-secrets
                   key: OPENAI_ORG_ID
           livenessProbe:
             httpGet:
@@ -171,7 +171,7 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-api-secrets
+                  name: jdr-generator-ai-secrets
                   key: FREEPIK_API_KEY
           livenessProbe:
             httpGet:
