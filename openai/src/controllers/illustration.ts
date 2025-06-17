@@ -1,19 +1,49 @@
 import {Request, Response} from "express";
 import * as fs from "fs";
 
+/**
+ * @file Contrôleur pour la génération d'images via l'API OpenAI (DALL-E).
+ * @description Ce fichier gère la configuration de l'API DALL-E, l'appel à l'API,
+ * le traitement de la réponse (Base64), la sauvegarde locale de l'image,
+ * et une logique de tentatives multiples en cas d'erreurs serveur.
+ */
+
 // --- Global Configuration ---
+/**
+ * Modèle DALL-E à utiliser pour la génération d'images.
+ * Récupéré depuis la variable d'environnement `AI_IMAGE_MODEL` ou utilise "dall-e-3" par défaut.
+ * @type {string}
+ */
 const dallEModel = process.env.AI_IMAGE_MODEL || "dall-e-3";
+
+/**
+ * Nom du dossier de téléchargement pour les fichiers générés.
+ * Récupéré depuis la variable d'environnement `DOWNLOAD_FOLDER` ou "default" par défaut.
+ * @type {string}
+ */
 const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
+
+/**
+ * Nombre maximal de tentatives pour l'appel API en cas d'erreur serveur (500/503).
+ * @type {number}
+ */
 const maxRetries = 3;
 
 // --- OpenAI Configuration ---
+/**
+ * Vérifie si la clé API OpenAI est définie dans les variables d'environnement.
+ * Log une erreur si elle est manquante.
+ */
 if (!process.env.API_KEY) {
   console.error(
     "API_KEY environment variable is not set. OpenAI API calls will fail.",
   );
 }
 
-// Définissez une interface pour la structure de la réponse de l'API OpenAI pour la génération d'images
+/**
+ * Interface décrivant la structure attendue de la réponse de l'API OpenAI
+ * pour une génération d'image (DALL-E).
+ */
 interface OpenAIImageGenerationResponse {
   created: number;
   data?: {
@@ -29,10 +59,27 @@ interface OpenAIImageGenerationResponse {
   };
 }
 
-// Function to check if we are in a local environment
+/**
+ * Vérifie si l'application s'exécute dans un environnement de développement local.
+ * @returns {boolean} True si `NODE_ENV` n'est pas "production", false sinon.
+ */
 const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
+
 // Controller function to generate the illustration
+/**
+ * Contrôleur pour générer une illustration en utilisant l'API OpenAI (DALL-E).
+ * Gère l'appel à l'API, le traitement de la réponse Base64, la sauvegarde locale
+ * en environnement de développement, et une logique de tentatives en cas d'erreurs serveur.
+ *
+ * @async
+ * @param {Request} req - L'objet requête Express. Le corps de la requête (`req.body`)
+ *                        doit contenir la propriété `prompt` (le texte décrivant l'image souhaitée).
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ *                          En cas de succès, renvoie un JSON avec la propriété `image` (Base64) et un `message`.
+ *                          En cas d'échec ou d'erreur, renvoie un statut d'erreur approprié avec un message.
+ */
 export const generateImage = async (
   req: Request,
   res: Response,
