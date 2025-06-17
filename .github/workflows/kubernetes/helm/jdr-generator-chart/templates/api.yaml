@@ -50,14 +50,17 @@ spec:
             {{- end }}
           env:
             - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.mysql.username | quote }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
+                  key: MYSQL_USER
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.mysql.existingSecretName }}
-                  key: {{ .Values.mysql.passwordSecretKey | default "MYSQL_PASSWORD" }}
+                  name: {{ .Values.secrets.mysql.existingSecretName }}
+                  key: MYSQL_PASSWORD
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://{{ include "jdr-generator-chart.fullname" . }}-mysql-service:{{ .Values.mysql.service.port }}/{{ .Values.mysql.databaseName }}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+              value: "jdbc:mysql://{{ include "jdr-generator-chart.fullname" . }}-mysql-service:{{ .Values.mysql.service.port }}/{{ .Values.secrets.mysql.data.MYSQL_DATABASE }}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
 
             {{- if .Values.gemini.enabled }}
             - name: GEMINI_SERVICE_URL

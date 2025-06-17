@@ -1,9 +1,9 @@
 # jdr-generator-chart/values.yaml
 
 # Valeurs globales pour le chart
-# imagePullSecrets: [] # Décommentez et configurez si vous utilisez un registre privé
-nameOverride: "" # Pour surcharger le nom du chart (ex: my-app)
-fullnameOverride: "" # Pour surcharger le nom complet (release-name-chart-name)
+# imagePullSecrets: []
+nameOverride: "" # Pour surcharger le nom du chart
+fullnameOverride: "" # Pour surcharger le nom complet
 
 serviceAccount:
   create: true
@@ -372,4 +372,4 @@ secrets:
     # Les données sensibles pour ce secret DOIVENT être fournies via
     # un fichier de valeurs externe (par exemple, ai-secrets-values.yaml)
     # lors de l'exécution de 'helm install/upgrade -f'.
-    # Ce fichier values.yaml NE CONTIENDRA PAS les clés d'API sensibles.
+    # Ce fichier 'values.yaml' NE CONTIENDRA PAS les clés d'API sensibles.

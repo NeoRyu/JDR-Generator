@@ -10,3 +10,5 @@ openai/.env
 # Kubernetes secrets (DO NOT COMMIT!)
 .github/workflows/kubernetes/00-secrets.yaml
 kubernetes/00-secrets.yaml
+# Helm secrets values (DO NOT COMMIT!)
+.github/workflows/kubernetes/helm/jdr-generator-chart/ai-secrets-values.yaml
