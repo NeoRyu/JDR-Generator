@@ -1,0 +1,97 @@
+# jdr-generator-chart/templates/mysql.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }} -mysql-pv-claim
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.mysql.persistence.size }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-mysql
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mysql
+spec:
+  replicas: {{ .Values.mysql.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "jdr-generator-chart.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: "mysql:{{ .Values.mysql.image.tag }}"
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.existingSecret }}
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mysql.databaseName }}
+            - name: MYSQL_USER
+              value: {{ .Values.mysql.username }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.mysql.existingSecret }}
+                  key: MYSQL_PASSWORD
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: {{ include "jdr-generator-chart.fullname" . }}-mysql-pv-claim
+        - name: mysql-initdb
+          configMap:
+            name: {{ include "jdr-generator-chart.fullname" . }}-mysql-init-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-mysql-init-config
+data:
+  init.sql: |
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '{{ .Values.mysql.rootPassword }}';
+    CREATE USER IF NOT EXISTS '{{ .Values.mysql.username }}'@'%' IDENTIFIED BY '{{ .Values.mysql.password }}';
+    GRANT ALL PRIVILEGES ON {{ .Values.mysql.databaseName }}.* TO '{{ .Values.mysql.username }}'@'%';
+    FLUSH PRIVILEGES;
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-mysql-service
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mysql
+spec:
+  type: ClusterIP
+  selector:
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    app.kubernetes.io/component: mysql
+  ports:
+    - port: {{ .Values.mysql.service.port }}
+      targetPort: 3306
+      protocol: TCP
+      name: mysql
