@@ -1,4 +1,4 @@
-# JDR-Generator Web (Frontend)
+# JDR-Generator - Module WEB (Frontend React/TypeScript)
 
 ## Description
 

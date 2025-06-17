@@ -1,4 +1,4 @@
-# JDR-Generator API (OpenAI)
+# JDR-Generator - Module FREEPIK (API IA)
 
 ## Description
 
