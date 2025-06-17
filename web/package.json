@@ -11,17 +11,14 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docs": "typedoc --out docs src/*.tsx src/services/*.ts src/pages/home/*.tsx src/pages/home/listes/*.tsx src/lib/*.ts src/components/*"
   },
-  "author": "NeoRyu",
+  "author": "NeoRyu (COUPEZ Frédéric)",
   "keywords": [
-    "jdr-generator",
-    "ia",
-    "gemini",
-    "chatgpt",
-    "dall-e",
-    "imagen",
-    "Neo_Ryu"
+    "Neo_Ryu" ,"jdr-generator",
+    "ia", "freepik", "gemini",
+    "imagen", "chatgpt", "dall-e"
   ],
   "license": "Apache License",
   "description": "NodeJS Frontend React/Typescript UI to interact with module 'api'",
@@ -58,6 +55,7 @@
     "postcss": "^8.4.32",
     "prettier": "3.5.3",
     "tailwindcss": "^3.4.0",
+    "typedoc": "^0.28.5",
     "typescript": "^5.2.2",
     "typescript-eslint": "^8.32.1",
     "vite": "^5.4.19"
