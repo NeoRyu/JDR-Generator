@@ -8,8 +8,27 @@ import {
 } from "@google/generative-ai";
 import * as fs from "fs";
 
-// Configuration requise
+/**
+ * @fileoverview Contrôleur pour la génération d'images via l'API Gemini (Imagen).
+ * Gère la communication avec le modèle d'image de Gemini, le traitement de la réponse,
+ * la sauvegarde de l'image et la gestion des erreurs, y compris une logique de tentatives multiples.
+ */
+
+// --- Configuration requise du modèle Gemini pour les images ---
+
+/**
+ * Instance du client GoogleGenerativeAI.
+ * Initialisée avec la clé API depuis les variables d'environnement.
+ * @type {GoogleGenerativeAI}
+ */
 const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
+
+/**
+ * Instance du modèle génératif Gemini pour les images (Imagen).
+ * Configuré avec le modèle d'image spécifié dans les variables d'environnement.
+ * Note: `responseModalities` est utilisé pour indiquer que nous attendons du texte et une image.
+ * @type {GenerativeModel}
+ */
 const model: GenerativeModel = genAI.getGenerativeModel({
   model: ''+process.env.AI_IMAGE_MODEL,
   generationConfig: {
@@ -18,7 +37,22 @@ const model: GenerativeModel = genAI.getGenerativeModel({
   },
 });
 
-// Fonction contrôleur pour gérer les conversations
+
+// --- Fonction Contrôleur ---
+
+/**
+ * Génère une image en utilisant l'API Gemini (Imagen) basé sur un prompt fourni.
+ * La fonction inclut une logique de tentatives multiples en cas d'erreur 503 (Service Unavailable).
+ * L'image générée est renvoyée en Base64 et sauvegardée localement en mode développement.
+ *
+ * @async
+ * @param {Request} req - L'objet requête Express. Le corps de la requête doit contenir :
+ *                        `req.body.prompt`: Le prompt textuel pour la génération de l'image.
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ *                          En cas de succès, envoie un JSON avec la propriété `image` (Base64) et un `message`.
+ *                          En cas d'échec ou d'erreur, envoie un statut d'erreur approprié avec un message.
+ */
 export const generateImage = async (
   req: Request,
   res: Response,
