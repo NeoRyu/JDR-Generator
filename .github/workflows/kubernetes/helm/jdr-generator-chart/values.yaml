@@ -26,6 +26,9 @@ tolerations: []
 volumes: []
 volumeMounts: []
 
+tests:
+  enabled: true # helm lint
+
 # Configuration de la section GEMINI
 gemini:
   enabled: true

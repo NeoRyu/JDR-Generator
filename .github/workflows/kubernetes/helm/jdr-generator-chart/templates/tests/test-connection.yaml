@@ -1,3 +1,5 @@
+# jdr-generator-chart/templates/tests/test-connection.yaml
+{{- if .Values.tests.enabled }}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -11,5 +13,10 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "jdr-generator-chart.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "jdr-generator-chart.fullname" . }}-web-service:{{ .Values.web.service.port }}']
+    - name: wget
+      image: busybox
+      command: [ 'wget' ]
+      args: [ '{{ include "jdr-generator-chart.fullname" . }}-api-service:{{ .Values.api.service.port }}' ]
   restartPolicy: Never
+{{- end }}
