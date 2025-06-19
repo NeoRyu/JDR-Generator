@@ -161,7 +161,7 @@ start powershell.exe -NoExit -Command "kubectl describe deployment/jdr-generator
 REM
 REM Pour que le navigateur puisse accéder à une application qui tourne dans Kubernetes, nous devons
 REM transférer le trafic du port 3080 de la machine locale vers le port 80 du conteneur du frontend
-REM dans le cluster. localhost:8080 sera alors le point d'entrée principal pour l'utilisateur final.
+REM dans le cluster. localhost:3080 sera alors le point d'entrée principal pour l'utilisateur final.
 REM
 echo.
 

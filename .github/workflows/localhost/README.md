@@ -2,8 +2,6 @@
 
 ## Table des Matières
 
-## Table des Matières
-
 1.  [Structure du Projet](#structure-du-projet)
 2.  [Exécution Locale avec Docker et Docker Compose](#exécution-locale-avec-docker-et-docker-compose)
     * [Prérequis](#prérequis)

@@ -55,7 +55,7 @@ spec:
             - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ .Values.secrets.aiKeys.existingSecretName }}
+                  name: {{ .Values.secrets.apiKeys.existingSecretName }}
                   key: {{ .Values.openai.apiKeySecretKey }}
             {{- end }}
             {{- end }}

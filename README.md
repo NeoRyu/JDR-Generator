@@ -309,12 +309,13 @@ JDR-Generator/
 │   │   │   │   ├── character-full.model.tsx
 │   │   │   │   ├── character-illustration.model.tsx
 │   │   │   │   └── character-json.model.tsx
-│   │   │   ├── ui
-│   │   │   │   └── ...                      <-- divers elements .tsx pour l'interface web
+│   │   │   ├── hooks/
+│   │   │   │   └── use-toast.ts
+│   │   │   ├── ui/ ...                      <-- divers elements .tsx pour l'interface web
 │   │   │   └── theme-provider.tsx
 │   │   ├── lib/ 
 │   │   │   └── utils.ts
-│   │   ├── pages/ (home/)
+│   │   ├── pages/
 │   │   │   └── home/
 │   │   │       ├── listes/                  <-- Fourni des listes de présaisie (non limitative) pour le contexte
 │   │   │       │   ├── characterClasses.tsx
@@ -327,24 +328,41 @@ JDR-Generator/
 │   │   │       ├── readCharacterContent.tsx                <-- Modale le visualisation du perso complet
 │   │   │       ├── updateCharacterContent.tsx              <-- Modale de mise a jour du perso (cf: character-form)
 │   │   │       ├── regenerateIllustrationButton.tsx        <-- Boutton mettant a jour le portrait du perso
+│   │   │       ├── generatePdfButton.tsx                   <-- Boutton generant la fiche PDF du perso
 │   │   │       └── deleteCharacterContent.tsx              <-- Suppression definitive d'un perso
 │   │   ├── services/                       <-- C'est ici que sont fait les call vers le module 'api'
 │   │   │   ├── getListCharacterFull.service.ts
 │   │   │   ├── createCharacter.service.ts
 │   │   │   ├── updateCharacter.service.ts
 │   │   │   ├── illustrateCharacter.service.ts
+│   │   │   ├── generatePdf.service.ts
 │   │   │   └── deleteCharacter.service.ts
 │   │   ├── App.tsx
 │   │   ├── main.tsx
-│   │   └── vite-env.d.ts
+│   │   ├── vite-env.d.ts
+│   │   ├── type.d.ts
+│   │   └── global.css
+│   ├── .gitignore
+│   ├── .ebignore
+│   ├── .env.local                          <-- VITE_API_URL=http://localhost:8080
+│   ├── favicon (.ico/.png)
+│   ├── nginx.conf
 │   ├── vite.config.ts
 │   ├── tailwind.config.ts
 │   ├── postcss.config.ts
+│   ├── eslint.config.js
 │   ├── tsconfig.json
+│   ├── tsconfig.node.json
+│   ├── component.json
 │   ├── package.json
 │   ├── index.html
-│   ├── Dockerfile                          <-- Dockerfile pour le service Web
-│   └── component.json
+│   └── Dockerfile                          <-- Dockerfile pour le service Web
+├── .documentation/ 
+│     ├── api/ index.html         <-- point d'entrée de la documentation technique du module API
+│     ├── freepik/ index.html     <-- point d'entrée de la documentation technique du module FREEPIK
+│     ├── gemini/ index.html      <-- point d'entrée de la documentation technique du module GEMINI
+│     ├── openai/ index.html      <-- point d'entrée de la documentation technique du module OPENAI
+│     └── web/ index.html         <-- point d'entrée de la documentation technique du module WEB
 ├── .github/
 │   └── workflows/
 │       ├── aws/                         <-- TODO : non fonctionnel, laissé pour y regarder plus tard...

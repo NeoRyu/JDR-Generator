@@ -365,11 +365,11 @@ secrets:
       MYSQL_USER: "jdr_user"
       MYSQL_PASSWORD: "root"
   # Configuration pour le secret contenant TOUTES les clés API des IA (Gemini, OpenAI, Freepik)
-  aiKeys:
+  apiKeys:
     create: true
     existingSecretName: "jdr-generator-ai-secrets"
     # IMPORTANT : Le bloc 'data' pour aiKeys est intentionnellement ABSENT ici.
-    # Les données sensibles pour ce secret DOIVENT être fournies via
-    # un fichier de valeurs externe (par exemple, ai-secrets-values.yaml)
-    # lors de l'exécution de 'helm install/upgrade -f'.
-    # Ce fichier 'values.yaml' NE CONTIENDRA PAS les clés d'API sensibles.
+    # Les données sensibles pour ce secret DOIVENT sont fournies via un fichier
+    # de valeurs externe ( ai-secrets-values.yaml) lors de l'exécution
+    # de 'helm install/upgrade -f'
+    # De fait ce fichier 'values.yaml' NE CONTIENDRA PAS les clés d'API sensibles.

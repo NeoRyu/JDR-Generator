@@ -50,6 +50,7 @@ JDR-Generator/
 │       │           ├── .helmignore
 │       │           ├── Chart.yaml
 │       │           ├── values.yaml
+│       │           ├── ai-secrets-values.yaml
 │       │           ├── charts/
 │       │           └── templates/
 │       │               ├── _helpers.tpl
