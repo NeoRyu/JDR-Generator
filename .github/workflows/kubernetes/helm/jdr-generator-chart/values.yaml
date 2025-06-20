@@ -1,7 +1,7 @@
 # jdr-generator-chart/values.yaml
 
 # Valeurs globales pour le chart
-# imagePullSecrets: []
+imagePullSecrets: []
 nameOverride: "" # Pour surcharger le nom du chart
 fullnameOverride: "" # Pour surcharger le nom complet
 

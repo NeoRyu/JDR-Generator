@@ -31,12 +31,16 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "jdr-generator-chart.serviceAccountName" . }}
+      {{- with .Values.api.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.api.podSecurityContext | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: api
+          {{- with .Values.api.securityContext }}
           securityContext:
-            {{- toYaml .Values.api.securityContext | nindent 12 }}
+            {{- toYaml  | nindent 12 }}
+          {{- end }}
           image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.api.image.pullPolicy }}
           ports:
@@ -127,7 +131,7 @@ metadata:
 spec:
   type: {{ .Values.api.service.type }}
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: api
   ports:
     - port: {{ .Values.api.service.port }}

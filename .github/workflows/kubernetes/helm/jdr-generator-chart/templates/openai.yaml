@@ -122,7 +122,7 @@ metadata:
 spec:
   type: {{ .Values.openai.service.type }}
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: openai
   ports:
     - port: {{ .Values.openai.service.port }}

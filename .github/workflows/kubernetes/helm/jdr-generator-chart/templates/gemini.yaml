@@ -122,7 +122,7 @@ metadata:
 spec:
   type: {{ .Values.gemini.service.type }}
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: gemini
   ports:
     - port: {{ .Values.gemini.service.port }}

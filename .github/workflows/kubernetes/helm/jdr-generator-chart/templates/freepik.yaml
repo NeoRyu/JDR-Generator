@@ -121,7 +121,7 @@ metadata:
 spec:
   type: {{ .Values.freepik.service.type }}
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: freepik
   ports:
     - port: {{ .Values.freepik.service.port }}

@@ -87,7 +87,7 @@ metadata:
 spec:
   type: {{ .Values.web.service.type }}
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: web
   ports:
     - port: {{ .Values.web.service.port }}

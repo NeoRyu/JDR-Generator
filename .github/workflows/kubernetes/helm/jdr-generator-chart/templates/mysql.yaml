@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "jdr-generator-chart.fullname" . }} -mysql-pv-claim
+  name: {{ include "jdr-generator-chart.fullname" . }}-mysql-pv-claim
   labels:
     {{- include "jdr-generator-chart.labels" . | nindent 4 }}
     app.kubernetes.io/component: mysql
@@ -95,7 +95,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    {{- include "jdr-generator-chart.selectorLabels" . | nindent 8 }}
+    {{- include "jdr-generator-chart.selectorLabels" . | nindent 4 }}
     app.kubernetes.io/component: mysql
   ports:
     - port: {{ .Values.mysql.service.port }}

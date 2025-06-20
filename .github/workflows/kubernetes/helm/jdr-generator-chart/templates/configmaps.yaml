@@ -34,9 +34,9 @@ metadata:
     app.kubernetes.io/component: web-config
 data:
   # L'URL de l'API pour le frontend.
-  # Si VITE_API_URL doit être l'URL complète du service API dans le cluster:
-  # VITE_API_URL: {{ printf "http://%s-api-service:%d" (include "jdr-generator-chart.fullname" .) .Values.api.service.port | quote }}
-  # Si VITE_API_URL est un chemin relatif (ex: "/") car Nginx ou un Ingress gère le proxying:
+  # Si VITE_API_URL doit être l'URL complète du service API dans le cluster :
+  # VITE_API_URL : {{ printf "http://%s-api-service:%d" (include "jdr-generator-chart.fullname" .) .Values.api.service.port | quote }}
+  # Si VITE_API_URL est un chemin relatif (ex : "/") car Nginx ou un Ingress gère le proxying :
   {{- range $key, $value := .Values.configmaps.web.data }}
   {{ $key }}: {{ $value | quote }}
   {{- end }}
