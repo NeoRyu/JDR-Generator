@@ -1,0 +1,835 @@
+---
+# Source: jdr-generator-chart/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jdr-generator-sa
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+automountServiceAccountToken:
+---
+# Source: jdr-generator-chart/templates/secrets.yaml
+# jdr-generator-chart/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jdr-generator-ai-secrets
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: ai-keys
+type: Opaque
+stringData:
+  # C'est ici que les clés sont injectées dynamiquement lors du déploiement
+  # helm template . -f values.yaml -f ai-secrets-values.yaml > output_with_secrets.yaml --debug
+---
+# Source: jdr-generator-chart/templates/secrets.yaml
+# Secret pour les identifiants MySQL
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jdr-generator-mysql-secrets
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mysql-secrets
+type: Opaque
+stringData:
+  MYSQL_DATABASE: "jdr_generator_db"
+  MYSQL_PASSWORD: "root"
+  MYSQL_ROOT_PASSWORD: "root"
+  MYSQL_USER: "jdr_user"
+---
+# Source: jdr-generator-chart/templates/configmaps.yaml
+# jdr-generator-chart/templates/configmaps.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-api-config
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api-config
+data:
+  # Les URLs des services internes sont construites dynamiquement
+  GEMINI_SERVICE_URL: "http://release-name-jdr-generator-chart-gemini-service:%!d(float64=3001)"
+  OPENAI_SERVICE_URL: "http://release-name-jdr-generator-chart-openai-service:%!d(float64=3002)"
+  FREEPIK_SERVICE_URL: "http://release-name-jdr-generator-chart-freepik-service:%!d(float64=3003)"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://release-name-jdr-generator-chart-mysql-service:%!d(float64=3306)/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&serverTimezone=UTC"
+
+  # Autres configurations pour l'API, tirées de values.yaml
+  DOWNLOAD_FOLDER: "jdr-generator"
+  MAX_TOKEN: "2048"
+  SPRING_PROFILES_ACTIVE: "prod,kubernetes"
+  USER_WINDOW: "fredericcoupez"
+---
+# Source: jdr-generator-chart/templates/configmaps.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-web-config
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: web-config
+data:
+  # L'URL de l'API pour le frontend.
+  # Si VITE_API_URL doit être l'URL complète du service API dans le cluster :
+  # VITE_API_URL : "http://release-name-jdr-generator-chart-api-service:%!d(float64=8080)"
+  # Si VITE_API_URL est un chemin relatif (ex : "/") car Nginx ou un Ingress gère le proxying :
+  VITE_API_URL: "/"
+---
+# Source: jdr-generator-chart/templates/configmaps.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-gemini-config
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: gemini-config
+data:
+  AI_IMAGE_MODEL: "gemini-2.0-flash-exp-image-generation"
+  AI_TEXT_MODEL: "gemini-2.0-flash"
+---
+# Source: jdr-generator-chart/templates/configmaps.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-freepik-config
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: freepik-config
+data:
+  AI_LIST: "https://www.freepik.com/api/pricing"
+---
+# Source: jdr-generator-chart/templates/configmaps.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-openai-config
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: openai-config
+data:
+  AI_IMAGE_MODEL: "dall-e-3"
+  AI_LIST: "https://platform.openai.com/docs/models"
+  AI_TEXT_MODEL: "gpt-4o-mini"
+---
+# Source: jdr-generator-chart/templates/mysql.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: release-name-jdr-generator-chart-mysql-init-config
+data:
+  init.sql: |
+    ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+    CREATE USER IF NOT EXISTS 'jdr_user'@'%' IDENTIFIED BY 'root';
+    GRANT ALL PRIVILEGES ON jdr_generator_db.* TO 'jdr_user'@'%';
+    FLUSH PRIVILEGES;
+---
+# Source: jdr-generator-chart/templates/mysql-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: release-name-jdr-generator-chart-mysql-pv-claim
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    # Cette annotation indique à Helm de NE PAS supprimer ce PVC lors d'un 'helm uninstall'.
+    # Cela permet de conserver les donnees de la base de donnees.
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+# Source: jdr-generator-chart/templates/mysql.yaml
+# jdr-generator-chart/templates/mysql.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: release-name-jdr-generator-chart-mysql-pv-claim
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+# Source: jdr-generator-chart/templates/api.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-api-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: api
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+---
+# Source: jdr-generator-chart/templates/freepik.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-freepik-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: freepik
+
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: freepik
+  ports:
+    - port: 3003
+      targetPort: http
+      protocol: TCP
+      name: http
+---
+# Source: jdr-generator-chart/templates/gemini.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-gemini-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: gemini
+
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: gemini
+  ports:
+    - port: 3001
+      targetPort: http
+      protocol: TCP
+      name: http
+---
+# Source: jdr-generator-chart/templates/mysql.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-mysql-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mysql
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: mysql
+  ports:
+    - port: 3306
+      targetPort: 3306
+      protocol: TCP
+      name: mysql
+---
+# Source: jdr-generator-chart/templates/openai.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-openai-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: openai
+
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: openai
+  ports:
+    - port: 3002
+      targetPort: 3002
+      protocol: TCP
+      name: http
+---
+# Source: jdr-generator-chart/templates/web.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: release-name-jdr-generator-chart-web-service
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/component: web
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+---
+# Source: jdr-generator-chart/templates/api.yaml
+# jdr-generator-chart/templates/api.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-api
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: api
+    spec:
+      serviceAccountName: jdr-generator-sa
+      containers:
+        - name: api
+          image: "eli256/jdr-generator-api:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: release-name-jdr-generator-chart-api-config
+          env:
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_USER
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_PASSWORD
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:mysql://release-name-jdr-generator-chart-mysql-service:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+            - name: GEMINI_SERVICE_URL
+              value: "http://release-name-jdr-generator-chart-gemini-service:3001"
+            - name: FREEPIK_SERVICE_URL
+              value: "http://release-name-jdr-generator-chart-freepik-service:3003"
+            - name: OPENAI_SERVICE_URL
+              value: "http://release-name-jdr-generator-chart-openai-service:3002"
+            - name: SPRING_PROFILES_ACTIVE
+              value: kubernetes
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            timeoutSeconds: 7
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            timeoutSeconds: 7
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1024Mi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+---
+# Source: jdr-generator-chart/templates/freepik.yaml
+# jdr-generator-chart/templates/freepik.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-freepik
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: freepik
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: freepik
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: freepik
+
+    spec:
+      serviceAccountName: jdr-generator-sa
+      securityContext:
+        {}
+
+      containers:
+        - name: freepik
+          securityContext:
+            {}
+          image: "eli256/jdr-generator-freepik:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3003
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: release-name-jdr-generator-chart-freepik-config
+          env:
+            - name: PORT
+              value: "3003"
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-ai-secrets
+                  key: FREEPIK_API_KEY
+
+          livenessProbe:
+            httpGet:
+              path: /freepik/healthcheck
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /freepik/healthcheck
+              port: http
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+---
+# Source: jdr-generator-chart/templates/gemini.yaml
+# jdr-generator-chart/templates/gemini.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-gemini
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: gemini
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: gemini
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: gemini
+
+    spec:
+      serviceAccountName: jdr-generator-sa
+      securityContext:
+        {}
+
+      containers:
+        - name: gemini
+          securityContext:
+            {}
+          image: "eli256/jdr-generator-gemini:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3001
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: release-name-jdr-generator-chart-gemini-config
+          env:
+            - name: PORT
+              value: "3001"
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-ai-secrets
+                  key: GEMINI_API_KEY
+
+          livenessProbe:
+            httpGet:
+              path: /gemini/healthcheck
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /gemini/healthcheck
+              port: http
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+---
+# Source: jdr-generator-chart/templates/mysql.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-mysql
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: "mysql:5.7"
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_DATABASE
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secrets
+                  key: MYSQL_PASSWORD
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: release-name-jdr-generator-chart-mysql-pv-claim
+        - name: mysql-initdb
+          configMap:
+            name: release-name-jdr-generator-chart-mysql-init-config
+---
+# Source: jdr-generator-chart/templates/openai.yaml
+# jdr-generator-chart/templates/openai.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-openai
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: openai
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: openai
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: openai
+
+    spec:
+      serviceAccountName: jdr-generator-sa
+      securityContext:
+        {}
+
+      containers:
+        - name: openai
+          securityContext:
+            {}
+          image: "eli256/jdr-generator-openai:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 3002
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "3002"
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-ai-secrets
+                  key: OPENAI_API_KEY # AJOUTÉ pour ORGANIZATION_ID
+            - name: ORGANIZATION_ID
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-ai-secrets
+                  key: OPENAI_ORG_ID
+
+          livenessProbe:
+            httpGet:
+              path: /openai/healthcheck
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /openai/healthcheck
+              port: http
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+---
+# Source: jdr-generator-chart/templates/web.yaml
+# jdr-generator-chart/templates/web.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-jdr-generator-chart-web
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/component: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: jdr-generator-chart
+      app.kubernetes.io/instance: release-name
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: jdr-generator-chart
+        app.kubernetes.io/instance: release-name
+        app.kubernetes.io/component: web
+    spec:
+      serviceAccountName: jdr-generator-sa
+      securityContext:
+        {}
+      containers:
+        - name: web
+          securityContext:
+            {}
+          image: "eli256/jdr-generator-web:latest"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 300m
+              memory: 256Mi
+            requests:
+              cpu: 200m
+              memory: 128Mi
+          envFrom:
+            - configMapRef:
+                name: release-name-jdr-generator-chart-web-config
+---
+# Source: jdr-generator-chart/templates/tests/test-connection.yaml
+# jdr-generator-chart/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-jdr-generator-chart-test-connection"
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['release-name-jdr-generator-chart-web-service:80']
+    - name: wget
+      image: busybox
+      command: [ 'wget' ]
+      args: [ 'release-name-jdr-generator-chart-api-service:8080' ]
+  restartPolicy: Never

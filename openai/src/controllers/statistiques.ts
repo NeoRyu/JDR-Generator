@@ -5,11 +5,48 @@ import OpenAI from "openai";
 
 dotenv.config();
 
+
+/**
+ * @file Contrôleur pour la génération de statistiques de personnages de JDR via l'API OpenAI.
+ * @description Ce fichier gère la configuration de l'API OpenAI, la construction des prompts,
+ * l'appel à l'API de complétion de chat (pour générer du JSON), le traitement de la réponse,
+ * et la sauvegarde locale des résultats en environnement de développement.
+ */
+
 // --- Global Configuration ---
+/**
+ * Clé API pour OpenAI.
+ * Récupérée depuis la variable d'environnement `API_KEY`.
+ * @type {string | undefined}
+ */
 const apiKey = process.env.API_KEY;
+
+/**
+ * Modèle de texte OpenAI à utiliser pour la génération.
+ * Récupéré depuis `process.env.AI_TEXT_MODEL` ou utilise "gpt-3.5-turbo" par défaut.
+ * @type {string}
+ */
 const openAITextModel = process.env.AI_TEXT_MODEL || "gpt-3.5-turbo";
+
+/**
+ * Nombre maximum de tokens pour la réponse générée par OpenAI.
+ * Récupéré depuis `process.env.MAX_TOKENS` ou 2048 par défaut.
+ * @type {number}
+ */
 const configMaxOutputTokens: number = +(process.env.MAX_TOKENS || 2048);
+
+/**
+ * Température pour la génération de texte OpenAI, contrôle la créativité.
+ * Récupérée depuis `process.env.TEMPERATURE` ou 0.7 par défaut.
+ * @type {number}
+ */
 const temperature: number = +(process.env.TEMPERATURE || 0.7);
+
+/**
+ * Nom du dossier de téléchargement pour les fichiers générés.
+ * Récupéré depuis `process.env.DOWNLOAD_FOLDER` ou "default" par défaut.
+ * @type {string}
+ */
 const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
 
 // --- OpenAI Configuration ---
@@ -18,9 +55,21 @@ if (!apiKey) {
     "API_KEY environment variable is not set. OpenAI API calls will fail.",
   );
 }
+
+/**
+ * Instance du client OpenAI.
+ * Initialisée avec la clé API.
+ * @type {OpenAI}
+ */
 const openai = new OpenAI({ apiKey });
 
-// System prompt for OpenAI
+
+/**
+ * Prompt système pour guider le modèle OpenAI.
+ * Définit le rôle de l'IA en tant qu'expert en JDR et spécifie le format JSON attendu
+ * pour les informations du personnage.
+ * @type {string}
+ */
 const systemPrompt = `You are an RPG expert with extensive knowledge of various game systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be provided with information on the game system, the character's race and class, and any other information needed to define them, as well as their stats, skills, disciplines, and equipment, in the target game world, to inspire you. If the character doesn't have a world, invent one; otherwise, don't invent it. Your response must not rely on previous exchanges, must be in JSON format only, with the following data filled in, and the texts need to be in French (fr-FR), except for the name:
 {
 "name": "string",
@@ -69,7 +118,11 @@ const systemPrompt = `You are an RPG expert with extensive knowledge of various 
 "image": "string"
 }`;
 
-// Specific prompt for statistics
+/**
+ * Génère le prompt utilisateur spécifique pour la demande de statistiques du personnage.
+ * @param {any} characterData - Les données du personnage (attendu avec une propriété `data`).
+ * @returns {string} Le prompt utilisateur formaté.
+ */
 const statsUserPrompt = (characterData: any): string => {
   const data = characterData.data;
   return (
@@ -79,10 +132,26 @@ const statsUserPrompt = (characterData: any): string => {
   );
 };
 
-// Function to check if we are in a local environment
+/**
+ * Vérifie si l'application s'exécute dans un environnement de développement local.
+ * @returns {boolean} True si `NODE_ENV` n'est pas "production", false sinon.
+ */
 const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
-// Controller function to generate the statistics (JSON text)
+/**
+ * Contrôleur pour générer les statistiques d'un personnage en utilisant l'API OpenAI.
+ * Attend les données du personnage dans `req.body`, appelle l'API OpenAI pour obtenir
+ * les statistiques au format JSON, puis renvoie cette réponse.
+ * Sauvegarde également le résultat localement en environnement de développement.
+ *
+ * @async
+ * @param {Request} req - L'objet requête Express. `req.body` doit contenir les données du personnage,
+ *                        notamment une propriété `data`.
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ *                          En cas de succès, renvoie un JSON avec la propriété `response` contenant les statistiques.
+ *                          En cas d'erreur, renvoie un statut d'erreur approprié avec un message.
+ */
 export const generateStats = async (req: Request, res: Response) => {
   const pathSrc: string = `/app/downloads/${downloadFolder}/`;
   const txtName: string = `${downloadFolder}-openai-stats_${Math.floor(Date.now() / 1000)}.txt`;

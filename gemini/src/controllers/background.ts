@@ -5,9 +5,35 @@ import {GenerateContentResult, GenerativeModel, GoogleGenerativeAI,} from "@goog
 
 dotenv.config();
 
-// Configuration requise
+/**
+ * @fileoverview Contrôleur pour la génération de backgrounds de personnages de JDR via l'API Gemini.
+ * @description Ce fichier gère la construction de prompts détaillés, l'interaction avec le modèle
+ * de texte Gemini, le traitement de la réponse JSON, et la sauvegarde des résultats.
+ */
+
+// --- Configuration requise du modèle Gemini ---
+
+/**
+ * Instance du client GoogleGenerativeAI.
+ * Initialisée avec la clé API depuis les variables d'environnement.
+ * @type {GoogleGenerativeAI}
+ */
 const genAI: GoogleGenerativeAI = new GoogleGenerativeAI(''+process.env.API_KEY);
+
+/**
+ * Nombre maximum de tokens pour la réponse générée.
+ * Récupéré depuis la variable d'environnement `MAX_TOKENS`, ou 2048 par défaut.
+ * @type {number}
+ */
 const configMaxOutputTokens: number = +(process.env.MAX_TOKENS ?? '2048');
+
+/**
+ * Instance du modèle génératif Gemini pour le texte.
+ * Configuré avec le modèle de texte spécifié dans les variables d'environnement
+ * et les paramètres de génération (maxOutputTokens, temperature, topP, topK).
+ * Inclut également des `safetySettings` pour ajuster les seuils de blocage de contenu.
+ * @type {GenerativeModel}
+ */
 const model: GenerativeModel = genAI.getGenerativeModel({
   model: ''+process.env.AI_TEXT_MODEL,
   generationConfig: {
@@ -16,12 +42,45 @@ const model: GenerativeModel = genAI.getGenerativeModel({
     topP: 0.8,
     topK: 40,
   },
+  /*
+  // Ajout de safetySettings pour potentiellement réduire les blocages sur des contenus de JDR
+  // Ajustez ces seuils avec prudence. BLOCK_ONLY_HIGH est moins restrictif que BLOCK_MEDIUM_AND_ABOVE.
+  safetySettings: [
+    {
+      category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+      threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE, // Peut être plus strict ici
+    },
+    {
+      category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+      threshold: HarmBlockThreshold.BLOCK_ONLY_HIGH,
+    },
+   */
 });
 
-// Ce tableau permet de conserver l'historique des conversations
+/**
+ * Tableau pour conserver l'historique des conversations (prompt et réponse).
+ * Note: Actuellement, cet historique n'est pas utilisé pour influencer les générations futures
+ * de manière contextuelle dans les appels suivants à l'API dans ce contrôleur.
+ * @type {Array<[string | undefined, string]>}
+ */
 const conversationContext: any[] = [];
 
-// Les prompts qui seront envoyés par la suite pour générer une réponse attendue
+
+// --- Prompts pour la génération de background ---
+
+/**
+ * Prompt de base fournissant le contexte initial et les instructions de formatage à l'IA.
+ * Décrit le rôle de l'IA en tant qu'expert en JDR et spécifie le format JSON attendu.
+ * @type {string}
+ */
 const basePrompt = `You are an expert in RPGs, with extensive knowledge of various gaming systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be informed about the game system, the character's race, class, and perhaps some description to inspire you. Your response must not rely on previous exchanges, must be in JSON format only, with the following data filled in, and the texts need to be in French (fr-FR), except for the 'image' which should be in English and the 'name' which should be appropriate for the game universe provided in the context:
         example answer:
         '''
@@ -74,6 +133,9 @@ const basePrompt = `You are an expert in RPGs, with extensive knowledge of vario
         '''
 `;
 
+/**
+ * Interface définissant la structure des données de contexte pour la génération du prompt.
+ */
 function contextPrompt(data: {
   promptSystem: any;
   promptRace: any;
@@ -81,6 +143,13 @@ function contextPrompt(data: {
   promptClass: any;
   promptDescription: any;
 }): string {
+  /**
+   * Construit le prompt complet à envoyer à l'API Gemini en combinant le `basePrompt`
+   * avec les informations contextuelles spécifiques au personnage.
+   *
+   * @param {CharacterContextData} data - Les données contextuelles du personnage.
+   * @returns {string} Le prompt complet formaté.
+   */
   const context = `
     game system: ${data.promptSystem}
     race: ${data.promptRace}
@@ -96,7 +165,25 @@ function contextPrompt(data: {
   );
 }
 
-// Fonction contrôleur pour gérer les conversations
+
+// --- Fonction Contrôleur ---
+
+/**
+ * Génère un background de personnage détaillé en utilisant l'API Gemini.
+ * La fonction attend des informations contextuelles sur le personnage (système de jeu, race, classe, etc.)
+ * dans le corps de la requête. La réponse de l'IA est attendue en format JSON,
+ * qui est ensuite validé, nettoyé, et renvoyé au client.
+ * Le résultat est également sauvegardé localement en mode développement.
+ *
+ * @async
+ * @param {Request} req - L'objet requête Express. Le corps de la requête (`req.body`)
+ *                        doit contenir les propriétés de {@link CharacterContextData}
+ *                        et optionnellement `prompt` (pour `conversationContext`).
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ *                          En cas de succès, envoie un JSON avec la propriété `response` contenant le background généré.
+ *                          En cas d'erreur (validation, API, analyse JSON), envoie un statut d'erreur approprié.
+ */
 export const generateResponse = async (req: Request, res: Response) => {
   const pathSrc: string =
     "C:\\Users\\" +

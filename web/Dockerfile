@@ -15,11 +15,11 @@ RUN rm -rf dist
 # Le chemin est maintenant relatif au répertoire 'web'
 COPY . .
 # Définit une variable d'environnement VITE_API_URL pendant le build
-ARG VITE_API_URL
+# ARG VITE_API_URL
 # Affiche la valeur de l'argument de build de test (pour diagnostic)
-RUN echo "La valeur de VITE_API_URL est : ${VITE_API_URL}"
+# RUN echo "La valeur de VITE_API_URL est : ${VITE_API_URL}"
 # Build l'application React avec Vite en s'assurant que la variable d'environnement est passée
-RUN sh -c "VITE_API_URL=${VITE_API_URL} npx tsc && VITE_API_URL=${VITE_API_URL} npx vite build"
+# RUN sh -c "VITE_API_URL=${VITE_API_URL} npx tsc && VITE_API_URL=${VITE_API_URL} npx vite build"
 
 # Utilise une image Nginx pour servir les fichiers statiques buildés
 FROM nginx:stable-alpine

@@ -1,4 +1,4 @@
-# JDR-Generator API (Gemini)
+# JDR-Generator - Module GEMINI (API IA)
 
 ## Description
 

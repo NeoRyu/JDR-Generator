@@ -6,7 +6,9 @@ const maxRetries = 3;
 const pollingMaxAttempts = 30; // Nombre de tentatives ajustable pour le polling du statut
 const pollingDelayMs = 2000; // Délai entre les tentatives de polling (2 secondes)
 
-// Interfaces pour les réponses de l'API Freepik
+/**
+ * Interface décrivant la structure de la réponse lors de la création d'une tâche via l'IA Freepik.
+ */
 interface FreepikTaskCreationResponse {
   data?: { // <-- AJOUT DE CETTE LIGNE
     task_id?: string;
@@ -19,6 +21,9 @@ interface FreepikTaskCreationResponse {
   };
 }
 
+/**
+ * Interface décrivant la structure de la réponse lors de la vérification du statut d'une tâche avec l'IA Freepik.
+ */
 interface FreepikTaskStatusResponse {
   data?: {
     task_id?: string;
@@ -33,10 +38,21 @@ interface FreepikTaskStatusResponse {
   message?: string;
 }
 
-// Function to check if we are in a local environment
+/**
+ * Vérifie si l'application s'exécute dans un environnement local.
+ * @returns {boolean} True si NODE_ENV n'est pas "production", false sinon.
+ */
 const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
-// Controller function to generate the illustration
+/**
+ * Contrôleur (asynchrone) pour générer une illustration en utilisant l'API de l'IA Freepik.
+ * Gère la création de la tâche, le polling de son statut, et la récupération de l'image.
+ *
+ * @param {Request} req - L'objet requête Express. Doit contenir `req.body.prompt`.
+ *                        Peut optionnellement contenir `req.body.aspectRatio`.
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ */
 export const generateImage = async (
   req: Request,
   res: Response,

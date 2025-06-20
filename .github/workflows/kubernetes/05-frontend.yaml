@@ -1,0 +1,59 @@
+# kubernetes/05-frontend.yaml
+# > kubectl apply -f .github/workflows/kubernetes/05-frontend.yaml
+#   kubectl get deployment jdr-generator-web
+#   kubectl get pods -l app=jdr-generator-web
+#   kubectl get service jdr-generator-web
+#   kubectl get nodes -o wide
+#   kubectl get pods -l app=jdr-generator-web -o custom-columns=NAME:.metadata.name --no-headers
+#   kubectl port-forward pod/$(kubectl get pods -l app=jdr-generator-web -o custom-columns=NAME:.metadata.name --no-headers) 3080:80
+#   # kubectl rollout restart deployment/jdr-generator-api
+#   # kubectl get deployments
+#   # kubectl get pods
+#   # kubectl get services
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-web
+  labels:
+    app: jdr-generator-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jdr-generator-web
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-web
+    spec:
+      containers:
+        - name: web
+          image: eli256/jdr-generator-web:latest
+          ports:
+            - containerPort: 80
+          envFrom:
+            - configMapRef:
+                name: jdr-generator-web-config
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "200m"
+            limits:
+              memory: "256Mi"
+              cpu: "300m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-container
+  labels:
+    app: jdr-generator-web
+spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

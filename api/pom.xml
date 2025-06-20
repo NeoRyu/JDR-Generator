@@ -298,6 +298,27 @@
                 </executions>
             </plugin>
 
+            <!-- mvn javadoc:javadoc --><!--<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.3</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <show>package</show>
+                    <nohelp>true</nohelp>
+                    <source>17</source>
+                    <doctitle><![CDATA[<h1>Documentation API JDR-Generator</h1>]]></doctitle>
+                    <windowtitle>API JDR-Generator Javadoc</windowtitle>
+                </configuration>
+            </plugin>-->
+
         </plugins>
     </build>
 

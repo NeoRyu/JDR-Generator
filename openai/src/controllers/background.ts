@@ -5,12 +5,60 @@ import OpenAI from "openai";
 
 dotenv.config();
 
+
+/**
+ * @file Contrôleur pour la génération de backgrounds de personnages de JDR via l'API OpenAI (ChatGPT).
+ * @description Ce fichier gère la configuration de l'API OpenAI, la construction des prompts,
+ * l'appel à l'API de complétion de chat, le traitement de la réponse JSON,
+ * et la sauvegarde locale des résultats en environnement de développement.
+ */
+
 // --- Global Configuration ---
+/**
+ * Clé API pour OpenAI.
+ * Récupérée depuis la variable d'environnement `API_KEY`.
+ * @type {string | undefined}
+ */
 const apiKey = process.env.API_KEY;
+
+/**
+ * Modèle de texte OpenAI (ChatGPT) à utiliser pour la génération.
+ * Récupéré depuis `process.env.AI_TEXT_MODEL` ou utilise "gpt-3.5-turbo" par défaut.
+ * @type {string}
+ */
 const openAITextModel = process.env.AI_TEXT_MODEL || "gpt-3.5-turbo";
+
+/**
+ * Nombre maximum de tokens pour la réponse générée par OpenAI.
+ * Récupéré depuis `process.env.MAX_TOKENS` ou 2048 par défaut.
+ * @type {number}
+ */
 const maxOutputTokens: number = +(process.env.MAX_TOKENS || 2048);
+
+/**
+ * Température pour la génération de texte OpenAI, contrôle la créativité.
+ * Valeur entre 0 et 2. Des valeurs plus élevées (ex: 0.8) rendent la sortie plus aléatoire,
+ * tandis que des valeurs plus basses (ex: 0.2) la rendent plus focalisée et déterministe.
+ * Récupérée depuis `process.env.TEMPERATURE` ou 0.7 par défaut.
+ * @type {number}
+ */
 const temperature: number = +(process.env.TEMPERATURE || 0.7);
+
+/**
+ * Alternative au sampling avec la température, appelée nucleus sampling.
+ * Le modèle considère les résultats des tokens avec une masse de probabilité top_p.
+ * Ainsi, 0.1 signifie que seuls les tokens composant les 10% de masse de probabilité supérieure sont considérés.
+ * Récupérée depuis `process.env.TOP_P` ou 0.8 par défaut.
+ * @type {number}
+ */
 const topP: number = +(process.env.TOP_P || 0.8);
+
+
+/**
+ * Nom du dossier de téléchargement pour les fichiers générés.
+ * Récupéré depuis `process.env.DOWNLOAD_FOLDER` ou "default" par défaut.
+ * @type {string}
+ */
 const downloadFolder = process.env.DOWNLOAD_FOLDER || "default";
 
 // --- OpenAI Configuration ---
@@ -19,9 +67,19 @@ if (!apiKey) {
     "API_KEY environment variable is not set. OpenAI API calls will fail.",
   );
 }
+/**
+ * Instance du client OpenAI.
+ * Initialisée avec la clé API.
+ * @type {OpenAI}
+ */
 const openai = new OpenAI({ apiKey });
 
-// System prompt for OpenAI
+/**
+ * Prompt système pour guider le modèle OpenAI.
+ * Définit le rôle de l'IA en tant qu'expert en JDR et spécifie le format JSON attendu
+ * pour les informations du personnage.
+ * @type {string}
+ */
 const systemPrompt = `You are an expert in RPGs, with extensive knowledge of various gaming systems, such as Dungeons & Dragons, Pathfinder, World of Darkness, Call of Cthulhu, Warhammer Fantasy Roleplay, Shadowrun, GURPS, and Fate. Your role is to create characters. You will be informed about the game system, the character's race, class, and perhaps some description to inspire you. Your response must not rely on previous exchanges, must be in JSON format only, with the following data filled in, and the texts need to be in French (fr-FR), except for the 'image' which should be in English and the 'name' which should be appropriate for the game universe provided in the context:
         example answer:
         '''
@@ -73,6 +131,12 @@ const systemPrompt = `You are an expert in RPGs, with extensive knowledge of var
         }
         '''
 `;
+
+/**
+ * Formate le prompt utilisateur basé sur les données de contexte du personnage.
+ * @param {any} data - Les données contextuelles du personnage.
+ * @returns {string} Le prompt utilisateur formaté.
+ */
 const formatUserPrompt = (data: any): string => {
   const context = `
     game system: ${data.promptSystem}
@@ -89,10 +153,27 @@ const formatUserPrompt = (data: any): string => {
   );
 };
 
-// Function to check if we are in a local environment
+/**
+ * Vérifie si l'application s'exécute dans un environnement de développement local.
+ * @returns {boolean} True si `NODE_ENV` n'est pas "production", false sinon.
+ */
 const isLocalEnvironment = (): boolean => process.env.NODE_ENV !== "production";
 
-// Controller function to generate the background (JSON text)
+
+/**
+ * Contrôleur pour générer le background d'un personnage (texte JSON) en utilisant l'API OpenAI.
+ * Attend les données contextuelles du personnage dans `req.body`, appelle l'API OpenAI
+ * pour obtenir le background au format JSON, puis renvoie cette réponse.
+ * Sauvegarde également le résultat localement en environnement de développement.
+ *
+ * @async
+ * @param {Request} req - L'objet requête Express. `req.body` doit être un objet
+ *                        conforme à l'interface {@link BackgroundContextData}.
+ * @param {Response} res - L'objet réponse Express.
+ * @returns {Promise<void>} Une promesse qui se résout lorsque la réponse a été envoyée.
+ *                          En cas de succès, renvoie un JSON avec la propriété `response` contenant le background.
+ *                          En cas d'erreur, renvoie un statut d'erreur approprié avec un message.
+ */
 export const generateResponse = async (req: Request, res: Response) => {
   const pathSrc: string = `/app/downloads/${downloadFolder}/`;
   const txtName: string = `${downloadFolder}-openai-background_${Math.floor(Date.now() / 1000)}.txt`;

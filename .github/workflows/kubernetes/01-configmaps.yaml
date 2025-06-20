@@ -1,0 +1,54 @@
+# kubernetes/01-configmaps.yaml
+# > kubectl apply -f .github/workflows/kubernetes/01-configmaps.yaml
+#   kubectl get configmaps
+
+# ConfigMap pour le service API (Java)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-api-config
+data:
+  GEMINI_SERVICE_URL: "http://gemini-container:3001"
+  OPENAI_SERVICE_URL: "http://openai-container:3002"
+  FREEPIK_SERVICE_URL: "http://freepik-container:3003"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-container:3306/jdr_generator_db?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true"
+  SPRING_PROFILES_ACTIVE: "prod,kubernetes"
+  MAX_TOKEN: "2048"                 # Valeur commune
+  DOWNLOAD_FOLDER: "jdr-generator"  # Conservé, note sur l'adaptation K8s maintenue
+  USER_WINDOW: "fredericcoupez"     # Conservé, note sur l'adaptation K8s maintenue
+---
+# ConfigMap pour le service Web (React)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-web-config
+data:
+  VITE_API_URL: "/"
+  # Utilise Nginx comme un proxy interne au cluster Kubernetes : "http://api-container:8080/characters"
+---
+# ConfigMap pour le service Gemini (Node.js)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-gemini-config
+data:
+  AI_TEXT_MODEL: "gemini-2.0-flash"
+  AI_IMAGE_MODEL: "gemini-2.0-flash-exp-image-generation"
+---
+# ConfigMap pour le service Freepik (Node.js)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-freepik-config
+data:
+  AI_LIST: "https://www.freepik.com/api/pricing"
+---
+# ConfigMap pour le service OpenAI (Node.js)
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jdr-generator-openai-config
+data:
+  AI_TEXT_MODEL: "gpt-4o-mini"
+  AI_IMAGE_MODEL: "dall-e-3"
+  AI_LIST: "https://platform.openai.com/docs/models"

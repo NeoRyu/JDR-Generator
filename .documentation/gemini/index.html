@@ -1,0 +1,261 @@
+<!DOCTYPE html><html class="default" lang="en" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>gemini</title><meta name="description" content="Documentation for gemini"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">gemini</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>gemini</h1></div><div class="tsd-panel tsd-typography"><h1 id="jdr-generator-api-gemini" class="tsd-anchor-link">JDR-Generator - Module GEMINI (API IA)<a href="#jdr-generator-api-gemini" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1><h2 id="description" class="tsd-anchor-link">Description<a href="#description" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Ce module contient l'API backend développée avec NestJS, dédiée à l'interaction avec les APIs de Google Gemini. Son rôle principal est de permettre la génération de texte (descriptions de personnages, statistiques) et d'images pour les personnages de jeux de rôle, enrichissant ainsi l'expérience utilisateur de JDR-Generator.</p>
+<h2 id="caractéristiques-principales" class="tsd-anchor-link">Caractéristiques Principales<a href="#caractéristiques-principales" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><strong>Interaction avec Google Gemini :</strong> Utilise les fonctionnalités de Google Gemini pour la génération de contenu.</li>
+<li><strong>API REST :</strong> Fournit une API RESTful pour accéder aux fonctionnalités de génération.</li>
+<li><strong>Génération de Texte :</strong> Crée des descriptions détaillées et des statistiques de personnages basées sur un contexte donné.</li>
+<li><strong>Génération d'Images :</strong> Génère des illustrations de personnages.</li>
+<li><strong>Développement avec NestJS :</strong> Utilise NestJS (Node.js et TypeScript) pour une architecture robuste et évolutive.</li>
+</ul>
+<h2 id="technologies-utilisées" class="tsd-anchor-link">Technologies Utilisées<a href="#technologies-utilisées" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Node.js</li>
+<li>NestJS (TypeScript)</li>
+<li>Google Gemini API</li>
+</ul>
+<h2 id="notes-importantes" class="tsd-anchor-link">Notes Importantes<a href="#notes-importantes" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><strong>Sécurité des clés API :</strong> Traitez votre clé API Google Gemini avec la plus grande précaution. Ne la partagez jamais publiquement. Utilisez toujours des variables d'environnement pour la stocker.</li>
+</ul>
+<h2 id="configuration-requise" class="tsd-anchor-link">Configuration Requise<a href="#configuration-requise" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>
+<p><strong>Installer Node.js :</strong> Téléchargez et installez Node.js depuis <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a> (Version recommandée : LTS).</p>
+</li>
+<li>
+<p><strong>Installer TypeScript (globalement) :</strong></p>
+<pre><code class="sh"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-3">-g</span><span class="hl-1"> </span><span class="hl-2">typescript</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+<li>
+<p><strong>Installer les dépendances du projet :</strong></p>
+<pre><code class="sh"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+</ol>
+<h2 id="configuration" class="tsd-anchor-link">Configuration<a href="#configuration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>
+<p><strong>Obtenir une clé d'API Google pour Gemini :</strong></p>
+<ul>
+<li>Accédez à la documentation de Google Gemini pour les détails sur l'obtention d'une clé d'API : <a href="https://ai.google.dev/gemini-api/docs/pricing?hl=fr">https://ai.google.dev/gemini-api/docs/pricing?hl=fr</a></li>
+<li>Vous pouvez généralement obtenir votre clé API depuis la console Google Cloud ou un service similaire (par exemple, Google AI Studio).</li>
+</ul>
+</li>
+<li>
+<p><strong>Configurer les variables d'environnement :</strong></p>
+<ul>
+<li>
+<p>Créez un fichier <code>.env</code> à la racine du projet (s'il n'existe pas déjà).</p>
+</li>
+<li>
+<p>Ajoutez les variables d'environnement suivantes à ce fichier :</p>
+<pre><code><span class="hl-4">GOOGLE_API_KEY</span><span class="hl-1">=</span><span class="hl-4">YOUR_GEMINI_API_KEY</span><span class="hl-1">  # </span><span class="hl-5">Remplacez</span><span class="hl-1"> </span><span class="hl-5">par</span><span class="hl-1"> </span><span class="hl-5">votre</span><span class="hl-1"> </span><span class="hl-5">clé</span><span class="hl-1"> </span><span class="hl-4">API</span><span class="hl-1"> </span><span class="hl-5">Gemini</span><br/><span class="hl-4">DOWNLOAD_FOLDER</span><span class="hl-1">=</span><span class="hl-5">jdr</span><span class="hl-1">-</span><span class="hl-5">generator</span><span class="hl-1">       # </span><span class="hl-5">Nom</span><span class="hl-1"> </span><span class="hl-5">du</span><span class="hl-1"> </span><span class="hl-5">dossier</span><span class="hl-1"> </span><span class="hl-5">de</span><span class="hl-1"> </span><span class="hl-0">téléchargement</span><span class="hl-1"> (</span><span class="hl-5">peut</span><span class="hl-1"> </span><span class="hl-5">être</span><span class="hl-1"> </span><span class="hl-5">personnalisé</span><span class="hl-1">)</span><br/><span class="hl-1"># </span><span class="hl-4">WINDOWS_USERNAME</span><span class="hl-1">=</span><span class="hl-5">your_windows_username</span><span class="hl-1"> # (</span><span class="hl-5">Optionnel</span><span class="hl-1">, </span><span class="hl-5">si</span><span class="hl-1"> </span><span class="hl-5">nécessaire</span><span class="hl-1"> </span><span class="hl-5">pour</span><span class="hl-1"> </span><span class="hl-5">les</span><span class="hl-1"> </span><span class="hl-5">chemins</span><span class="hl-1">)</span>
+</code><button>Copy</button></pre>
+
+</li>
+<li>
+<p><strong>Important :</strong> Ne commitez jamais votre fichier <code>.env</code> contenant des clés API dans un dépôt public.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Configurer le dossier de téléchargement :</strong></p>
+<ul>
+<li>
+<p>Par défaut, les JSON et les images générés seront enregistrés dans un dossier nommé <code>jdr-generator</code> dans votre dossier de téléchargements.</p>
+</li>
+<li>
+<p>Créez ce dossier manuellement si vous ne l'avez pas déjà :</p>
+<ul>
+<li>Windows : <code>C:\Users\{your_windows_username}\Downloads\jdr-generator\</code> (Remplacez <code>{your_windows_username}</code> par votre nom d'utilisateur Windows)</li>
+</ul>
+</li>
+<li>
+<p>Pour personnaliser l'emplacement du dossier de téléchargement, modifiez la variable <code>DOWNLOAD_FOLDER</code> dans le fichier <code>.env</code>.</p>
+</li>
+<li>
+<p><strong>Note :</strong> Si vous personnalisez le dossier de téléchargement, assurez-vous d'ajuster les chemins en conséquence dans les fichiers du dossier <code>controllers</code> (si nécessaire).</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="générer-et-exécuter" class="tsd-anchor-link">Générer et Exécuter<a href="#générer-et-exécuter" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ol>
+<li>
+<p><strong>Supprimer le dossier <code>dist</code> (avant une nouvelle compilation) :</strong></p>
+<pre><code class="sh"><span class="hl-0">rd</span><span class="hl-1"> </span><span class="hl-2">/s</span><span class="hl-1"> </span><span class="hl-2">/q</span><span class="hl-1"> </span><span class="hl-2">dist</span>
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>(Cette commande est pour Windows. Pour d'autres systèmes d'exploitation, utilisez l'équivalent <code>rm -rf dist</code>.)</li>
+</ul>
+</li>
+<li>
+<p><strong>Compiler le code TypeScript :</strong></p>
+<pre><code class="sh"><span class="hl-0">tsc</span>
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Cela compile le code TypeScript en JavaScript et place le résultat dans le dossier <code>dist</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Démarrer le serveur :</strong></p>
+<pre><code class="sh"><span class="hl-0">node</span><span class="hl-1"> </span><span class="hl-2">dist/app.js</span>
+</code><button type="button">Copy</button></pre>
+
+<ul>
+<li>Cela exécute le serveur NestJS à partir du code JavaScript compilé.</li>
+</ul>
+</li>
+</ol>
+<h2 id="api-endpoints" class="tsd-anchor-link">API Endpoints<a href="#api-endpoints" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>(À compléter avec la liste complète des points de terminaison de l'API, leurs méthodes HTTP, les paramètres attendus, les formats de requête et de réponse, et des exemples. Ceci est crucial pour l'intégration avec le frontend et pour les tests.)</p>
+<p>Voici une version plus détaillée basée sur votre exemple :</p>
+<ul>
+<li>
+<p><strong><code>POST /generate</code></strong></p>
+<ul>
+<li>
+<p><strong>Description :</strong> Génère les détails d'un personnage RPG à partir d'un contexte fourni.</p>
+</li>
+<li>
+<p><strong>Requête :</strong></p>
+<ul>
+<li>
+<p><strong>Méthode :</strong> <code>POST</code></p>
+</li>
+<li>
+<p><strong>URL :</strong> <code>http://localhost:3001/generate</code></p>
+</li>
+<li>
+<p><strong>Corps (raw/JSON) :</strong></p>
+<pre><code class="json"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt_system&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Nom du système de jeu (ex: Dungeons &amp; Dragons)&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt_race&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Race du personnage&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt_gender&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Genre du personnage&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt_class&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Classe du personnage&quot;</span><span class="hl-1">,</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt_description&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Description du contexte du personnage&quot;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Réponse :</strong></p>
+<ul>
+<li><strong>Format :</strong> JSON</li>
+<li><strong>Contenu :</strong> Un objet JSON contenant les détails du personnage générés (nom, âge, histoire, etc.).</li>
+<li><strong>Exemple :</strong> (Voir l'exemple de réponse que vous avez fourni dans votre description)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>POST /illustrate</code></strong></p>
+<ul>
+<li>
+<p><strong>Description :</strong> Génère une illustration pour le personnage en utilisant la description d'image générée précédemment.</p>
+</li>
+<li>
+<p><strong>Requête :</strong></p>
+<ul>
+<li>
+<p><strong>Méthode :</strong> <code>POST</code></p>
+</li>
+<li>
+<p><strong>URL :</strong> <code>http://localhost:3002/illustrate</code></p>
+</li>
+<li>
+<p><strong>Corps (raw/JSON) :</strong></p>
+<pre><code class="json"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Prompt pour la génération d&#39;image (basé sur l&#39;attribut &#39;image&#39; généré précédemment)&quot;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Réponse :</strong></p>
+<ul>
+<li><strong>Format :</strong> JSON (peut contenir une URL vers l'image, ou les données de l'image encodées)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><code>POST /stats</code></strong></p>
+<ul>
+<li>
+<p><strong>Description :</strong> Génère les statistiques du personnage (force, dextérité, etc.) en fonction du contexte et des détails du personnage générés.</p>
+</li>
+<li>
+<p><strong>Requête :</strong></p>
+<ul>
+<li>
+<p><strong>Méthode :</strong> <code>POST</code></p>
+</li>
+<li>
+<p><strong>URL :</strong> <code>http://localhost:3001/stats</code></p>
+</li>
+<li>
+<p><strong>Corps (raw/JSON) :</strong></p>
+<pre><code class="json"><span class="hl-1">{</span><br/><span class="hl-1">  </span><span class="hl-6">&quot;prompt&quot;</span><span class="hl-1">: </span><span class="hl-2">&quot;Objet JSON contenant les détails du personnage (voir l&#39;exemple que vous avez fourni)&quot;</span><br/><span class="hl-1">}</span>
+</code><button type="button">Copy</button></pre>
+
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Réponse :</strong></p>
+<ul>
+<li><strong>Format :</strong> JSON</li>
+<li><strong>Contenu :</strong> Un objet JSON contenant les statistiques du personnage (force, dextérité, etc.). (Voir l'exemple de réponse que vous avez fourni)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="sortie-des-données" class="tsd-anchor-link">Sortie des Données<a href="#sortie-des-données" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li>Les données générées (JSON et images) sont enregistrées sous forme de fichiers dans le dossier de téléchargement configuré (<code>DOWNLOAD_FOLDER</code> dans le fichier <code>.env</code>).</li>
+<li>Par défaut, ce dossier est <code>jdr-generator</code> dans le dossier de téléchargements de l'utilisateur.</li>
+</ul>
+<h2 id="intégration-de-github-actions" class="tsd-anchor-link">Intégration de GitHub Actions<a href="#intégration-de-github-actions" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><p>Ce projet utilise GitHub Actions pour automatiser à la fois les vérifications de la qualité du code et le déploiement des images Docker.
+Cette approche permet d'assurer un code de haute qualité et de simplifier le processus de déploiement.</p>
+<h3 id="workflow-de-qualité-du-code" class="tsd-anchor-link">Workflow de Qualité du Code<a href="#workflow-de-qualité-du-code" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>La qualité du code est vérifiée automatiquement à chaque <em>push</em> et <em>pull request</em> grâce à un workflow GitHub Actions défini dans le fichier <code>.github/workflows/code-quality.yml</code>.
+Ce workflow contient une section dédiée à la partie du projet <code>nodejs-code-quality-gemini</code> et s'exécute depuis toutes les branches.</p>
+<p><strong>Fonctionnement :</strong></p>
+<ul>
+<li>Le workflow vérifie la qualité du code à chaque <em>push</em> et <em>pull request</em> sur toutes les branches.</li>
+<li>Des vérifications spécifiques sont exécutées pour ce module Node.js.</li>
+<li>Les résultats des vérifications sont disponibles dans l'interface GitHub Actions.</li>
+</ul>
+<p><strong>Étapes du workflow de qualité du code :</strong></p>
+<ol>
+<li><strong>Checkout du code :</strong> Récupère la dernière version du code source.</li>
+<li><strong>Configuration de Node.js :</strong> Configure l'environnement Node.js avec la version spécifiée.</li>
+<li><strong>Installation des dépendances :</strong> Installe les dépendances du projet.</li>
+<li><strong>Vérifications :</strong>
+<ul>
+<li><strong>Linting :</strong> ESLint est utilisé pour vérifier le style et la qualité du code.</li>
+<li><strong>Formatage :</strong> Prettier est utilisé pour formater le code de manière cohérente.</li>
+<li><strong>Compilation :</strong> Le code TypeScript est compilé pour détecter les erreurs de typage.</li>
+</ul>
+</li>
+</ol>
+<h3 id="workflow-de-déploiement-continu-avec-docker" class="tsd-anchor-link">Workflow de Déploiement Continu avec Docker<a href="#workflow-de-déploiement-continu-avec-docker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3><p>Le déploiement des images Docker est également automatisé via GitHub Actions avec le workflow défini dans <code>.github/workflows/docker-push.yml</code>.
+Ce workflow construit et publie les images Docker vers Docker Hub lorsqu'un <em>push</em> est effectué sur les branches spécifiées (actuellement <code>githubactions</code> et <code>main</code>).</p>
+<p><strong>Fonctionnement :</strong></p>
+<ul>
+<li>Le workflow ne construit et ne pousse une image Docker que si des modifications sont détectées dans le dossier source correspondant (ici gemini/).</li>
+<li>Il est possible de déclencher manuellement le workflow pour forcer la reconstruction de toutes les images.</li>
+<li>Cette approche optimise le temps d'exécution et l'utilisation des ressources.</li>
+</ul>
+<p><strong>Étapes du workflow de déploiement :</strong></p>
+<ol>
+<li><strong>Checkout du code :</strong> Récupère la dernière version du code source.</li>
+<li><strong>Connexion à Docker Hub :</strong> Utilise les secrets GitHub <code>DOCKERHUB_USERNAME</code> et <code>DOCKERHUB_TOKEN</code> pour se connecter au compte Docker Hub.</li>
+<li><strong>Build et push des images :</strong> Pour ce module 'gemini', l'image Docker est construite et taguée avec le SHA du commit actuel ainsi que le tag <code>latest</code>, puis les deux tags sont poussés vers Docker Hub. Les images sont disponibles sur ce repo : <a href="https://hub.docker.com/repositories/eli256">https://hub.docker.com/repositories/eli256</a></li>
+</ol>
+<p>En combinant ces deux workflows GitHub Actions, cela assure à la fois la qualité du code et un déploiement efficace et automatisé de l'application.</p>
+<h2 id="sécurité" class="tsd-anchor-link">Sécurité<a href="#sécurité" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><ul>
+<li><strong>Clé API :</strong> Sécurisez votre clé API OpenAI. Ne l'incluez jamais directement dans votre code. Utilisez toujours des variables d'environnement.</li>
+<li><strong>Validation :</strong> Validez les données d'entrée (par exemple, la longueur et le format de l'invite) pour éviter les erreurs et les abus.</li>
+<li><strong>Limitation de débit :</strong> Envisagez d'implémenter une limitation de débit pour éviter la surcharge de l'API OpenAI et les coûts excessifs.</li>
+</ul>
+<h2 id="licence" class="tsd-anchor-link">Licence<a href="#licence" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2><pre><code class="markdow">Apache License
+Version 2.0, January 2004
+http://www.apache.org/licenses/
+</code><button type="button">Copy</button></pre>
+
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#jdr-generator-api-gemini"><span>JDR-<wbr/>Generator <wbr/>API (<wbr/>Gemini)</span></a><ul><li><a href="#description"><span>Description</span></a></li><li><a href="#caractéristiques-principales"><span>Caractéristiques <wbr/>Principales</span></a></li><li><a href="#technologies-utilisées"><span>Technologies <wbr/>Utilisées</span></a></li><li><a href="#notes-importantes"><span>Notes <wbr/>Importantes</span></a></li><li><a href="#configuration-requise"><span>Configuration <wbr/>Requise</span></a></li><li><a href="#configuration"><span>Configuration</span></a></li><li><a href="#générer-et-exécuter"><span>Générer et <wbr/>Exécuter</span></a></li><li><a href="#api-endpoints"><span>API <wbr/>Endpoints</span></a></li><li><a href="#sortie-des-données"><span>Sortie des <wbr/>Données</span></a></li><li><a href="#intégration-de-github-actions"><span>Intégration de <wbr/>Git<wbr/>Hub <wbr/>Actions</span></a></li><li><ul><li><a href="#workflow-de-qualité-du-code"><span>Workflow de <wbr/>Qualité du <wbr/>Code</span></a></li><li><a href="#workflow-de-déploiement-continu-avec-docker"><span>Workflow de <wbr/>Déploiement <wbr/>Continu avec <wbr/>Docker</span></a></li></ul></li><li><a href="#sécurité"><span>Sécurité</span></a></li><li><a href="#licence"><span>Licence</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">gemini</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

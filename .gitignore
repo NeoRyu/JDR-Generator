@@ -3,6 +3,13 @@
 /.idea/dataSources/
 /.jython_cache/
 /.jenkins/
+# AP_KEY IA secrets (DO NOT COMMIT!)
 freepik/.env
 gemini/.env
 openai/.env
+# Kubernetes secrets (DO NOT COMMIT!)
+.github/workflows/kubernetes/00-secrets.yaml
+kubernetes/00-secrets.yaml
+# Helm secrets values (DO NOT COMMIT!)
+.github/workflows/kubernetes/helm/jdr-generator-chart/ai-secrets-values.yaml
+.github/workflows/kubernetes/helm/jdr-generator-chart/output_with_secrets.yaml

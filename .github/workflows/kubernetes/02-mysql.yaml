@@ -1,0 +1,95 @@
+# kubernetes/02-mysql.yaml
+# > kubectl apply -f .github/workflows/kubernetes/02-mysql.yaml
+#   kubectl get pvc
+#   kubectl get deployments
+#   kubectl get pods -l app=jdr-generator-mysql
+#   kubectl get services
+#   # kubectl describe pod jdr-generator-mysql-754cd784-wgjp7
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: jdr-generator-mysql
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jdr-generator-mysql
+  labels:
+    app: jdr-generator-mysql
+spec:
+  selector:
+    matchLabels:
+      app: jdr-generator-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: jdr-generator-mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secret
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_DATABASE
+              value: jdr_generator_db
+            - name: MYSQL_USER
+              value: jdr_user
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: jdr-generator-mysql-secret
+                  key: MYSQL_PASSWORD
+          volumeMounts:
+            - name: mysql-persistent-storage
+              mountPath: /var/lib/mysql
+            - name: mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: mysql-pv-claim
+        - name: mysql-initdb
+          configMap:
+            name: mysql-init-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-init-config
+data:
+  init.sql: |
+    ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
+    CREATE USER IF NOT EXISTS 'jdr_user'@'%' IDENTIFIED BY 'root';
+    GRANT ALL PRIVILEGES ON jdr_generator_db.* TO 'jdr_user'@'%';
+    FLUSH PRIVILEGES;
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-container
+  labels:
+    app: jdr-generator-mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: jdr-generator-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"jdr.generator.api"},{"l":"jdr.generator.api.characters"},{"l":"jdr.generator.api.characters.context"},{"l":"jdr.generator.api.characters.details"},{"l":"jdr.generator.api.characters.illustration"},{"l":"jdr.generator.api.characters.stats"},{"l":"jdr.generator.api.config"}];updateSearchResults();

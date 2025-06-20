@@ -1,4 +1,4 @@
-# JDR-Generator API (Java)
+# JDR-Generator - Module API (Backend Java)
 
 ## Description
 
