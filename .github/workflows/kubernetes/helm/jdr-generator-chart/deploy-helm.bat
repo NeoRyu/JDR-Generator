@@ -45,13 +45,18 @@ echo ==============================================
 echo --- PHASE DE NETTOYAGE : KUBERNETES / HELM ---
 echo ==============================================
 echo.
+echo INFO : Pour désinstaller complètement la release Helm 'jdr-generator' :
+echo        helm uninstall jdr-generator --ignore-not-found=true
+echo        kubectl delete pvc jdr-generator-jdr-generator-chart-mysql-pv-claim
+REM # helm get all jdr-generator # pour vérifier la suppression
+echo ATTENTION : Cela provoquera une perte irréversible des personnages générés !!!
+echo.
+echo        ---------------------------------------
+echo.
 echo Début du nettoyage des ressources Kubernetes existantes pour éviter les conflits...
-echo Tentative de désinstallation de la release Helm 'jdr-generator'...
-helm uninstall jdr-generator --ignore-not-found=true
-REM helm get all jdr-generator # pour vérifier
 echo.
 REM Nettoyage explicite des services de l'ancien déploiement manuel (qui n'incluent pas 'jdr-generator' dans leur nom)
-echo Suppression des services d'un déploiement jubernetes vanilla si existants...
+echo Suppression des services d'un déploiement Kubernetes "vanilla" si existants...
 kubectl delete service api-container freepik-container gemini-container mysql-container openai-container web-container --ignore-not-found=true
 echo.
 REM Nettoyage dynamique de TOUTES les ressources liées à jdr-generator qui pourraient subsister.
@@ -61,20 +66,37 @@ for /f "tokens=*" %%a in ('kubectl get all -o name ^| findstr "jdr-generator"') 
     echo Suppression de %%a
     kubectl delete %%a --ignore-not-found=true
 )
-echo Identification et suppression dynamique des PersistentVolumeClaims 'jdr-generator'...
-for /f "tokens=*" %%a in ('kubectl get pvc -o name ^| findstr "jdr-generator"') do (
-    echo Suppression de %%a
-    kubectl delete %%a --ignore-not-found=true
-)
+REM Nettoyage explicite des reliquat HELM du précédent déploiement :
+kubectl delete deployment jdr-generator-jdr-generator-chart-freepik --ignore-not-found=true
+kubectl delete deployment jdr-generator-jdr-generator-chart-gemini --ignore-not-found=true
+kubectl delete deployment jdr-generator-jdr-generator-chart-openai --ignore-not-found=true
+kubectl delete deployment jdr-generator-jdr-generator-chart-mysql --ignore-not-found=true
+kubectl delete deployment jdr-generator-jdr-generator-chart-api --ignore-not-found=true
+kubectl delete deployment jdr-generator-jdr-generator-chart-web --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-freepik-service --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-gemini-service --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-openai-service --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-mysql-service --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-api-service --ignore-not-found=true
+kubectl delete service jdr-generator-jdr-generator-chart-web-service --ignore-not-found=true
+echo.
 REM Nettoyage explicite des secrets qui pourraient persister et causer des problèmes si non supprimés par 'get all'
 REM Note: 'get all' n'inclut pas toujours tous les types de ressources et les secrets spécifiques peuvent être problématiques.
+echo Suppression des secrets
 kubectl delete secret jdr-generator-mysql-secrets --ignore-not-found=true
 kubectl delete secret jdr-generator-ai-secrets --ignore-not-found=true
 echo.
-echo Attente de 10 secondes pour le nettoyage des ressources...
-timeout /t 10 /nobreak >nul
 echo.
-echo Vérification que les ressources 'jdr-generator' sont bien supprimées...
+echo Identification des PersistentVolumeClaims 'jdr-generator'...
+for /f "tokens=*" %%a in ('kubectl get pvc -o name ^| findstr "jdr-generator"') do (
+    echo INFO : Suppression possible de %%a via :
+    echo # kubectl delete %%a --ignore-not-found=true
+)
+echo.
+echo Attente de 10 secondes pour le nettoyage des ressources...
+ping -n 11 127.0.0.1 > nul
+echo.
+echo Ressources 'jdr-generator' non supprimées :
 kubectl get all -o name | findstr "jdr-generator"
 kubectl get pvc -o name | findstr "jdr-generator"
 echo.
@@ -94,28 +116,68 @@ if %errorlevel% neq 0 (
 )
 echo Chart Helm packagé avec succès.
 echo.
-echo Installation du chart Helm 'jdr-generator' sur le cluster Kubernetes...
-helm install jdr-generator ./ -f values.yaml -f ai-secrets-values.yaml
+
+echo Saisie des clés API (non-silencieuse en Batch)
+set /p GEMINI_API_KEY_INPUT="- Votre API KEY pour GEMINI : "
+
+set /p FREEPIK_API_KEY_INPUT="- Votre API KEY pour FREEPIK : "
+
+set /p OPENAI_API_KEY_INPUT="- Votre API KEY pour OPENAI : "
+
+set /p OPENAI_ORG_ID_INPUT="-- Et OPENAI_ORG_ID associé : "
+echo.
+
+if not defined GEMINI_API_KEY_INPUT goto :missing_gemini_key
+if not defined FREEPIK_API_KEY_INPUT goto :missing_freepik_key
+if not defined OPENAI_API_KEY_INPUT goto :missing_openai_key
+if not defined OPENAI_ORG_ID_INPUT goto :missing_openai_org_id_key
+echo Utilisation des valeurs saisies pour injecter les clés API via --set
+helm upgrade --install jdr-generator ./ ^
+  -f values.yaml ^
+  --set secrets.apiKeys.data.GEMINI_API_KEY="%GEMINI_API_KEY_INPUT%" ^
+  --set secrets.apiKeys.data.FREEPIK_API_KEY="%FREEPIK_API_KEY_INPUT%" ^
+  --set secrets.apiKeys.data.OPENAI_API_KEY="%OPENAI_API_KEY_INPUT%" ^
+  --set secrets.apiKeys.data.OPENAI_ORG_ID="%OPENAI_ORG_ID_INPUT%"
 if %errorlevel% neq 0 (
-    echo ERREUR: L'installation du chart Helm a échoué.
+    echo ERREUR: L'installation du chart Helm a échouée ...
     pause
     goto :eof
 )
-echo Chart Helm installé avec succès.
+echo Chart Helm installe avec succès !
+echo.
+goto :skip_key_error_checks
+:missing_gemini_key
+echo ERREUR: GEMINI_API_KEY non saisie. L'installation est annulée.
+pause
+goto :eof
+:missing_freepik_key
+echo ERREUR: FREEPIK_API_KEY non saisie. L'installation est annulée.
+pause
+goto :eof
+:missing_openai_key
+echo ERREUR: OPENAI_API_KEY non saisie. L'installation est annulée.
+pause
+goto :eof
+:missing_openai_org_id_key
+echo ERREUR: OPENAI_ORG_ID non saisie. L'installation est annulée.
+pause
+goto :eof
+:skip_key_error_checks
+
 echo Vérification de l'état initial des Deployments...
 kubectl get deployments
 echo.
 echo En attente du déploiement complet (états stables et 'Ready') ...
-kubectl rollout status deployment/jdr-generator-jdr-generator-chart-api
-if %errorlevel% neq 0 (echo ERREUR: Déploiement API non prêt. && pause && goto :eof)
 kubectl rollout status deployment/jdr-generator-jdr-generator-chart-freepik
 if %errorlevel% neq 0 (echo ERREUR: Déploiement Freepik non prêt. && pause && goto :eof)
 kubectl rollout status deployment/jdr-generator-jdr-generator-chart-gemini
 if %errorlevel% neq 0 (echo ERREUR: Déploiement Gemini non prêt. && pause && goto :eof)
-kubectl rollout status deployment/jdr-generator-jdr-generator-chart-mysql
-if %errorlevel% neq 0 (echo ERREUR: Déploiement MySQL non prêt. && pause && goto :eof)
 kubectl rollout status deployment/jdr-generator-jdr-generator-chart-openai
 if %errorlevel% neq 0 (echo ERREUR: Déploiement OpenAI non prêt. && pause && goto :eof)
+kubectl rollout status deployment/jdr-generator-jdr-generator-chart-mysql
+if %errorlevel% neq 0 (echo ERREUR: Déploiement MySQL non prêt. && pause && goto :eof)
+kubectl rollout status deployment/jdr-generator-jdr-generator-chart-api
+if %errorlevel% neq 0 (echo ERREUR: Déploiement API non prêt. && pause && goto :eof)
 kubectl rollout status deployment/jdr-generator-jdr-generator-chart-web
 if %errorlevel% neq 0 (echo ERREUR: Déploiement WEB non prêt. && pause && goto :eof)
 echo.

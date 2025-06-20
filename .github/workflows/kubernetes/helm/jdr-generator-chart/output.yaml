@@ -155,6 +155,28 @@ data:
     GRANT ALL PRIVILEGES ON jdr_generator_db.* TO 'jdr_user'@'%';
     FLUSH PRIVILEGES;
 ---
+# Source: jdr-generator-chart/templates/mysql-pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: release-name-jdr-generator-chart-mysql-pv-claim
+  labels:
+    helm.sh/chart: jdr-generator-chart-0.1.0
+    app.kubernetes.io/name: jdr-generator-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    # Cette annotation indique à Helm de NE PAS supprimer ce PVC lors d'un 'helm uninstall'.
+    # Cela permet de conserver les donnees de la base de donnees.
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
 # Source: jdr-generator-chart/templates/mysql.yaml
 # jdr-generator-chart/templates/mysql.yaml
 apiVersion: v1
