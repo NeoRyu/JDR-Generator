@@ -7,7 +7,7 @@ fullnameOverride: "" # Pour surcharger le nom complet
 
 serviceAccount:
   create: true
-  name: ""
+  name: jdr-generator-sa
 podSecurityContext: {}
   # fsGroup: 2000
   # runAsGroup: 2000
@@ -232,12 +232,6 @@ mysql:
     port: 3306
   persistence:
     size: 5Gi
-  # Les identifiants MySQL ne sont plus directement sous 'mysql', mais sous 'secrets.mysql.data'
-  # existingSecret: "jdr-generator-mysql-secrets"
-  # rootPassword: "root"
-  # databaseName: "jdr_generator_db"
-  # username: "jdr_user"
-  # password: "root"
   resources:
     requests:
       memory: "128Mi"

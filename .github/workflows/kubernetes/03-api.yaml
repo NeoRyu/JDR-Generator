@@ -36,7 +36,7 @@ spec:
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-mysql-secrets
+                  name: jdr-generator-mysql-secret
                   key: MYSQL_PASSWORD
           livenessProbe:
             httpGet:

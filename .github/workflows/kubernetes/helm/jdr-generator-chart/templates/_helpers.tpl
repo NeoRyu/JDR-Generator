@@ -55,8 +55,8 @@ Create the name of the service account to use
 */}}
 {{- define "jdr-generator-chart.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
-{{- default (include "jdr-generator-chart.fullname" .) .Values.serviceAccount.name }}
+    {{- default (include "jdr-generator-chart.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
-{{- default "default" .Values.serviceAccount.name }}
+    {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}

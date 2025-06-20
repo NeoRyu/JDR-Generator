@@ -45,7 +45,7 @@ spec:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-mysql-secrets
+                  name: jdr-generator-mysql-secret
                   key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_DATABASE
               value: jdr_generator_db
@@ -54,7 +54,7 @@ spec:
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: jdr-generator-mysql-secrets
+                  name: jdr-generator-mysql-secret
                   key: MYSQL_PASSWORD
           volumeMounts:
             - name: mysql-persistent-storage
