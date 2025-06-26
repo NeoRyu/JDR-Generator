@@ -185,3 +185,32 @@ jobs:
       # Vérifier TypeScript
       #- name: TypeScript Check
       #  run: cd openai && npx tsc --noEmit
+
+  nodejs-code-quality-freepik:
+    name: Node.js Code Quality - Freepik
+    runs-on: ubuntu-latest
+    needs: java-code-quality
+    steps:
+      # Récupérer le code source du dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # Configurer Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22.x'
+      # Installer les dépendances
+      - name: Install dependencies
+        run: cd freepik && npm install
+      # Formater le code avec Prettier
+      - name: Format code # npm run format
+        run: cd freepik && npm run format
+      # Vérifier le formatage avec Prettier
+      - name: Check formatting # cmd 'lint' dans package.json
+        run: cd freepik && npm run format:check
+      # ESLint
+      - name: Freepik ESLint
+        run: cd freepik && npm run lint
+      # Vérifier TypeScript
+      #- name: TypeScript Check
+      #  run: cd freepik && npx tsc --noEmit

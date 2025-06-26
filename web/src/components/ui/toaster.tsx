@@ -9,12 +9,10 @@ import {
 } from "@/components/ui/toast"
 
 export function Toaster() {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const { toasts } = useToast()
 
   return (
     <ToastProvider>
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-call */}
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
