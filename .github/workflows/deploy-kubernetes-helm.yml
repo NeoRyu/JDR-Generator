@@ -1,0 +1,106 @@
+name: Deploy JDR Generator to Kubernetes via Helm
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+  # Permet de déclencher manuellement ce workflow depuis l'interface GitHub Actions
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Kubeconfig
+        # Cette étape configure kubectl pour interagir avec votre cluster Kubernetes.
+        # Elle décode le secret KUBECONFIG_BASE64 et le place dans ~/.kube/config.
+        # Si cluster cloud spécifique (GKE, AKS, EKS), utilisez l'authentification du fournisseur.
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBECONFIG_BASE64 }}" | base64 --decode > ~/.kube/config
+          chmod 600 ~/.kube/config # Définir les permissions pour des raisons de sécurité
+        env:
+          KUBECONFIG_BASE64: ${{ secrets.KUBECONFIG_BASE64 }} # Secret GitHub
+
+      - name: Verify kubectl Context
+        # On vérifie que kubectl est bien configuré pour le bon cluster.
+        run: |
+          kubectl config current-context
+          kubectl cluster-info
+
+      - name: Setup Helm
+        # On installe Helm sur le runner GitHub Actions.
+        uses: azure/setup-helm@v3
+        with:
+          version: '3.18.2'
+
+      - name: Verify Helm Version
+        run: helm version
+
+      - name: Clean up Existing Deployments and Services
+        # On supprime les ressources existantes pour un déploiement propre.
+        run: |
+          echo "Deleting old Services and Deployments..."
+          kubectl delete service jdr-generator-jdr-generator-chart-api-service --ignore-not-found=true
+          kubectl delete service jdr-generator-jdr-generator-chart-freepik-service --ignore-not-found=true
+          kubectl delete service jdr-generator-jdr-generator-chart-gemini-service --ignore-not-found=true
+          kubectl delete service jdr-generator-jdr-generator-chart-mysql-service --ignore-not-found=true
+          kubectl delete service jdr-generator-jdr-generator-chart-openai-service --ignore-not-found=true
+          kubectl delete service jdr-generator-jdr-generator-chart-web-service --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-api --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-freepik --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-gemini --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-mysql --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-openai --ignore-not-found=true
+          kubectl delete deployment jdr-generator-jdr-generator-chart-web --ignore-not-found=true
+          echo "Clean up complete."
+          sleep 10
+
+      - name: Lint and Template Helm Chart
+        # On exécute les tests de linting et génère le YAML du chart.
+        run: |
+          echo "Running helm lint..."
+          helm lint .
+          echo "Generating Helm template..."
+          helm template . > output.yaml
+        working-directory: ./.github/workflows/kubernetes/helm/jdr-generator-chart/
+
+      - name: Deploy with Helm
+        # On déploie l'application en utilisant Helm, en passant les clés API via les secrets GitHub.
+        # Ces secrets sont injectés comme des variables de Helm (set) et seront utilisées
+        # pour créer un Secret Kubernetes, consommé par les modules en question de l'application.
+        run: |
+          echo "Deploying JDR Generator with Helm..."
+          helm upgrade --install jdr-generator ./jdr-generator-chart \
+            --set secrets.apiKeys.data.GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" \
+            --set secrets.apiKeys.data.FREEPIK_API_KEY="${{ secrets.FREEPIK_API_KEY }}" \
+            --set secrets.apiKeys.data.OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+            --set secrets.apiKeys.data.OPENAI_ORG_ID="${{ secrets.OPENAI_ORG_ID }}"
+          echo "Helm deployment initiated."
+        working-directory: ./.github/workflows/kubernetes/helm/jdr-generator-chart/
+
+      - name: Wait for Deployments to be Ready
+        # On attend que les déploiements soient stables avant de terminer le workflow.
+        # Cela assure que l'application est bien démarrée.
+        run: |
+          echo "Waiting for all deployments to be ready..."
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-api --timeout=5m
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-freepik --timeout=5m
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-gemini --timeout=5m
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-mysql --timeout=5m
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-openai --timeout=5m
+          kubectl rollout status deployment/jdr-generator-jdr-generator-chart-web --timeout=5m
+          echo "All deployments are ready!"
+
+      - name: Verify Service Status
+        # Affiche l'état des services et des pods pour le débogage.
+        run: |
+          echo "Current Services:"
+          kubectl get services -l app.kubernetes.io/instance=jdr-generator
+          echo "Current Pods:"
+          kubectl get pods -l app.kubernetes.io/instance=jdr-generator
