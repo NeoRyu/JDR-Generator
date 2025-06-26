@@ -14,8 +14,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterIllustrationModel {
-    private Long id;
-    private CharacterDetailsEntity characterDetails;
-    private String imageLabel;
-    private byte[] imageBlob;
+  private Long id;
+  private CharacterDetailsEntity characterDetails;
+  private String imageLabel;
+  private byte[] imageBlob;
 }

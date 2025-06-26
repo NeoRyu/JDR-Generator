@@ -14,14 +14,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterContextModel {
-    public Long id;
+  public Long id;
 
-    public String promptSystem;
-    public String promptRace;
-    public String promptGender;
-    public String promptClass;
-    public String promptDrawStyle;
-    public String promptDescription;
+  public String promptSystem;
+  public String promptRace;
+  public String promptGender;
+  public String promptClass;
+  public String promptDrawStyle;
+  public String promptDescription;
 
-    public Date createdAt;
+  public Date createdAt;
 }

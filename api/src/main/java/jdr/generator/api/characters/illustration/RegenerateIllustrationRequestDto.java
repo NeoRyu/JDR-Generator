@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegenerateIllustrationRequestDto {
-    private Long id;
-    private String drawStyle;
+  private Long id;
+  private String drawStyle;
 }

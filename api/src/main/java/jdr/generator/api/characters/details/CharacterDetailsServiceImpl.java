@@ -23,246 +23,227 @@ import org.springframework.transaction.annotation.Transactional;
 /** Implementation of the {@link CharacterDetailsService} interface. */
 @Service
 public class CharacterDetailsServiceImpl implements CharacterDetailsService {
-    private static final Logger logger = LoggerFactory.getLogger(CharacterDetailsServiceImpl.class);
+  private static final Logger logger = LoggerFactory.getLogger(CharacterDetailsServiceImpl.class);
 
-    private final ModelMapper modelMapper;
-    private final CharacterContextRepository characterContextRepository;
-    private final CharacterDetailsRepository characterDetailsRepository;
-    private final CharacterIllustrationRepository characterIllustrationRepository;
-    private final CharacterJsonDataService characterJsonDataService;
+  private final ModelMapper modelMapper;
+  private final CharacterContextRepository characterContextRepository;
+  private final CharacterDetailsRepository characterDetailsRepository;
+  private final CharacterIllustrationRepository characterIllustrationRepository;
+  private final CharacterJsonDataService characterJsonDataService;
 
-    /**
-     * Constructor for the CharacterDetailsServiceImpl.
-     *
-     * @param modelMapper The ModelMapper for mapping entities to models.
-     * @param characterContextRepository The repository for accessing character context data.
-     * @param characterDetailsRepository The repository for accessing character details data.
-     * @param characterIllustrationRepository The repository for accessing character illustration.
-     * @param characterJsonDataService The service for accessing character JSON data.
-     */
-    @Autowired
-    public CharacterDetailsServiceImpl(
-            final ModelMapper modelMapper,
-            final CharacterContextRepository characterContextRepository,
-            final CharacterDetailsRepository characterDetailsRepository,
-            final CharacterIllustrationRepository characterIllustrationRepository,
-            final CharacterJsonDataService characterJsonDataService) {
-        this.characterDetailsRepository = characterDetailsRepository;
-        this.modelMapper = modelMapper;
-        this.characterContextRepository = characterContextRepository;
-        this.characterIllustrationRepository = characterIllustrationRepository;
-        this.characterJsonDataService = characterJsonDataService;
+  /**
+   * Constructor for the CharacterDetailsServiceImpl.
+   *
+   * @param modelMapper The ModelMapper for mapping entities to models.
+   * @param characterContextRepository The repository for accessing character context data.
+   * @param characterDetailsRepository The repository for accessing character details data.
+   * @param characterIllustrationRepository The repository for accessing character illustration.
+   * @param characterJsonDataService The service for accessing character JSON data.
+   */
+  @Autowired
+  public CharacterDetailsServiceImpl(
+      final ModelMapper modelMapper,
+      final CharacterContextRepository characterContextRepository,
+      final CharacterDetailsRepository characterDetailsRepository,
+      final CharacterIllustrationRepository characterIllustrationRepository,
+      final CharacterJsonDataService characterJsonDataService) {
+    this.characterDetailsRepository = characterDetailsRepository;
+    this.modelMapper = modelMapper;
+    this.characterContextRepository = characterContextRepository;
+    this.characterIllustrationRepository = characterIllustrationRepository;
+    this.characterJsonDataService = characterJsonDataService;
+  }
+
+  /**
+   * Saves a new character's details.
+   *
+   * @param entity The CharacterDetailsEntity to save.
+   * @return The saved CharacterDetailsEntity.
+   */
+  @Override
+  @Transactional
+  public CharacterDetailsEntity save(final CharacterDetailsEntity entity) {
+    logger.info("Saving character details: {}", entity);
+    return this.characterDetailsRepository.save(entity);
+  }
+
+  @Transactional
+  public CharacterDetailsEntity saveAndFlush(CharacterDetailsEntity entity) {
+    logger.info("Saving and flush context: {}", entity);
+    try {
+      return this.characterDetailsRepository.saveAndFlush(entity);
+    } catch (Exception e) {
+      logger.error("Error saving and flush context: {}", entity, e);
+      throw e;
     }
+  }
 
-    /**
-     * Saves a new character's details.
-     *
-     * @param entity The CharacterDetailsEntity to save.
-     * @return The saved CharacterDetailsEntity.
-     */
-    @Override
-    @Transactional
-    public CharacterDetailsEntity save(final CharacterDetailsEntity entity) {
-        logger.info("Saving character details: {}", entity);
-        return this.characterDetailsRepository.save(entity);
+  /**
+   * Finds character details by their ID.
+   *
+   * @param id The ID of the character details to find.
+   * @return The found CharacterDetailsEntity, or null if not found.
+   */
+  @Override
+  public CharacterDetailsEntity findById(Long id) {
+    logger.info("Finding character details by ID: {}", id);
+    CharacterDetailsEntity entity = characterDetailsRepository.findById(id).orElse(null);
+    if (entity == null) {
+      logger.warn("Character details not found for ID: {}", id);
     }
+    return entity;
+  }
 
-    @Transactional
-    public CharacterDetailsEntity saveAndFlush(CharacterDetailsEntity entity) {
-        logger.info("Saving and flush context: {}", entity);
-        try {
-            return this.characterDetailsRepository.saveAndFlush(entity);
-        } catch (Exception e) {
-            logger.error("Error saving and flush context: {}", entity, e);
-            throw e;
-        }
+  /**
+   * Updates an existing character's details.
+   *
+   * @param id The ID of the character to update.
+   * @param model The updated character data.
+   * @return The updated CharacterDetailsEntity.
+   * @throws CharacterDetailsNotFoundException if no character details are found for the given ID.
+   * @throws IllegalArgumentException if the provided details in the model are null.
+   */
+  @Override
+  public CharacterDetailsEntity updateCharacterDetails(
+      final Long id, final CharacterFullModel model) {
+    CharacterDetailsEntity entity = this.findById(id);
+    if (entity != null) {
+      logger.debug("Character details found for update: {}", entity);
+      if (model.getDetails() != null) {
+        modelMapper.map(model.getDetails(), entity);
+        CharacterDetailsEntity updatedEntity = this.characterDetailsRepository.save(entity);
+        logger.info("Character details updated for ID: {}", id);
+        return updatedEntity;
+      } else {
+        logger.warn("Character details update failed, details are null for ID: {}", id);
+        throw new IllegalArgumentException("Character details update failed, details are null.");
+      }
+    } else {
+      logger.warn("Character details not found for update, ID: {}", id);
+      throw new CharacterDetailsNotFoundException(id);
     }
+  }
 
-    /**
-     * Finds character details by their ID.
-     *
-     * @param id The ID of the character details to find.
-     * @return The found CharacterDetailsEntity, or null if not found.
-     */
-    @Override
-    public CharacterDetailsEntity findById(Long id) {
-        logger.info("Finding character details by ID: {}", id);
-        CharacterDetailsEntity entity = characterDetailsRepository.findById(id).orElse(null);
-        if (entity == null) {
-            logger.warn("Character details not found for ID: {}", id);
-        }
-        return entity;
+  /**
+   * @param id The ID of the character to delete.
+   */
+  @Override
+  @Transactional // Indispensable pour que les opérations de cascade JPA soient gérées
+  public void deleteCharacter(Long id) {
+    logger.info("Attempting to delete character details by ID: {}", id);
+    CharacterDetailsEntity entityToDelete =
+        characterDetailsRepository
+            .findById(id)
+            .orElseThrow(
+                () ->
+                    new CharacterDetailsNotFoundException(
+                        "Character with ID " + id + " not found."));
+    // La suppression de l'entité CharacterDetailsEntity
+    // déclenchera automatiquement la suppression en cascade de :
+    // 1. CharacterContextEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true)
+    // 2. CharacterIllustrationEntity (via JPA @OneToOne avec CascadeType.ALL et
+    // orphanRemoval=true,
+    //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
+    // 3. CharacterJsonDataEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true,
+    //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
+    characterDetailsRepository.delete(entityToDelete); // Suppression de l'entité gérée par JPA
+    logger.info("Character and all associated data for ID {} have been successfully deleted.", id);
+  }
+
+  /**
+   * Retrieves a list of all character details.
+   *
+   * @return A list of CharacterDetailsModel. Returns an empty list if no characters are found or an
+   *     error occurs.
+   */
+  @Override
+  public List<CharacterDetailsModel> getAllCharacters() {
+    logger.info("Fetching all characters details.");
+    try {
+      List<CharacterDetailsModel> characters =
+          characterDetailsRepository.findAll().parallelStream()
+              .map(entity -> modelMapper.map(entity, CharacterDetailsModel.class))
+              .collect(Collectors.toList());
+
+      logger.debug("Fetched {} characters details.", characters.size());
+      return characters;
+
+    } catch (Exception e) {
+      logger.info("Empty list when fetching all characters details: {}", e.getMessage());
+      return Collections.emptyList();
     }
+  }
 
-    /**
-     * Updates an existing character's details.
-     *
-     * @param id The ID of the character to update.
-     * @param model The updated character data.
-     * @return The updated CharacterDetailsEntity.
-     * @throws CharacterDetailsNotFoundException if no character details are found for the given ID.
-     * @throws IllegalArgumentException if the provided details in the model are null.
-     */
-    @Override
-    public CharacterDetailsEntity updateCharacterDetails(
-            final Long id, final CharacterFullModel model) {
-        CharacterDetailsEntity entity = this.findById(id);
-        if (entity != null) {
-            logger.debug("Character details found for update: {}", entity);
-            if (model.getDetails() != null) {
-                modelMapper.map(model.getDetails(), entity);
-                CharacterDetailsEntity updatedEntity = this.characterDetailsRepository.save(entity);
-                logger.info("Character details updated for ID: {}", id);
-                return updatedEntity;
-            } else {
-                logger.warn("Character details update failed, details are null for ID: {}", id);
-                throw new IllegalArgumentException(
-                        "Character details update failed, details are null.");
-            }
-        } else {
-            logger.warn("Character details not found for update, ID: {}", id);
-            throw new CharacterDetailsNotFoundException(id);
-        }
+  /**
+   * Retrieves a list of all full character models, including their details, context, illustration,
+   * and JSON data.
+   *
+   * @return A list of CharacterFullModel. Returns an empty list if no characters are found or an
+   *     error occurs during processing.
+   */
+  @Override
+  @Transactional(readOnly = true)
+  public List<CharacterFullModel> getAllCharactersFull() {
+    logger.info("Fetching all characters full details.");
+    try {
+      final List<CharacterDetailsEntity> detailsEntities = characterDetailsRepository.findAll();
+      List<CharacterFullModel> fullModels =
+          detailsEntities.stream()
+              .map(
+                  detailsEntity -> {
+                    try {
+                      // Récupération des contextes et illustrations
+                      CharacterContextEntity contextEntity =
+                          characterContextRepository
+                              .findById(detailsEntity.getContextId())
+                              .orElseThrow(
+                                  () ->
+                                      new RuntimeException(
+                                          "Context not found for character: "
+                                              + detailsEntity.getId()));
+                      CharacterIllustrationEntity illustrationEntity =
+                          characterIllustrationRepository
+                              .findByCharacterDetailsId(detailsEntity.getId())
+                              .orElse(null); // Illustration peut être
+                      // null
+                      CharacterJsonDataEntity jsonDataEntity =
+                          characterJsonDataService
+                              .findByCharacterDetailsId(detailsEntity.getId())
+                              .orElse(null); // JsonData peut être
+                      // null
+
+                      final CharacterDetailsModel detailsModel =
+                          modelMapper.map(detailsEntity, CharacterDetailsModel.class);
+                      final CharacterContextModel contextModel =
+                          modelMapper.map(contextEntity, CharacterContextModel.class);
+                      final CharacterIllustrationModel illustrationModel =
+                          illustrationEntity != null
+                              ? modelMapper.map(
+                                  illustrationEntity, CharacterIllustrationModel.class)
+                              : null;
+                      final CharacterJsonDataModel jsonDataModel =
+                          jsonDataEntity != null
+                              ? modelMapper.map(jsonDataEntity, CharacterJsonDataModel.class)
+                              : null;
+                      return new CharacterFullModel(
+                          contextModel, detailsModel, jsonDataModel, illustrationModel);
+                    } catch (Exception e) {
+                      logger.error(
+                          "Error processing character details: {}, model: {}",
+                          detailsEntity.getId(),
+                          modelMapper.map(detailsEntity, CharacterDetailsModel.class),
+                          e);
+                      return null; // ou une valeur par défaut, ou lancez une
+                      // exception
+                    }
+                  })
+              .filter(java.util.Objects::nonNull)
+              .collect(Collectors.toList());
+      logger.debug("Fetched {} characters full details.", fullModels.size());
+      return fullModels;
+    } catch (Exception e) {
+      logger.info("Empty list when fetching all characters full details: {}", e.getMessage());
+      return Collections.emptyList();
     }
-
-    /**
-     * @param id The ID of the character to delete.
-     */
-    @Override
-    @Transactional // Indispensable pour que les opérations de cascade JPA soient gérées
-    public void deleteCharacter(Long id) {
-        logger.info("Attempting to delete character details by ID: {}", id);
-        CharacterDetailsEntity entityToDelete =
-                characterDetailsRepository
-                        .findById(id)
-                        .orElseThrow(
-                                () ->
-                                        new CharacterDetailsNotFoundException(
-                                                "Character with ID " + id + " not found."));
-        // La suppression de l'entité CharacterDetailsEntity
-        // déclenchera automatiquement la suppression en cascade de :
-        // 1. CharacterContextEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true)
-        // 2. CharacterIllustrationEntity (via JPA @OneToOne avec CascadeType.ALL et
-        // orphanRemoval=true,
-        //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
-        // 3. CharacterJsonDataEntity (via JPA @OneToOne avec CascadeType.ALL et orphanRemoval=true,
-        //    ET via ON DELETE CASCADE SQL si JPA ne gère pas)
-        characterDetailsRepository.delete(entityToDelete); // Suppression de l'entité gérée par JPA
-        logger.info(
-                "Character and all associated data for ID {} have been successfully deleted.", id);
-    }
-
-    /**
-     * Retrieves a list of all character details.
-     *
-     * @return A list of CharacterDetailsModel. Returns an empty list if no characters are found or
-     *     an error occurs.
-     */
-    @Override
-    public List<CharacterDetailsModel> getAllCharacters() {
-        logger.info("Fetching all characters details.");
-        try {
-            List<CharacterDetailsModel> characters =
-                    characterDetailsRepository.findAll().parallelStream()
-                            .map(entity -> modelMapper.map(entity, CharacterDetailsModel.class))
-                            .collect(Collectors.toList());
-
-            logger.debug("Fetched {} characters details.", characters.size());
-            return characters;
-
-        } catch (Exception e) {
-            logger.info("Empty list when fetching all characters details: {}", e.getMessage());
-            return Collections.emptyList();
-        }
-    }
-
-    /**
-     * Retrieves a list of all full character models, including their details, context,
-     * illustration, and JSON data.
-     *
-     * @return A list of CharacterFullModel. Returns an empty list if no characters are found or an
-     *     error occurs during processing.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<CharacterFullModel> getAllCharactersFull() {
-        logger.info("Fetching all characters full details.");
-        try {
-            final List<CharacterDetailsEntity> detailsEntities =
-                    characterDetailsRepository.findAll();
-            List<CharacterFullModel> fullModels =
-                    detailsEntities.stream()
-                            .map(
-                                    detailsEntity -> {
-                                        try {
-                                            // Récupération des contextes et illustrations
-                                            CharacterContextEntity contextEntity =
-                                                    characterContextRepository
-                                                            .findById(detailsEntity.getContextId())
-                                                            .orElseThrow(
-                                                                    () ->
-                                                                            new RuntimeException(
-                                                                                    "Context not found for character: "
-                                                                                            + detailsEntity
-                                                                                                    .getId()));
-                                            CharacterIllustrationEntity illustrationEntity =
-                                                    characterIllustrationRepository
-                                                            .findByCharacterDetailsId(
-                                                                    detailsEntity.getId())
-                                                            .orElse(null); // Illustration peut être
-                                            // null
-                                            CharacterJsonDataEntity jsonDataEntity =
-                                                    characterJsonDataService
-                                                            .findByCharacterDetailsId(
-                                                                    detailsEntity.getId())
-                                                            .orElse(null); // JsonData peut être
-                                            // null
-
-                                            final CharacterDetailsModel detailsModel =
-                                                    modelMapper.map(
-                                                            detailsEntity,
-                                                            CharacterDetailsModel.class);
-                                            final CharacterContextModel contextModel =
-                                                    modelMapper.map(
-                                                            contextEntity,
-                                                            CharacterContextModel.class);
-                                            final CharacterIllustrationModel illustrationModel =
-                                                    illustrationEntity != null
-                                                            ? modelMapper.map(
-                                                                    illustrationEntity,
-                                                                    CharacterIllustrationModel
-                                                                            .class)
-                                                            : null;
-                                            final CharacterJsonDataModel jsonDataModel =
-                                                    jsonDataEntity != null
-                                                            ? modelMapper.map(
-                                                                    jsonDataEntity,
-                                                                    CharacterJsonDataModel.class)
-                                                            : null;
-                                            return new CharacterFullModel(
-                                                    contextModel,
-                                                    detailsModel,
-                                                    jsonDataModel,
-                                                    illustrationModel);
-                                        } catch (Exception e) {
-                                            logger.error(
-                                                    "Error processing character details: {}, model: {}",
-                                                    detailsEntity.getId(),
-                                                    modelMapper.map(
-                                                            detailsEntity,
-                                                            CharacterDetailsModel.class),
-                                                    e);
-                                            return null; // ou une valeur par défaut, ou lancez une
-                                            // exception
-                                        }
-                                    })
-                            .filter(java.util.Objects::nonNull)
-                            .collect(Collectors.toList());
-            logger.debug("Fetched {} characters full details.", fullModels.size());
-            return fullModels;
-        } catch (Exception e) {
-            logger.info("Empty list when fetching all characters full details: {}", e.getMessage());
-            return Collections.emptyList();
-        }
-    }
+  }
 }

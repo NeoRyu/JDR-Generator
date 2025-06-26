@@ -31,96 +31,95 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class PdfGeneratorServiceTest {
 
-    @Mock private CharacterContextService characterContextService;
-    @Mock private CharacterDetailsService characterDetailsService;
-    @Mock private CharacterIllustrationService characterIllustrationService;
-    @Mock private CharacterJsonDataService characterJsonDataService;
+  @Mock private CharacterContextService characterContextService;
+  @Mock private CharacterDetailsService characterDetailsService;
+  @Mock private CharacterIllustrationService characterIllustrationService;
+  @Mock private CharacterJsonDataService characterJsonDataService;
 
-    private ObjectMapper objectMapper;
+  private ObjectMapper objectMapper;
 
-    @InjectMocks private PdfGeneratorService pdfGeneratorService;
+  @InjectMocks private PdfGeneratorService pdfGeneratorService;
 
-    private CharacterDetailsEntity testCharacterDetails;
-    private CharacterContextEntity testCharacterContext;
-    private CharacterJsonDataEntity testCharacterJsonData;
-    private CharacterIllustrationEntity testCharacterIllustration;
+  private CharacterDetailsEntity testCharacterDetails;
+  private CharacterContextEntity testCharacterContext;
+  private CharacterJsonDataEntity testCharacterJsonData;
+  private CharacterIllustrationEntity testCharacterIllustration;
 
-    private Long TEST_CHARACTER_ID = 1L;
+  private Long TEST_CHARACTER_ID = 1L;
 
-    @BeforeEach
-    void setUp() throws IOException {
-        objectMapper = new ObjectMapper();
-        pdfGeneratorService =
-                new PdfGeneratorService(
-                        objectMapper,
-                        characterContextService,
-                        characterDetailsService,
-                        characterIllustrationService,
-                        characterJsonDataService);
+  @BeforeEach
+  void setUp() throws IOException {
+    objectMapper = new ObjectMapper();
+    pdfGeneratorService =
+        new PdfGeneratorService(
+            objectMapper,
+            characterContextService,
+            characterDetailsService,
+            characterIllustrationService,
+            characterJsonDataService);
 
-        testCharacterDetails = new CharacterDetailsEntity();
-        testCharacterDetails.setId(TEST_CHARACTER_ID);
-        testCharacterDetails.setContextId(TEST_CHARACTER_ID);
-        testCharacterDetails.setName("Alan de Wylye");
-        testCharacterDetails.setAge(20);
-        testCharacterDetails.setBirthPlace("Vagon");
-        testCharacterDetails.setResidenceLocation("Vagon");
-        testCharacterDetails.setReasonForResidence("Chevalier en formation");
-        testCharacterDetails.setClimate("Tempéré");
-        testCharacterDetails.setCommonProblems("Anarchie ambiante");
-        testCharacterDetails.setDailyRoutine("Entraînement, études, patrouilles");
-        testCharacterDetails.setParentsAlive(true);
-        testCharacterDetails.setDetailsAboutParents("Fils d'un chevalier de petite terre");
-        testCharacterDetails.setFeelingsAboutParents("Respect et fierté");
-        testCharacterDetails.setSiblings("1");
-        testCharacterDetails.setChildhoodStory("Enfance au château, formations précoces");
-        testCharacterDetails.setYouthFriends("7 autres écuyers");
-        testCharacterDetails.setPet("Cheval");
-        testCharacterDetails.setMaritalStatus("Célibataire");
-        testCharacterDetails.setTypeOfLover("Noble et spirituelle");
-        testCharacterDetails.setConjugalHistory("Aucune");
-        testCharacterDetails.setChildren(0);
-        testCharacterDetails.setEducation("Chevalerie et lettres");
-        testCharacterDetails.setProfession("Écuyer");
-        testCharacterDetails.setReasonForProfession("Tradition familiale");
-        testCharacterDetails.setWorkPreferences("Action et aventure");
-        testCharacterDetails.setChangeInWorld("Rétablir la paix et la justice");
-        testCharacterDetails.setChangeInSelf("Maîtriser son impulsivité");
-        testCharacterDetails.setGoal("Devenir un chevalier digne");
-        testCharacterDetails.setReasonForGoal("Héritage familial et honneur");
-        testCharacterDetails.setBiggestObstacle("Son tempérament fier et impulsif");
-        testCharacterDetails.setOvercomingObstacle("Discipline et mentorat");
-        testCharacterDetails.setPlanIfSuccessful("Servir le roi Arthur");
-        testCharacterDetails.setPlanIfFailed("Rejoindre les moines");
-        testCharacterDetails.setSelfDescription("Fier, impulsif, loyal");
-        testCharacterDetails.setDistinctiveTrait("Cicatrice sur le bras");
-        testCharacterDetails.setPhysicalDescription("Jeune homme aux cheveux bruns et yeux bleus");
-        testCharacterDetails.setClothingPreferences("Tunique et chausses");
-        testCharacterDetails.setFears("Échec et déshonneur");
-        testCharacterDetails.setFavoriteFood("Viande rôtie");
-        testCharacterDetails.setHobbies("Chasse et joute");
-        testCharacterDetails.setLeisureActivities("Musique et lecture");
-        testCharacterDetails.setIdealCompany("Chevaliers courageux et dames nobles");
-        testCharacterDetails.setAttitudeTowardsGroups(
-                "Prend les devants, mais valorise le travail d'équipe");
-        testCharacterDetails.setAttitudeTowardsWorld("Mélange d'idéalisme et de cynisme");
-        testCharacterDetails.setAttitudeTowardsPeople(
-                "Amical avec les respectés, méfiant envers les inconnus");
+    testCharacterDetails = new CharacterDetailsEntity();
+    testCharacterDetails.setId(TEST_CHARACTER_ID);
+    testCharacterDetails.setContextId(TEST_CHARACTER_ID);
+    testCharacterDetails.setName("Alan de Wylye");
+    testCharacterDetails.setAge(20);
+    testCharacterDetails.setBirthPlace("Vagon");
+    testCharacterDetails.setResidenceLocation("Vagon");
+    testCharacterDetails.setReasonForResidence("Chevalier en formation");
+    testCharacterDetails.setClimate("Tempéré");
+    testCharacterDetails.setCommonProblems("Anarchie ambiante");
+    testCharacterDetails.setDailyRoutine("Entraînement, études, patrouilles");
+    testCharacterDetails.setParentsAlive(true);
+    testCharacterDetails.setDetailsAboutParents("Fils d'un chevalier de petite terre");
+    testCharacterDetails.setFeelingsAboutParents("Respect et fierté");
+    testCharacterDetails.setSiblings("1");
+    testCharacterDetails.setChildhoodStory("Enfance au château, formations précoces");
+    testCharacterDetails.setYouthFriends("7 autres écuyers");
+    testCharacterDetails.setPet("Cheval");
+    testCharacterDetails.setMaritalStatus("Célibataire");
+    testCharacterDetails.setTypeOfLover("Noble et spirituelle");
+    testCharacterDetails.setConjugalHistory("Aucune");
+    testCharacterDetails.setChildren(0);
+    testCharacterDetails.setEducation("Chevalerie et lettres");
+    testCharacterDetails.setProfession("Écuyer");
+    testCharacterDetails.setReasonForProfession("Tradition familiale");
+    testCharacterDetails.setWorkPreferences("Action et aventure");
+    testCharacterDetails.setChangeInWorld("Rétablir la paix et la justice");
+    testCharacterDetails.setChangeInSelf("Maîtriser son impulsivité");
+    testCharacterDetails.setGoal("Devenir un chevalier digne");
+    testCharacterDetails.setReasonForGoal("Héritage familial et honneur");
+    testCharacterDetails.setBiggestObstacle("Son tempérament fier et impulsif");
+    testCharacterDetails.setOvercomingObstacle("Discipline et mentorat");
+    testCharacterDetails.setPlanIfSuccessful("Servir le roi Arthur");
+    testCharacterDetails.setPlanIfFailed("Rejoindre les moines");
+    testCharacterDetails.setSelfDescription("Fier, impulsif, loyal");
+    testCharacterDetails.setDistinctiveTrait("Cicatrice sur le bras");
+    testCharacterDetails.setPhysicalDescription("Jeune homme aux cheveux bruns et yeux bleus");
+    testCharacterDetails.setClothingPreferences("Tunique et chausses");
+    testCharacterDetails.setFears("Échec et déshonneur");
+    testCharacterDetails.setFavoriteFood("Viande rôtie");
+    testCharacterDetails.setHobbies("Chasse et joute");
+    testCharacterDetails.setLeisureActivities("Musique et lecture");
+    testCharacterDetails.setIdealCompany("Chevaliers courageux et dames nobles");
+    testCharacterDetails.setAttitudeTowardsGroups(
+        "Prend les devants, mais valorise le travail d'équipe");
+    testCharacterDetails.setAttitudeTowardsWorld("Mélange d'idéalisme et de cynisme");
+    testCharacterDetails.setAttitudeTowardsPeople(
+        "Amical avec les respectés, méfiant envers les inconnus");
 
-        testCharacterContext = new CharacterContextEntity();
-        testCharacterContext.setId(TEST_CHARACTER_ID);
-        testCharacterContext.setPromptGender("Male");
-        testCharacterContext.setPromptRace("Human");
-        testCharacterContext.setPromptClass("Knight");
-        testCharacterContext.setPromptSystem("Pendragon");
-        testCharacterContext.setPromptDescription(
-                "Jeune écuyer fier et impulsif du château de Vagon.");
+    testCharacterContext = new CharacterContextEntity();
+    testCharacterContext.setId(TEST_CHARACTER_ID);
+    testCharacterContext.setPromptGender("Male");
+    testCharacterContext.setPromptRace("Human");
+    testCharacterContext.setPromptClass("Knight");
+    testCharacterContext.setPromptSystem("Pendragon");
+    testCharacterContext.setPromptDescription("Jeune écuyer fier et impulsif du château de Vagon.");
 
-        testCharacterJsonData = new CharacterJsonDataEntity();
-        testCharacterJsonData.setId(TEST_CHARACTER_ID);
-        testCharacterJsonData.setCharacterDetails(testCharacterDetails);
-        testCharacterJsonData.setJsonData(
-                """
+    testCharacterJsonData = new CharacterJsonDataEntity();
+    testCharacterJsonData.setId(TEST_CHARACTER_ID);
+    testCharacterJsonData.setCharacterDetails(testCharacterDetails);
+    testCharacterJsonData.setJsonData(
+        """
                 {
                   "attributes": {
                     "TAI": 12, "DEX": 14, "FOR": 12, "CON": 12,
@@ -143,67 +142,64 @@ public class PdfGeneratorServiceTest {
                 }
                 """);
 
-        testCharacterIllustration = new CharacterIllustrationEntity();
-        testCharacterIllustration.setId(TEST_CHARACTER_ID);
-        testCharacterIllustration.setCharacterDetails(testCharacterDetails);
+    testCharacterIllustration = new CharacterIllustrationEntity();
+    testCharacterIllustration.setId(TEST_CHARACTER_ID);
+    testCharacterIllustration.setCharacterDetails(testCharacterDetails);
 
-        String testImageFileName = "test-image.png";
+    String testImageFileName = "test-image.png";
 
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream(testImageFileName)) {
-            if (is != null) {
-                byte[] imageBytes = is.readAllBytes();
-                testCharacterIllustration.setImageBlob(imageBytes);
-                // NOUVEAU: Vérification de la taille du BLOB
-                if (imageBytes.length > 0) {
-                    System.out.println(
-                            "Image de test '"
-                                    + testImageFileName
-                                    + "' chargée. Taille: "
-                                    + imageBytes.length
-                                    + " octets.");
-                } else {
-                    System.err.println("L'image '" + testImageFileName + "' est vide ou corrompue");
-                }
-            } else {
-                System.err.println(
-                        "Fichier image non trouvé: "
-                                + testImageFileName
-                                + ". Assurez-vous qu'il est dans 'api/src/test/resources/'.");
-                testCharacterIllustration.setImageBlob(null);
-            }
+    try (InputStream is = getClass().getClassLoader().getResourceAsStream(testImageFileName)) {
+      if (is != null) {
+        byte[] imageBytes = is.readAllBytes();
+        testCharacterIllustration.setImageBlob(imageBytes);
+        // NOUVEAU: Vérification de la taille du BLOB
+        if (imageBytes.length > 0) {
+          System.out.println(
+              "Image de test '"
+                  + testImageFileName
+                  + "' chargée. Taille: "
+                  + imageBytes.length
+                  + " octets.");
+        } else {
+          System.err.println("L'image '" + testImageFileName + "' est vide ou corrompue");
         }
-
-        when(characterDetailsService.findById(anyLong())).thenReturn(testCharacterDetails);
-        when(characterContextService.findById(anyLong())).thenReturn(testCharacterContext);
-        when(characterJsonDataService.findByCharacterDetailsId(anyLong()))
-                .thenReturn(Optional.of(testCharacterJsonData));
-        when(characterIllustrationService.findByCharacterDetailsId(anyLong()))
-                .thenReturn(testCharacterIllustration);
+      } else {
+        System.err.println(
+            "Fichier image non trouvé: "
+                + testImageFileName
+                + ". Assurez-vous qu'il est dans 'api/src/test/resources/'.");
+        testCharacterIllustration.setImageBlob(null);
+      }
     }
 
-    @Test
-    void testGenerateCharacterPdf_Success() throws DocumentException, IOException {
-        byte[] pdfBytes = pdfGeneratorService.generateCharacterPdf(TEST_CHARACTER_ID);
+    when(characterDetailsService.findById(anyLong())).thenReturn(testCharacterDetails);
+    when(characterContextService.findById(anyLong())).thenReturn(testCharacterContext);
+    when(characterJsonDataService.findByCharacterDetailsId(anyLong()))
+        .thenReturn(Optional.of(testCharacterJsonData));
+    when(characterIllustrationService.findByCharacterDetailsId(anyLong()))
+        .thenReturn(testCharacterIllustration);
+  }
 
-        assertNotNull(pdfBytes);
+  @Test
+  void testGenerateCharacterPdf_Success() throws DocumentException, IOException {
+    byte[] pdfBytes = pdfGeneratorService.generateCharacterPdf(TEST_CHARACTER_ID);
 
-        String testOutputDir = "target/test-output/pdf";
-        File outputDir = new File(testOutputDir);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
+    assertNotNull(pdfBytes);
 
-        String timestamp =
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        File pdfFile =
-                new File(
-                        outputDir,
-                        "generated_character_" + TEST_CHARACTER_ID + "_" + timestamp + ".pdf");
-
-        try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
-            fos.write(pdfBytes);
-        }
-        // Ouvrez ce fichier pour vérifier le PDF manuellement.
-        System.out.println("PDF généré à : " + pdfFile.getAbsolutePath());
+    String testOutputDir = "target/test-output/pdf";
+    File outputDir = new File(testOutputDir);
+    if (!outputDir.exists()) {
+      outputDir.mkdirs();
     }
+
+    String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+    File pdfFile =
+        new File(outputDir, "generated_character_" + TEST_CHARACTER_ID + "_" + timestamp + ".pdf");
+
+    try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
+      fos.write(pdfBytes);
+    }
+    // Ouvrez ce fichier pour vérifier le PDF manuellement.
+    System.out.println("PDF généré à : " + pdfFile.getAbsolutePath());
+  }
 }

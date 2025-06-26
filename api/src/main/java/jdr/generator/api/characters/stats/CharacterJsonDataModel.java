@@ -15,9 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CharacterJsonDataModel {
-    public Long id;
-    public CharacterDetailsEntity characterDetails;
-    public String jsonData;
-    public Date createdAt;
-    public Date updatedAt;
+  public Long id;
+  public CharacterDetailsEntity characterDetails;
+  public String jsonData;
+  public Date createdAt;
+  public Date updatedAt;
 }

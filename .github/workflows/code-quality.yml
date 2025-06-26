@@ -80,7 +80,7 @@ jobs:
           echo "exit 1"
       # Exécution de Dependency Check
       - name: API Maven Dependency Check
-        run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check
+        run: cd api && mvn --batch-mode org.owasp:dependency-check-maven:check -Dnvd.api.key="${{ secrets.NVD_API_KEY }}"
       # Exécution des tests unitaires
       - name: API Maven Test
         run: cd api && mvn --batch-mode surefire:test

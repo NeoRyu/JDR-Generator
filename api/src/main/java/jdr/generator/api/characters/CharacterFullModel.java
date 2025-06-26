@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CharacterFullModel {
 
-    private CharacterContextModel context;
-    private CharacterDetailsModel details;
-    private CharacterJsonDataModel jsonData;
-    private CharacterIllustrationModel illustration;
+  private CharacterContextModel context;
+  private CharacterDetailsModel details;
+  private CharacterJsonDataModel jsonData;
+  private CharacterIllustrationModel illustration;
 }

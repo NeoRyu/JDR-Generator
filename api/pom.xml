@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>20250107</version><!--CVE-2022-45688, CVE-2023-5072-->
+            <version>20250517</version><!--CVE-2022-45688, CVE-2023-5072-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -218,7 +218,7 @@
                     <java>
                         <googleJavaFormat>
                             <version>1.17.0</version>
-                            <style>AOSP</style>
+                            <style>GOOGLE</style>
                         </googleJavaFormat>
                         <importOrder/>
                         <removeUnusedImports/>
@@ -228,10 +228,18 @@
                     <skip>${skip.quality.code}</skip>
                 </configuration>
                 <executions>
-                    <execution>
+                    <execution><!-- mvn spotless:check -->
+                        <id>spotless-check</id>
+                        <phase>compile</phase>
                         <goals>
-                            <goal>apply</goal><!-- mvn spotless:apply -->
-                            <goal>check</goal><!-- mvn spotless:check -->
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                    <execution><!-- mvn spotless:apply -->
+                        <id>spotless-apply</id>
+                        <phase>none</phase>
+                        <goals>
+                            <goal>apply</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -267,7 +275,7 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.9.3.0</version>
                 <configuration>
-                    <skip>${skip.quality.code}</skip><!-- mvn spotbugs:gui -->
+                    <skip>true</skip><!-- mvn spotbugs:gui -->
                 </configuration>
                 <executions>
                     <execution>
@@ -282,8 +290,9 @@
             <plugin><!-- mvn org.owasp:dependency-check-maven:aggregate -->
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>8.3.1</version>
+                <version>12.1.0</version>
                 <configuration>
+                    <nvdApiKey>${nvd.api.key}</nvdApiKey><!-- /.m2/settings.xml || secrets.NVD_API_KEY -->
                     <skip>${skip.quality.code}</skip>
                     <failBuildOnCVSS>10</failBuildOnCVSS>
                     <suppressionFile>${project.basedir}/dependency-check-suppress.xml</suppressionFile>

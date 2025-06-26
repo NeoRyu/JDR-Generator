@@ -24,19 +24,19 @@ import lombok.NoArgsConstructor;
 @Table(name = "character_illustration")
 public class CharacterIllustrationEntity {
 
-    @Id
-    @Column(name = "id", unique = true, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @Column(name = "id", unique = true, nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "character_details_id", unique = true, nullable = false)
-    private CharacterDetailsEntity characterDetails;
+  @OneToOne
+  @JoinColumn(name = "character_details_id", unique = true, nullable = false)
+  private CharacterDetailsEntity characterDetails;
 
-    @Column(name = "image_label", columnDefinition = "TEXT")
-    private String imageLabel;
+  @Column(name = "image_label", columnDefinition = "TEXT")
+  private String imageLabel;
 
-    @Lob
-    @Column(name = "image_blob")
-    private byte[] imageBlob;
+  @Lob
+  @Column(name = "image_blob")
+  private byte[] imageBlob;
 }
