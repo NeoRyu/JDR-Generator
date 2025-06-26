@@ -63,8 +63,6 @@ spec:
                 secretKeyRef:
                   name: {{ .Values.secrets.mysql.existingSecretName }}
                   key: MYSQL_PASSWORD
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mysql://{{ include "jdr-generator-chart.fullname" . }}-mysql-service:{{ .Values.mysql.service.port }}/{{ .Values.secrets.mysql.data.MYSQL_DATABASE }}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
 
             {{- if .Values.gemini.enabled }}
             - name: GEMINI_SERVICE_URL

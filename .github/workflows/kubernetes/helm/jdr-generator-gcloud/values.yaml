@@ -277,7 +277,7 @@ api:
     port: 80
   extraEnv:
     - name: SPRING_PROFILES_ACTIVE
-      value: "kubernetes"
+      value: "gcloud"
     - name: SPRING_DATASOURCE_URL
       value: "jdbc:mysql://34.163.160.42:3306/jdr_generator_db?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam&connectTimeout=5000&socketTimeout=5000"
   resources:
@@ -321,6 +321,9 @@ configmaps:
       MAX_TOKEN: "2048"
       DOWNLOAD_FOLDER: "jdr-generator"
       USER_WINDOW: "fredericcoupez"
+      GEMINI_API_URL: "http://34.163.160.42:3001/gemini"
+      OPENAI_API_URL: "http://34.163.160.42:3002/openai"
+      FREEPIK_API_URL: "http://34.163.160.42:3003/freepik"
 
   web:
     enabled: true
