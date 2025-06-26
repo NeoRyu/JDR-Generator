@@ -10,9 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Represents the data transfer object for detailed character information.
- * */
+/** Represents the data transfer object for detailed character information. */
 @Getter
 @Setter
 @Builder(toBuilder = true)
@@ -21,142 +19,142 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true) // Indique à Jackson d'ignorer les champs JSON inconnus
 public class CharacterDetailsModel {
 
-  @JsonProperty("name")
-  public String name;
+    @JsonProperty("name")
+    public String name;
 
-  @JsonProperty("age")
-  public int age;
+    @JsonProperty("age")
+    public int age;
 
-  @JsonProperty("birthPlace")
-  public String birthPlace;
+    @JsonProperty("birthPlace")
+    public String birthPlace;
 
-  @JsonProperty("residenceLocation")
-  public String residenceLocation;
+    @JsonProperty("residenceLocation")
+    public String residenceLocation;
 
-  @JsonProperty("reasonForResidence")
-  public String reasonForResidence;
+    @JsonProperty("reasonForResidence")
+    public String reasonForResidence;
 
-  @JsonProperty("climate")
-  public String climate;
+    @JsonProperty("climate")
+    public String climate;
 
-  @JsonProperty("commonProblems")
-  public String commonProblems;
+    @JsonProperty("commonProblems")
+    public String commonProblems;
 
-  @JsonProperty("dailyRoutine")
-  public String dailyRoutine;
+    @JsonProperty("dailyRoutine")
+    public String dailyRoutine;
 
-  @JsonProperty("parentsAlive")
-  @JsonDeserialize(using = CustomBooleanDeserializer.class)
-  public Boolean parentsAlive;
+    @JsonProperty("parentsAlive")
+    @JsonDeserialize(using = CustomBooleanDeserializer.class)
+    public Boolean parentsAlive;
 
-  @JsonProperty("detailsAboutParents")
-  public String detailsAboutParents;
+    @JsonProperty("detailsAboutParents")
+    public String detailsAboutParents;
 
-  @JsonProperty("feelingsAboutParents")
-  public String feelingsAboutParents;
+    @JsonProperty("feelingsAboutParents")
+    public String feelingsAboutParents;
 
-  @JsonProperty("siblings")
-  public String siblings;
+    @JsonProperty("siblings")
+    public String siblings;
 
-  @JsonProperty("childhoodStory")
-  public String childhoodStory;
+    @JsonProperty("childhoodStory")
+    public String childhoodStory;
 
-  @JsonProperty("youthFriends")
-  public String youthFriends;
+    @JsonProperty("youthFriends")
+    public String youthFriends;
 
-  @JsonProperty("pet")
-  public String pet;
+    @JsonProperty("pet")
+    public String pet;
 
-  @JsonProperty("maritalStatus")
-  public String maritalStatus;
+    @JsonProperty("maritalStatus")
+    public String maritalStatus;
 
-  @JsonProperty("typeOfLover")
-  public String typeOfLover;
+    @JsonProperty("typeOfLover")
+    public String typeOfLover;
 
-  @JsonProperty("conjugalHistory")
-  public String conjugalHistory;
+    @JsonProperty("conjugalHistory")
+    public String conjugalHistory;
 
-  @JsonProperty("children")
-  @JsonDeserialize(using = CustomIntegerDeserializer.class)
-  public Integer children; // TODO : List<Character> ?
+    @JsonProperty("children")
+    @JsonDeserialize(using = CustomIntegerDeserializer.class)
+    public Integer children; // TODO : List<Character> ?
 
-  @JsonProperty("education")
-  public String education;
+    @JsonProperty("education")
+    public String education;
 
-  @JsonProperty("profession")
-  public String profession;
+    @JsonProperty("profession")
+    public String profession;
 
-  @JsonProperty("reasonForProfession")
-  public String reasonForProfession;
+    @JsonProperty("reasonForProfession")
+    public String reasonForProfession;
 
-  @JsonProperty("workPreferences")
-  public String workPreferences;
+    @JsonProperty("workPreferences")
+    public String workPreferences;
 
-  @JsonProperty("changeInWorld")
-  public String changeInWorld;
+    @JsonProperty("changeInWorld")
+    public String changeInWorld;
 
-  @JsonProperty("changeInSelf")
-  public String changeInSelf;
+    @JsonProperty("changeInSelf")
+    public String changeInSelf;
 
-  @JsonProperty("goal")
-  public String goal;
+    @JsonProperty("goal")
+    public String goal;
 
-  @JsonProperty("reasonForGoal")
-  public String reasonForGoal;
+    @JsonProperty("reasonForGoal")
+    public String reasonForGoal;
 
-  @JsonProperty("biggestObstacle")
-  public String biggestObstacle;
+    @JsonProperty("biggestObstacle")
+    public String biggestObstacle;
 
-  @JsonProperty("overcomingObstacle")
-  public String overcomingObstacle;
+    @JsonProperty("overcomingObstacle")
+    public String overcomingObstacle;
 
-  @JsonProperty("planIfSuccessful")
-  public String planIfSuccessful;
+    @JsonProperty("planIfSuccessful")
+    public String planIfSuccessful;
 
-  @JsonProperty("planIfFailed")
-  public String planIfFailed;
+    @JsonProperty("planIfFailed")
+    public String planIfFailed;
 
-  @JsonProperty("selfDescription")
-  public String selfDescription;
+    @JsonProperty("selfDescription")
+    public String selfDescription;
 
-  @JsonProperty("distinctiveTrait")
-  public String distinctiveTrait;
+    @JsonProperty("distinctiveTrait")
+    public String distinctiveTrait;
 
-  @JsonProperty("physicalDescription")
-  public String physicalDescription;
+    @JsonProperty("physicalDescription")
+    public String physicalDescription;
 
-  @JsonProperty("clothingPreferences")
-  public String clothingPreferences;
+    @JsonProperty("clothingPreferences")
+    public String clothingPreferences;
 
-  @JsonProperty("fears")
-  public String fears;
+    @JsonProperty("fears")
+    public String fears;
 
-  @JsonProperty("favoriteFood")
-  public String favoriteFood;
+    @JsonProperty("favoriteFood")
+    public String favoriteFood;
 
-  @JsonProperty("hobbies")
-  public String hobbies;
+    @JsonProperty("hobbies")
+    public String hobbies;
 
-  @JsonProperty("leisureActivities")
-  public String leisureActivities;
+    @JsonProperty("leisureActivities")
+    public String leisureActivities;
 
-  @JsonProperty("idealCompany")
-  public String idealCompany;
+    @JsonProperty("idealCompany")
+    public String idealCompany;
 
-  @JsonProperty("attitudeTowardsGroups")
-  public String attitudeTowardsGroups;
+    @JsonProperty("attitudeTowardsGroups")
+    public String attitudeTowardsGroups;
 
-  @JsonProperty("attitudeTowardsWorld")
-  public String attitudeTowardsWorld;
+    @JsonProperty("attitudeTowardsWorld")
+    public String attitudeTowardsWorld;
 
-  @JsonProperty("attitudeTowardsPeople")
-  public String attitudeTowardsPeople;
+    @JsonProperty("attitudeTowardsPeople")
+    public String attitudeTowardsPeople;
 
-  @JsonProperty("image")
-  public String image;
+    @JsonProperty("image")
+    public String image;
 
-  public Long id;
-  public Long contextId;
-  public Date createdAt;
-  public Date updatedAt;
+    public Long id;
+    public Long contextId;
+    public Date createdAt;
+    public Date updatedAt;
 }

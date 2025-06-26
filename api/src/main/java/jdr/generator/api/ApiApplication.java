@@ -22,28 +22,28 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin(origins = {"*"})
 public class ApiApplication {
 
-  private static final Logger log = LogManager.getLogger();
+    private static final Logger log = LogManager.getLogger();
 
-  /**
-   * Main method to start the JDR-GENERATOR application.
-   *
-   * <p>This method starts the Spring Boot application and logs a message indicating that the
-   * application is ready to use.
-   *
-   * @param args Command line arguments passed to the application.
-   */
-  public static void main(String[] args) {
-    SpringApplication.run(ApiApplication.class, args);
-    logAppReady();
-  }
-
-  /** Logs a message indicating that the application is ready. */
-  private static void logAppReady() {
-    log.log(Level.OFF, "LOGGER LEVEL '{}' WILL BE USED...", log.getLevel());
-    final String message = "\n---------\n\nJDR-GENERATOR : APP IS READY TO USE !\n\n---------";
-    log.log(Level.OFF, message);
-    if (log.isInfoEnabled()) {
-      log.info(message);
+    /**
+     * Main method to start the JDR-GENERATOR application.
+     *
+     * <p>This method starts the Spring Boot application and logs a message indicating that the
+     * application is ready to use.
+     *
+     * @param args Command line arguments passed to the application.
+     */
+    public static void main(String[] args) {
+        SpringApplication.run(ApiApplication.class, args);
+        logAppReady();
     }
-  }
+
+    /** Logs a message indicating that the application is ready. */
+    private static void logAppReady() {
+        log.log(Level.OFF, "LOGGER LEVEL '{}' WILL BE USED...", log.getLevel());
+        final String message = "\n---------\n\nJDR-GENERATOR : APP IS READY TO USE !\n\n---------";
+        log.log(Level.OFF, message);
+        if (log.isInfoEnabled()) {
+            log.info(message);
+        }
+    }
 }

@@ -6,6 +6,13 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.DocumentException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import jdr.generator.api.characters.context.CharacterContextEntity;
 import jdr.generator.api.characters.context.CharacterContextService;
 import jdr.generator.api.characters.details.CharacterDetailsEntity;
@@ -14,13 +21,6 @@ import jdr.generator.api.characters.illustration.CharacterIllustrationEntity;
 import jdr.generator.api.characters.illustration.CharacterIllustrationService;
 import jdr.generator.api.characters.stats.CharacterJsonDataEntity;
 import jdr.generator.api.characters.stats.CharacterJsonDataService;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,19 +31,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class PdfGeneratorServiceTest {
 
-    @Mock
-    private CharacterContextService characterContextService;
-    @Mock
-    private CharacterDetailsService characterDetailsService;
-    @Mock
-    private CharacterIllustrationService characterIllustrationService;
-    @Mock
-    private CharacterJsonDataService characterJsonDataService;
+    @Mock private CharacterContextService characterContextService;
+    @Mock private CharacterDetailsService characterDetailsService;
+    @Mock private CharacterIllustrationService characterIllustrationService;
+    @Mock private CharacterJsonDataService characterJsonDataService;
 
     private ObjectMapper objectMapper;
 
-    @InjectMocks
-    private PdfGeneratorService pdfGeneratorService;
+    @InjectMocks private PdfGeneratorService pdfGeneratorService;
 
     private CharacterDetailsEntity testCharacterDetails;
     private CharacterContextEntity testCharacterContext;
@@ -55,9 +50,13 @@ public class PdfGeneratorServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         objectMapper = new ObjectMapper();
-        pdfGeneratorService = new PdfGeneratorService(objectMapper,
-                characterContextService, characterDetailsService,
-                characterIllustrationService, characterJsonDataService);
+        pdfGeneratorService =
+                new PdfGeneratorService(
+                        objectMapper,
+                        characterContextService,
+                        characterDetailsService,
+                        characterIllustrationService,
+                        characterJsonDataService);
 
         testCharacterDetails = new CharacterDetailsEntity();
         testCharacterDetails.setId(TEST_CHARACTER_ID);
@@ -102,9 +101,11 @@ public class PdfGeneratorServiceTest {
         testCharacterDetails.setHobbies("Chasse et joute");
         testCharacterDetails.setLeisureActivities("Musique et lecture");
         testCharacterDetails.setIdealCompany("Chevaliers courageux et dames nobles");
-        testCharacterDetails.setAttitudeTowardsGroups("Prend les devants, mais valorise le travail d'équipe");
+        testCharacterDetails.setAttitudeTowardsGroups(
+                "Prend les devants, mais valorise le travail d'équipe");
         testCharacterDetails.setAttitudeTowardsWorld("Mélange d'idéalisme et de cynisme");
-        testCharacterDetails.setAttitudeTowardsPeople("Amical avec les respectés, méfiant envers les inconnus");
+        testCharacterDetails.setAttitudeTowardsPeople(
+                "Amical avec les respectés, méfiant envers les inconnus");
 
         testCharacterContext = new CharacterContextEntity();
         testCharacterContext.setId(TEST_CHARACTER_ID);
@@ -118,7 +119,8 @@ public class PdfGeneratorServiceTest {
         testCharacterJsonData = new CharacterJsonDataEntity();
         testCharacterJsonData.setId(TEST_CHARACTER_ID);
         testCharacterJsonData.setCharacterDetails(testCharacterDetails);
-        testCharacterJsonData.setJsonData("""
+        testCharacterJsonData.setJsonData(
+                """
                 {
                   "attributes": {
                     "TAI": 12, "DEX": 14, "FOR": 12, "CON": 12,
@@ -153,22 +155,26 @@ public class PdfGeneratorServiceTest {
                 testCharacterIllustration.setImageBlob(imageBytes);
                 // NOUVEAU: Vérification de la taille du BLOB
                 if (imageBytes.length > 0) {
-                    System.out.println("Image de test '" + testImageFileName
-                            + "' chargée. Taille: " + imageBytes.length + " octets.");
+                    System.out.println(
+                            "Image de test '"
+                                    + testImageFileName
+                                    + "' chargée. Taille: "
+                                    + imageBytes.length
+                                    + " octets.");
                 } else {
                     System.err.println("L'image '" + testImageFileName + "' est vide ou corrompue");
                 }
             } else {
-                System.err.println("Fichier image non trouvé: " + testImageFileName
+                System.err.println(
+                        "Fichier image non trouvé: "
+                                + testImageFileName
                                 + ". Assurez-vous qu'il est dans 'api/src/test/resources/'.");
                 testCharacterIllustration.setImageBlob(null);
             }
         }
 
-        when(characterDetailsService.findById(anyLong()))
-                .thenReturn(testCharacterDetails);
-        when(characterContextService.findById(anyLong()))
-                .thenReturn(testCharacterContext);
+        when(characterDetailsService.findById(anyLong())).thenReturn(testCharacterDetails);
+        when(characterContextService.findById(anyLong())).thenReturn(testCharacterContext);
         when(characterJsonDataService.findByCharacterDetailsId(anyLong()))
                 .thenReturn(Optional.of(testCharacterJsonData));
         when(characterIllustrationService.findByCharacterDetailsId(anyLong()))
@@ -176,10 +182,8 @@ public class PdfGeneratorServiceTest {
     }
 
     @Test
-    void testGenerateCharacterPdf_Success()
-            throws DocumentException, IOException {
-        byte[] pdfBytes = pdfGeneratorService.generateCharacterPdf(
-                TEST_CHARACTER_ID);
+    void testGenerateCharacterPdf_Success() throws DocumentException, IOException {
+        byte[] pdfBytes = pdfGeneratorService.generateCharacterPdf(TEST_CHARACTER_ID);
 
         assertNotNull(pdfBytes);
 
@@ -189,10 +193,12 @@ public class PdfGeneratorServiceTest {
             outputDir.mkdirs();
         }
 
-        String timestamp = LocalDateTime.now().format(
-                DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
-        File pdfFile = new File(outputDir, "generated_character_" +
-                TEST_CHARACTER_ID + "_" + timestamp + ".pdf");
+        String timestamp =
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+        File pdfFile =
+                new File(
+                        outputDir,
+                        "generated_character_" + TEST_CHARACTER_ID + "_" + timestamp + ".pdf");
 
         try (FileOutputStream fos = new FileOutputStream(pdfFile)) {
             fos.write(pdfBytes);

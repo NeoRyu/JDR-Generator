@@ -8,19 +8,19 @@ package jdr.generator.api;
  */
 public class RestPreconditions {
 
-  /**
-   * Checks if the given data object is not null.
-   *
-   * @param <T> The type of the data object.
-   * @param data The data object to check.
-   * @return The data object if it is not null.
-   * @throws Exception if the data object is null.
-   * @throws InvalidContextException If the data object is null.
-   */
-  public static <T> T checkFound(T data) throws Exception {
-    if (data == null) {
-      throw new InvalidContextException();
+    /**
+     * Checks if the given data object is not null.
+     *
+     * @param <T> The type of the data object.
+     * @param data The data object to check.
+     * @return The data object if it is not null.
+     * @throws Exception if the data object is null.
+     * @throws InvalidContextException If the data object is null.
+     */
+    public static <T> T checkFound(T data) throws Exception {
+        if (data == null) {
+            throw new InvalidContextException();
+        }
+        return data;
     }
-    return data;
-  }
 }

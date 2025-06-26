@@ -8,8 +8,8 @@ package jdr.generator.api;
  * the requested operation.
  */
 public class InvalidContextException extends RuntimeException {
-  /** Constructs a new InvalidContextException with a default message. */
-  InvalidContextException() {
-    super("> Invalid data context found !");
-  }
+    /** Constructs a new InvalidContextException with a default message. */
+    InvalidContextException() {
+        super("> Invalid data context found !");
+    }
 }

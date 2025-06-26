@@ -12,13 +12,13 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-  /**
-   * Configures and provides a RestTemplate instance.
-   *
-   * @return A RestTemplate instance.
-   */
-  @Bean
-  public RestTemplate restTemplate() {
-    return new RestTemplate();
-  }
+    /**
+     * Configures and provides a RestTemplate instance.
+     *
+     * @return A RestTemplate instance.
+     */
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 }
