@@ -8,6 +8,9 @@ COPY .mvn .mvn/
 COPY pom.xml ./
 # Copie le code source de l'application Java
 COPY src ./src
+
+# Exécute spotless:apply pour s'assurer que le code est formaté avant de construire le package JAR.
+RUN mvn spotless:apply
 # Exécute la commande Maven pour nettoyer le projet et construire le package JAR, en sautant les tests
 RUN mvn clean package -DskipTests
 

@@ -1,0 +1,91 @@
+# jdr-generator-chart/templates/configmaps.yaml
+
+{{- /* ConfigMap pour le service API (Java) */}}
+{{- if .Values.configmaps.api.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-api-config
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: api-config
+data:
+  # Les URLs des services internes sont construites dynamiquement
+  GEMINI_SERVICE_URL: {{ printf "http://%s-gemini-service:%d" (include "jdr-generator-chart.fullname" .) .Values.gemini.service.port | quote }}
+  OPENAI_SERVICE_URL: {{ printf "http://%s-openai-service:%d" (include "jdr-generator-chart.fullname" .) .Values.openai.service.port | quote }}
+  FREEPIK_SERVICE_URL: {{ printf "http://%s-freepik-service:%d" (include "jdr-generator-chart.fullname" .) .Values.freepik.service.port | quote }}
+  SPRING_DATASOURCE_URL: {{ printf "jdbc:mysql://%s-mysql-service:%d/%s?useSSL=false&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=true&serverTimezone=UTC" (include "jdr-generator-chart.fullname" .) .Values.mysql.service.port .Values.secrets.mysql.data.MYSQL_DATABASE | quote }}
+
+  # Autres configurations pour l'API, tirées de values.yaml
+  {{- range $key, $value := .Values.configmaps.api.data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
+
+{{- /* ConfigMap pour le service Web (React/TS) */}}
+{{- if .Values.configmaps.web.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-web-config
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web-config
+data:
+  # L'URL de l'API pour le frontend.
+  # Si VITE_API_URL doit être l'URL complète du service API dans le cluster :
+  # VITE_API_URL : {{ printf "http://%s-api-service:%d" (include "jdr-generator-chart.fullname" .) .Values.api.service.port | quote }}
+  # Si VITE_API_URL est un chemin relatif (ex : "/") car Nginx ou un Ingress gère le proxying :
+  {{- range $key, $value := .Values.configmaps.web.data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
+
+{{- /* ConfigMap pour le service Gemini (Node.js) */}}
+{{- if .Values.configmaps.gemini.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-gemini-config
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: gemini-config
+data:
+  {{- range $key, $value := .Values.configmaps.gemini.data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
+
+{{- /* ConfigMap pour le service Freepik (Node.js) */}}
+{{- if .Values.configmaps.freepik.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-freepik-config
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: freepik-config
+data:
+  {{- range $key, $value := .Values.configmaps.freepik.data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+---
+{{- end }}
+
+{{- /* ConfigMap pour le service OpenAI (Node.js) */}}
+{{- if .Values.configmaps.openai.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-openai-config
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: openai-config
+data:
+  {{- range $key, $value := .Values.configmaps.openai.data }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}
+{{- end }}

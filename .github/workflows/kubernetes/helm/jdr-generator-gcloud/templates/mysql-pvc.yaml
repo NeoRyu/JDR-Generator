@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "jdr-generator-chart.fullname" . }}-mysql-pv-claim
+  labels:
+    {{- include "jdr-generator-chart.labels" . | nindent 4 }}
+  annotations:
+    # Cette annotation indique à Helm de NE PAS supprimer ce PVC lors d'un 'helm uninstall'.
+    # Cela permet de conserver les donnees de la base de donnees.
+    helm.sh/resource-policy: keep
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

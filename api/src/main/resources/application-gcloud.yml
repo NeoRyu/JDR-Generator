@@ -1,0 +1,83 @@
+logging:
+  level:
+    ROOT: INFO
+    org.springboot.security: INFO
+    jdr.generator.api: DEBUG
+
+# Configuration de l'URL de l'API des IA
+GEMINI_API_URL: http://34.163.160.42:3001/gemini
+OPENAI_API_URL: http://34.163.160.42:3002/openai
+FREEPIK_API_URL: http://34.163.160.42:3003/freepik
+
+spring:
+  application:
+    name: api
+  datasource:
+    hostname: 34.163.160.42
+    port: 3306
+    schema-name: jdr_generator_db
+    args: ?verifyServerCertificate=false&autoReconnect=true&useSSL=true&requireSSL=false&serverTimezone=Europe/Amsterdam
+    url: jdbc:mysql://${spring.datasource.hostname}:${spring.datasource.port}/${spring.datasource.schema-name}${spring.datasource.args}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 600000
+      maxLifetime: 1800000 # 30 minutes
+      connectionTimeout: 30000 # 30 secondes
+      leakDetectionThreshold: 20000 # 20 secondes
+      username: root
+      password: root
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+    dbcp2:
+      test-while-idle: true
+      validation-query: SELECT 1
+  flyway:
+    enabled: true
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    baseline-on-migrate: true
+    locations: [ "classpath:db/migration" ]
+    schemas: public
+    fail-on-missing-locations: true
+  jpa:
+    #  SHOW VARIABLES LIKE "%version%"; ## check InnoDB version ::
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    properties:
+      org.hibernate.flushMode: COMMIT
+    show-sql: false
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: none
+      #ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 400000000
+      max-request-size: 400000000
+  messages:
+    encoding: UTF-8
+
+server:
+  port: 8080
+  tomcat:
+    max-swallow-size: 500000000
+    uri-encoding: UTF-8
+    max-http-form-post-size: 500000000
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+# Exposition des endpoints Actuator :
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
