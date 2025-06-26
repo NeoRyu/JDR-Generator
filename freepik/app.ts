@@ -3,7 +3,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import { generateImage } from "./src/controllers/illustration.js";
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 /**
  * @file Fichier principal du serveur API Freepik.
@@ -15,7 +15,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 // CETTE LIGNE DOIT ÊTRE ICI ET EN PREMIER POUR CHARGER LE .ENV
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 /**
  * Instance de l'application Express
@@ -56,9 +56,7 @@ app.post("/freepik/illustrate", generateImage);
  * }
  */
 app.get("/freepik/healthcheck", (_req, res) => {
-  res
-      .status(200)
-      .json({ status: "OK", port: port });
+  res.status(200).json({ status: "OK", port: port });
 });
 
 /**
@@ -69,11 +67,13 @@ app.get("/freepik/healthcheck", (_req, res) => {
  * @param {string} host - L'hôte sur lequel écouter (0.0.0.0 pour toutes les interfaces).
  * @param {Function} callback - Fonction exécutée une fois le serveur démarré.
  */
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`Freepik API Server running on http://0.0.0.0:${port}`);
   if (process.env.API_KEY) {
     console.log(`API_KEY loaded successfully.`);
   } else {
-    console.error("ERROR: API_KEY environment variable is NOT set. Freepik API calls will fail.");
+    console.error(
+      "ERROR: API_KEY environment variable is NOT set. Freepik API calls will fail.",
+    );
   }
 });
