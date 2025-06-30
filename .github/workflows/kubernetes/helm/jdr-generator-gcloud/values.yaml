@@ -3,14 +3,35 @@
 # Items                            Req.CPU      Req.Memory     Limits CPU    Limits Memory
 # -----------------------------------------------------------------------------------------
 # Pods
-#  api                               350m         328Mi            500m         512Mi
-#  web                               150m         192Mi            175m         256Mi
-#  gemini                             50m          96Mi             75m         128Mi
-#  freepik                            50m          96Mi             75m         128Mi
-#  openai                             50m          64Mi             75m          96Mi   # Inutilisé
+#  api                               150m         328Mi            500m         512Mi
+#  web                                25m         192Mi            175m         256Mi
+#  gemini                             25m          96Mi             75m         128Mi
+#  freepik                            25m          96Mi             75m         128Mi
+#  openai                             25m          64Mi             75m          96Mi   # DISABLED
 # -----------------------------------------------------------------------------------------
-#  Total Pods                        650m         776Mi            900m        1120Mi
+#  Total Pods                        225m         776Mi            900m        1120Mi
 # -----------------------------------------------------------------------------------------
+
+### DEPLOYMENT ###
+# cls
+# helm uninstall jdr-generator-gcloud-release
+# kubectl delete deployment -l app.kubernetes.io/instance=jdr-generator-gcloud-release
+# kubectl delete pvc jdr-generator-gcloud-release-mysql-pv-claim
+# gcloud container clusters delete jdr-api-cluster --zone europe-west9-b --quiet
+# ipconfig /flushdns
+# gcloud container clusters create jdr-api-cluster --zone europe-west9-b --num-nodes=1 --machine-type=e2-medium
+# gcloud container clusters get-credentials jdr-api-cluster --zone europe-west9-b
+# helm upgrade --install jdr-generator-gcloud-release ./jdr-generator-gcloud -f ./jdr-generator-gcloud/values.yaml --set secrets.apiKeys.data.GEMINI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.FREEPIK_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_ORG_ID="VOTRE_ORG_ID"
+# kubectl get pods
+
+### DEBUGGING ###
+# kubectl get pods
+# kubectl get nodes
+# kubectl top pod -n kube-system
+# kubectl top pod -A
+# kubectl top node
+# kubectl describe node jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
+# kubectl logs jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
 
 # ----- e2-small (Capacités RÉELLES du nœud, basées sur 'kubectl describe node') ----------
 # Consommation du Nœud (OS + Kub.)   ~840m      ~660Mi           ~1060m        ~660Mi
@@ -120,24 +141,24 @@ api:
   resources:
     requests:
       memory: "328Mi"
-      cpu: "350m"
+      cpu: "150m"
     limits:
       memory: "512Mi"
       cpu: "500m"
   readinessProbe:
     httpGet:
       path: /actuator/health
-    failureThreshold: 3
-    timeoutSeconds: 7
-    periodSeconds: 15
-    initialDelaySeconds: 45
+    failureThreshold: 5
+    timeoutSeconds: 15
+    periodSeconds: 30
+    initialDelaySeconds: 180
   livenessProbe:
     httpGet:
       path: /actuator/health
-    failureThreshold: 3
-    timeoutSeconds: 7
-    periodSeconds: 15
-    initialDelaySeconds: 45
+    failureThreshold: 5
+    timeoutSeconds: 15
+    periodSeconds: 30
+    initialDelaySeconds: 180
   podAnnotations: {}
   podLabels: {}
   podSecurityContext: {}
@@ -164,7 +185,7 @@ web:
   resources:
     requests:
       memory: "192Mi"
-      cpu: "150m"
+      cpu: "25m"
     limits:
       memory: "256Mi"
       cpu: "175m"
@@ -210,7 +231,7 @@ gemini:
   resources:
     requests:
       memory: "96Mi"
-      cpu: "50m"
+      cpu: "25m"
     limits:
       memory: "128Mi"
       cpu: "75m"
@@ -258,7 +279,7 @@ freepik:
   resources:
     requests:
       memory: "96Mi"
-      cpu: "50m"
+      cpu: "25m"
     limits:
       memory: "128Mi"
       cpu: "75m"
@@ -293,7 +314,7 @@ freepik:
 
 # Configuration de la section OPENAI
 openai:
-  enabled: true
+  enabled: false
   replicaCount: 1
   image:
     repository: eli256/jdr-generator-openai
@@ -306,7 +327,7 @@ openai:
   resources:
     requests:
       memory: "64Mi"
-      cpu: "50m"
+      cpu: "25m"
     limits:
       memory: "96Mi"
       cpu: "75m"
