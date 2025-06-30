@@ -33,7 +33,8 @@ public class CorsConfig {
     List<String> baseUrls =
         Arrays.asList(
             "http://localhost", // L'adresse d'origine par défaut de l'application
-            "http://127.0.0.1" // L'adresse IP loopback
+            "http://127.0.0.1", // L'adresse IP loopback
+            "http://34.155.16.213", "http://34.155.35.109" // TODO : Adresses IP GoogleCloud
             );
     List<Integer> ports =
         Arrays.asList(

@@ -21,6 +21,9 @@ COPY . .
 # Build l'application React avec Vite en s'assurant que la variable d'environnement est passée
 # RUN sh -c "VITE_API_URL=${VITE_API_URL} npx tsc && VITE_API_URL=${VITE_API_URL} npx vite build"
 
+# Build l'application React avec Vite en mode production (.env.prod si présent et configuré)
+RUN npx tsc && npx vite build
+
 # Utilise une image Nginx pour servir les fichiers statiques buildés
 FROM nginx:stable-alpine
 # Copie les fichiers buildés depuis l'étape de build précédente

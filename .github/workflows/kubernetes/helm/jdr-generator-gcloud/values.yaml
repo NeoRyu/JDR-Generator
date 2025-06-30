@@ -1,5 +1,36 @@
 # jdr-generator-chart/values.yaml
 
+### DEPLOYMENT ###
+# TODO 1 : edit all "secrets.apiKeys.data.XXX values" in helm upgrade command
+# TODO 2 : optional edit all : --zone "europe-west9-b"
+# cls
+# helm uninstall jdr-generator-gcloud-release
+# kubectl delete deployment -l app.kubernetes.io/instance=jdr-generator-gcloud-release
+# kubectl delete pvc jdr-generator-gcloud-release-mysql-pv-claim
+# gcloud container clusters delete jdr-api-cluster --zone europe-west9-b --quiet
+# ipconfig /flushdns
+# gcloud container clusters create jdr-api-cluster --zone europe-west9-b --num-nodes=1 --machine-type=e2-medium
+# gcloud container clusters get-credentials jdr-api-cluster --zone europe-west9-b
+# TODO : helm upgrade --install jdr-generator-gcloud-release ./jdr-generator-gcloud -f ./jdr-generator-gcloud/values.yaml --set secrets.apiKeys.data.GEMINI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.FREEPIK_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_ORG_ID="VOTRE_ORG_ID"
+# kubectl get pods
+# -----------------------------------------------------------------------------------------
+### DEBUGGING ###
+# TODO 1 : Edit "api-xxxxxxx-xxxxxxx" with your targeted pod
+# kubectl get pods
+# kubectl get nodes
+# kubectl top pod -n kube-system
+# kubectl top pod -A
+# kubectl top node
+# TODO : kubectl describe node jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
+# TODO : kubectl logs jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
+# -----------------------------------------------------------------------------------------
+### UPDATE DEPLOY ###
+# TODO 1 : edit all "secrets.apiKeys.data.XXX values" in helm upgrade command
+# kubectl delete deployment jdr-generator-gcloud-release-web
+# TODO : helm upgrade --install jdr-generator-gcloud-release ./jdr-generator-gcloud -f ./jdr-generator-gcloud/values.yaml --set secrets.apiKeys.data.GEMINI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.FREEPIK_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_ORG_ID="VOTRE_ORG_ID"
+# kubectl get services
+
+# -----------------------------------------------------------------------------------------
 # Items                            Req.CPU      Req.Memory     Limits CPU    Limits Memory
 # -----------------------------------------------------------------------------------------
 # Pods
@@ -11,27 +42,6 @@
 # -----------------------------------------------------------------------------------------
 #  Total Pods                        225m         776Mi            900m        1120Mi
 # -----------------------------------------------------------------------------------------
-
-### DEPLOYMENT ###
-# cls
-# helm uninstall jdr-generator-gcloud-release
-# kubectl delete deployment -l app.kubernetes.io/instance=jdr-generator-gcloud-release
-# kubectl delete pvc jdr-generator-gcloud-release-mysql-pv-claim
-# gcloud container clusters delete jdr-api-cluster --zone europe-west9-b --quiet
-# ipconfig /flushdns
-# gcloud container clusters create jdr-api-cluster --zone europe-west9-b --num-nodes=1 --machine-type=e2-medium
-# gcloud container clusters get-credentials jdr-api-cluster --zone europe-west9-b
-# helm upgrade --install jdr-generator-gcloud-release ./jdr-generator-gcloud -f ./jdr-generator-gcloud/values.yaml --set secrets.apiKeys.data.GEMINI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.FREEPIK_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_API_KEY="VOTRE_API_KEY" --set secrets.apiKeys.data.OPENAI_ORG_ID="VOTRE_ORG_ID"
-# kubectl get pods
-
-### DEBUGGING ###
-# kubectl get pods
-# kubectl get nodes
-# kubectl top pod -n kube-system
-# kubectl top pod -A
-# kubectl top node
-# kubectl describe node jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
-# kubectl logs jdr-generator-gcloud-release-api-xxxxxxx-xxxxxxx
 
 # ----- e2-small (Capacités RÉELLES du nœud, basées sur 'kubectl describe node') ----------
 # Consommation du Nœud (OS + Kub.)   ~840m      ~660Mi           ~1060m        ~660Mi
@@ -180,8 +190,9 @@ web:
     tag: "latest"
   containerPort: 80
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 80
+    targetPort: 80
   resources:
     requests:
       memory: "192Mi"
