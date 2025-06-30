@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "proxy": "http://localhost:8080",
+  "proxy": "http://34.155.16.213:80",
   "scripts": {
     "start: dev": "vite",
     "clean-xtrem": "rd /s /q dist && rm -rf node_modules && npm cache clean --force && rm -rf package-lock.json && npm install",
