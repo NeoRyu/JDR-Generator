@@ -136,7 +136,7 @@ api:
   enabled: true
   replicaCount: 1
   image:
-    repository: gcr.io/jdr-generator/api # @sha256:5a5d8576c5121c3dcb909c8f7a53c7c117d20226d461bcee0ca87f1110e809db
+    repository: gcr.io/jdr-generator/api
     pullPolicy: IfNotPresent
     tag: "latest"
   containerPort: 8080
@@ -185,7 +185,7 @@ web:
   enabled: true
   replicaCount: 1
   image:
-    repository: eli256/jdr-generator-web
+    repository: gcr.io/jdr-generator/web
     pullPolicy: IfNotPresent
     tag: "latest"
   containerPort: 80
@@ -232,7 +232,7 @@ gemini:
   enabled: true
   replicaCount: 1
   image:
-    repository: eli256/jdr-generator-gemini
+    repository: gcr.io/jdr-generator/gemini
     pullPolicy: IfNotPresent
     tag: "latest"
   containerPort: 3001
@@ -280,7 +280,7 @@ freepik:
   enabled: true
   replicaCount: 1
   image:
-    repository: eli256/jdr-generator-freepik
+    repository: gcr.io/jdr-generator/freepik
     pullPolicy: IfNotPresent
     tag: "latest"
   containerPort: 3003
@@ -328,7 +328,7 @@ openai:
   enabled: false
   replicaCount: 1
   image:
-    repository: eli256/jdr-generator-openai
+    repository: gcr.io/jdr-generator/openai
     pullPolicy: IfNotPresent
     tag: "latest"
   containerPort: 3002
